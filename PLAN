@@ -1,0 +1,36 @@
+Project Management
+==================
+Each iteration consists of one or more stories. Stories can be determined when
+the iteration is started, or ahead of time.
+Stories can be big or small and are broken down into tasks.
+Tasks are discrete units of 25 minutes. An iterating top-down approach is used
+for development, ie; no premature optimizations. As simple as possible in the
+first iteration. 
+Keypoints are meant to be places where we think and come up with new stuff for
+next iteration. Updating ports can be done here. No two time units can be used
+consecutively for planning.
+
+Schedule, optimistic
+====================
+4 blocks on mondays
+3 blocks on tuesdays
+4 blocks on thursdays
+
+Goals
+=====
+2010-09-27: 10 blocks finished
+
+Iteration 1:
+    Create graphics subsystem
+    A snail with user input controller
+    Snail geometrical representation
+    
+Iteration 2:
+    Load and use bitmap graphics
+    Restrain snails to world, disable X-movement
+    Weapons and bullets
+    
+Iteration 3:        
+    
+        
+        
