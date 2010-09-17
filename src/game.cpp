@@ -16,6 +16,7 @@ Game::~Game() {
 }
 
 void Game::tick(float dt) {
+   graphics.render(dt);
    // const float step_size = 1.0f / 40.0f;
    // accum_time += dt;
    // 
