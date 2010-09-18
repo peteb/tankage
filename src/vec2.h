@@ -7,6 +7,8 @@
 #ifndef VEC2_H_8BJJJ5TN
 #define VEC2_H_8BJJJ5TN
 
+#include <string>
+
 class vec2 {
 public:
    vec2(float x, float y);

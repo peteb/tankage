@@ -9,9 +9,9 @@
 #include "graphics/sprite.h"
 
 static vec2 dirToVecMap[4] = {
-   vec2(0.0f, 1.0f), 
-   vec2(1.0f, 0.0f), 
    vec2(0.0f, -1.0f), 
+   vec2(1.0f, 0.0f), 
+   vec2(0.0f, 1.0f), 
    vec2(-1.0f, 0.0f)
 };
  
@@ -32,10 +32,12 @@ void HiController::stopDirection(int dir) {
 }
 
 void HiController::update(float dt) {
+   static const float speed = 300.0f;
+   
    if (target) {
       for (unsigned i = 0; i < activeDirs.size(); ++i) {
          if (activeDirs[i])
-            target->position += dirToVecMap[i] * dt;
+            target->position += dirToVecMap[i] * speed * dt;
       }
    }
 }

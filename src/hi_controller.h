@@ -9,9 +9,7 @@
 
 #include <vector>
 
-namespace Graphics {
-   class Sprite;
-}
+namespace Graphics {class Sprite; }
 
 class HiController {
 public:

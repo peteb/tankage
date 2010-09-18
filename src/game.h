@@ -8,6 +8,7 @@
 #define GAME_H_RGVIQMD1
 
 #include "graphics/gfx_subsystem.h"
+#include "physics/phys_subsystem.h"
 #include "hi_controller.h"
 
 namespace Graphics {
@@ -25,6 +26,7 @@ public:
    
 private:
    Graphics::Subsystem graphics;
+   Physics::Subsystem physics;
    Graphics::Sprite * playerSprite;
    HiController playerController;
 
