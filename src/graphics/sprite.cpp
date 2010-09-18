@@ -6,3 +6,25 @@
 
 #include "graphics/sprite.h"
 
+using Graphics::Sprite;
+ 
+Sprite::Sprite() 
+   : position(vec2::Zero) 
+{
+   
+}
+
+std::vector<vec2> Sprite::constructVertices() const {
+   std::vector<vec2> vertices;
+   vertices.reserve(4);
+
+   const float halfWidth = 32.0f / 2.0f;
+   const float halfHeight = 32.0f / 2.0f;
+
+   vertices.push_back(vec2(-halfWidth, -halfHeight));
+   vertices.push_back(vec2( halfWidth, -halfHeight));
+   vertices.push_back(vec2( halfWidth,  halfHeight));
+   vertices.push_back(vec2(-halfWidth,  halfHeight));
+
+   return vertices;
+}

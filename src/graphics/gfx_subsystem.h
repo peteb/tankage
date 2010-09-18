@@ -8,6 +8,7 @@
 #define GFX_SUBSYSTEM_H_EAH7WN3F
 
 #include <vector>
+#include "vec2.h"
 
 namespace Graphics {
    class Sprite;
@@ -17,9 +18,11 @@ namespace Graphics {
       Subsystem();
       
       void render(float dt);
+      void resizeViewport(const vec2 & size);
       
    private:
       std::vector<Graphics::Sprite *> sprites;
+      vec2 viewport;
    };
 }
 

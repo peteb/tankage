@@ -15,6 +15,7 @@ public:
    ~Game();
    
    void tick(float dt);
+   void windowChangedSize(int width, int height);
    
 private:
    Graphics::Subsystem graphics;

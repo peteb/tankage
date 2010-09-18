@@ -11,47 +11,49 @@
 
 using Graphics::Subsystem;
  
-Subsystem::Subsystem() {
+Subsystem::Subsystem() 
+   : viewport(vec2::Zero)
+{
    Sprite * s1 = new Sprite;
-   s1->x = 0;
-   s1->y = 0;
+   s1->position = vec2(0.0f, 0.0f);
    
    sprites.push_back(s1);
 }
+
 
 void Subsystem::render(float dt) {
    glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
    glClear(GL_COLOR_BUFFER_BIT);
 
+   glViewport(0, 0, int(viewport.x), int(viewport.y));
+   
    glMatrixMode(GL_PROJECTION);
    glLoadIdentity();
    
-   const float scaleX = 1.0f / 400.0f;
-   const float scaleY = 1.0f / 300.0f;
+   const float scaleX = 2.0f / viewport.x;
+   const float scaleY = 2.0f / viewport.y;
    glTranslatef(-1.0f, 1.0f, 0.0f);
    glScalef(scaleX, -scaleY, 1.0f);
    
    glMatrixMode(GL_MODELVIEW);
    
-   for (int i = 0; i < sprites.size(); ++i) {
+   for (unsigned i = 0; i < sprites.size(); ++i) {
       const Sprite * sprite = sprites[i];
-      sprites[i]->y += 0.01f;
-      sprites[i]->x += 0.01f;
-      glLoadIdentity();
-      glTranslatef(sprite->x, sprite->y, 0.0f);
-
-      glBegin(GL_QUADS);
-
-      glColor3f(1.0f, 0.0f, 0.0f);
+      sprites[i]->position += vec2(0.01f, 0.1f);
       
-      const float halfWidth = 32.0f / 2.0f;
-      const float halfHeight = 32.0f / 2.0f;
+      glBegin(GL_QUADS);
+      glColor3f(1.0f, 0.0f, 0.0f);
 
-      glVertex2f(-halfWidth, -halfHeight);
-      glVertex2f( halfWidth, -halfHeight);
-      glVertex2f( halfWidth,  halfHeight);
-      glVertex2f(-halfWidth,  halfHeight);
+      std::vector<vec2> vertices = sprite->constructVertices();
+      for (unsigned i = 0; i < vertices.size(); ++i) {
+         const vec2 pos = vertices[i] + sprite->position;
+         glVertex2f(pos.x, pos.y);
+      }
+         
       glEnd();
    }
 }
 
+void Subsystem::resizeViewport(const vec2 & size) {
+   viewport = size;
+}

@@ -9,6 +9,12 @@
 #include "game.h"
 
 static void main_loop(Game & game);
+static Game * gameInstance = 0;
+
+static void GLFWCALL WindowResize(int width, int height) {
+   if (gameInstance)
+      gameInstance->windowChangedSize(width, height);
+}
 
 int main(int argc, char ** argv) {
    if (!glfwInit()) {
@@ -16,26 +22,32 @@ int main(int argc, char ** argv) {
       return EXIT_FAILURE;
    }
    
-   if (!glfwOpenWindow(800, 600, 0, 0, 0, 0, 24, 0, GLFW_WINDOW)) {
+   const int windowWidth = 800, windowHeight = 600;
+   
+   if (!glfwOpenWindow(windowWidth, windowHeight, 0, 0, 0, 0, 24, 0, GLFW_WINDOW)) {
       glfwTerminate();
       std::cerr << "Failed to open GLFW window" << std::endl;
       return EXIT_FAILURE;
    }
    
+   glfwSetWindowSizeCallback(WindowResize);
    glfwSetWindowTitle("Neon Afterlife");
    std::cout << "Initialized glfw" << std::endl;
    
    Game game;
+   gameInstance = &game;
+   game.windowChangedSize(windowWidth, windowHeight);
    main_loop(game);
-   
+   gameInstance = 0;
    glfwTerminate();
 }
 
 void main_loop(Game & game) {
    bool running = true;
    float last_tick = glfwGetTime();
+   int lastWidth = -1, lastHeight = -1;
    
-   while (running) {
+   while (running) {      
       float this_tick = glfwGetTime();
       float dt = this_tick - last_tick;
       

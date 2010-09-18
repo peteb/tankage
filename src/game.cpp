@@ -25,3 +25,7 @@ void Game::tick(float dt) {
    // }   
 }
 
+void Game::windowChangedSize(int width, int height) {
+   std::cout << "Window changed size: " << width << ", " << height << std::endl;
+   graphics.resizeViewport(vec2(width, height));
+}

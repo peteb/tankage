@@ -7,11 +7,17 @@
 #ifndef SPRITE_H_CD2WG4HZ
 #define SPRITE_H_CD2WG4HZ
 
+#include <vector>
+#include "vec2.h"
+
 namespace Graphics {
    class Sprite {
    public:
+      Sprite();
       
-      float x, y;
+      std::vector<vec2> constructVertices() const;
+      
+      vec2 position;
    };
    
 }
