@@ -8,6 +8,11 @@
 #define GAME_H_RGVIQMD1
 
 #include "graphics/gfx_subsystem.h"
+#include "hi_controller.h"
+
+namespace Graphics {
+   class Sprite;
+}
 
 class Game {
 public:
@@ -16,9 +21,13 @@ public:
    
    void tick(float dt);
    void windowChangedSize(int width, int height);
+   void keyStateChanged(const std::string & key, int state);
    
 private:
    Graphics::Subsystem graphics;
+   Graphics::Sprite * playerSprite;
+   HiController playerController;
+
 };
 
 #endif /* end of include guard: GAME_H_RGVIQMD1 */

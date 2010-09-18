@@ -5,6 +5,8 @@
  */
 
 #include <iostream>
+#include <map>
+
 #include "glfw.h"
 #include "game.h"
 
@@ -14,6 +16,27 @@ static Game * gameInstance = 0;
 static void GLFWCALL WindowResize(int width, int height) {
    if (gameInstance)
       gameInstance->windowChangedSize(width, height);
+}
+
+static void GLFWCALL KeyStateChange(int key, int state) {
+   if (gameInstance) {
+      typedef std::map<int, std::string> KeyMap;
+      KeyMap boundKeys;
+      
+      boundKeys[GLFW_KEY_UP] = "up_arrow";
+      boundKeys[GLFW_KEY_DOWN] = "down_arrow";
+      boundKeys[GLFW_KEY_LEFT] = "left_arrow";
+      boundKeys[GLFW_KEY_RIGHT] = "right_arrow";
+      
+      std::string keyName = "unknown";
+      KeyMap::const_iterator iter = boundKeys.find(key);
+      if (iter != boundKeys.end())
+         keyName = iter->second;
+      
+      gameInstance->keyStateChanged(keyName, (state == GLFW_PRESS ? 1 : 0));
+      
+      
+   }
 }
 
 int main(int argc, char ** argv) {
@@ -31,7 +54,8 @@ int main(int argc, char ** argv) {
    }
    
    glfwSetWindowSizeCallback(WindowResize);
-   glfwSetWindowTitle("Neon Afterlife");
+   glfwSetKeyCallback(KeyStateChange);
+   glfwSetWindowTitle("Snail Wail");
    std::cout << "Initialized glfw" << std::endl;
    
    Game game;

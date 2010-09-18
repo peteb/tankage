@@ -19,6 +19,7 @@ namespace Graphics {
       
       void render(float dt);
       void resizeViewport(const vec2 & size);
+      Sprite * createSprite();
       
    private:
       std::vector<Graphics::Sprite *> sprites;

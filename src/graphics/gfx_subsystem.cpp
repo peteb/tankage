@@ -14,10 +14,6 @@ using Graphics::Subsystem;
 Subsystem::Subsystem() 
    : viewport(vec2::Zero)
 {
-   Sprite * s1 = new Sprite;
-   s1->position = vec2(0.0f, 0.0f);
-   
-   sprites.push_back(s1);
 }
 
 
@@ -39,7 +35,6 @@ void Subsystem::render(float dt) {
    
    for (unsigned i = 0; i < sprites.size(); ++i) {
       const Sprite * sprite = sprites[i];
-      sprites[i]->position += vec2(0.01f, 0.1f);
       
       glBegin(GL_QUADS);
       glColor3f(1.0f, 0.0f, 0.0f);
@@ -56,4 +51,11 @@ void Subsystem::render(float dt) {
 
 void Subsystem::resizeViewport(const vec2 & size) {
    viewport = size;
+}
+
+Graphics::Sprite * Subsystem::createSprite() {
+   Graphics::Sprite * s1 = new Graphics::Sprite;   
+   sprites.push_back(s1);
+   
+   return s1;   
 }
