@@ -5,3 +5,4 @@ Iteration 1
     [25] gfx subsystem, handle window resize, vec2 class
     [25] added user key input from GLFW
     [25] added physics subsystem and two areas for physical bodies to be restrained by
+    [25] cleared up ownership and object relationships

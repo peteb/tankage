@@ -8,8 +8,9 @@
 #include "graphics/sprite.h"
 
 #include <OpenGL/OpenGL.h>
+#include <boost/make_shared.hpp>
 
-using Graphics::Subsystem;
+using namespace Graphics;
  
 Subsystem::Subsystem() 
    : viewport(vec2::Zero)
@@ -33,19 +34,23 @@ void Subsystem::render(float dt) {
    
    glMatrixMode(GL_MODELVIEW);
    
+   
    for (unsigned i = 0; i < sprites.size(); ++i) {
-      const Sprite * sprite = sprites[i];
-      
-      glBegin(GL_QUADS);
-      glColor3f(1.0f, 0.0f, 0.0f);
+      if (boost::shared_ptr<Sprite> sprite = sprites[i].lock()) {
+         glBegin(GL_QUADS);
+         glColor3f(1.0f, 0.0f, 0.0f);
 
-      std::vector<vec2> vertices = sprite->constructVertices();
-      for (unsigned i = 0; i < vertices.size(); ++i) {
-         const vec2 pos = vertices[i] + sprite->position;
-         glVertex2f(pos.x, pos.y);
+         std::vector<vec2> vertices = sprite->constructVertices();
+         for (unsigned i = 0; i < vertices.size(); ++i) {
+            const vec2 pos = vertices[i] + sprite->position;
+            glVertex2f(pos.x, pos.y);
+         }
+      
+         glEnd();
       }
-         
-      glEnd();
+      else {
+         sprites.erase(sprites.begin() + i);
+      }
    }
 }
 
@@ -53,9 +58,9 @@ void Subsystem::resizeViewport(const vec2 & size) {
    viewport = size;
 }
 
-Graphics::Sprite * Subsystem::createSprite() {
-   Graphics::Sprite * s1 = new Graphics::Sprite;   
-   sprites.push_back(s1);
+boost::shared_ptr<Sprite> Subsystem::createSprite() {
+   boost::shared_ptr<Sprite> newSprite = boost::make_shared<Sprite>();   
+   sprites.push_back(newSprite);
    
-   return s1;   
+   return newSprite;   
 }

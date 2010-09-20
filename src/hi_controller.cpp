@@ -4,6 +4,8 @@
  * (c) Copyright 2010 Peter Backman. All Rights Reserved. 
  */
 
+#include <boost/shared_ptr.hpp>
+
 #include "hi_controller.h"
 #include "vec2.h"
 #include "graphics/sprite.h"
@@ -18,7 +20,6 @@ static vec2 dirToVecMap[4] = {
 HiController::HiController()
    : activeDirs(4, false)
 {   
-   target = NULL;
 }
 
 void HiController::startDirection(int dir) {
@@ -34,14 +35,14 @@ void HiController::stopDirection(int dir) {
 void HiController::update(float dt) {
    static const float speed = 300.0f;
    
-   if (target) {
+   if (boost::shared_ptr<Graphics::Sprite> acquiredTarget = target.lock()) {
       for (unsigned i = 0; i < activeDirs.size(); ++i) {
          if (activeDirs[i])
-            target->position += dirToVecMap[i] * speed * dt;
+            acquiredTarget->position += dirToVecMap[i] * speed * dt;
       }
    }
 }
 
-void HiController::setTarget(Graphics::Sprite * target) {
-   this->target = target;
+void HiController::setTarget(boost::shared_ptr<Graphics::Sprite> & newTarget) {
+   this->target = newTarget;
 }

@@ -13,6 +13,7 @@ Game::Game() {
    playerSprite = graphics.createSprite();
    playerSprite->position = vec2(10.0f, 10.0f);
    playerController.setTarget(playerSprite);
+   
 }
 
 Game::~Game() {

@@ -24,11 +24,13 @@ Iteration 1:
     Create graphics subsystem                               DONE
     A snail with user input controller                      DONE
     Snail geometrical representation
+    Proper ownership, entities own their representation     DONE
     
 Iteration 2:
     Load and use bitmap graphics
     Restrain snails to world, disable X-movement
     Weapons and bullets
+    Implement CMake
     
 Iteration 3:        
     

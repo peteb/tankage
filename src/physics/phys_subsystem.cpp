@@ -5,11 +5,12 @@
  */
 
 #include <iostream>
+#include <boost/make_shared.hpp>
 
 #include "phys_subsystem.h"
 #include "physics/body.h"
 
-using Physics::Subsystem;
+using namespace Physics;
 
 Subsystem::Subsystem() 
    : maxArea(vec2::Zero)
@@ -32,7 +33,7 @@ void Subsystem::resizeArea(int width, int height) {
    rightArea.size = vec2(width / 2.0f, height);
 }
 
-Physics::Body * Subsystem::createBody(const std::string & area) {
+boost::shared_ptr<Body> Subsystem::createBody(const std::string & area) {
    rect * rectArea = 0;
    
    if (area == "AREA_LEFT")
@@ -42,7 +43,8 @@ Physics::Body * Subsystem::createBody(const std::string & area) {
    else
       std::cout << "Warning: unknown area: " << area << std::endl;
       
-   Physics::Body * body = new Physics::Body(*this, rectArea);
+   boost::shared_ptr<Body> body = boost::shared_ptr<Body>(new Body(*this, rectArea));
+   bodies.push_back(body);
    
    return body;
 }

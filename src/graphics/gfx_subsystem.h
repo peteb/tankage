@@ -7,6 +7,8 @@
 #ifndef GFX_SUBSYSTEM_H_EAH7WN3F
 #define GFX_SUBSYSTEM_H_EAH7WN3F
 
+#include <boost/shared_ptr.hpp>
+#include <boost/weak_ptr.hpp>
 #include <vector>
 #include "vec2.h"
 
@@ -19,10 +21,10 @@ namespace Graphics {
       
       void render(float dt);
       void resizeViewport(const vec2 & size);
-      Sprite * createSprite();
+      boost::shared_ptr<Sprite> createSprite();
       
    private:
-      std::vector<Graphics::Sprite *> sprites;
+      std::vector<boost::weak_ptr<Graphics::Sprite> > sprites;
       vec2 viewport;
    };
 }
