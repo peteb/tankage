@@ -1,4 +1,3 @@
-
 Iteration 1
     [25] project setup, github repository, graphics subsystem stub
     [25] graphics subsystem, rendering sprites
@@ -6,3 +5,6 @@ Iteration 1
     [25] added user key input from GLFW
     [25] added physics subsystem and two areas for physical bodies to be restrained by
     [25] cleared up ownership and object relationships
+    [25] pixled on snail helmet #1
+    [25] pixled on snail helmet #1
+    [25] composed mock game scene
