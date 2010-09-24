@@ -5,6 +5,11 @@ Iteration 1
     [25] added user key input from GLFW
     [25] added physics subsystem and two areas for physical bodies to be restrained by
     [25] cleared up ownership and object relationships
+
+2010-09-23
     [25] pixled on snail helmet #1
+    [25] pixled on snail helmet #1
+
+2010-09-24
     [25] pixled on snail helmet #1
     [25] composed mock game scene
