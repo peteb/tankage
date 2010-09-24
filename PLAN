@@ -25,14 +25,16 @@ Iteration 1:
     A snail with user input controller                      DONE
     Snail geometrical representation
     Proper ownership, entities own their representation     DONE
-    
+    Basic snail sprite                                      DONE
+
 Iteration 2:
     Load and use bitmap graphics
     Restrain snails to world, disable X-movement
     Weapons and bullets
     Implement CMake
+    Improve snail sprite
     
 Iteration 3:        
-    
+        
         
         
