@@ -28,3 +28,11 @@ std::vector<vec2> Sprite::constructVertices() const {
 
    return vertices;
 }
+
+void Sprite::setPosition(const vec2 & newPos) {
+   this->position = newPos;
+}
+
+vec2 Sprite::getPosition() const {
+   return position;
+}

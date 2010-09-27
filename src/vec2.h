@@ -22,6 +22,9 @@ public:
    
    operator std::string() const;
    
+   float getMagnitude() const;
+   vec2 & normalize();
+   
    static const vec2 Zero;
    
    float x, y;

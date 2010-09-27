@@ -12,6 +12,7 @@
 #include "graphics/gfx_subsystem.h"
 #include "physics/phys_subsystem.h"
 #include "hi_controller.h"
+#include "player_entity.h"
 
 namespace Graphics {
    class Sprite;
@@ -29,7 +30,8 @@ public:
 private:
    boost::shared_ptr<Graphics::Sprite> playerSprite;
    HiController playerController;
-
+   boost::shared_ptr<PlayerEntity> playerEntity;
+   
    Graphics::Subsystem graphics;
    Physics::Subsystem physics;
 };

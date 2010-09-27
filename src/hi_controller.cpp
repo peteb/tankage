@@ -35,14 +35,16 @@ void HiController::stopDirection(int dir) {
 void HiController::update(float dt) {
    static const float speed = 300.0f;
    
-   if (boost::shared_ptr<Graphics::Sprite> acquiredTarget = target.lock()) {
+   if (boost::shared_ptr<ReferenceFrame2D> acquiredTarget = target.lock()) {
       for (unsigned i = 0; i < activeDirs.size(); ++i) {
          if (activeDirs[i])
-            acquiredTarget->position += dirToVecMap[i] * speed * dt;
+            acquiredTarget->setPosition(
+               acquiredTarget->getPosition() + dirToVecMap[i] * speed * dt
+            );
       }
    }
 }
 
-void HiController::setTarget(boost::shared_ptr<Graphics::Sprite> & newTarget) {
+void HiController::setTarget(const boost::weak_ptr<ReferenceFrame2D> & newTarget) {
    this->target = newTarget;
 }

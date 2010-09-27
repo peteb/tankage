@@ -8,12 +8,15 @@
 #include "graphics/sprite.h"
 #include <iostream>
 
+#include <boost/make_shared.hpp>
 
 Game::Game() {
    playerSprite = graphics.createSprite();
-   playerSprite->position = vec2(10.0f, 10.0f);
-   playerController.setTarget(playerSprite);
-   
+   playerSprite->setPosition(vec2(10.0f, 10.0f));
+
+   playerEntity = boost::make_shared<PlayerEntity>();
+   playerController.setTarget(playerEntity);
+   playerEntity->setTarget(playerSprite);
 }
 
 Game::~Game() {
@@ -22,6 +25,7 @@ Game::~Game() {
 
 void Game::tick(float dt) {
    playerController.update(dt);
+   playerEntity->update(dt);
    physics.update(dt);
    graphics.render(dt);
    // const float step_size = 1.0f / 40.0f;

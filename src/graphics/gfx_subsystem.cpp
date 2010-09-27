@@ -42,7 +42,7 @@ void Subsystem::render(float dt) {
 
          std::vector<vec2> vertices = sprite->constructVertices();
          for (unsigned i = 0; i < vertices.size(); ++i) {
-            const vec2 pos = vertices[i] + sprite->position;
+            const vec2 pos = vertices[i] + sprite->getPosition();
             glVertex2f(pos.x, pos.y);
          }
       

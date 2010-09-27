@@ -9,9 +9,8 @@
 
 #include <vector>
 #include <boost/weak_ptr.hpp>
-#include <boost/shared_ptr.hpp>
 
-namespace Graphics {class Sprite; }
+class ReferenceFrame2D;
 
 class HiController {
 public:
@@ -20,10 +19,10 @@ public:
    void startDirection(int dir);
    void stopDirection(int dir);
    void update(float dt);
-   void setTarget(boost::shared_ptr<Graphics::Sprite> & newTarget);
+   void setTarget(const boost::weak_ptr<ReferenceFrame2D> & newTarget);
    
 private:
-   boost::weak_ptr<Graphics::Sprite> target;
+   boost::weak_ptr<ReferenceFrame2D> target;
    std::vector<bool> activeDirs;
 };
 

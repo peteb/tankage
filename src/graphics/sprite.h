@@ -9,14 +9,19 @@
 
 #include <vector>
 #include "vec2.h"
+#include "reference_frame.h"
 
 namespace Graphics {
-   class Sprite {
+   class Sprite : public ReferenceFrame2D {
    public:
       Sprite();
       
       std::vector<vec2> constructVertices() const;
       
+      void setPosition(const vec2 & newPos);
+      vec2 getPosition() const;
+
+   private:
       vec2 position;
    };
    
