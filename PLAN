@@ -23,13 +23,14 @@ Goals
 Iteration 1:
     Create graphics subsystem                               DONE
     A snail with user input controller                      DONE
-    Snail geometrical representation
+    Snail geometrical representation                        DONE
     Proper ownership, entities own their representation     DONE
     Basic snail sprite                                      DONE
 
 Iteration 2:
-    Load and use bitmap graphics
-    Restrain snails to world, disable X-movement
+    Load and use bitmap graphics                            
+    Two snails
+    Restrain snails to world, disable X-movement            DONE
     Weapons and bullets
     Implement CMake
     Improve snail sprite

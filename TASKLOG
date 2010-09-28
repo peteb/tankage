@@ -17,3 +17,8 @@
 2010-09-27
     [25] added player entity movements/restraints
     [25] improved player entity
+    
+2010-09-28
+    [25] compiled DevIL for i386 and x86_64, created fat binary
+    [25] added support for loading images and creating opengl textures
+    
