@@ -18,6 +18,8 @@
     [25] added player entity movements/restraints
     [25] improved player entity
     
+New sprint, last sprint goal (10) reached (12)
+
 2010-09-28
     [25] compiled DevIL for i386 and x86_64, created fat binary
     [25] added support for loading images and creating opengl textures
