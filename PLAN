@@ -29,9 +29,9 @@ Iteration 1:
 
 Iteration 2:
     Load and use bitmap graphics                            
-    Two snails
+    Two snails (two sets of HID input)
     Restrain snails to world, disable X-movement            DONE
-    Weapons and bullets
+    Weapons and bullets (shooting, no collision detection)
     Implement CMake
     Improve snail sprite
     
