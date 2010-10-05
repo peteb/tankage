@@ -29,7 +29,7 @@ Iteration 1:
     Basic snail sprite                                      DONE
 
 Iteration 2:
-    Load and use bitmap graphics                            
+    Load and use bitmap graphics                            DONE               
     Two snails (two sets of HID input)
     Restrain snails to world, disable X-movement            DONE
     Weapons and bullets (shooting, no collision detection)

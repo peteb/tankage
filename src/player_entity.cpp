@@ -7,6 +7,10 @@
 #include "player_entity.h"
 #include <algorithm>
 
+PlayerEntity::PlayerEntity(float x) {
+   xPos = x;
+}
+
 void PlayerEntity::setTarget(const boost::weak_ptr<ReferenceFrame2D> & newTarget) {
    this->target = newTarget;
 }
@@ -20,7 +24,7 @@ void PlayerEntity::update(float dt) {
       pos.y = std::min(pos.y, 600.0f - 10.0f);
 
 
-      vec2 delta = vec2(500.0f, pos.y) - pos;
+      vec2 delta = vec2(xPos, pos.y) - pos;
 
       if (delta.getMagnitude() > 50.0f) {
          delta.normalize();

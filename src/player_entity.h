@@ -12,7 +12,8 @@
 
 class PlayerEntity : public ReferenceFrame2D {
 public:
-
+   PlayerEntity(float x);
+   
    void setTarget(const boost::weak_ptr<ReferenceFrame2D> & newTarget);
    void update(float dt);
    
@@ -20,6 +21,7 @@ public:
    vec2 getPosition() const;
    
 private:
+   float xPos;
    boost::weak_ptr<ReferenceFrame2D> target;
 };
 

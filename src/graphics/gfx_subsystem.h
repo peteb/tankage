@@ -11,6 +11,7 @@
 #include <boost/weak_ptr.hpp>
 #include <vector>
 #include "vec2.h"
+#include "texture_loader.h"
 
 namespace Graphics {
    class Sprite;
@@ -21,9 +22,10 @@ namespace Graphics {
       
       void render(float dt);
       void resizeViewport(const vec2 & size);
-      boost::shared_ptr<Sprite> createSprite();
+      boost::shared_ptr<Sprite> createSprite(const std::string & fragments);
       
    private:
+      TextureLoader textureCache;
       std::vector<boost::weak_ptr<Graphics::Sprite> > sprites;
       vec2 viewport;
    };

@@ -6,7 +6,7 @@
 
 #include "graphics/gfx_subsystem.h"
 #include "graphics/sprite.h"
-
+#include "graphics/vertex.h"
 #include <OpenGL/OpenGL.h>
 #include <boost/make_shared.hpp>
 
@@ -32,17 +32,24 @@ void Subsystem::render(float dt) {
    glTranslatef(-1.0f, 1.0f, 0.0f);
    glScalef(scaleX, -scaleY, 1.0f);
    
+   glMatrixMode(GL_TEXTURE);
+   glLoadIdentity();
+
    glMatrixMode(GL_MODELVIEW);
+   glLoadIdentity();
    
+   
+   glEnable(GL_TEXTURE_2D);
    
    for (unsigned i = 0; i < sprites.size(); ++i) {
       if (boost::shared_ptr<Sprite> sprite = sprites[i].lock()) {
          glBegin(GL_QUADS);
-         glColor3f(1.0f, 0.0f, 0.0f);
+         // glColor3f(1.0f, 0.0f, 0.0f);
 
-         std::vector<vec2> vertices = sprite->constructVertices();
+         std::vector<Vertex2T2> vertices = sprite->constructVertices();
          for (unsigned i = 0; i < vertices.size(); ++i) {
-            const vec2 pos = vertices[i] + sprite->getPosition();
+            const vec2 pos = vertices[i].pos + sprite->getPosition();
+            glTexCoord2f(vertices[i].tc.x, vertices[i].tc.y);
             glVertex2f(pos.x, pos.y);
          }
       
@@ -58,8 +65,9 @@ void Subsystem::resizeViewport(const vec2 & size) {
    viewport = size;
 }
 
-boost::shared_ptr<Sprite> Subsystem::createSprite() {
-   boost::shared_ptr<Sprite> newSprite = boost::make_shared<Sprite>();   
+boost::shared_ptr<Sprite> Subsystem::createSprite(const std::string & fragments) {
+   boost::shared_ptr<Texture> spriteTexture = textureCache.loadTexture(fragments);
+   boost::shared_ptr<Sprite> newSprite = boost::make_shared<Sprite>(spriteTexture);   
    sprites.push_back(newSprite);
    
    return newSprite;   

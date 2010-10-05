@@ -50,15 +50,18 @@ boost::shared_ptr<Texture> TextureLoader::loadTexture(const std::string & name) 
    ILuint width = ilGetInteger(IL_IMAGE_WIDTH);
    ILuint height = ilGetInteger(IL_IMAGE_HEIGHT);
    ILuint format = ilGetInteger(IL_IMAGE_FORMAT); // IL_RGB, IL_RGBA, IL_BGR, IL_BGRA, etc
+   ILuint bpp = ilGetInteger(IL_IMAGE_BPP);
    
    const void * data = ilGetData();
    
    // generate texture
    GLuint newTexture;
+   glEnable(GL_TEXTURE_2D);
    glGenTextures(1, &newTexture);
    glBindTexture(GL_TEXTURE_2D, newTexture);
    glTexImage2D(
-      GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data
+      GL_TEXTURE_2D, 0, bpp, width, height, 0, format,
+      GL_UNSIGNED_BYTE, data
    );
    
    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);

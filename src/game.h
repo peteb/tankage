@@ -31,6 +31,11 @@ private:
    boost::shared_ptr<Graphics::Sprite> playerSprite;
    HiController playerController;
    boost::shared_ptr<PlayerEntity> playerEntity;
+
+   boost::shared_ptr<Graphics::Sprite> playerSprite2;
+   //HiController playerController2;
+   boost::shared_ptr<PlayerEntity> playerEntity2;
+
    
    Graphics::Subsystem graphics;
    Physics::Subsystem physics;

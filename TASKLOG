@@ -24,3 +24,6 @@ New sprint, last sprint goal (10) reached (12)
     [25] compiled DevIL for i386 and x86_64, created fat binary
     [25] added support for loading images and creating opengl textures
     
+2010-10-05
+    [25] added another snail + stuff for displaying textured sprites
+    [25] solved a bug where textures were rotated 90°. cleaned up some stuff

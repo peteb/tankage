@@ -5,8 +5,10 @@
  */
 
 #include "texture.h"
+#include <iostream>
 
 Texture::Texture(GLuint texId)
    : texId(texId)
 {
+   std::cout << "created texId " << texId << std::endl;
 }

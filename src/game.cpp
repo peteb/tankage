@@ -11,12 +11,19 @@
 #include <boost/make_shared.hpp>
 
 Game::Game() {
-   playerSprite = graphics.createSprite();
+   playerSprite = graphics.createSprite("../data/snail2.png");
    playerSprite->setPosition(vec2(10.0f, 10.0f));
 
-   playerEntity = boost::make_shared<PlayerEntity>();
+   playerSprite2 = graphics.createSprite("../data/snail2.png");
+   playerSprite2->setPosition(vec2(10.0f, 50.0f));
+
+   playerEntity = boost::make_shared<PlayerEntity>(500.0f);
    playerController.setTarget(playerEntity);
    playerEntity->setTarget(playerSprite);
+
+   playerEntity2 = boost::make_shared<PlayerEntity>(100.0f);
+   playerEntity2->setTarget(playerSprite2);
+
 }
 
 Game::~Game() {
@@ -26,6 +33,7 @@ Game::~Game() {
 void Game::tick(float dt) {
    playerController.update(dt);
    playerEntity->update(dt);
+   playerEntity2->update(dt);
    physics.update(dt);
    graphics.render(dt);
    // const float step_size = 1.0f / 40.0f;
