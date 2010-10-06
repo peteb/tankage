@@ -9,8 +9,9 @@
 
 #include <boost/weak_ptr.hpp>
 #include "reference_frame.h"
+#include "triggerable.h"
 
-class PlayerEntity : public ReferenceFrame2D {
+class PlayerEntity : public ReferenceFrame2D, public Triggerable {
 public:
    PlayerEntity(float x);
    
@@ -20,7 +21,12 @@ public:
    void setPosition(const vec2 & newPos);
    vec2 getPosition() const;
    
+   void trigger(const std::string & action, int state);
+   
 private:
+   int shooting;
+   float tshot;
+   
    float xPos;
    boost::weak_ptr<ReferenceFrame2D> target;
 };

@@ -27,6 +27,7 @@ static void GLFWCALL KeyStateChange(int key, int state) {
       boundKeys[GLFW_KEY_DOWN] = "down_arrow";
       boundKeys[GLFW_KEY_LEFT] = "left_arrow";
       boundKeys[GLFW_KEY_RIGHT] = "right_arrow";
+      boundKeys[GLFW_KEY_SPACE] = "shoot";
       
       std::string keyName = "unknown";
       KeyMap::const_iterator iter = boundKeys.find(key);

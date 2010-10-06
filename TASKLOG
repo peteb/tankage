@@ -27,3 +27,7 @@ New sprint, last sprint goal (10) reached (12)
 2010-10-05
     [25] added another snail + stuff for displaying textured sprites
     [25] solved a bug where textures were rotated 90°. cleaned up some stuff
+    
+2010-10-06
+    [25] added generic code for triggering of events (used for shooting)
+    

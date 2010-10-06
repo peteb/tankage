@@ -18,9 +18,10 @@ Game::Game() {
    playerSprite2->setPosition(vec2(10.0f, 50.0f));
 
    playerEntity = boost::make_shared<PlayerEntity>(500.0f);
-   playerController.setTarget(playerEntity);
+   playerController.setRefFrameDelegate(playerEntity);
+   playerController.setActionDelegate(playerEntity);
    playerEntity->setTarget(playerSprite);
-
+   
    playerEntity2 = boost::make_shared<PlayerEntity>(100.0f);
    playerEntity2->setTarget(playerSprite2);
 
@@ -54,22 +55,6 @@ void Game::windowChangedSize(int width, int height) {
 // to the controller
 void Game::keyStateChanged(const std::string & key, int state) {
    std::cout << key << ": " << state << std::endl;
-   
-   int dir = -1;
-   
-   if (key == "up_arrow")
-      dir = 0;
-   else if (key == "right_arrow")
-      dir = 1;
-   else if (key == "down_arrow")
-      dir = 2;
-   else if (key == "left_arrow")
-      dir = 3;
       
-   if (dir > -1) {
-      if (state)
-         playerController.startDirection(dir);
-      else
-         playerController.stopDirection(dir);
-   }
+   playerController.toggle(key, state);
 }
