@@ -13,11 +13,11 @@
 #include "physics/phys_subsystem.h"
 #include "hi_controller.h"
 #include "player_entity.h"
+#include "object_creator.h"
+#include "world.h"
 
-namespace Graphics {
-   class Sprite;
-}
-
+class Snail;
+ 
 class Game {
 public:
    Game();
@@ -28,17 +28,13 @@ public:
    void keyStateChanged(const std::string & key, int state);
    
 private:
-   boost::shared_ptr<Graphics::Sprite> playerSprite;
+   boost::weak_ptr<Snail> firstSnail;
+   boost::weak_ptr<Snail> secondSnail;
    HiController playerController;
-   boost::shared_ptr<PlayerEntity> playerEntity;
-
-   boost::shared_ptr<Graphics::Sprite> playerSprite2;
-   //HiController playerController2;
-   boost::shared_ptr<PlayerEntity> playerEntity2;
 
    
-   Graphics::Subsystem graphics;
-   Physics::Subsystem physics;
+   World world;
+   ObjectCreator creator;
 };
 
 #endif /* end of include guard: GAME_H_RGVIQMD1 */

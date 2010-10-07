@@ -5,9 +5,16 @@
  */
 
 #include "player_entity.h"
+#include "bullet.h"
+#include "object_creator.h"
+#include "world.h"
+#include "graphics/sprite.h"
 #include <algorithm>
 
-PlayerEntity::PlayerEntity(float x) {
+PlayerEntity::PlayerEntity(float x, ObjectCreator & creator, World & world) 
+   : creator(creator)
+   , world(world)
+{
    xPos = x;
    shooting = 0;
    tshot = 0.0f;
@@ -17,9 +24,11 @@ void PlayerEntity::setTarget(const boost::weak_ptr<ReferenceFrame2D> & newTarget
    this->target = newTarget;
 }
 
-#include <iostream>
-void shoot() {
-   std::cout << "SHOOT" << std::endl;
+void PlayerEntity::shoot() {
+   boost::shared_ptr<Bullet> bullet = creator.createBullet();
+   bullet->sprite->setPosition(getPosition());
+   world.insert(bullet);
+  // world.add(bullet);
 }
 
 void PlayerEntity::update(float dt) {

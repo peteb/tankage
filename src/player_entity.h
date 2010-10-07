@@ -11,9 +11,12 @@
 #include "reference_frame.h"
 #include "triggerable.h"
 
+class ObjectCreator;
+class World;
+
 class PlayerEntity : public ReferenceFrame2D, public Triggerable {
 public:
-   PlayerEntity(float x);
+   PlayerEntity(float x, ObjectCreator & creator, World & world);
    
    void setTarget(const boost::weak_ptr<ReferenceFrame2D> & newTarget);
    void update(float dt);
@@ -24,11 +27,15 @@ public:
    void trigger(const std::string & action, int state);
    
 private:
+   void shoot();
+   
    int shooting;
    float tshot;
    
    float xPos;
    boost::weak_ptr<ReferenceFrame2D> target;
+   ObjectCreator & creator;
+   World & world;
 };
 
 #endif /* end of include guard: PLAYER_ENTITY_H_5TG24XG5 */

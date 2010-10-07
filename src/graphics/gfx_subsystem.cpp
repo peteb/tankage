@@ -68,7 +68,10 @@ void Subsystem::resizeViewport(const vec2 & size) {
 boost::shared_ptr<Sprite> Subsystem::createSprite(const std::string & fragments) {
    boost::shared_ptr<Texture> spriteTexture = textureCache.loadTexture(fragments);
    boost::shared_ptr<Sprite> newSprite = boost::make_shared<Sprite>(spriteTexture);   
-   sprites.push_back(newSprite);
    
    return newSprite;   
+}
+
+void Subsystem::addSpriteToScene(const boost::shared_ptr<Sprite> & sprite) {
+   sprites.push_back(sprite);   
 }

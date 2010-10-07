@@ -6,25 +6,22 @@
 
 #include "game.h"
 #include "graphics/sprite.h"
-#include <iostream>
+#include "snail.h"
 
+#include <iostream>
 #include <boost/make_shared.hpp>
 
-Game::Game() {
-   playerSprite = graphics.createSprite("../data/snail2.png");
-   playerSprite->setPosition(vec2(10.0f, 10.0f));
-
-   playerSprite2 = graphics.createSprite("../data/snail2.png");
-   playerSprite2->setPosition(vec2(10.0f, 50.0f));
-
-   playerEntity = boost::make_shared<PlayerEntity>(500.0f);
-   playerController.setRefFrameDelegate(playerEntity);
-   playerController.setActionDelegate(playerEntity);
-   playerEntity->setTarget(playerSprite);
+Game::Game()
+   : creator(world)
+{
+   firstSnail = world.insert(creator.createSnail(100.0f, creator, world));
+   secondSnail = world.insert(creator.createSnail(500.0f, creator, world));
    
-   playerEntity2 = boost::make_shared<PlayerEntity>(100.0f);
-   playerEntity2->setTarget(playerSprite2);
-
+   firstSnail.lock()->sprite->setPosition(vec2(10.0f, 10.0f));
+   // TODO: scheduler <-- updatable
+   
+   playerController.setRefFrameDelegate(firstSnail.lock()->logic);
+   playerController.setActionDelegate(firstSnail.lock()->logic);
 }
 
 Game::~Game() {
@@ -33,10 +30,11 @@ Game::~Game() {
 
 void Game::tick(float dt) {
    playerController.update(dt);
-   playerEntity->update(dt);
-   playerEntity2->update(dt);
-   physics.update(dt);
-   graphics.render(dt);
+   firstSnail.lock()->logic->update(dt);
+   secondSnail.lock()->logic->update(dt);
+   
+   world.physics.update(dt);
+   world.graphics.render(dt);
    // const float step_size = 1.0f / 40.0f;
    // accum_time += dt;
    // 
@@ -47,8 +45,8 @@ void Game::tick(float dt) {
 
 void Game::windowChangedSize(int width, int height) {
    std::cout << "Window changed size: " << width << ", " << height << std::endl;
-   graphics.resizeViewport(vec2(width, height));
-   physics.resizeArea(width, height);
+   world.graphics.resizeViewport(vec2(width, height));
+   world.physics.resizeArea(width, height);
 }
 
 // shouldn't really be here. would be better if glfw talked directly
