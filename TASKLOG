@@ -39,3 +39,13 @@ New sprint, last sprint goal (10) reached (12)
     [25] engine is taking form
     [25] fixed up the architecture a bit more
     
+2010-10-08
+    [25] setting up cmake
+    [25] same
+    
+2010-10-09
+    [25] trying to get it linking again...
+    [25] still working on making it compile. glfw can only be compiled on 32bit due to
+         Carbon being deprecated...
+    [25] still cmake
+    

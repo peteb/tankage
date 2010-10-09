@@ -1,1 +1,1 @@
-g++ *.cpp */*.cpp -I. -arch i386 -I../inc/ -L../libs/macosx/ -lglfw -lIL -framework Cocoa -framework OpenGL
+g++ *.cpp */*.cpp -I. -arch x86_64 -I../inc/ -L../libs/macosx/ -lglfw -libIL.la -framework Cocoa -framework OpenGL
