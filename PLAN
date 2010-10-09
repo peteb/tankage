@@ -20,6 +20,7 @@ Goals
 =====
 2010-09-27: 10 blocks finished
 2010-10-07: 10 blocks finished
+2010-10-14: 7 blocks finished
 
 Iteration 1:
     Create graphics subsystem                               DONE
@@ -43,5 +44,6 @@ Iteration 3:
     Weapon system; rocket launcher
     Ammunition
     
-        
-        
+Iteration 4:
+    Effects, particle systems
+
