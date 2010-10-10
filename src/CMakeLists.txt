@@ -1,0 +1,23 @@
+
+add_subdirectory(graphics)
+add_subdirectory(physics)
+
+add_executable(snail-wail
+   bullet.cpp
+   game.cpp
+   glfw_main.cpp
+   hi_controller.cpp
+   object_creator.cpp
+   object_list.cpp
+   player_entity.cpp
+   rect.cpp
+   snail.cpp
+   vec2.cpp
+   world.cpp
+)
+
+
+#find_package(Carbon)
+#set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -framework Cocoa")
+#find_package(Cocoa)
+target_link_libraries(snail-wail png12 IL graphics physics glfw "-framework Cocoa")
