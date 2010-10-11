@@ -48,7 +48,7 @@
 2010-10-09
     [25] trying to get it linking again...
     [25] still working on making it compile. glfw can only be compiled on 32bit due to
-         Carbon being deprecated...
+         Carbon being deprecated... (maybe wrong here, it might use Cocoa after all)
     [25] still cmake
     
 2010-10-10

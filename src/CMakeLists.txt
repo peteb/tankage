@@ -17,7 +17,17 @@ add_executable(snail-wail
 )
 
 
-#find_package(Carbon)
-#set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -framework Cocoa")
-#find_package(Cocoa)
-target_link_libraries(snail-wail png12 IL graphics physics glfw "-framework Cocoa")
+find_package(Cocoa REQUIRED)
+find_package(glfw REQUIRED)
+
+include_directories(
+   ${GLFW_INCLUDE_DIR} 
+   ${Cocoa_INCLUDE_DIR}
+)
+
+target_link_libraries(snail-wail 
+   graphics 
+   physics 
+   ${GLFW_LIBRARY} 
+   ${Cocoa_LIBRARIES}
+)

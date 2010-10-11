@@ -1,7 +1,9 @@
 
 
-find_package(OpenGL)
-#find_package()
+find_package(OpenGL REQUIRED)
+find_package(DevIL REQUIRED)
+find_package(png) # for DevIL
+find_package(jpeg)
 
 add_library(graphics 
    gfx_subsystem.cpp
@@ -10,4 +12,14 @@ add_library(graphics
    texture_loader.cpp
 )
 
-target_link_libraries(graphics ${OPENGL_LIBRARIES} ${DEVIL_LIBRARIES} IL png14 jpeg m z)
+include_directories(
+   ${IL_INCLUDE_DIR}
+   ${OPENGL_INCLUDE_DIR}
+)
+
+target_link_libraries(graphics 
+   ${OPENGL_LIBRARIES} 
+   ${IL_LIBRARY} 
+   ${PNG_LIBRARIES}
+   ${JPEG_LIBRARIES}
+)
