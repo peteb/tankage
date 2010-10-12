@@ -7,11 +7,13 @@
 #ifndef WORLD_H_1FEL58C0
 #define WORLD_H_1FEL58C0
 
+#include <boost/shared_ptr.hpp>
+#include <boost/weak_ptr.hpp>
+
 #include "graphics/gfx_subsystem.h"
 #include "physics/phys_subsystem.h"
 #include "object_list.h"
-#include <boost/shared_ptr.hpp>
-#include <boost/weak_ptr.hpp>
+#include "scheduler.h"
 
 class Object;
  
@@ -21,13 +23,14 @@ public:
    boost::weak_ptr<T> insert(const boost::shared_ptr<T> & object) {
       object->submitComponents(*this);
       liveObjects.add(object);   
-
+      
       return object;      
    }
    
    Graphics::Subsystem graphics;
    Physics::Subsystem physics;
    ObjectList liveObjects;
+   Scheduler scheduler;
 };
 
 

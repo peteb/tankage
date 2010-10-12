@@ -55,3 +55,9 @@
     [25] compiling libs etc. is this ever going to work?!
     [25] more of that. I see a light in the end, now.
     
+2010-10-11
+    [25] improved cmake build system, added updatable
+    
+2010-10-12
+    [25] added scheduler for interval-based events
+    

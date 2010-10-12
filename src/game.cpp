@@ -18,7 +18,7 @@ Game::Game()
    secondSnail = world.insert(creator.createSnail(500.0f, creator, world));
    
    firstSnail.lock()->sprite->setPosition(vec2(10.0f, 10.0f));
-   // TODO: scheduler <-- updatable
+   firstSnail.lock()->setPosition(vec2(10.0f, 10.0f));
    
    playerController.setRefFrameDelegate(firstSnail.lock()->logic);
    playerController.setActionDelegate(firstSnail.lock()->logic);
@@ -30,11 +30,13 @@ Game::~Game() {
 
 void Game::tick(float dt) {
    playerController.update(dt);
-   firstSnail.lock()->logic->update(dt);
-   secondSnail.lock()->logic->update(dt);
+//   firstSnail.lock()->logic->update(dt);
+//   secondSnail.lock()->logic->update(dt);
    
+   world.scheduler.update(dt);
    world.physics.update(dt);
    world.graphics.render(dt);
+   
    // const float step_size = 1.0f / 40.0f;
    // accum_time += dt;
    // 

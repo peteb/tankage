@@ -10,11 +10,12 @@
 #include <boost/weak_ptr.hpp>
 #include "reference_frame.h"
 #include "triggerable.h"
+#include "updatable.h"
 
 class ObjectCreator;
 class World;
 
-class PlayerEntity : public ReferenceFrame2D, public Triggerable {
+class PlayerEntity : public ReferenceFrame2D, public Triggerable, public Updatable {
 public:
    PlayerEntity(float x, ObjectCreator & creator, World & world);
    

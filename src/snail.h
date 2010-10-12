@@ -14,10 +14,13 @@ namespace Graphics {class Sprite; class Subsystem; }
 
 class PlayerEntity;
 class World;
+class vec2;
 
 class Snail : public Object {
 public:
    void submitComponents(World & world);
+   
+   void setPosition(const vec2 & pos);
    
    boost::shared_ptr<Graphics::Sprite> sprite;
    boost::shared_ptr<PlayerEntity> logic;
