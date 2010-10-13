@@ -7,14 +7,16 @@
 #ifndef BODY_H_JI764YY5
 #define BODY_H_JI764YY5
 
-class rect;
- 
+
 namespace Physics {
    class Subsystem;
-   
+
+   /*
+    * A physical body that can be acted upon through forces
+    */
    class Body {
    private:
-      Body(Physics::Subsystem & subsystem, rect * area);
+      Body(Physics::Subsystem & subsystem);
       
    public:
       
@@ -22,7 +24,7 @@ namespace Physics {
       
    private:
       Physics::Subsystem & subsystem;
-      rect * area;
+
    };
    
 }

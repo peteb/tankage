@@ -17,7 +17,6 @@ Game::Game()
    firstSnail = world.insert(creator.createSnail(100.0f, creator, world));
    secondSnail = world.insert(creator.createSnail(500.0f, creator, world));
    
-   firstSnail.lock()->sprite->setPosition(vec2(10.0f, 10.0f));
    firstSnail.lock()->setPosition(vec2(10.0f, 10.0f));
    
    playerController.setRefFrameDelegate(firstSnail.lock()->logic);

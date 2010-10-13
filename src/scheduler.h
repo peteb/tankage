@@ -17,7 +17,7 @@ public:
    class Item {
    private:
       Item(float interval, const boost::weak_ptr<Updatable> & receiver);
-      void trigger(float dt);
+      bool trigger(float dt);
       
       float interval;
       boost::weak_ptr<Updatable> receiver;

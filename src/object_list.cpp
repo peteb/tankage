@@ -9,3 +9,7 @@
 void ObjectList::add(const boost::shared_ptr<Object> & object) {
    objects.push_back(object);
 }
+
+void ObjectList::erase() {
+   
+}

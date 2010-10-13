@@ -39,7 +39,7 @@
     [25] engine is taking form
     [25] fixed up the architecture a bit more
     
-*** Sprint finished, goal (10) reached (11)
+*** Sprint finished, goal (10) reached (11) total: 23
 
 2010-10-08
     [25] setting up cmake
@@ -60,4 +60,8 @@
     
 2010-10-12
     [25] added scheduler for interval-based events
+    
+2010-10-13
+    [25] worked on object lifetime management
+    
     

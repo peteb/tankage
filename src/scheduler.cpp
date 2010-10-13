@@ -14,10 +14,18 @@ Scheduler::Item::Item(float interval, const boost::weak_ptr<Updatable> & receive
    this->interval = interval;
 }
        
-void Scheduler::Item::trigger(float dt) {
+bool Scheduler::Item::trigger(float dt) {
+   bool retainItem = true;
+   
    if (boost::shared_ptr<Updatable> lReceiver = receiver.lock()) {
       lReceiver->update(dt);
+      retainItem = true;
    }
+   else {
+      retainItem = false;
+   }
+   
+   return retainItem;
 }
 
 
@@ -26,9 +34,19 @@ void Scheduler::subscribe(float interval, const boost::weak_ptr<Updatable> & rec
 }
 
 void Scheduler::update(float dt) {
-   for (int i = 0; i < scheduledItems.size(); ++i) {
+   unsigned listSize = scheduledItems.size();
+   
+   // TODO: make sure no modifications to the scheduledItems list can be done
+   //       while this method is running. new items should be added to another list first
+   
+   for (int i = 0; i < listSize; ++i) {
       Item & item = scheduledItems[i];
-      item.trigger(dt);
+      if (!item.trigger(dt)) {
+         scheduledItems[i] = scheduledItems[std::max(0u, listSize - 1)];
+         listSize--;
+      }
    }
+   
+   scheduledItems.erase(scheduledItems.begin() + listSize, scheduledItems.end());
 }
 

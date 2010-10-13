@@ -6,9 +6,8 @@
 
 #include "body.h"
 
-Physics::Body::Body(Physics::Subsystem & subsystem, rect * area)
+Physics::Body::Body(Physics::Subsystem & subsystem)
    : subsystem(subsystem)
-   , area(area)
 {
    
 }

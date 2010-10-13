@@ -24,11 +24,11 @@ namespace Physics {
       
       void update(float dt);
       void resizeArea(int width, int height);
-      boost::shared_ptr<Body> createBody(const std::string & area);
+      boost::shared_ptr<Body> createBody();
       
    private:
-      vec2 maxArea;
-      rect leftArea, rightArea;
+      // vec2 maxArea;
+      // rect leftArea, rightArea;
       std::vector<boost::weak_ptr<Body> > bodies;
    };
    

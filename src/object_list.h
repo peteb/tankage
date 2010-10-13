@@ -11,10 +11,15 @@
 #include <vector>
 
 class Object;
- 
+
 class ObjectList {
 public:
    void add(const boost::shared_ptr<Object> & object);
+   void erase(); // remove from list
+   
+   
+   // object should receive a method call when added to an object list
+   // object should have a "kill" method, that removes the object from those lists
    
 private:
    std::vector<boost::shared_ptr<Object> > objects;
