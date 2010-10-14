@@ -5,12 +5,15 @@
  */
 
 #include "graphics/sprite.h"
+#include "graphics/texture.h"
+#include "graphics/gfx_subsystem.h"
 
 using Graphics::Sprite;
  
-Sprite::Sprite(const boost::shared_ptr<Texture> & texture) 
+Sprite::Sprite(const boost::shared_ptr<Texture> & texture, BoundedSprite * sceneNode) 
    : position(vec2::Zero) 
    , texture(texture)
+   , sceneNode(sceneNode)
 {
    
 }
@@ -32,8 +35,14 @@ std::vector<Vertex2T2> Sprite::constructVertices() const {
 
 void Sprite::setPosition(const vec2 & newPos) {
    this->position = newPos;
+   if (sceneNode)
+      sceneNode->boundingArea.origin = newPos;
 }
 
 vec2 Sprite::getPosition() const {
    return position;
+}
+
+rect Sprite::getSize() const {
+   return texture->getSize();
 }

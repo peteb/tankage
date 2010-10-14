@@ -7,6 +7,7 @@
 #include "graphics/gfx_subsystem.h"
 #include "graphics/sprite.h"
 #include "graphics/vertex.h"
+#include "graphics/texture.h"
 #include <OpenGL/OpenGL.h>
 #include <boost/make_shared.hpp>
 
@@ -17,18 +18,23 @@ Subsystem::Subsystem()
 {
 }
 
-
+#include <iostream>
 void Subsystem::render(float dt) {
    glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
    glClear(GL_COLOR_BUFFER_BIT);
 
-   glViewport(0, 0, int(viewport.x), int(viewport.y));
+   vec2 min, max;
+   viewport.getCoords(min, max);
+   glViewport(int(min.x), int(min.y), int(max.x - min.x), int(max.y - min.y));
    
    glMatrixMode(GL_PROJECTION);
    glLoadIdentity();
    
-   const float scaleX = 2.0f / viewport.x;
-   const float scaleY = 2.0f / viewport.y;
+   const float scaleX = 1.0f / viewport.halfSize.x;
+   const float scaleY = 1.0f / viewport.halfSize.y;
+
+   bool showBoundingAreas = true;
+   
    glTranslatef(-1.0f, 1.0f, 0.0f);
    glScalef(scaleX, -scaleY, 1.0f);
    
@@ -43,37 +49,74 @@ void Subsystem::render(float dt) {
    
    glEnable(GL_TEXTURE_2D);
    
+   int rendered = 0;
+   
    for (unsigned i = 0; i < sprites.size(); ++i) {
-      if (boost::shared_ptr<Sprite> sprite = sprites[i].lock()) {
-         glBegin(GL_QUADS);
-         // glColor3f(1.0f, 0.0f, 0.0f);
-
-         std::vector<Vertex2T2> vertices = sprite->constructVertices();
-         for (unsigned i = 0; i < vertices.size(); ++i) {
-            const vec2 pos = vertices[i].pos + sprite->getPosition();
-            glTexCoord2f(vertices[i].tc.x, vertices[i].tc.y);
-            glVertex2f(pos.x, pos.y);
-         }
+      const BoundedSprite * bs = sprites[i];
       
-         glEnd();
-      }
-      else {
-         sprites.erase(sprites.begin() + i);
+      if (rect::intersect(bs->boundingArea, viewport)) {
+         if (boost::shared_ptr<Sprite> sprite = bs->sprite.lock()) {
+            glEnable(GL_TEXTURE_2D);
+            glBegin(GL_QUADS);
+            glColor3f(1.0f, 1.0f, 1.0f);
+            rendered++;
+            std::vector<Vertex2T2> vertices = sprite->constructVertices();
+            for (unsigned i = 0; i < vertices.size(); ++i) {
+               const vec2 pos = vertices[i].pos + sprite->getPosition();
+               glTexCoord2f(vertices[i].tc.x, vertices[i].tc.y);
+               glVertex2f(pos.x, pos.y);
+            }
+      
+            glEnd();
+
+            if (showBoundingAreas) {
+               glColor4f(0.0f, 0.0f, 1.0f, 0.5f);
+               glDisable(GL_TEXTURE_2D);
+               glBegin(GL_QUADS);
+               vec2 min, max;
+               bs->boundingArea.getCoords(min, max);
+               glVertex2f(min.x, min.y);
+               glVertex2f(max.x, min.y);
+               glVertex2f(max.x, max.y);
+               glVertex2f(min.x, max.y);
+               glEnd();
+            }
+
+         }
+         else {
+            sprites.erase(sprites.begin() + i);
+            // TODO: this is totally wrong!
+         }
+
+
       }
    }
+   
+   std::cout << "Rendered: " << rendered << std::endl;
 }
 
-void Subsystem::resizeViewport(const vec2 & size) {
+void Subsystem::resizeViewport(const rect & size) {
    viewport = size;
 }
 
 boost::shared_ptr<Sprite> Subsystem::createSprite(const std::string & fragments) {
    boost::shared_ptr<Texture> spriteTexture = textureCache.loadTexture(fragments);
-   boost::shared_ptr<Sprite> newSprite = boost::make_shared<Sprite>(spriteTexture);   
+   
+   BoundedSprite * node = new BoundedSprite;
+   node->boundingArea = spriteTexture->getSize();
+   node->boundingArea.origin = vec2::Zero;
+
+   boost::shared_ptr<Sprite> newSprite = boost::make_shared<Sprite>(spriteTexture, node);   
+   node->sprite = newSprite;
+   
+   sprites.push_back(node);
    
    return newSprite;   
 }
 
 void Subsystem::addSpriteToScene(const boost::shared_ptr<Sprite> & sprite) {
-   sprites.push_back(sprite);   
+   // BoundedSprite node;
+   // node.sprite = sprite;
+   // node.boundingArea = sprite->getSize();
+   // sprites.push_back(node);   
 }

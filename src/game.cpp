@@ -7,6 +7,7 @@
 #include "game.h"
 #include "graphics/sprite.h"
 #include "snail.h"
+#include "rect.h"
 
 #include <iostream>
 #include <boost/make_shared.hpp>
@@ -46,7 +47,7 @@ void Game::tick(float dt) {
 
 void Game::windowChangedSize(int width, int height) {
    std::cout << "Window changed size: " << width << ", " << height << std::endl;
-   world.graphics.resizeViewport(vec2(width, height));
+   world.graphics.resizeViewport(rect(vec2::Zero, width, height));
    world.physics.resizeArea(width, height);
 }
 

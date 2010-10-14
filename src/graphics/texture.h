@@ -8,15 +8,18 @@
 #define TEXTURE_H_61TB0IDZ
 
 #include <OpenGL/OpenGL.h>
+#include "rect.h"
 
 class Texture {
 public:
+   rect getSize() const;
    
 private:
-   Texture(GLuint texId);
+   Texture(GLuint texId, const rect & size);
    
    friend class TextureLoader;
 
+   rect size;
    GLuint texId;
 };
 

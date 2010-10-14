@@ -68,4 +68,6 @@
     [25] improved sprites
     [25] improved sprites
     [25] worked on physical bodies
+    [25] fixing bounding areas for sprites
+    [25] the gfx subsystem won't render sprites with an out-of-bounds bounding area
     

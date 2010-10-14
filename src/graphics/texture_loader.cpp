@@ -67,7 +67,9 @@ boost::shared_ptr<Texture> TextureLoader::loadTexture(const std::string & name) 
    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
-   boost::shared_ptr<Texture> texture(new Texture(newTexture));
+   boost::shared_ptr<Texture> texture(
+      new Texture(newTexture, rect(vec2::Zero, width, height))
+   );
    cachedTextures.insert(std::make_pair(name, texture));
    
    return texture;

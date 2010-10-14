@@ -12,24 +12,37 @@
 #include <vector>
 #include "vec2.h"
 #include "texture_loader.h"
+#include "rect.h"
 
 namespace Graphics {
    class Sprite;
+   class BoundedSprite;
    
    class Subsystem {
    public:
       Subsystem();
       
       void render(float dt);
-      void resizeViewport(const vec2 & size);
+      void resizeViewport(const rect & size);
       boost::shared_ptr<Sprite> createSprite(const std::string & fragments);
       void addSpriteToScene(const boost::shared_ptr<Sprite> & sprite);
       
    private:
       TextureLoader textureCache;
-      std::vector<boost::weak_ptr<Graphics::Sprite> > sprites;
-      vec2 viewport;
+      std::vector<BoundedSprite *> sprites;
+      rect viewport;
    };
+
+   class BoundedSprite {
+   private:
+      boost::weak_ptr<Graphics::Sprite> sprite;
+
+   public:
+      rect boundingArea;
+      
+      friend class Graphics::Subsystem;
+   };
+
 }
 
 #endif /* end of include guard: GFX_SUBSYSTEM_H_EAH7WN3F */
