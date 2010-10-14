@@ -21,7 +21,11 @@ Subsystem::Subsystem()
 }
 
 void Subsystem::update(float dt) {
-   
+   for (int i = 0; i < bodies.size(); ++i) {
+      if (boost::shared_ptr<Body> body = bodies[i].lock()) {
+         body->update(dt);
+      }      
+   }
 }
 
 void Subsystem::resizeArea(int width, int height) {
@@ -34,17 +38,12 @@ void Subsystem::resizeArea(int width, int height) {
 }
 
 boost::shared_ptr<Body> Subsystem::createBody() {
-   // rect * rectArea = 0;
-   // 
-   // if (area == "AREA_LEFT")
-   //    rectArea = &leftArea;
-   // else if (area == "AREA_RIGHT")
-   //    rectArea = &rightArea;
-   // else
-   //    std::cout << "Warning: unknown area: " << area << std::endl;
-      
    boost::shared_ptr<Body> body = boost::shared_ptr<Body>(new Body(*this));
-   bodies.push_back(body);
    
    return body;
 }
+
+void Subsystem::addBody(const boost::weak_ptr<Body> & body) {
+   bodies.push_back(body);   
+}
+

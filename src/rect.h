@@ -11,9 +11,13 @@
 
 class rect {
 public:
-   rect(const vec2 & origin, const vec2 & size);
+   rect(const vec2 & origin, const vec2 & halfSize);
+
+   void getCoords(vec2 & upperLeft, vec2 & lowerRight) const;
    
-   vec2 origin, size;
+   static bool intersect(const rect & r1, const rect & r2);
+   
+   vec2 origin, halfSize;
 };
 
 

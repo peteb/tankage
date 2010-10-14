@@ -9,16 +9,22 @@
 
 #include <boost/shared_ptr.hpp>
 #include "object.h"
+#include "reference_frame.h"
 
 namespace Graphics {class Sprite; }
+namespace Physics {class Body; }
 
 class World;
 
-class Bullet : public Object {
+class Bullet : public Object, public ReferenceFrame2D {
 public:
    void submitComponents(World & world);
 
+   void setPosition(const vec2 & pos);
+   vec2 getPosition() const;
+   
    boost::shared_ptr<Graphics::Sprite> sprite;
+   boost::shared_ptr<Physics::Body> body;
 };
 
 #endif /* end of include guard: BULLET_H_1LH5R0L7 */

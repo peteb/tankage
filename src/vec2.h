@@ -11,6 +11,7 @@
 
 class vec2 {
 public:
+   vec2();
    vec2(float x, float y);
    
    vec2 operator + (const vec2 & rh) const;

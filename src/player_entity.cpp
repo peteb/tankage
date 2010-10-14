@@ -26,7 +26,7 @@ void PlayerEntity::setTarget(const boost::weak_ptr<ReferenceFrame2D> & newTarget
 
 void PlayerEntity::shoot() {
    boost::shared_ptr<Bullet> bullet = creator.createBullet();
-   bullet->sprite->setPosition(getPosition());
+   bullet->setPosition(getPosition());
    world.insert(bullet);
   // world.add(bullet);
 }
@@ -45,7 +45,7 @@ void PlayerEntity::update(float dt) {
          shooting = 0;
    }
    else if (shooting == 2) {
-      if (tshot >= 0.5) {
+      if (tshot >= 0.05) {
          tshot = 0.0f;
          shoot();
       }

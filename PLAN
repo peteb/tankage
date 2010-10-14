@@ -35,7 +35,7 @@ Iteration 2:
     Restrain snails to world, disable X-movement            DONE
     Weapons and bullets (shooting, no collision detection)  
     Implement CMake                                         DONE
-    Improve snail sprite
+    Improve snail sprite                                    DONE
     
 Iteration 3:        
     Collision detection between snails and projectiles

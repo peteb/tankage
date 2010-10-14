@@ -24,6 +24,8 @@ namespace Physics {
       
       void update(float dt);
       void resizeArea(int width, int height);
+      void addBody(const boost::weak_ptr<Body> & body);
+      
       boost::shared_ptr<Body> createBody();
       
    private:

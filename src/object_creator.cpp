@@ -12,6 +12,7 @@
 #include "graphics/sprite.h"
 #include "player_entity.h"
 #include "world.h"
+#include "physics/body.h"
 
 ObjectCreator::ObjectCreator(World & world)
    : world(world)
@@ -21,6 +22,8 @@ ObjectCreator::ObjectCreator(World & world)
 boost::shared_ptr<Bullet> ObjectCreator::createBullet() {
    boost::shared_ptr<Bullet> newBullet = boost::make_shared<Bullet>();
    newBullet->sprite = world.graphics.createSprite("../data/snail2.png");
+   newBullet->body = world.physics.createBody();
+   newBullet->body->setDelegate(newBullet->sprite);
    
    return newBullet;
 }
