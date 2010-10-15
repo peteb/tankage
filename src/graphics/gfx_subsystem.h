@@ -35,10 +35,13 @@ namespace Graphics {
 
    class BoundedSprite {
    private:
+      BoundedSprite() {visibleLastFrame = false; }
+      
       boost::weak_ptr<Graphics::Sprite> sprite;
 
    public:
       rect boundingArea;
+      bool visibleLastFrame;
       
       friend class Graphics::Subsystem;
    };

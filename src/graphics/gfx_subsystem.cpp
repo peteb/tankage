@@ -51,16 +51,25 @@ void Subsystem::render(float dt) {
    
    int rendered = 0;
    
-   for (unsigned i = 0; i < sprites.size(); ++i) {
-      const BoundedSprite * bs = sprites[i];
+   std::vector<BoundedSprite *>::iterator iter = sprites.begin();
+   
+   while (iter != sprites.end()) {
+      BoundedSprite * bs = *iter;
       
       if (rect::intersect(bs->boundingArea, viewport)) {
+
          if (boost::shared_ptr<Sprite> sprite = bs->sprite.lock()) {
+            if (!bs->visibleLastFrame) {
+               sprite->enteredView();
+               bs->visibleLastFrame = true;
+            }
+            
             glEnable(GL_TEXTURE_2D);
             glBegin(GL_QUADS);
             glColor3f(1.0f, 1.0f, 1.0f);
             rendered++;
             std::vector<Vertex2T2> vertices = sprite->constructVertices();
+            
             for (unsigned i = 0; i < vertices.size(); ++i) {
                const vec2 pos = vertices[i].pos + sprite->getPosition();
                glTexCoord2f(vertices[i].tc.x, vertices[i].tc.y);
@@ -82,17 +91,25 @@ void Subsystem::render(float dt) {
                glEnd();
             }
 
+            ++iter;
          }
          else {
-            sprites.erase(sprites.begin() + i);
-            // TODO: this is totally wrong!
+            delete bs;
+            iter = sprites.erase(iter);
+         }         
+      }
+      else {
+         if (bs->visibleLastFrame) {
+            if (boost::shared_ptr<Sprite> sprite = bs->sprite.lock()) {
+               sprite->leftView();
+               bs->visibleLastFrame = false;
+            }
          }
-
-
+         ++iter;
       }
    }
    
-   std::cout << "Rendered: " << rendered << std::endl;
+  // std::cout << "Rendered: " << rendered << std::endl;
 }
 
 void Subsystem::resizeViewport(const rect & size) {
@@ -106,7 +123,9 @@ boost::shared_ptr<Sprite> Subsystem::createSprite(const std::string & fragments)
    node->boundingArea = spriteTexture->getSize();
    node->boundingArea.origin = vec2::Zero;
 
-   boost::shared_ptr<Sprite> newSprite = boost::make_shared<Sprite>(spriteTexture, node);   
+   boost::shared_ptr<Sprite> newSprite = boost::shared_ptr<Sprite>(
+      new Sprite(spriteTexture, node)
+   );   
    node->sprite = newSprite;
    
    sprites.push_back(node);

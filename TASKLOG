@@ -71,3 +71,8 @@
     [25] fixing bounding areas for sprites
     [25] the gfx subsystem won't render sprites with an out-of-bounds bounding area
     
+*** Sprint finished, goal (7) reached (15) total: 38
+
+2010-10-15
+    [25] handling sprites, not rendering them when they're out of view
+    

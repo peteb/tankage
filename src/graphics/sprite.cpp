@@ -46,3 +46,13 @@ vec2 Sprite::getPosition() const {
 rect Sprite::getSize() const {
    return texture->getSize();
 }
+
+#include <iostream>
+
+void Sprite::enteredView() {
+   std::cout << "entered view" << std::endl;
+}
+
+void Sprite::leftView() {
+   std::cout << "left view" << std::endl;
+}

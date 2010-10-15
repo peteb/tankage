@@ -19,11 +19,19 @@ class Texture;
 namespace Graphics {
    class BoundedSprite;
 
+   class Subsystem;
+   
    class Sprite : public ReferenceFrame2D {
-   public:
+   private:
       Sprite(const boost::shared_ptr<Texture> & texture, BoundedSprite * sceneNode);
+
+      friend class Graphics::Subsystem;
+   public:
       
       std::vector<Vertex2T2> constructVertices() const;
+
+      void enteredView();
+      void leftView();
       
       void setPosition(const vec2 & newPos);
       vec2 getPosition() const;

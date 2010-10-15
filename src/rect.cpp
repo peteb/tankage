@@ -18,6 +18,12 @@ rect::rect(const vec2 & origin, float width, float height) {
    this->origin = origin + halfSize;
 }
 
+rect::rect(float width, float height) 
+   : origin(vec2::Zero)
+   , halfSize(width / 2.0f, height / 2.0f)
+{   
+}
+
 void rect::getCoords(vec2 & upperLeft, vec2 & lowerRight) const {
    upperLeft = origin - halfSize;
    lowerRight = origin + halfSize;
