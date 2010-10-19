@@ -76,3 +76,9 @@
 2010-10-15
     [25] handling sprites, not rendering them when they're out of view
     
+2010-10-19
+    [25] handling events when a sprite goes out of screen, worked on functionality for
+        killing an object
+    [25] worked more on the ability to kill objects
+    [25] components are now cleaned up properly on a kill
+    

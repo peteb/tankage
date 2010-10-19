@@ -9,6 +9,7 @@
 
 #include <vector>
 #include <boost/shared_ptr.hpp>
+#include <boost/weak_ptr.hpp>
 #include "vec2.h"
 #include "reference_frame.h"
 #include "graphics/vertex.h"
@@ -20,14 +21,23 @@ namespace Graphics {
    class BoundedSprite;
 
    class Subsystem;
+
+   class SpriteEventHandler {
+   public:
+      virtual ~SpriteEventHandler() {}
+      
+      virtual void enteredView() {}
+      virtual void leftView() {}
+   };
    
+
    class Sprite : public ReferenceFrame2D {
    private:
       Sprite(const boost::shared_ptr<Texture> & texture, BoundedSprite * sceneNode);
 
       friend class Graphics::Subsystem;
+
    public:
-      
       std::vector<Vertex2T2> constructVertices() const;
 
       void enteredView();
@@ -37,8 +47,11 @@ namespace Graphics {
       vec2 getPosition() const;
 
       rect getSize() const;
+
+      void setEventHandler(const boost::weak_ptr<SpriteEventHandler> & eventHandler);
       
    private:
+      boost::weak_ptr<SpriteEventHandler> eventHandler;
       boost::shared_ptr<Texture> texture;
       vec2 position;
       BoundedSprite * sceneNode;

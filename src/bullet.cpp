@@ -20,3 +20,7 @@ void Bullet::setPosition(const vec2 & pos) {
 vec2 Bullet::getPosition() const {
    return body->getPosition();
 }
+
+void Bullet::leftView() {
+   kill();
+}

@@ -21,10 +21,16 @@ Subsystem::Subsystem()
 }
 
 void Subsystem::update(float dt) {
-   for (int i = 0; i < bodies.size(); ++i) {
-      if (boost::shared_ptr<Body> body = bodies[i].lock()) {
+   std::vector<boost::weak_ptr<Body> >::iterator iter = bodies.begin();
+         
+   while (iter != bodies.end()) {
+      if (boost::shared_ptr<Body> body = iter->lock()) {
          body->update(dt);
+         ++iter;
       }      
+      else {
+         iter = bodies.erase(iter);
+      }
    }
 }
 

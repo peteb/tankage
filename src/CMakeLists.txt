@@ -15,6 +15,7 @@ add_executable(snail-wail
    vec2.cpp
    world.cpp
    scheduler.cpp
+   object.cpp
 )
 
 

@@ -22,6 +22,7 @@ ObjectCreator::ObjectCreator(World & world)
 boost::shared_ptr<Bullet> ObjectCreator::createBullet() {
    boost::shared_ptr<Bullet> newBullet = boost::make_shared<Bullet>();
    newBullet->sprite = world.graphics.createSprite("../data/snail2.png");
+   newBullet->sprite->setEventHandler(newBullet);
    newBullet->body = world.physics.createBody();
    newBullet->body->setDelegate(newBullet->sprite);
    

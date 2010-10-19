@@ -23,10 +23,14 @@ public:
    boost::weak_ptr<T> insert(const boost::shared_ptr<T> & object) {
       object->submitComponents(*this);
       liveObjects.add(object);   
-      
+      object->addedOwner(&liveObjects);
+
       return object;      
    }
    
+   void update() {
+      liveObjects.eraseEnqueuedRemovals();
+   }
    Graphics::Subsystem graphics;
    Physics::Subsystem physics;
    ObjectList liveObjects;

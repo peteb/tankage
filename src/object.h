@@ -8,11 +8,19 @@
 #define OBJECT_H_GV2YM86M
 
 class World;
- 
+class ObjectList;
+
 class Object {
 public:
+   Object();
    virtual ~Object() {}
    virtual void submitComponents(World & wold) =0;
+   
+   void addedOwner(ObjectList * owner);
+   void kill();
+   
+private:
+   ObjectList * owner;
 };
 
 

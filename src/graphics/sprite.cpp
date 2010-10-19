@@ -47,12 +47,16 @@ rect Sprite::getSize() const {
    return texture->getSize();
 }
 
-#include <iostream>
-
 void Sprite::enteredView() {
-   std::cout << "entered view" << std::endl;
+   if (boost::shared_ptr<SpriteEventHandler> locked = eventHandler.lock())
+      locked->enteredView();
 }
 
 void Sprite::leftView() {
-   std::cout << "left view" << std::endl;
+   if (boost::shared_ptr<SpriteEventHandler> locked = eventHandler.lock())
+      locked->leftView();
+}
+
+void Sprite::setEventHandler(const boost::weak_ptr<SpriteEventHandler> & eventHandler) {
+   this->eventHandler = eventHandler;
 }

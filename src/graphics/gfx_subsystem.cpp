@@ -56,9 +56,8 @@ void Subsystem::render(float dt) {
    while (iter != sprites.end()) {
       BoundedSprite * bs = *iter;
       
-      if (rect::intersect(bs->boundingArea, viewport)) {
-
-         if (boost::shared_ptr<Sprite> sprite = bs->sprite.lock()) {
+      if (boost::shared_ptr<Sprite> sprite = bs->sprite.lock()) {
+         if (rect::intersect(bs->boundingArea, viewport)) {
             if (!bs->visibleLastFrame) {
                sprite->enteredView();
                bs->visibleLastFrame = true;
@@ -94,18 +93,19 @@ void Subsystem::render(float dt) {
             ++iter;
          }
          else {
-            delete bs;
-            iter = sprites.erase(iter);
+            if (bs->visibleLastFrame) {
+               if (boost::shared_ptr<Sprite> sprite = bs->sprite.lock()) {
+                  sprite->leftView();
+                  bs->visibleLastFrame = false;
+               }
+            }
+            ++iter;
          }         
       }
       else {
-         if (bs->visibleLastFrame) {
-            if (boost::shared_ptr<Sprite> sprite = bs->sprite.lock()) {
-               sprite->leftView();
-               bs->visibleLastFrame = false;
-            }
-         }
-         ++iter;
+         delete bs;
+         iter = sprites.erase(iter);
+      
       }
    }
    

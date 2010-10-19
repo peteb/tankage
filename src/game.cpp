@@ -36,6 +36,7 @@ void Game::tick(float dt) {
    world.scheduler.update(dt);
    world.physics.update(dt);
    world.graphics.render(dt);
+   world.update();
    
    // const float step_size = 1.0f / 40.0f;
    // accum_time += dt;
