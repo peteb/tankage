@@ -36,7 +36,7 @@ void HiController::stopDirection(int dir) {
 void HiController::update(float dt) {
    static const float speed = 300.0f;
    
-   if (boost::shared_ptr<ReferenceFrame2D> acquiredTarget = reframeDelegate.lock()) {
+   if (boost::shared_ptr<ReferenceFrame2> acquiredTarget = reframeDelegate.lock()) {
       for (unsigned i = 0; i < activeDirs.size(); ++i) {
          if (activeDirs[i])
             acquiredTarget->setPosition(
@@ -47,7 +47,7 @@ void HiController::update(float dt) {
 }
 
 void HiController::setRefFrameDelegate(
-   const boost::weak_ptr<ReferenceFrame2D> & newTarget) 
+   const boost::weak_ptr<ReferenceFrame2> & newTarget) 
 {
    this->reframeDelegate = newTarget;
 }

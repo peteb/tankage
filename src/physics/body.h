@@ -8,7 +8,7 @@
 #define BODY_H_JI764YY5
 
 #include <boost/weak_ptr.hpp>
-#include "reference_frame.h"
+#include "reference_frame2.h"
 
 namespace Physics {
    class Subsystem;
@@ -16,7 +16,7 @@ namespace Physics {
    /*
     * A physical body that can be acted upon through forces
     */
-   class Body : public ReferenceFrame2D {
+   class Body : public ReferenceFrame2 {
    private:
       Body(Physics::Subsystem & subsystem); 
       
@@ -25,14 +25,14 @@ namespace Physics {
       friend class Physics::Subsystem;
 
       void update(float dt);
-      void setDelegate(const boost::weak_ptr<ReferenceFrame2D> & newTarget);
+      void setDelegate(const boost::weak_ptr<ReferenceFrame2> & newTarget);
  
       void setPosition(const vec2 & pos);
       vec2 getPosition() const;
       
    private:
       Physics::Subsystem & subsystem;
-      boost::weak_ptr<ReferenceFrame2D> delegate;
+      boost::weak_ptr<ReferenceFrame2> delegate;
       vec2 position, velocity;
    };
    

@@ -9,7 +9,7 @@
 
 #include <boost/shared_ptr.hpp>
 #include "object.h"
-#include "reference_frame.h"
+#include "reference_frame2.h"
 #include "graphics/sprite.h"
 
 //namespace Graphics {class Sprite; }
@@ -17,7 +17,7 @@ namespace Physics {class Body; }
 
 class World;
 
-class Bullet : public Object, public ReferenceFrame2D, public Graphics::SpriteEventHandler {
+class Bullet : public Object, public ReferenceFrame2, public Graphics::SpriteEventHandler {
 public:
    void submitComponents(World & world);
 

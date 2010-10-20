@@ -10,7 +10,7 @@
 #include <vector>
 #include <boost/weak_ptr.hpp>
 
-class ReferenceFrame2D;
+class ReferenceFrame2;
 class Triggerable;
 
 class HiController {
@@ -21,11 +21,11 @@ public:
    void startDirection(int dir);
    void stopDirection(int dir);
    void update(float dt);
-   void setRefFrameDelegate(const boost::weak_ptr<ReferenceFrame2D> & newTarget);
+   void setRefFrameDelegate(const boost::weak_ptr<ReferenceFrame2> & newTarget);
    void setActionDelegate(const boost::weak_ptr<Triggerable> & newTarget);
    
 private:
-   boost::weak_ptr<ReferenceFrame2D> reframeDelegate;
+   boost::weak_ptr<ReferenceFrame2> reframeDelegate;
    boost::weak_ptr<Triggerable> actionDelegate;
    std::vector<bool> activeDirs;
 };

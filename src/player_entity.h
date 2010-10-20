@@ -8,18 +8,18 @@
 #define PLAYER_ENTITY_H_5TG24XG5
 
 #include <boost/weak_ptr.hpp>
-#include "reference_frame.h"
+#include "reference_frame2.h"
 #include "triggerable.h"
 #include "updatable.h"
 
 class ObjectCreator;
 class World;
 
-class PlayerEntity : public ReferenceFrame2D, public Triggerable, public Updatable {
+class PlayerEntity : public ReferenceFrame2, public Triggerable, public Updatable {
 public:
    PlayerEntity(float x, ObjectCreator & creator, World & world);
    
-   void setTarget(const boost::weak_ptr<ReferenceFrame2D> & newTarget);
+   void setTarget(const boost::weak_ptr<ReferenceFrame2> & newTarget);
    void update(float dt);
    
    void setPosition(const vec2 & newPos);
@@ -34,7 +34,7 @@ private:
    float tshot;
    
    float xPos;
-   boost::weak_ptr<ReferenceFrame2D> target;
+   boost::weak_ptr<ReferenceFrame2> target;
    ObjectCreator & creator;
    World & world;
 };

@@ -11,7 +11,7 @@
 #include <boost/shared_ptr.hpp>
 #include <boost/weak_ptr.hpp>
 #include "vec2.h"
-#include "reference_frame.h"
+#include "reference_frame2.h"
 #include "graphics/vertex.h"
 #include "rect.h"
 
@@ -31,7 +31,7 @@ namespace Graphics {
    };
    
 
-   class Sprite : public ReferenceFrame2D {
+   class Sprite : public ReferenceFrame2 {
    private:
       Sprite(const boost::shared_ptr<Texture> & texture, BoundedSprite * sceneNode);
 
