@@ -17,3 +17,7 @@ Texture::Texture(GLuint texId, const rect & size)
 rect Texture::getSize() const {
    return size;
 }
+
+GLuint Texture::getTexId() const {
+   return texId;
+}

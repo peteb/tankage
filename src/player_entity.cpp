@@ -9,6 +9,7 @@
 #include "object_creator.h"
 #include "world.h"
 #include "graphics/sprite.h"
+#include "physics/body.h"
 #include <algorithm>
 
 PlayerEntity::PlayerEntity(float x, ObjectCreator & creator, World & world) 
@@ -27,6 +28,8 @@ void PlayerEntity::setTarget(const Ref<ReferenceFrame2> & newTarget) {
 void PlayerEntity::shoot() {
    boost::shared_ptr<Bullet> bullet = creator.createBullet();
    bullet->setPosition(getPosition());
+   bullet->body->setVelocity(vec2(800.0f, 0.0f));
+   
    world.insert(bullet);
   // world.add(bullet);
 }
@@ -45,7 +48,7 @@ void PlayerEntity::update(float dt) {
          shooting = 0;
    }
    else if (shooting == 2) {
-      if (tshot >= 0.005) {
+      if (tshot >= 0.1) {
          tshot = 0.0f;
          shoot();
       }

@@ -51,12 +51,14 @@ namespace Graphics {
       // ------------------------------------------------------------
       
       rect getSize() const;
-
+      boost::shared_ptr<Texture> getTexture() const;
+      
       void setEventHandler(const boost::weak_ptr<SpriteEventHandler> & eventHandler);
       
    private:
       boost::weak_ptr<SpriteEventHandler> eventHandler;
       boost::shared_ptr<Texture> texture;
+      rect size;
       vec2 position;
       mat2 orientation;
       BoundedSprite * sceneNode;

@@ -20,7 +20,7 @@ Subsystem::Subsystem()
 
 #include <iostream>
 void Subsystem::render(float dt) {
-   glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
+   glClearColor(0.957, 0.917, 0.682, 1.0f);
    glClear(GL_COLOR_BUFFER_BIT);
 
    vec2 min, max;
@@ -33,7 +33,7 @@ void Subsystem::render(float dt) {
    const float scaleX = 1.0f / viewport.halfSize.x;
    const float scaleY = 1.0f / viewport.halfSize.y;
 
-   bool showBoundingAreas = true;
+   bool showBoundingAreas = false;
    
    glTranslatef(-1.0f, 1.0f, 0.0f);
    glScalef(scaleX, -scaleY, 1.0f);
@@ -64,6 +64,7 @@ void Subsystem::render(float dt) {
             }
             
             glEnable(GL_TEXTURE_2D);
+            glBindTexture(GL_TEXTURE_2D, sprite->getTexture()->getTexId());
             glBegin(GL_QUADS);
             glColor3f(1.0f, 1.0f, 1.0f);
             rendered++;

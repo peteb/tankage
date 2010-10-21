@@ -14,6 +14,8 @@ class Texture {
 public:
    rect getSize() const;
    
+   GLuint getTexId() const;
+   
 private:
    Texture(GLuint texId, const rect & size);
    

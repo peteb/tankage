@@ -16,15 +16,15 @@ Sprite::Sprite(const boost::shared_ptr<Texture> & texture, BoundedSprite * scene
    , texture(texture)
    , sceneNode(sceneNode)
 {
-   
+   size = texture->getSize();
 }
 
 std::vector<Vertex2T2> Sprite::constructVertices() const {
    std::vector<Vertex2T2> vertices;
    vertices.reserve(4);
 
-   const float halfWidth = 64.0f / 2.0f;
-   const float halfHeight = 64.0f / 2.0f;
+   const float halfWidth = size.halfSize.x;
+   const float halfHeight = size.halfSize.y;
 
    vertices.push_back(Vertex2T2(vec2(-halfWidth, -halfHeight), vec2(0.0f, 0.0f)));
    vertices.push_back(Vertex2T2(vec2( halfWidth, -halfHeight), vec2(1.0f, 0.0f)));
@@ -53,7 +53,11 @@ mat2 Sprite::getOrientation() const {
 }
 
 rect Sprite::getSize() const {
-   return texture->getSize();
+   return size;
+}
+
+boost::shared_ptr<Texture> Sprite::getTexture() const {
+   return texture;
 }
 
 void Sprite::enteredView() {

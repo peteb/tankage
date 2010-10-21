@@ -27,12 +27,14 @@ namespace Physics {
 
       void update(float dt);
       void setDelegate(const Ref<ReferenceFrame2> & newTarget);
- 
+      void setVelocity(const vec2 & vel);
+      
       // ReferenceFrame2 ---------------------------------------
       void setPosition(const vec2 & pos);
       vec2 getPosition() const;
       void setOrientation(const mat2 & orient);
       mat2 getOrientation() const;
+      // -------------------------------------------------------
       
    private:
       Physics::Subsystem & subsystem;

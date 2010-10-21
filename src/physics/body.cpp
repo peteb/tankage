@@ -9,7 +9,7 @@
 Physics::Body::Body(Physics::Subsystem & subsystem)
    : subsystem(subsystem)
    , position(vec2::Zero)
-   , velocity(400.0f, 0.0)
+   , velocity(vec2::Zero)
 {
    
 }
@@ -39,4 +39,8 @@ void Physics::Body::setOrientation(const mat2 & orient) {
 
 mat2 Physics::Body::getOrientation() const {
    return mat2::Identity;
+}
+
+void Physics::Body::setVelocity(const vec2 & vel) {
+   velocity = vel;
 }
