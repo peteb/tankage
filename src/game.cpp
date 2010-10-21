@@ -12,6 +12,8 @@
 #include <iostream>
 #include <boost/make_shared.hpp>
 
+#include "ref.h"
+
 Game::Game()
    : creator(world)
 {

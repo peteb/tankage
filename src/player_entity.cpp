@@ -20,7 +20,7 @@ PlayerEntity::PlayerEntity(float x, ObjectCreator & creator, World & world)
    tshot = 0.0f;
 }
 
-void PlayerEntity::setTarget(const boost::weak_ptr<ReferenceFrame2> & newTarget) {
+void PlayerEntity::setTarget(const Ref<ReferenceFrame2> & newTarget) {
    this->target = newTarget;
 }
 
@@ -52,7 +52,7 @@ void PlayerEntity::update(float dt) {
    }
    
    
-   if (boost::shared_ptr<ReferenceFrame2> acquiredTarget = target.lock()) {
+   if (Ref<ReferenceFrame2>::SharedPtr acquiredTarget = target.lock()) {
       vec2 pos = acquiredTarget->getPosition();
       pos.x = std::max(pos.x, -10.0f);
       pos.x = std::min(pos.x, 890.0f);
@@ -72,18 +72,29 @@ void PlayerEntity::update(float dt) {
 }
 
 void PlayerEntity::setPosition(const vec2 & newPos) {
-   if (boost::shared_ptr<ReferenceFrame2> acquiredTarget = target.lock()) {
+   if (Ref<ReferenceFrame2>::SharedPtr acquiredTarget = target.lock())
       acquiredTarget->setPosition(newPos);
-   }
 }
 
 vec2 PlayerEntity::getPosition() const {
-   if (boost::shared_ptr<ReferenceFrame2> acquiredTarget = target.lock()) {
+   if (Ref<ReferenceFrame2>::SharedPtr acquiredTarget = target.lock())
       return acquiredTarget->getPosition();
-   }
 
    return vec2::Zero;
 }
+
+void PlayerEntity::setOrientation(const mat2 & newOrientation) {
+   if (Ref<ReferenceFrame2>::SharedPtr acquiredTarget = target.lock())
+      acquiredTarget->setOrientation(newOrientation);   
+}
+
+mat2 PlayerEntity::getOrientation() const {
+   if (Ref<ReferenceFrame2>::SharedPtr acquiredTarget = target.lock())
+      return acquiredTarget->getOrientation();
+   
+   return mat2::Identity;
+}
+
 
 // 1 = on, 0 = off, -1 = one-shot
 void PlayerEntity::trigger(const std::string & action, int state) {

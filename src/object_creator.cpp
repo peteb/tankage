@@ -13,6 +13,7 @@
 #include "player_entity.h"
 #include "world.h"
 #include "physics/body.h"
+#include "ref.h"
 
 ObjectCreator::ObjectCreator(World & world)
    : world(world)
@@ -33,7 +34,7 @@ boost::shared_ptr<Snail> ObjectCreator::createSnail(float x, ObjectCreator & cre
    boost::shared_ptr<Snail> newSnail = boost::make_shared<Snail>();
    newSnail->sprite = world.graphics.createSprite("../data/snail2.png");
    newSnail->logic = boost::shared_ptr<PlayerEntity>(new PlayerEntity(x, creator, world));
-   newSnail->logic->setTarget(newSnail->sprite);
+   newSnail->logic->setTarget(Sp2Wr(newSnail->sprite));
    
    return newSnail;
 }

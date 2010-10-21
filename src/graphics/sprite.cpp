@@ -12,6 +12,7 @@ using Graphics::Sprite;
  
 Sprite::Sprite(const boost::shared_ptr<Texture> & texture, BoundedSprite * sceneNode) 
    : position(vec2::Zero) 
+   , orientation(mat2::Identity)
    , texture(texture)
    , sceneNode(sceneNode)
 {
@@ -41,6 +42,14 @@ void Sprite::setPosition(const vec2 & newPos) {
 
 vec2 Sprite::getPosition() const {
    return position;
+}
+
+void Sprite::setOrientation(const mat2 & orient) {
+   this->orientation = orient;
+}
+
+mat2 Sprite::getOrientation() const {
+   return orientation;
 }
 
 rect Sprite::getSize() const {

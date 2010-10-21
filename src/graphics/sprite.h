@@ -43,9 +43,13 @@ namespace Graphics {
       void enteredView();
       void leftView();
       
+      // ReferenceFrame2 --------------------------------------------
       void setPosition(const vec2 & newPos);
       vec2 getPosition() const;
-
+      void setOrientation(const mat2 & orient);
+      mat2 getOrientation() const;
+      // ------------------------------------------------------------
+      
       rect getSize() const;
 
       void setEventHandler(const boost::weak_ptr<SpriteEventHandler> & eventHandler);
@@ -54,6 +58,7 @@ namespace Graphics {
       boost::weak_ptr<SpriteEventHandler> eventHandler;
       boost::shared_ptr<Texture> texture;
       vec2 position;
+      mat2 orientation;
       BoundedSprite * sceneNode;
    };
    

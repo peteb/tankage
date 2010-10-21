@@ -27,8 +27,11 @@ namespace Physics {
       void update(float dt);
       void setDelegate(const boost::weak_ptr<ReferenceFrame2> & newTarget);
  
+      // ReferenceFrame2 ---------------------------------------
       void setPosition(const vec2 & pos);
       vec2 getPosition() const;
+      void setOrientation(const mat2 & orient);
+      mat2 getOrientation() const;
       
    private:
       Physics::Subsystem & subsystem;

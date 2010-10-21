@@ -3,7 +3,7 @@ project (SnailWail)
 
 
 #add_definitions("-arch x86_64")
-#set(CMAKE_CXX_FLAGS "-arch x86_64")
+#set(CMAKE_CXX_FLAGS "-std=c++0x")
 
 
 

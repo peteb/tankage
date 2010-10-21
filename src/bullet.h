@@ -21,9 +21,13 @@ class Bullet : public Object, public ReferenceFrame2, public Graphics::SpriteEve
 public:
    void submitComponents(World & world);
 
+   // ReferenceFrame2 ------------------------------------------------
    void setPosition(const vec2 & pos);
    vec2 getPosition() const;
-
+   void setOrientation(const mat2 & orient);
+   mat2 getOrientation() const;
+   // ----------------------------------------------------------------
+   
    void leftView();
    
    boost::shared_ptr<Graphics::Sprite> sprite;

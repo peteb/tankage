@@ -21,6 +21,15 @@ vec2 Bullet::getPosition() const {
    return body->getPosition();
 }
 
+void Bullet::setOrientation(const mat2 & orient) {
+   body->setOrientation(orient);
+}
+
+mat2 Bullet::getOrientation() const {
+   return body->getOrientation();
+}
+
+
 void Bullet::leftView() {
    kill();
 }

@@ -32,3 +32,11 @@ void Physics::Body::setPosition(const vec2 & pos) {
 vec2 Physics::Body::getPosition() const {
    return position;
 }
+
+void Physics::Body::setOrientation(const mat2 & orient) {
+   
+}
+
+mat2 Physics::Body::getOrientation() const {
+   return mat2::Identity;
+}

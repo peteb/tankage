@@ -11,6 +11,7 @@
 #include "reference_frame2.h"
 #include "triggerable.h"
 #include "updatable.h"
+#include "ref.h"
 
 class ObjectCreator;
 class World;
@@ -19,12 +20,16 @@ class PlayerEntity : public ReferenceFrame2, public Triggerable, public Updatabl
 public:
    PlayerEntity(float x, ObjectCreator & creator, World & world);
    
-   void setTarget(const boost::weak_ptr<ReferenceFrame2> & newTarget);
+   void setTarget(const Ref<ReferenceFrame2> & newTarget);
    void update(float dt);
    
+   // ReferenceFrame2 --------------------------------------
    void setPosition(const vec2 & newPos);
    vec2 getPosition() const;
+   void setOrientation(const mat2 & newOrientation);
+   mat2 getOrientation() const;
    
+   // Updatable --------------------------------------------
    void trigger(const std::string & action, int state);
    
 private:
@@ -34,7 +39,7 @@ private:
    float tshot;
    
    float xPos;
-   boost::weak_ptr<ReferenceFrame2> target;
+   Ref<ReferenceFrame2> target;
    ObjectCreator & creator;
    World & world;
 };

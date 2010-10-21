@@ -82,3 +82,9 @@
     [25] worked more on the ability to kill objects
     [25] components are now cleaned up properly on a kill
     
+2010-10-20
+    [25] added orientations to ReferenceFrame2
+    
+2010-10-21
+    [25] added own reference class
+    
