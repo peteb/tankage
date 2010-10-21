@@ -7,7 +7,7 @@
 #include "game.h"
 #include "graphics/sprite.h"
 #include "snail.h"
-#include "rect.h"
+#include "math/rect.h"
 
 #include <iostream>
 #include <boost/make_shared.hpp>

@@ -7,8 +7,8 @@
 #ifndef REFERENCE_FRAME2_H_434BR1U2
 #define REFERENCE_FRAME2_H_434BR1U2
 
-#include "vec2.h"
-#include "mat2.h"
+#include "math/vec2.h"
+#include "math/mat2.h"
 
 class ReferenceFrame2 {
 public:

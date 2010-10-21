@@ -10,10 +10,10 @@
 #include <vector>
 #include <boost/shared_ptr.hpp>
 #include <boost/weak_ptr.hpp>
-#include "vec2.h"
+#include "math/vec2.h"
 #include "reference_frame2.h"
 #include "graphics/vertex.h"
-#include "rect.h"
+#include "math/rect.h"
 
 class Texture;
 

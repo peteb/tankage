@@ -7,7 +7,7 @@
 #include <boost/shared_ptr.hpp>
 
 #include "hi_controller.h"
-#include "vec2.h"
+#include "math/vec2.h"
 #include "graphics/sprite.h"
 #include "triggerable.h"
 

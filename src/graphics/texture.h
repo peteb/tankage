@@ -8,7 +8,7 @@
 #define TEXTURE_H_61TB0IDZ
 
 #include <OpenGL/OpenGL.h>
-#include "rect.h"
+#include "math/rect.h"
 
 class Texture {
 public:

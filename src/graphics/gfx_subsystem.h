@@ -10,9 +10,9 @@
 #include <boost/shared_ptr.hpp>
 #include <boost/weak_ptr.hpp>
 #include <vector>
-#include "vec2.h"
+#include "math/vec2.h"
+#include "math/rect.h"
 #include "texture_loader.h"
-#include "rect.h"
 
 namespace Graphics {
    class Sprite;

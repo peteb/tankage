@@ -7,7 +7,7 @@
 #ifndef VERTEX_H_L5CPFJ2H
 #define VERTEX_H_L5CPFJ2H
 
-#include "vec2.h"
+#include "math/vec2.h"
 
 struct Vertex2T2 {
    Vertex2T2(const vec2 & pos, const vec2 & tc) : pos(pos), tc(tc) {}

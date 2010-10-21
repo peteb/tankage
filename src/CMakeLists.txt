@@ -1,6 +1,7 @@
 
 add_subdirectory(graphics)
 add_subdirectory(physics)
+add_subdirectory(math)
 
 add_executable(snail-wail
    bullet.cpp
@@ -10,13 +11,10 @@ add_executable(snail-wail
    object_creator.cpp
    object_list.cpp
    player_entity.cpp
-   rect.cpp
    snail.cpp
-   vec2.cpp
    world.cpp
    scheduler.cpp
    object.cpp
-   mat2.cpp
 )
 
 
@@ -31,6 +29,7 @@ include_directories(
 target_link_libraries(snail-wail 
    graphics 
    physics 
+   math
    ${GLFW_LIBRARY} 
    ${Cocoa_LIBRARIES}
 )

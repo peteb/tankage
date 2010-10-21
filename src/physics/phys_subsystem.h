@@ -12,8 +12,8 @@
 #include <boost/shared_ptr.hpp>
 #include <boost/weak_ptr.hpp>
 
-#include "vec2.h"
-#include "rect.h"
+#include "math/vec2.h"
+#include "math/rect.h"
 
 namespace Physics {
    class Body;
