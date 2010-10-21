@@ -22,19 +22,25 @@ ObjectCreator::ObjectCreator(World & world)
 
 boost::shared_ptr<Bullet> ObjectCreator::createBullet() {
    boost::shared_ptr<Bullet> newBullet = boost::make_shared<Bullet>();
-   newBullet->sprite = world.graphics.createSprite("../data/snail2.png");
+
+   newBullet->sprite = Owning(world.graphics.createSprite("../data/snail2.png"));
    newBullet->sprite->setEventHandler(newBullet);
-   newBullet->body = world.physics.createBody();
+
+   newBullet->body = Owning(world.physics.createBody());
    newBullet->body->setDelegate(newBullet->sprite);
    
    return newBullet;
 }
 
-boost::shared_ptr<Snail> ObjectCreator::createSnail(float x, ObjectCreator & creator, World & world) {
+boost::shared_ptr<Snail> ObjectCreator::createSnail(float x, ObjectCreator & creator,
+   World & world) 
+{
    boost::shared_ptr<Snail> newSnail = boost::make_shared<Snail>();
-   newSnail->sprite = world.graphics.createSprite("../data/snail2.png");
-   newSnail->logic = boost::shared_ptr<PlayerEntity>(new PlayerEntity(x, creator, world));
-   newSnail->logic->setTarget(Sp2Wr(newSnail->sprite));
+   
+   newSnail->sprite = Owning(world.graphics.createSprite("../data/snail2.png"));
+
+   newSnail->logic = Owning(new PlayerEntity(x, creator, world));
+   newSnail->logic->setTarget(Observing(newSnail->sprite.lock()));
    
    return newSnail;
 }

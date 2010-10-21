@@ -76,7 +76,8 @@ void Subsystem::render(float dt) {
             }
       
             glEnd();
-
+            rendered++;
+            
             if (showBoundingAreas) {
                glColor4f(0.0f, 0.0f, 1.0f, 0.5f);
                glDisable(GL_TEXTURE_2D);
@@ -131,11 +132,4 @@ boost::shared_ptr<Sprite> Subsystem::createSprite(const std::string & fragments)
    sprites.push_back(node);
    
    return newSprite;   
-}
-
-void Subsystem::addSpriteToScene(const boost::shared_ptr<Sprite> & sprite) {
-   // BoundedSprite node;
-   // node.sprite = sprite;
-   // node.boundingArea = sprite->getSize();
-   // sprites.push_back(node);   
 }

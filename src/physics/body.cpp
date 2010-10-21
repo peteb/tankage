@@ -14,12 +14,12 @@ Physics::Body::Body(Physics::Subsystem & subsystem)
    
 }
 
-void Physics::Body::setDelegate(const boost::weak_ptr<ReferenceFrame2> & newTarget) {
+void Physics::Body::setDelegate(const Ref<ReferenceFrame2> & newTarget) {
    delegate = newTarget;
 }
 
 void Physics::Body::update(float dt) {
-   if (boost::shared_ptr<ReferenceFrame2> target = delegate.lock()) {
+   if (Ref<ReferenceFrame2>::SharedPtr target = delegate.lock()) {
       position += velocity * dt;
       target->setPosition(position);  
    }

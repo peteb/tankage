@@ -9,6 +9,7 @@
 
 #include <boost/weak_ptr.hpp>
 #include <vector>
+#include "ref.h"
 
 class Updatable;
  
@@ -16,16 +17,16 @@ class Scheduler {
 public:
    class Item {
    private:
-      Item(float interval, const boost::weak_ptr<Updatable> & receiver);
+      Item(float interval, const Ref<Updatable> & receiver);
       bool trigger(float dt);
       
       float interval;
-      boost::weak_ptr<Updatable> receiver;
+      Ref<Updatable> receiver;
       
       friend class Scheduler;
    };
    
-   void subscribe(float interval, const boost::weak_ptr<Updatable> & receiver);
+   void subscribe(float interval, const Ref<Updatable> & receiver);
    void update(float dt);
    
 private:

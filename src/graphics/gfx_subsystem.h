@@ -25,7 +25,6 @@ namespace Graphics {
       void render(float dt);
       void resizeViewport(const rect & size);
       boost::shared_ptr<Sprite> createSprite(const std::string & fragments);
-      void addSpriteToScene(const boost::shared_ptr<Sprite> & sprite);
       
    private:
       TextureLoader textureCache;

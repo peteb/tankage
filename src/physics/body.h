@@ -9,6 +9,7 @@
 
 #include <boost/weak_ptr.hpp>
 #include "reference_frame2.h"
+#include "ref.h"
 
 namespace Physics {
    class Subsystem;
@@ -25,7 +26,7 @@ namespace Physics {
       friend class Physics::Subsystem;
 
       void update(float dt);
-      void setDelegate(const boost::weak_ptr<ReferenceFrame2> & newTarget);
+      void setDelegate(const Ref<ReferenceFrame2> & newTarget);
  
       // ReferenceFrame2 ---------------------------------------
       void setPosition(const vec2 & pos);
@@ -35,7 +36,7 @@ namespace Physics {
       
    private:
       Physics::Subsystem & subsystem;
-      boost::weak_ptr<ReferenceFrame2> delegate;
+      Ref<ReferenceFrame2> delegate;
       vec2 position, velocity;
    };
    

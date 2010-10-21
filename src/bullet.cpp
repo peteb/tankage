@@ -9,24 +9,23 @@
 #include "physics/body.h"
 
 void Bullet::submitComponents(World & world) {
-   world.graphics.addSpriteToScene(sprite);
-   world.physics.addBody(body);
+//   world.physics.addBody(body);
 }
 
 void Bullet::setPosition(const vec2 & pos) {
-   body->setPosition(pos);
+   body.lock()->setPosition(pos);
 }
 
 vec2 Bullet::getPosition() const {
-   return body->getPosition();
+   return body.lock()->getPosition();
 }
 
 void Bullet::setOrientation(const mat2 & orient) {
-   body->setOrientation(orient);
+   body.lock()->setOrientation(orient);
 }
 
 mat2 Bullet::getOrientation() const {
-   return body->getOrientation();
+   return body.lock()->getOrientation();
 }
 
 
