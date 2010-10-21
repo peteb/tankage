@@ -8,7 +8,7 @@
 #define HI_CONTROLLER_H_TRQG6TL3
 
 #include <vector>
-#include <boost/weak_ptr.hpp>
+#include "ref.h"
 
 class ReferenceFrame2;
 class Triggerable;
@@ -21,12 +21,12 @@ public:
    void startDirection(int dir);
    void stopDirection(int dir);
    void update(float dt);
-   void setRefFrameDelegate(const boost::weak_ptr<ReferenceFrame2> & newTarget);
-   void setActionDelegate(const boost::weak_ptr<Triggerable> & newTarget);
+   void setRefFrameDelegate(const Ref<ReferenceFrame2> & newTarget);
+   void setActionDelegate(const Ref<Triggerable> & newTarget);
    
 private:
-   boost::weak_ptr<ReferenceFrame2> reframeDelegate;
-   boost::weak_ptr<Triggerable> actionDelegate;
+   Ref<ReferenceFrame2> reframeDelegate;
+   Ref<Triggerable> actionDelegate;
    std::vector<bool> activeDirs;
 };
 

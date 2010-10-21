@@ -8,7 +8,7 @@
 #include "scheduler.h"
 #include "updatable.h"
 
-Scheduler::Item::Item(float interval, const boost::weak_ptr<Updatable> & receiver)
+Scheduler::Item::Item(float interval, const Ref<Updatable> & receiver)
    : receiver(receiver)
 {
    this->interval = interval;
@@ -17,7 +17,7 @@ Scheduler::Item::Item(float interval, const boost::weak_ptr<Updatable> & receive
 bool Scheduler::Item::trigger(float dt) {
    bool retainItem = true;
    
-   if (boost::shared_ptr<Updatable> lReceiver = receiver.lock()) {
+   if (Ref<Updatable>::SharedPtr lReceiver = receiver.lock()) {
       lReceiver->update(dt);
       retainItem = true;
    }
@@ -29,7 +29,7 @@ bool Scheduler::Item::trigger(float dt) {
 }
 
 
-void Scheduler::subscribe(float interval, const boost::weak_ptr<Updatable> & receiver) {
+void Scheduler::subscribe(float interval, const Ref<Updatable> & receiver) {
    scheduledItems.push_back(Item(interval, receiver));
 }
 

@@ -11,6 +11,7 @@
 #include "object.h"
 #include "reference_frame2.h"
 #include "graphics/sprite.h"
+#include "ref.h"
 
 //namespace Graphics {class Sprite; }
 namespace Physics {class Body; }
@@ -30,8 +31,8 @@ public:
    
    void leftView();
    
-   boost::shared_ptr<Graphics::Sprite> sprite;
-   boost::shared_ptr<Physics::Body> body;
+   Ref<Graphics::Sprite> sprite;
+   Ref<Physics::Body> body;
 };
 
 #endif /* end of include guard: BULLET_H_1LH5R0L7 */

@@ -9,6 +9,7 @@
 
 #include <boost/shared_ptr.hpp>
 #include "object.h"
+#include "ref.h"
 
 namespace Graphics {class Sprite; class Subsystem; }
 
@@ -22,8 +23,8 @@ public:
    
    void setPosition(const vec2 & pos);
    
-   boost::shared_ptr<Graphics::Sprite> sprite;
-   boost::shared_ptr<PlayerEntity> logic;
+   Ref<Graphics::Sprite> sprite;
+   Ref<PlayerEntity> logic;
 };
 
 #endif /* end of include guard: SNAIL_H_7SGQH1KL */

@@ -23,6 +23,8 @@ Subsystem::Subsystem()
 void Subsystem::update(float dt) {
    std::vector<boost::weak_ptr<Body> >::iterator iter = bodies.begin();
          
+   //std::cout << "bodies: " << bodies.size() << std::endl;
+   
    while (iter != bodies.end()) {
       if (boost::shared_ptr<Body> body = iter->lock()) {
          body->update(dt);
@@ -45,6 +47,7 @@ void Subsystem::resizeArea(int width, int height) {
 
 boost::shared_ptr<Body> Subsystem::createBody() {
    boost::shared_ptr<Body> body = boost::shared_ptr<Body>(new Body(*this));
+   bodies.push_back(body);
    
    return body;
 }
