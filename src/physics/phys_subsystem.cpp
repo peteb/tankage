@@ -9,6 +9,7 @@
 
 #include "phys_subsystem.h"
 #include "physics/body.h"
+#include "physics/geom.h"
 
 using namespace Physics;
 
@@ -52,7 +53,13 @@ boost::shared_ptr<Body> Subsystem::createBody() {
    return body;
 }
 
-void Subsystem::addBody(const boost::weak_ptr<Body> & body) {
-   bodies.push_back(body);   
+boost::shared_ptr<Geom> Subsystem::createRectGeom(const rect & size) {
+   boost::shared_ptr<Geom> geom = boost::shared_ptr<Geom>(new Geom(size));
+   //geoms.push_back(geom);
+   return geom;
 }
 
+// void Subsystem::addBody(const boost::weak_ptr<Body> & body) {
+//    bodies.push_back(body);   
+// }
+// 

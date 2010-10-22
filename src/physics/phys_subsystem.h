@@ -17,6 +17,7 @@
 
 namespace Physics {
    class Body;
+   class Geom;
    
    class Subsystem {
    public:
@@ -27,12 +28,15 @@ namespace Physics {
       void addBody(const boost::weak_ptr<Body> & body);
       
       boost::shared_ptr<Body> createBody();
+      boost::shared_ptr<Geom> createRectGeom(const rect & size);
       
    private:
       // vec2 maxArea;
       // rect leftArea, rightArea;
       std::vector<boost::weak_ptr<Body> > bodies;
+      std::vector<boost::weak_ptr<Geom> > geoms;
    };
+   
    
 }
 
