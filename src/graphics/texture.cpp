@@ -14,6 +14,11 @@ Texture::Texture(GLuint texId, const rect & size)
    std::cout << "created texId " << texId << std::endl;
 }
 
+Texture::~Texture() {
+	glBindTexture(GL_TEXTURE_2D, 0);
+	glDeleteTextures(1, &texId);
+}
+
 rect Texture::getSize() const {
    return size;
 }

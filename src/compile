@@ -1,2 +1,0 @@
-g++ *.cpp */*.cpp -I. -arch x86_64 -I../inc/ -L../libs/macosx/ -lIL -lpng12 -ljpeg -lglfw -framework Cocoa -framework OpenGL
-
