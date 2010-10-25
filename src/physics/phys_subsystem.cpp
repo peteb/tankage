@@ -49,15 +49,35 @@ void Subsystem::resizeArea(int width, int height) {
 }
 
 void Subsystem::checkCollisions() {
-   // first pass, generate Geom, Rect tupple
-   
-   std::vector<std::pair<rect, boost::shared_ptr<Geom> > > fixedGeoms;
+   // first pass, generate <Rect, Geom> tupple
+   // some kind of sorting might be possible here
+   typedef std::vector<std::pair<rect, boost::shared_ptr<Geom> > > GeomVector;
+   GeomVector resGeoms;
 
    std::vector<boost::weak_ptr<Geom> >::iterator iter = geoms.begin();
    
    while (iter != geoms.end()) {
-      // todo: lock geom, add to fixedGeoms, remove if not possible
-      ++iter;
+      if (boost::shared_ptr<Geom> lockedGeom = iter->lock()) {
+         rect fixedRect = lockedGeom->getSize();
+         fixedRect.origin = lockedGeom->getPosition();
+         
+         resGeoms.push_back(std::make_pair(fixedRect, lockedGeom));
+         ++iter;
+      }
+      else {
+         iter = geoms.erase(iter);
+      }
+   }
+   
+   // second pass, check collisions
+   for (GeomVector::iterator it1 = resGeoms.begin(); it1 != resGeoms.end(); ++it1) {
+      for (GeomVector::iterator it2 = resGeoms.begin(); it2 != resGeoms.end(); ++it2) {
+         if (it1->second.get() != it2->second.get()) {
+            if (rect::intersect(it1->first, it2->first)) {
+               std::cout << "COLLISION" << std::endl;
+            }
+         }
+      }
    }
 }
 

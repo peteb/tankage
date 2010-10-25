@@ -19,12 +19,17 @@ void Physics::Geom::setBody(const Ref<Physics::Body> & body) {
 void Physics::Geom::setRefFrame(const Ref<ReferenceFrame2> & refFrame) {
    this->refFrame = refFrame;
 }
+
+rect Physics::Geom::getSize() const {
+   return size;
+}
+
 void Physics::Geom::setPosition(const vec2 & newPos) {
-   
+   this->position = newPos;
 }
 
 vec2 Physics::Geom::getPosition() const {
-   return vec2::Zero;
+   return position;
 }
 
 void Physics::Geom::setOrientation(const mat2 & orient) {
