@@ -12,6 +12,10 @@ Physics::Geom::Geom(const rect & size)
    
 }
 
+void Physics::Geom::setBody(const Ref<Physics::Body> & body) {
+   this->linkedBody = body;
+}
+
 void Physics::Geom::setPosition(const vec2 & newPos) {
    
 }

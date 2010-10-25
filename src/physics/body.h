@@ -13,7 +13,7 @@
 
 namespace Physics {
    class Subsystem;
-
+   
    /*
     * A physical body that can be acted upon through forces
     */
@@ -27,6 +27,7 @@ namespace Physics {
 
       void update(float dt);
       void setDelegate(const Ref<ReferenceFrame2> & newTarget);
+      
       void setVelocity(const vec2 & vel);
       
       // ReferenceFrame2 ---------------------------------------

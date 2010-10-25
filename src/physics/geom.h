@@ -9,12 +9,20 @@
 
 #include "reference_frame2.h"
 #include "math/rect.h"
+#include "ref.h"
 
 namespace Physics {
+   class Subsystem;
+   class Body;
+   
    class Geom : public ReferenceFrame2 {
-   public:
+   private:
       Geom(const rect & size);
       
+      friend class Physics::Subsystem;
+      
+   public:
+      void setBody(const Ref<Physics::Body> & body);
       
       // ReferenceFrame2 --------------------------------------------
       void setPosition(const vec2 & newPos);
@@ -24,6 +32,7 @@ namespace Physics {
       // ------------------------------------------------------------
    
    private:
+      Ref<Physics::Body> linkedBody;
       rect size;
    };
 }
