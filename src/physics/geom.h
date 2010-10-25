@@ -23,6 +23,7 @@ namespace Physics {
       
    public:
       void setBody(const Ref<Physics::Body> & body);
+      void setRefFrame(const Ref<ReferenceFrame2> & refFrame);
       
       // ReferenceFrame2 --------------------------------------------
       void setPosition(const vec2 & newPos);
@@ -33,6 +34,7 @@ namespace Physics {
    
    private:
       Ref<Physics::Body> linkedBody;
+      Ref<ReferenceFrame2> refFrame;
       rect size;
    };
 }

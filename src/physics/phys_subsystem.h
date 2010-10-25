@@ -31,6 +31,8 @@ namespace Physics {
       boost::shared_ptr<Geom> createRectGeom(const rect & size);
       
    private:
+      void checkCollisions();
+      
       // vec2 maxArea;
       // rect leftArea, rightArea;
       std::vector<boost::weak_ptr<Body> > bodies;

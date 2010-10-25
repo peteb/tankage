@@ -35,6 +35,8 @@ void Subsystem::update(float dt) {
          iter = bodies.erase(iter);
       }
    }
+   
+   checkCollisions();
 }
 
 void Subsystem::resizeArea(int width, int height) {
@@ -46,6 +48,19 @@ void Subsystem::resizeArea(int width, int height) {
    // rightArea.size = vec2(width / 2.0f, height);
 }
 
+void Subsystem::checkCollisions() {
+   // first pass, generate Geom, Rect tupple
+   
+   std::vector<std::pair<rect, boost::shared_ptr<Geom> > > fixedGeoms;
+
+   std::vector<boost::weak_ptr<Geom> >::iterator iter = geoms.begin();
+   
+   while (iter != geoms.end()) {
+      // todo: lock geom, add to fixedGeoms, remove if not possible
+      ++iter;
+   }
+}
+
 boost::shared_ptr<Body> Subsystem::createBody() {
    boost::shared_ptr<Body> body = boost::shared_ptr<Body>(new Body(*this));
    bodies.push_back(body);
@@ -55,7 +70,7 @@ boost::shared_ptr<Body> Subsystem::createBody() {
 
 boost::shared_ptr<Geom> Subsystem::createRectGeom(const rect & size) {
    boost::shared_ptr<Geom> geom = boost::shared_ptr<Geom>(new Geom(size));
-   //geoms.push_back(geom);
+   geoms.push_back(geom);
    return geom;
 }
 

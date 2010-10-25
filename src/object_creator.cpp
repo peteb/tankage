@@ -13,6 +13,8 @@
 #include "player_entity.h"
 #include "world.h"
 #include "physics/body.h"
+#include "physics/geom.h"
+
 #include "ref.h"
 
 ObjectCreator::ObjectCreator(World & world)
@@ -29,6 +31,9 @@ boost::shared_ptr<Bullet> ObjectCreator::createBullet() {
    newBullet->body = Owning(world.physics.createBody());
    newBullet->body->setDelegate(newBullet->sprite);
    
+   newBullet->geom = Owning(world.physics.createRectGeom(newBullet->sprite->getSize()));
+   newBullet->geom->setBody(newBullet->body);
+   
    return newBullet;
 }
 
@@ -41,6 +46,9 @@ boost::shared_ptr<Snail> ObjectCreator::createSnail(float x, ObjectCreator & cre
 
    newSnail->logic = Owning(new PlayerEntity(x, creator, world));
    newSnail->logic->setTarget(Observing(newSnail->sprite.lock()));
+   
+   newSnail->physGeom = Owning(world.physics.createRectGeom(newSnail->sprite->getSize()));
+   newSnail->physGeom->setRefFrame(Observing(newSnail->sprite.lock()));
    
    return newSnail;
 }

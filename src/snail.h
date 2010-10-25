@@ -12,6 +12,7 @@
 #include "ref.h"
 
 namespace Graphics {class Sprite; class Subsystem; }
+namespace Physics {class Geom; }
 
 class PlayerEntity;
 class World;
@@ -20,11 +21,11 @@ class vec2;
 class Snail : public Object {
 public:
    void submitComponents(World & world);
-   
    void setPosition(const vec2 & pos);
    
    Ref<Graphics::Sprite> sprite;
    Ref<PlayerEntity> logic;
+   Ref<Physics::Geom> physGeom;
 };
 
 #endif /* end of include guard: SNAIL_H_7SGQH1KL */

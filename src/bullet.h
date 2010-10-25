@@ -14,7 +14,7 @@
 #include "ref.h"
 
 //namespace Graphics {class Sprite; }
-namespace Physics {class Body; }
+namespace Physics {class Body; class Geom; }
 
 class World;
 
@@ -33,6 +33,7 @@ public:
    
    Ref<Graphics::Sprite> sprite;
    Ref<Physics::Body> body;
+   Ref<Physics::Geom> geom;
 };
 
 #endif /* end of include guard: BULLET_H_1LH5R0L7 */
