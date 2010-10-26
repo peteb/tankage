@@ -33,16 +33,17 @@ Iteration 2:
     Load and use bitmap graphics                            DONE               
     Two snails                                              DONE
     Restrain snails to world, disable X-movement            DONE
-    Weapons and bullets (shooting, no collision detection)  
+    Weapons and bullets (shooting, no collision detection)  DONE
     Implement CMake                                         DONE
     Improve snail sprite                                    DONE
     
 Iteration 3:        
-    Collision detection between snails and projectiles
+    Collision detection between snails and projectiles		DONE
     General physics when shooting, getting hit, etc.
     Animations
     Weapon system; rocket launcher
     Ammunition
+	Cactii (cactuses?)
     
 Iteration 4:
     Effects, particle systems
