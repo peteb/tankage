@@ -11,6 +11,8 @@
 #include "math/rect.h"
 #include "ref.h"
 
+#include <bitset>
+
 namespace Physics {
    class Subsystem;
    class Body;
@@ -26,6 +28,9 @@ namespace Physics {
       void setRefFrame(const Ref<ReferenceFrame2> & refFrame);
       rect getSize() const;
       
+      void setCollisionId(unsigned int collisionId);
+      void setCollisionMask(const std::bitset<32> & mask);
+      
       // ReferenceFrame2 --------------------------------------------
       void setPosition(const vec2 & newPos);
       vec2 getPosition() const;
@@ -37,6 +42,9 @@ namespace Physics {
       Ref<Physics::Body> linkedBody;
       Ref<ReferenceFrame2> refFrame;
       rect size;
+      
+      std::bitset<32> collisionMask;
+      unsigned int collisionId;
       
       vec2 position;
    };

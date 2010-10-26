@@ -49,7 +49,7 @@ void Subsystem::resizeArea(int width, int height) {
 }
 
 void Subsystem::checkCollisions() {
-   // first pass, generate <Rect, Geom> tupple
+   // first pass, generate <Rect, Geom> tupple, calculate bounding boxes
    // some kind of sorting might be possible here
    typedef std::vector<std::pair<rect, boost::shared_ptr<Geom> > > GeomVector;
    GeomVector resGeoms;
@@ -59,7 +59,11 @@ void Subsystem::checkCollisions() {
    while (iter != geoms.end()) {
       if (boost::shared_ptr<Geom> lockedGeom = iter->lock()) {
          rect fixedRect = lockedGeom->getSize();
-         fixedRect.origin = lockedGeom->getPosition();
+         
+         if (boost::shared_ptr<Physics::Body> lockedBody = lockedGeom->linkedBody.lock())
+            fixedRect.origin = lockedBody->getPosition();
+         else if (boost::shared_ptr<ReferenceFrame2> lockedRef = lockedGeom->refFrame.lock())
+            fixedRect.origin = lockedRef->getPosition();
          
          resGeoms.push_back(std::make_pair(fixedRect, lockedGeom));
          ++iter;
@@ -70,12 +74,18 @@ void Subsystem::checkCollisions() {
    }
    
    // second pass, check collisions
-   for (GeomVector::iterator it1 = resGeoms.begin(); it1 != resGeoms.end(); ++it1) {
+   for (GeomVector::iterator it1 = resGeoms.begin(); it1 != resGeoms.end(); ++it1) {      
       for (GeomVector::iterator it2 = resGeoms.begin(); it2 != resGeoms.end(); ++it2) {
-         if (it1->second.get() != it2->second.get()) {
-            if (rect::intersect(it1->first, it2->first)) {
-               std::cout << "COLLISION" << std::endl;
+         if (it1->second.get() != it2->second.get()) { 
+            if (it1->second->collisionMask.test(it2->second->collisionId) ||
+               it2->second->collisionMask.test(it1->second->collisionId)) {
+                  
+               if (rect::intersect(it1->first, it2->first)) {
+                  std::cout << "COLLISION " << it1->second.get() << " - " << it2->second.get() << std::endl;
+               }
+
             }
+
          }
       }
    }

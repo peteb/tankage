@@ -95,3 +95,7 @@
 2010-10-25
     [25] worked on collision detection, physical geometries
     
+2010-10-26
+    [25] collision detection, collisionId, collisionMask
+    
+    

@@ -8,8 +8,9 @@
 
 Physics::Geom::Geom(const rect & size)
    : size(size)
+   , collisionMask(0xFFFFFFFFu)
 {
-   
+   collisionId = 0;
 }
 
 void Physics::Geom::setBody(const Ref<Physics::Body> & body) {
@@ -39,3 +40,12 @@ void Physics::Geom::setOrientation(const mat2 & orient) {
 mat2 Physics::Geom::getOrientation() const {
    return mat2::Identity;
 }
+
+void Physics::Geom::setCollisionId(unsigned int collisionId) {
+   this->collisionId = collisionId;
+}
+
+void Physics::Geom::setCollisionMask(const std::bitset<32> & mask) {
+   this->collisionMask = mask;
+}
+
