@@ -28,7 +28,7 @@ void PlayerEntity::setTarget(const Ref<ReferenceFrame2> & newTarget) {
 void PlayerEntity::shoot() {
    boost::shared_ptr<Bullet> bullet = creator.createBullet();
    bullet->setPosition(getPosition());
-   bullet->body->setVelocity(vec2(800.0f, 0.0f));
+   bullet->body->setVelocity(vec2(300.0f, 0.0f));
    
    world.insert(bullet);
   // world.add(bullet);

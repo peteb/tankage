@@ -18,7 +18,7 @@ public:
    ObjectCreator(World & world);
    
    boost::shared_ptr<Bullet> createBullet();
-   boost::shared_ptr<Snail> createSnail(float x, ObjectCreator & creator, World & world);
+   boost::shared_ptr<Snail> createSnail(int team, ObjectCreator & creator, World & world);
    
 private:
    World & world;

@@ -33,25 +33,39 @@ boost::shared_ptr<Bullet> ObjectCreator::createBullet() {
    
    newBullet->geom = Owning(world.physics.createRectGeom(newBullet->sprite->getSize()));
    newBullet->geom->setBody(newBullet->body);
-   newBullet->geom->setCollisionId(1);
+   newBullet->geom->setCollisionId(4);
    newBullet->geom->setCollisionMask(0x1u);
    
    return newBullet;
 }
 
-boost::shared_ptr<Snail> ObjectCreator::createSnail(float x, ObjectCreator & creator,
+boost::shared_ptr<Snail> ObjectCreator::createSnail(int team, ObjectCreator & creator,
    World & world) 
 {
+   float xPos = 0.0f;
+   if (team == 0)
+      xPos = 100.0f;
+   else
+      xPos = 600.0f;
+   
    boost::shared_ptr<Snail> newSnail = boost::make_shared<Snail>();
    
-   newSnail->sprite = Owning(world.graphics.createSprite("../data/snail_r.png"));
-
-   newSnail->logic = Owning(new PlayerEntity(x, creator, world));
+   if (team == 0)
+      newSnail->sprite = Owning(world.graphics.createSprite("../data/snail_r.png"));
+   else
+      newSnail->sprite = Owning(world.graphics.createSprite("../data/snail_l.png"));
+   
+   newSnail->logic = Owning(new PlayerEntity(xPos, creator, world));
    newSnail->logic->setTarget(Observing(newSnail->sprite.lock()));
    
    newSnail->physGeom = Owning(world.physics.createRectGeom(newSnail->sprite->getSize()));
    newSnail->physGeom->setRefFrame(Observing(newSnail->sprite.lock()));
-   newSnail->physGeom->setCollisionId(0);
+
+   if (team == 0)
+      newSnail->physGeom->setCollisionId(1);
+   else
+      newSnail->physGeom->setCollisionId(0);
+   
    newSnail->physGeom->setCollisionMask(0x0u);
    
    return newSnail;
