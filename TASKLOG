@@ -101,3 +101,8 @@
     [25] collision detection, collisionId, collisionMask
     [25] more collision detection, adjusted snail entities
     
+2010-10-27
+	[12.5] event handling for collision detection
+
+2010-10-28
+	[12.5] collision

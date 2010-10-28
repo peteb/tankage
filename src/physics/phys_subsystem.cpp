@@ -76,17 +76,22 @@ void Subsystem::checkCollisions() {
    // second pass, check collisions
    for (GeomVector::iterator it1 = resGeoms.begin(); it1 != resGeoms.end(); ++it1) {      
       for (GeomVector::iterator it2 = resGeoms.begin(); it2 != resGeoms.end(); ++it2) {
-         if (it1->second.get() != it2->second.get()) { 
-            if (it1->second->collisionMask.test(it2->second->collisionId) ||
-               it2->second->collisionMask.test(it1->second->collisionId)) {
+		  if (it1->second.get() != it2->second.get()) { 
+			  if (it1->second->collisionMask.test(it2->second->collisionId) ||
+				  it2->second->collisionMask.test(it1->second->collisionId)) {
                   
-               if (rect::intersect(it1->first, it2->first)) {
-                  std::cout << "COLLISION " << it1->second.get() << " - " << it2->second.get() << std::endl;
-               }
-
-            }
-
-         }
+				  if (rect::intersect(it1->first, it2->first)) {
+					  if (it1->second->collisionMask.test(it2->second->collisionId))
+						  it1->second->collided(it2->second);
+					  if (it2->second->collisionMask.test(it1->second->collisionId))
+						  it2->second->collided(it1->second);
+					  
+					  std::cout << "COLLISION " << it1->second.get() << " - " << it2->second.get() << std::endl;
+				  }
+				  
+			  }
+			  
+		  }
       }
    }
 }

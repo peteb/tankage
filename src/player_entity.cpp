@@ -21,14 +21,17 @@ PlayerEntity::PlayerEntity(float x, ObjectCreator & creator, World & world)
    tshot = 0.0f;
 }
 
-void PlayerEntity::setTarget(const Ref<ReferenceFrame2> & newTarget) {
+void PlayerEntity::setTarget(const Ref<Physics::Body> & newTarget) {
    this->target = newTarget;
 }
 
 void PlayerEntity::shoot() {
    boost::shared_ptr<Bullet> bullet = creator.createBullet();
    bullet->setPosition(getPosition());
-   bullet->body->setVelocity(vec2(300.0f, 0.0f));
+   bullet->body->addImpulse(vec2(300.0f, 0.0f));
+
+   if (Ref<Physics::Body>::SharedPtr lockedTarget = target.lock())
+	   lockedTarget->addImpulse(vec2(-10.0f, 0.0f));
    
    world.insert(bullet);
   // world.add(bullet);
@@ -55,7 +58,7 @@ void PlayerEntity::update(float dt) {
    }
    
    
-   if (Ref<ReferenceFrame2>::SharedPtr acquiredTarget = target.lock()) {
+   if (Ref<Physics::Body>::SharedPtr acquiredTarget = target.lock()) {
       vec2 pos = acquiredTarget->getPosition();
       pos.x = std::max(pos.x, -10.0f);
       pos.x = std::min(pos.x, 890.0f);
@@ -70,29 +73,31 @@ void PlayerEntity::update(float dt) {
          delta = delta * 50.0f;
       }
          
-      acquiredTarget->setPosition(pos + delta * 5.0f * dt);
+	  // TODO: hur får man rätt impulse här?
+	  acquiredTarget->addImpulse(delta * 0.01f);
+	  //   acquiredTarget->setPosition(pos + delta * 5.0f * dt);
    }   
 }
 
 void PlayerEntity::setPosition(const vec2 & newPos) {
-   if (Ref<ReferenceFrame2>::SharedPtr acquiredTarget = target.lock())
+	if (Ref<Physics::Body>::SharedPtr acquiredTarget = target.lock())
       acquiredTarget->setPosition(newPos);
 }
 
 vec2 PlayerEntity::getPosition() const {
-   if (Ref<ReferenceFrame2>::SharedPtr acquiredTarget = target.lock())
+   if (Ref<Physics::Body>::SharedPtr acquiredTarget = target.lock())
       return acquiredTarget->getPosition();
 
    return vec2::Zero;
 }
 
 void PlayerEntity::setOrientation(const mat2 & newOrientation) {
-   if (Ref<ReferenceFrame2>::SharedPtr acquiredTarget = target.lock())
+   if (Ref<Physics::Body>::SharedPtr acquiredTarget = target.lock())
       acquiredTarget->setOrientation(newOrientation);   
 }
 
 mat2 PlayerEntity::getOrientation() const {
-   if (Ref<ReferenceFrame2>::SharedPtr acquiredTarget = target.lock())
+   if (Ref<Physics::Body>::SharedPtr acquiredTarget = target.lock())
       return acquiredTarget->getOrientation();
    
    return mat2::Identity;

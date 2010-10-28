@@ -49,3 +49,12 @@ void Physics::Geom::setCollisionMask(const std::bitset<32> & mask) {
    this->collisionMask = mask;
 }
 
+void Physics::Geom::setEventHandler(const Ref<GeomEventHandler> & eventHandler) {
+	this->eventHandler = eventHandler;
+}
+
+void Physics::Geom::collided(const boost::shared_ptr<Geom> & with) {
+	if (Ref<GeomEventHandler>::SharedPtr lockedPtr = eventHandler.lock())
+		lockedPtr->collided(with);
+}
+

@@ -33,8 +33,8 @@ boost::shared_ptr<Bullet> ObjectCreator::createBullet() {
    
    newBullet->geom = Owning(world.physics.createRectGeom(newBullet->sprite->getSize()));
    newBullet->geom->setBody(newBullet->body);
-   newBullet->geom->setCollisionId(4);
-   newBullet->geom->setCollisionMask(0x1u);
+   newBullet->geom->setCollisionId(3);
+   newBullet->geom->setCollisionMask(0x0u);
    
    return newBullet;
 }
@@ -54,19 +54,40 @@ boost::shared_ptr<Snail> ObjectCreator::createSnail(int team, ObjectCreator & cr
       newSnail->sprite = Owning(world.graphics.createSprite("../data/snail_r.png"));
    else
       newSnail->sprite = Owning(world.graphics.createSprite("../data/snail_l.png"));
+
+   newSnail->physBody = Owning(world.physics.createBody());
+   newSnail->physBody->setDelegate(Observing(newSnail->sprite.lock()));
    
    newSnail->logic = Owning(new PlayerEntity(xPos, creator, world));
-   newSnail->logic->setTarget(Observing(newSnail->sprite.lock()));
+   newSnail->logic->setTarget(Observing(newSnail->physBody.lock()));
    
    newSnail->physGeom = Owning(world.physics.createRectGeom(newSnail->sprite->getSize()));
    newSnail->physGeom->setRefFrame(Observing(newSnail->sprite.lock()));
-
+   newSnail->physGeom->setEventHandler(Observing(newSnail));
+   
    if (team == 0)
       newSnail->physGeom->setCollisionId(1);
    else
       newSnail->physGeom->setCollisionId(0);
    
-   newSnail->physGeom->setCollisionMask(0x0u);
+   newSnail->physGeom->setCollisionMask(0x8u);
    
    return newSnail;
+}
+
+boost::shared_ptr<Object> ObjectCreator::createObject(const std::string & type, ObjectCreator & creator) {
+	boost::shared_ptr<Object> retval;
+
+	if (type == "snail1") {
+
+
+
+
+	}
+	else if (type == "bullet") {
+
+
+	}
+	
+	return retval;
 }

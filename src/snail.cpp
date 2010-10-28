@@ -17,3 +17,8 @@ void Snail::submitComponents(World & world) {
 void Snail::setPosition(const vec2 & pos) {
    sprite.lock()->setPosition(pos);   
 }
+
+#include <iostream>
+void Snail::collided(const boost::shared_ptr<Physics::Geom> & with) {
+	std::cout << "snail collided" << std::endl;
+}

@@ -16,11 +16,13 @@
 class ObjectCreator;
 class World;
 
+namespace Physics {class Body; }
+
 class PlayerEntity : public ReferenceFrame2, public Triggerable, public Updatable {
 public:
    PlayerEntity(float x, ObjectCreator & creator, World & world);
    
-   void setTarget(const Ref<ReferenceFrame2> & newTarget);
+   void setTarget(const Ref<Physics::Body> & newTarget);
    void update(float dt);
    
    // ReferenceFrame2 --------------------------------------
@@ -39,7 +41,7 @@ private:
    float tshot;
    
    float xPos;
-   Ref<ReferenceFrame2> target;
+	Ref<Physics::Body> target;
    ObjectCreator & creator;
    World & world;
 };

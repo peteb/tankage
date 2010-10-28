@@ -12,6 +12,7 @@
 class Bullet;
 class Snail;
 class World;
+class Object;
 
 class ObjectCreator {
 public:
@@ -19,7 +20,8 @@ public:
    
    boost::shared_ptr<Bullet> createBullet();
    boost::shared_ptr<Snail> createSnail(int team, ObjectCreator & creator, World & world);
-   
+   boost::shared_ptr<Object> createObject(const std::string & type, ObjectCreator & creator);
+
 private:
    World & world;
 };

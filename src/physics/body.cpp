@@ -41,6 +41,13 @@ mat2 Physics::Body::getOrientation() const {
    return mat2::Identity;
 }
 
-void Physics::Body::setVelocity(const vec2 & vel) {
-   velocity = vel;
+// void Physics::Body::setVelocity(const vec2 & vel) {
+//    velocity = vel;
+// }
+void Physics::Body::addImpulse(const vec2 & vel) {
+	velocity += vel;
+}
+
+vec2 Physics::Body::getVelocity() const {
+	return velocity;
 }
