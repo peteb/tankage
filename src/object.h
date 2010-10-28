@@ -14,10 +14,11 @@ class Object {
 public:
    Object();
    virtual ~Object() {}
-   virtual void submitComponents(World & wold) =0;
-   
+
    void addedOwner(ObjectList * owner);
    void kill();
+	virtual void activate();
+	virtual void deactivate();
    
 private:
    ObjectList * owner;

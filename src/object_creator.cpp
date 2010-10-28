@@ -39,9 +39,7 @@ boost::shared_ptr<Bullet> ObjectCreator::createBullet() {
    return newBullet;
 }
 
-boost::shared_ptr<Snail> ObjectCreator::createSnail(int team, ObjectCreator & creator,
-   World & world) 
-{
+boost::shared_ptr<Snail> ObjectCreator::createSnail(int team, ObjectCreator & creator) {
    float xPos = 0.0f;
    if (team == 0)
       xPos = 100.0f;
@@ -60,6 +58,16 @@ boost::shared_ptr<Snail> ObjectCreator::createSnail(int team, ObjectCreator & cr
    
    newSnail->logic = Owning(new PlayerEntity(xPos, creator, world));
    newSnail->logic->setTarget(Observing(newSnail->physBody.lock()));
+   world.scheduler.subscribe(0.0f, newSnail->logic); // kan man verkligen göra såhär?
+													 // hur hanteras aktivering/deaktivering?
+													 // när ett objekt skapas är det aktiverat,
+													 // men hur vet snigeln att den ska bli avaktiverad
+													 // hos schedulern?
+													 // något borde säga åt subsystemet att komponeten
+													 // ska aktiveras, så inte subsystemet behöver jobba.
+													 // kanske att man registrerar sånt?
+													 // äh, det blir jobb för senare. nu ska allt vara
+													 // komponenter iaf, i en lista. behöver inte vara listor än
    
    newSnail->physGeom = Owning(world.physics.createRectGeom(newSnail->sprite->getSize()));
    newSnail->physGeom->setRefFrame(Observing(newSnail->sprite.lock()));
@@ -79,15 +87,15 @@ boost::shared_ptr<Object> ObjectCreator::createObject(const std::string & type, 
 	boost::shared_ptr<Object> retval;
 
 	if (type == "snail1") {
-
-
-
-
+		return createSnail(0, creator);
+	}
+	else if (type == "snail2") {
+		return createSnail(1, creator);
 	}
 	else if (type == "bullet") {
-
-
+		return createBullet();
 	}
 	
-	return retval;
+
+	throw std::runtime_error("failed to create object of type '" + type + "', I don't know what it is!");
 }

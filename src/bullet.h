@@ -20,8 +20,6 @@ class World;
 
 class Bullet : public Object, public ReferenceFrame2, public Graphics::SpriteEventHandler {
 public:
-   void submitComponents(World & world);
-
    // ReferenceFrame2 ------------------------------------------------
    void setPosition(const vec2 & pos);
    vec2 getPosition() const;

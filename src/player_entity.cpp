@@ -26,7 +26,7 @@ void PlayerEntity::setTarget(const Ref<Physics::Body> & newTarget) {
 }
 
 void PlayerEntity::shoot() {
-   boost::shared_ptr<Bullet> bullet = creator.createBullet();
+	boost::shared_ptr<Bullet> bullet = boost::dynamic_pointer_cast<Bullet>(creator.createObject("bullet", creator));
    bullet->setPosition(getPosition());
    bullet->body->addImpulse(vec2(300.0f, 0.0f));
 

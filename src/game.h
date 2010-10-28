@@ -15,6 +15,7 @@
 #include "player_entity.h"
 #include "object_creator.h"
 #include "world.h"
+#include "ref.h"
 
 class Snail;
  
@@ -28,10 +29,9 @@ public:
    void keyStateChanged(const std::string & key, int state);
    
 private:
-   boost::weak_ptr<Snail> firstSnail;
-   boost::weak_ptr<Snail> secondSnail;
+   Ref<Snail> firstSnail;
+   Ref<Snail> secondSnail;
    HiController playerController;
-
    
    World world;
    ObjectCreator creator;

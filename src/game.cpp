@@ -8,6 +8,7 @@
 #include "graphics/sprite.h"
 #include "snail.h"
 #include "math/rect.h"
+#include "object.h"
 
 #include <iostream>
 #include <boost/make_shared.hpp>
@@ -17,13 +18,13 @@
 Game::Game()
    : creator(world)
 {
-   firstSnail = world.insert(creator.createSnail(0, creator, world));
-   secondSnail = world.insert(creator.createSnail(1, creator, world));
-   firstSnail.lock()->setPosition(vec2(100.0f, 200.0f));
-   secondSnail.lock()->setPosition(vec2(600.0f, 200.0f));
+    firstSnail = Owning(boost::dynamic_pointer_cast<Snail>(creator.createObject("snail1", creator)));
+    secondSnail = Owning(boost::dynamic_pointer_cast<Snail>(creator.createObject("snail2", creator)));
+    firstSnail->setPosition(vec2(100.0f, 200.0f));
+    secondSnail->setPosition(vec2(600.0f, 200.0f));
    
-   playerController.setRefFrameDelegate(firstSnail.lock()->logic);
-   playerController.setActionDelegate(firstSnail.lock()->logic);
+    playerController.setRefFrameDelegate(firstSnail->logic);
+   playerController.setActionDelegate(firstSnail->logic);
 }
 
 Game::~Game() {

@@ -47,6 +47,13 @@ public:
 			return wp.lock();
 	}
 
+	template<typename OtherT>
+	Ref<T> & operator = (const Ref<OtherT> & other) {
+		this->sp = other.sp;
+		this->wp = other.wp;
+		owner = other.owner;
+	}
+	
 	// and just for convenience...
 	SharedPtr operator -> () const {
 		SharedPtr ret = lock();

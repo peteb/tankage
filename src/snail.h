@@ -22,7 +22,6 @@ class vec2;
 
 class Snail : public Object, public Physics::GeomEventHandler {
 public:
-	void submitComponents(World & world);
 	void setPosition(const vec2 & pos);
 	void collided(const boost::shared_ptr<Physics::Geom> & with);
 	

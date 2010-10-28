@@ -8,10 +8,6 @@
 #include "world.h"
 #include "physics/body.h"
 
-void Bullet::submitComponents(World & world) {
-//   world.physics.addBody(body);
-}
-
 void Bullet::setPosition(const vec2 & pos) {
    body.lock()->setPosition(pos);
 }

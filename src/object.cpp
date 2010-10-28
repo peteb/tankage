@@ -23,3 +23,13 @@ void Object::kill() {
    if (owner)
       owner->enqueueRemoval(this);
 }
+
+// Called by the cache or something
+void Object::activate() {
+
+}
+
+// Also called by the cache or owner
+void Object::deactivate() {
+
+}

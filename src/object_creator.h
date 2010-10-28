@@ -18,12 +18,13 @@ class ObjectCreator {
 public:
    ObjectCreator(World & world);
    
-   boost::shared_ptr<Bullet> createBullet();
-   boost::shared_ptr<Snail> createSnail(int team, ObjectCreator & creator, World & world);
    boost::shared_ptr<Object> createObject(const std::string & type, ObjectCreator & creator);
 
 private:
-   World & world;
+   boost::shared_ptr<Bullet> createBullet();
+   boost::shared_ptr<Snail> createSnail(int team, ObjectCreator & creator);
+
+	World & world;
 };
 
 #endif /* end of include guard: OBJECT_CREATOR_H_FSSO9BSX */

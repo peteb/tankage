@@ -21,7 +21,6 @@ class World {
 public:
    template<typename T>
    boost::weak_ptr<T> insert(const boost::shared_ptr<T> & object) {
-      object->submitComponents(*this);
       liveObjects.add(object);   
       object->addedOwner(&liveObjects);
 
