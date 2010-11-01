@@ -12,13 +12,14 @@
 #include "physics/body.h"
 #include <algorithm>
 
-PlayerEntity::PlayerEntity(float x, ObjectCreator & creator, World & world) 
+PlayerEntity::PlayerEntity(float x, void * shooterId, ObjectCreator & creator, World & world) 
    : creator(creator)
    , world(world)
 {
    xPos = x;
    shooting = 0;
    tshot = 0.0f;
+   this->shooterId = shooterId;
 }
 
 void PlayerEntity::setTarget(const Ref<Physics::Body> & newTarget) {
@@ -26,16 +27,19 @@ void PlayerEntity::setTarget(const Ref<Physics::Body> & newTarget) {
 }
 
 void PlayerEntity::shoot() {
-	boost::shared_ptr<Bullet> bullet = boost::dynamic_pointer_cast<Bullet>(creator.createObject("bullet", creator));
+   boost::shared_ptr<Bullet> bullet = boost::dynamic_pointer_cast<Bullet>(creator.createObject("bullet", creator));
    bullet->setPosition(getPosition());
    bullet->body->addImpulse(vec2(300.0f, 0.0f));
-
-   if (Ref<Physics::Body>::SharedPtr lockedTarget = target.lock())
-	   lockedTarget->addImpulse(vec2(-10.0f, 0.0f));
    
-   world.insert(bullet);
-  // world.add(bullet);
+//    if (Ref<Physics::Body>::SharedPtr lockedTarget = target.lock())
+// 	   lockedTarget->addImpulse(vec2(-10.0f, 0.0f));
+
+   bullet->shooter = shooterId;
+    world.insert(bullet);
+   //world.add(bullet);
 }
+
+// TODO: setPosition+getPosition on body to restrict
 
 void PlayerEntity::update(float dt) {
    tshot += dt;

@@ -5,7 +5,7 @@
  */
 
 #include "geom.h"
-
+#include "body.h"
 Physics::Geom::Geom(const rect & size)
    : size(size)
    , collisionMask(0xFFFFFFFFu)
@@ -51,6 +51,13 @@ void Physics::Geom::setCollisionMask(const std::bitset<32> & mask) {
 
 void Physics::Geom::setEventHandler(const Ref<GeomEventHandler> & eventHandler) {
 	this->eventHandler = eventHandler;
+}
+
+boost::weak_ptr<Object> Physics::Geom::getOwner() const {
+   if (Ref<Physics::Body>::SharedPtr lockedPtr = linkedBody.lock())
+	  return lockedPtr->getOwner();
+
+   throw std::runtime_error("no body linked to geom");
 }
 
 void Physics::Geom::collided(const boost::shared_ptr<Geom> & with) {

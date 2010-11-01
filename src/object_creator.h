@@ -24,7 +24,7 @@ private:
    boost::shared_ptr<Bullet> createBullet();
    boost::shared_ptr<Snail> createSnail(int team, ObjectCreator & creator);
 
-	World & world;
+   World & world;
 };
 
 #endif /* end of include guard: OBJECT_CREATOR_H_FSSO9BSX */

@@ -30,6 +30,7 @@ boost::shared_ptr<Bullet> ObjectCreator::createBullet() {
 
    newBullet->body = Owning(world.physics.createBody());
    newBullet->body->setDelegate(newBullet->sprite);
+   newBullet->body->setOwner(newBullet);
    
    newBullet->geom = Owning(world.physics.createRectGeom(newBullet->sprite->getSize()));
    newBullet->geom->setBody(newBullet->body);
@@ -56,7 +57,7 @@ boost::shared_ptr<Snail> ObjectCreator::createSnail(int team, ObjectCreator & cr
    newSnail->physBody = Owning(world.physics.createBody());
    newSnail->physBody->setDelegate(Observing(newSnail->sprite.lock()));
    
-   newSnail->logic = Owning(new PlayerEntity(xPos, creator, world));
+   newSnail->logic = Owning(new PlayerEntity(xPos, newSnail.get(), creator, world));
    newSnail->logic->setTarget(Observing(newSnail->physBody.lock()));
    world.scheduler.subscribe(0.0f, newSnail->logic); // kan man verkligen göra såhär?
 													 // hur hanteras aktivering/deaktivering?

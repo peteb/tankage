@@ -18,12 +18,12 @@
 Game::Game()
    : creator(world)
 {
-    firstSnail = Owning(boost::dynamic_pointer_cast<Snail>(creator.createObject("snail1", creator)));
-    secondSnail = Owning(boost::dynamic_pointer_cast<Snail>(creator.createObject("snail2", creator)));
-    firstSnail->setPosition(vec2(100.0f, 200.0f));
-    secondSnail->setPosition(vec2(600.0f, 200.0f));
+   firstSnail = Owning(boost::dynamic_pointer_cast<Snail>(creator.createObject("snail1", creator)));
+   secondSnail = Owning(boost::dynamic_pointer_cast<Snail>(creator.createObject("snail2", creator)));
+   firstSnail->setPosition(vec2(100.0f, 200.0f));
+   secondSnail->setPosition(vec2(600.0f, 200.0f));
    
-    playerController.setRefFrameDelegate(firstSnail->logic);
+   playerController.setRefFrameDelegate(firstSnail->logic);
    playerController.setActionDelegate(firstSnail->logic);
 }
 

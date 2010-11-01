@@ -28,7 +28,8 @@ public:
    // ----------------------------------------------------------------
    
    void leftView();
-   
+
+   void * shooter;
    Ref<Graphics::Sprite> sprite;
    Ref<Physics::Body> body;
    Ref<Physics::Geom> geom;

@@ -18,6 +18,14 @@ void Physics::Body::setDelegate(const Ref<ReferenceFrame2> & newTarget) {
    delegate = newTarget;
 }
 
+void Physics::Body::setOwner(const boost::weak_ptr<Object> & owner) {
+   this->owner = owner;
+}
+
+boost::weak_ptr<Object> Physics::Body::getOwner() const {
+   return owner;
+}
+
 void Physics::Body::update(float dt) {
    if (Ref<ReferenceFrame2>::SharedPtr target = delegate.lock()) {
       position += velocity * dt;

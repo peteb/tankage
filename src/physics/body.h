@@ -11,6 +11,8 @@
 #include "reference_frame2.h"
 #include "ref.h"
 
+class Object;
+
 namespace Physics {
    class Subsystem;
    
@@ -28,11 +30,14 @@ namespace Physics {
       void update(float dt);
       void setDelegate(const Ref<ReferenceFrame2> & newTarget);
 
-	   void addImpulse(const vec2 & vel);
-	   //void setVelocity(const vec2 & vel);
-	   vec2 getVelocity() const;
+	  void addImpulse(const vec2 & vel);
+	  //void setVelocity(const vec2 & vel);
+	  vec2 getVelocity() const;
 
-      // ReferenceFrame2 ---------------------------------------
+	  void setOwner(const boost::weak_ptr<Object> & owner);
+	  boost::weak_ptr<Object> getOwner() const;
+	  
+      // Referenceframe2 ---------------------------------------
       void setPosition(const vec2 & pos);
       vec2 getPosition() const;
       void setOrientation(const mat2 & orient);
@@ -42,6 +47,7 @@ namespace Physics {
    private:
       Physics::Subsystem & subsystem;
       Ref<ReferenceFrame2> delegate;
+	  boost::weak_ptr<Object> owner;
       vec2 position, velocity;
    };
    

@@ -13,6 +13,8 @@
 
 #include <bitset>
 
+class Object;
+
 namespace Physics {
 	class Subsystem;
 	class Body;
@@ -33,14 +35,15 @@ namespace Physics {
    public:
       void setBody(const Ref<Physics::Body> & body);
       void setRefFrame(const Ref<ReferenceFrame2> & refFrame);
-	   void setEventHandler(const Ref<GeomEventHandler> & eventHandler);
+	  void setEventHandler(const Ref<GeomEventHandler> & eventHandler);
 
-	   rect getSize() const;
+	  rect getSize() const;
       
       void setCollisionId(unsigned int collisionId);
       void setCollisionMask(const std::bitset<32> & mask);
 	  void collided(const boost::shared_ptr<Geom> & with);
 
+	  boost::weak_ptr<Object> getOwner() const;
 	  
 	  // ReferenceFrame2 --------------------------------------------
       void setPosition(const vec2 & newPos);
@@ -50,15 +53,16 @@ namespace Physics {
       // ------------------------------------------------------------
    
    private:
-	   Ref<Physics::Body> linkedBody;
-	   Ref<ReferenceFrame2> refFrame;
-	   Ref<GeomEventHandler> eventHandler;
-	   rect size;
+	  Ref<Physics::Body> linkedBody;
+	  Ref<ReferenceFrame2> refFrame;
+	  Ref<GeomEventHandler> eventHandler;
+	  
+	  rect size;
       
-	   std::bitset<32> collisionMask;
-	   unsigned int collisionId;
+	  std::bitset<32> collisionMask;
+	  unsigned int collisionId;
 	   
-	   vec2 position;
+	  vec2 position;
    };
 }
 
