@@ -4,9 +4,11 @@
  * (c) Copyright 2010 Peter Backman. All Rights Reserved. 
  */
 
-#include <boost/shared_ptr.hpp>
-
 #include "hi_controller.h"
+
+#include <boost/shared_ptr.hpp>
+#include <iostream>
+
 #include "math/vec2.h"
 #include "graphics/sprite.h"
 #include "triggerable.h"
@@ -18,8 +20,9 @@ static vec2 dirToVecMap[4] = {
    vec2(-1.0f, 0.0f)
 };
  
-HiController::HiController()
+HiController::HiController(const std::string & identifier)
    : activeDirs(4, false)
+   , identifier(identifier)
 {   
 }
 
@@ -56,19 +59,18 @@ void HiController::setActionDelegate(const Ref<Triggerable> & newTarget) {
    this->actionDelegate = newTarget;
 }
 
-
 void HiController::toggle(const std::string & key, int state) {
    int dir = -1;
    
-   if (key == "up_arrow")
+   if (key == identifier + "_up")
       dir = 0;
-   else if (key == "right_arrow")
+   else if (key == identifier + "_right")
       dir = 1;
-   else if (key == "down_arrow")
+   else if (key == identifier + "_down")
       dir = 2;
-   else if (key == "left_arrow")
+   else if (key == identifier + "_left")
       dir = 3;
-      
+   
    if (dir > -1) {
       if (state)
          startDirection(dir);
@@ -76,7 +78,7 @@ void HiController::toggle(const std::string & key, int state) {
          stopDirection(dir);
    }
 
-   if (key == "shoot") {
+   if (key == identifier + "_shoot") {
       if (Ref<Triggerable>::SharedPtr acquiredTarget = actionDelegate.lock()) {
          acquiredTarget->trigger("shoot", state);
       }      

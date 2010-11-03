@@ -17,14 +17,18 @@
 
 Game::Game()
    : creator(world)
+   , playerInput1("player1")
+   , playerInput2("player2")
 {
    firstSnail = Owning(boost::dynamic_pointer_cast<Snail>(creator.createObject("snail1", creator)));
    secondSnail = Owning(boost::dynamic_pointer_cast<Snail>(creator.createObject("snail2", creator)));
    firstSnail->setPosition(vec2(100.0f, 200.0f));
    secondSnail->setPosition(vec2(600.0f, 200.0f));
    
-   playerController.setRefFrameDelegate(firstSnail->logic);
-   playerController.setActionDelegate(firstSnail->logic);
+   playerInput1.setRefFrameDelegate(firstSnail->logic);
+   playerInput1.setActionDelegate(firstSnail->logic);
+   playerInput2.setRefFrameDelegate(secondSnail->logic);
+   playerInput2.setActionDelegate(secondSnail->logic);
 }
 
 Game::~Game() {
@@ -32,7 +36,9 @@ Game::~Game() {
 }
 
 void Game::tick(float dt) {
-   playerController.update(dt);
+   playerInput1.update(dt);
+   playerInput2.update(dt);
+   
 //   firstSnail.lock()->logic->update(dt);
 //   secondSnail.lock()->logic->update(dt);
    
@@ -60,5 +66,6 @@ void Game::windowChangedSize(int width, int height) {
 void Game::keyStateChanged(const std::string & key, int state) {
    std::cout << key << ": " << state << std::endl;
       
-   playerController.toggle(key, state);
+   playerInput1.toggle(key, state);
+   playerInput2.toggle(key, state);
 }

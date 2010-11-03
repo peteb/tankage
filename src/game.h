@@ -31,7 +31,7 @@ public:
 private:
    Ref<Snail> firstSnail;
    Ref<Snail> secondSnail;
-   HiController playerController;
+   HiController playerInput1, playerInput2;
    
    World world;
    ObjectCreator creator;

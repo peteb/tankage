@@ -23,12 +23,18 @@ static void GLFWCALL KeyStateChange(int key, int state) {
       typedef std::map<int, std::string> KeyMap;
       KeyMap boundKeys;
       
-      boundKeys[GLFW_KEY_UP] = "up_arrow";
-      boundKeys[GLFW_KEY_DOWN] = "down_arrow";
-      boundKeys[GLFW_KEY_LEFT] = "left_arrow";
-      boundKeys[GLFW_KEY_RIGHT] = "right_arrow";
-      boundKeys[GLFW_KEY_SPACE] = "shoot";
-      
+      boundKeys[GLFW_KEY_UP] = "player1_up";
+      boundKeys[GLFW_KEY_DOWN] = "player1_down";
+      boundKeys[GLFW_KEY_LEFT] = "player1_left";
+      boundKeys[GLFW_KEY_RIGHT] = "player1_right";
+      boundKeys[GLFW_KEY_SPACE] = "player1_shoot";
+
+	  boundKeys['W'] = "player2_up";
+	  boundKeys['S'] = "player2_down";
+	  boundKeys['D'] = "player2_right";
+	  boundKeys['A'] = "player2_left";
+	  boundKeys['Z'] = "player2_shoot";
+	  
       std::string keyName = "unknown";
       KeyMap::const_iterator iter = boundKeys.find(key);
       if (iter != boundKeys.end())

@@ -15,7 +15,7 @@ class Triggerable;
 
 class HiController {
 public:
-   HiController();
+   HiController(const std::string & identifier);
    
    void toggle(const std::string & key, int state);
    void startDirection(int dir);
@@ -28,6 +28,7 @@ private:
    Ref<ReferenceFrame2> reframeDelegate;
    Ref<Triggerable> actionDelegate;
    std::vector<bool> activeDirs;
+   std::string identifier;
 };
 
 
