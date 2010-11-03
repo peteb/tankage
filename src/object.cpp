@@ -20,8 +20,18 @@ void Object::addedOwner(ObjectList * owner) {
 }
 
 void Object::kill() {
-   if (owner)
+   if (owner) {
       owner->enqueueRemoval(this);
+	  owner = NULL; // TODO: check if enqueueRemoval succeeds, and then remove owner?
+
+	  if (Ref<ObjectEventListener>::SharedPtr lockedListener = eventListener.lock())
+		 lockedListener->onObjectDeath(*this);
+   }
+   
+}
+
+void Object::setEventListener(const Ref<ObjectEventListener> & newListener) {
+   this->eventListener = newListener;
 }
 
 // Called by the cache or something

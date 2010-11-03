@@ -7,8 +7,18 @@
 #ifndef OBJECT_H_GV2YM86M
 #define OBJECT_H_GV2YM86M
 
+#include "ref.h"
+
 class World;
 class ObjectList;
+class Object;
+
+class ObjectEventListener {
+public:
+   virtual ~ObjectEventListener() {}
+
+   virtual void onObjectDeath(const Object & object) =0;
+};
 
 class Object {
 public:
@@ -17,10 +27,13 @@ public:
 
    void addedOwner(ObjectList * owner);
    void kill();
-	virtual void activate();
-	virtual void deactivate();
+   void setEventListener(const Ref<ObjectEventListener> & newListener);
+
+   virtual void activate();
+   virtual void deactivate();
    
 private:
+   Ref<ObjectEventListener> eventListener;
    ObjectList * owner;
 };
 
