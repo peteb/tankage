@@ -111,9 +111,11 @@ mat2 PlayerEntity::getOrientation() const {
    return mat2::Identity;
 }
 
-
+#include <iostream>
 // 1 = on, 0 = off, -1 = one-shot
 void PlayerEntity::trigger(const std::string & action, int state) {
+   std::cout << "received event: " << action << std::endl;
+   
    if (shooting == 2 && state == 0) // event triggered already, remove
       shooting = 0;
    else if (shooting == 0 && state == 1) // not been set for shooting yet

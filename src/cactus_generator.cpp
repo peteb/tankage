@@ -35,7 +35,11 @@ void CactusGenerator::update(float dt) {
 
 void CactusGenerator::spawnCactus() {
    boost::shared_ptr<Cactus> cactus = boost::dynamic_pointer_cast<Cactus>(creator.createObject("cactus", creator));
-   cactus->setPosition(origin);
+
+   vec2 startPos = origin;
+   startPos.x += static_cast<float>(rand() % 50) * 1.5f;
+   cactus->setPosition(startPos);
+   
    cactus->body->addImpulse(vec2(0.0f, -140.0f));
    world.insert(cactus);
 }

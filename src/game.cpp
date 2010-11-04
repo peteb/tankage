@@ -38,14 +38,14 @@ Game::Game()
    firstSnail->setPosition(vec2(100.0f, 300.0f));
    secondSnail->setPosition(vec2(700.0f, 300.0f));
    
-   playerInput1.setRefFrameDelegate(firstSnail->logic);
-   playerInput1.setActionDelegate(firstSnail->logic);
-   playerInput2.setRefFrameDelegate(secondSnail->logic);
-   playerInput2.setActionDelegate(secondSnail->logic);
+   playerInput1.setRefFrameDelegate(Observing(firstSnail->logic));
+   playerInput1.setActionDelegate(Observing(firstSnail->logic));
+   playerInput2.setRefFrameDelegate(Observing(secondSnail->logic));
+   playerInput2.setActionDelegate(Observing(secondSnail->logic));
 
 
    cactusGenerator = Owning(boost::shared_ptr<CactusGenerator>(new CactusGenerator(creator, world)));
-   cactusGenerator->setPosition(vec2(400.0f, 630.0f));
+   cactusGenerator->setPosition(vec2(350.0f, 630.0f));
    world.scheduler.subscribe(0.1f, cactusGenerator); // update each 1/10 of a second, should be enough
    
 }
