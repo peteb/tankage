@@ -22,15 +22,18 @@ class vec2;
 
 class Snail : public Object, public Physics::GeomEventHandler {
 public:
-	void setPosition(const vec2 & pos);
-	void collided(const boost::shared_ptr<Physics::Geom> & with);
-	
-
-	
-	Ref<Graphics::Sprite> sprite;
-	Ref<PlayerEntity> logic;
-	Ref<Physics::Geom> physGeom;
-	Ref<Physics::Body> physBody;
+   Snail();
+   
+   void setPosition(const vec2 & pos);
+   void collided(const boost::shared_ptr<Physics::Geom> & with);
+   
+   
+   
+   Ref<Graphics::Sprite> sprite;
+   Ref<PlayerEntity> logic;
+   Ref<Physics::Geom> physGeom;
+   Ref<Physics::Body> physBody;
+   int health;
 };
 
 #endif /* end of include guard: SNAIL_H_7SGQH1KL */

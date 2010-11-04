@@ -6,6 +6,7 @@
 
 #include <iostream>
 #include <boost/make_shared.hpp>
+#include <set>
 
 #include "phys_subsystem.h"
 #include "physics/body.h"
@@ -72,26 +73,31 @@ void Subsystem::checkCollisions() {
          iter = geoms.erase(iter);
       }
    }
+
+   // a set to remember which pairs have collided already
+   std::set<std::pair<Physics::Geom *, Physics::Geom *> > collided;
    
    // second pass, check collisions
    for (GeomVector::iterator it1 = resGeoms.begin(); it1 != resGeoms.end(); ++it1) {      
       for (GeomVector::iterator it2 = resGeoms.begin(); it2 != resGeoms.end(); ++it2) {
-		  if (it1->second.get() != it2->second.get()) { 
-			  if (it1->second->collisionMask.test(it2->second->collisionId) ||
-				  it2->second->collisionMask.test(it1->second->collisionId)) {
-                  
-				  if (rect::intersect(it1->first, it2->first)) {
-					  if (it1->second->collisionMask.test(it2->second->collisionId))
-						  it1->second->collided(it2->second);
-					  if (it2->second->collisionMask.test(it1->second->collisionId))
-						  it2->second->collided(it1->second);
-					  
-					  std::cout << "COLLISION " << it1->second.get() << " - " << it2->second.get() << std::endl;
-				  }
+		 if (it1->second.get() != it2->second.get()) { 
+			if (it1->second->collisionMask.test(it2->second->collisionId) ||
+				it2->second->collisionMask.test(it1->second->collisionId)) {
+
+			   if (rect::intersect(it1->first, it2->first) && collided.find(std::make_pair(it2->second.get(), it1->second.get())) == collided.end() ) {
+				  if (it1->second->collisionMask.test(it2->second->collisionId))
+					 it1->second->collided(it2->second);
+				  if (it2->second->collisionMask.test(it1->second->collisionId))
+					 it2->second->collided(it1->second);
 				  
-			  }
-			  
-		  }
+				  std::cout << "COLLISION " << it1->second.get() << " - " << it2->second.get() << std::endl;
+
+				  collided.insert(std::make_pair(it1->second.get(), it2->second.get()));
+			   }
+			   
+			}
+			
+		 }
       }
    }
 }
