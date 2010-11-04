@@ -7,6 +7,7 @@
 #include "object.h"
 #include "object_list.h"
 #include <stdexcept>
+#include <iostream>
 
 Object::Object() {
    owner = NULL;
@@ -23,11 +24,13 @@ void Object::kill() {
    if (owner) {
       owner->enqueueRemoval(this);
 	  owner = NULL; // TODO: check if enqueueRemoval succeeds, and then remove owner?
-
+	  
 	  if (Ref<ObjectEventListener>::SharedPtr lockedListener = eventListener.lock())
-		 lockedListener->onObjectDeath(*this);
+		 lockedListener->onObjectDeath(*this); // TODO: in object dtor instead? but maybe not, what about caches
    }
-   
+   else {
+	  std::cout << "object::kill: no owner" << std::endl;
+   }
 }
 
 void Object::setEventListener(const Ref<ObjectEventListener> & newListener) {

@@ -19,49 +19,49 @@ public:
       setWeak(wp);
    }
 
-	template<typename Other>
-	Ref(const Ref<Other> & ref) {
-	   sp = ref.sp;
+   template<typename Other>
+   Ref(const Ref<Other> & ref) {
+	  sp = ref.sp;
       wp = ref.wp;
       owner = ref.owner;
    }
 
    typedef boost::shared_ptr<T> SharedPtr;
-
+   
    void setWeak(const boost::weak_ptr<T> & wp) {
       this->wp = wp;
       this->sp.reset();
       owner = false;
    }
 
-	void setOwning(const boost::shared_ptr<T> & sp) {
-		this->sp = sp;
-		this->wp.reset();
-		owner = true;
-	}
+   void setOwning(const boost::shared_ptr<T> & sp) {
+	  this->sp = sp;
+	  this->wp.reset();
+	  owner = true;
+   }
 
-	SharedPtr lock() const {
-		if (owner)
-			return sp;
-		else
-			return wp.lock();
-	}
+   SharedPtr lock() const {
+	  if (owner)
+		 return sp;
+	  else
+		 return wp.lock();
+   }
 
-	template<typename OtherT>
-	Ref<T> & operator = (const Ref<OtherT> & other) {
-		this->sp = other.sp;
-		this->wp = other.wp;
-		owner = other.owner;
-	}
+   template<typename OtherT>
+   Ref<T> & operator = (const Ref<OtherT> & other) {
+	  this->sp = other.sp;
+	  this->wp = other.wp;
+	  owner = other.owner;
+   }
 	
-	// and just for convenience...
-	SharedPtr operator -> () const {
-		SharedPtr ret = lock();
-		if (!ret)
-			throw std::runtime_error("null pointer exception!");
-		
-		return ret;
-	}
+   // and just for convenience...
+   SharedPtr operator -> () const {
+	  SharedPtr ret = lock();
+	  if (!ret)
+		 throw std::runtime_error("null pointer exception!");
+	  
+	  return ret;
+   }
 
    template<typename Other>
    friend class Ref<T>;
@@ -107,6 +107,12 @@ Ref<T> Observing(const boost::shared_ptr<T> & sp) {
    return ret;
 }
 
+template<typename T>
+Ref<T> Observing(const Ref<T> & ref) {
+   Ref<T> ret;
+   ret.setWeak(ref.lock());
+   return ret;
+}
 
 template<typename T>
 Ref<T> Owning(const boost::shared_ptr<T> & sp) {

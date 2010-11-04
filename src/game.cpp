@@ -20,8 +20,18 @@ Game::Game()
    , playerInput1("player1")
    , playerInput2("player2")
 {
-   firstSnail = Owning(boost::dynamic_pointer_cast<Snail>(creator.createObject("snail1", creator)));
-   secondSnail = Owning(boost::dynamic_pointer_cast<Snail>(creator.createObject("snail2", creator)));
+   {
+	  Ref<Snail> snail = Owning(boost::dynamic_pointer_cast<Snail>(creator.createObject("snail1", creator)));
+	  world.insert(snail.lock());
+	  firstSnail = Observing(snail);
+   }
+
+   {
+	  Ref<Snail> snail = Owning(boost::dynamic_pointer_cast<Snail>(creator.createObject("snail2", creator)));
+	  world.insert(snail.lock());
+	  secondSnail = Observing(snail);
+   }
+
    firstSnail->setPosition(vec2(100.0f, 200.0f));
    secondSnail->setPosition(vec2(600.0f, 200.0f));
    

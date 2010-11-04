@@ -29,6 +29,11 @@ void Snail::collided(const boost::shared_ptr<Physics::Geom> & with) {
 			bulletOwner->kill();
 			health -= 20.0f;
 			std::cout << "decreased health to " << health << std::endl;
+
+			if (health <= 0.0f) {
+			   std::cout << "snail died" << std::endl;
+			   kill();
+			}
 		 }
 	  }
    }

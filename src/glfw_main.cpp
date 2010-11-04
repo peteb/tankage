@@ -59,6 +59,8 @@ int main(int argc, char ** argv) {
       std::cerr << "Failed to open GLFW window" << std::endl;
       return EXIT_FAILURE;
    }
+
+//   glfwOpenWindowHint(GLFW_WINDOW_NO_RESIZE, 1);
    
    glfwSetWindowSizeCallback(WindowResize);
    glfwSetKeyCallback(KeyStateChange);
