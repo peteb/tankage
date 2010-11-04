@@ -7,6 +7,7 @@
 #include "cactus.h"
 #include "world.h"
 #include "physics/body.h"
+#include "bullet.h"
 
 void Cactus::setPosition(const vec2 & pos) {
    body.lock()->setPosition(pos);
@@ -27,3 +28,12 @@ mat2 Cactus::getOrientation() const {
 void Cactus::leftView() {
    kill();
 }
+
+void Cactus::collided(const boost::shared_ptr<Physics::Geom> & with) {
+   if (boost::shared_ptr<Object> lockedOwner = with->getOwner().lock()) {
+	  if (boost::shared_ptr<Bullet> bulletOwner = boost::dynamic_pointer_cast<Bullet>(lockedOwner)) {
+		 bulletOwner->kill();
+	  }
+   }
+}
+

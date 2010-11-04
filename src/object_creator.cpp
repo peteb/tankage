@@ -120,9 +120,10 @@ boost::shared_ptr<Object> ObjectCreator::createObject(const std::string & type, 
    
 	   newCactus->geom = Owning(world.physics.createRectGeom(newCactus->sprite->getSize()));
 	   newCactus->geom->setBody(newCactus->body);
-	   newCactus->geom->setCollisionId(3);
-	   newCactus->geom->setCollisionMask(0x0u);
-   
+	   newCactus->geom->setCollisionId(4);
+	   newCactus->geom->setCollisionMask(0x8u);
+	   newCactus->geom->setEventHandler(Observing(newCactus));
+	   
 	   return newCactus;
 	}
 	
