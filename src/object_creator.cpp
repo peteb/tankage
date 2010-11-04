@@ -7,6 +7,8 @@
 #include "object_creator.h"
 #include "bullet.h"
 #include "snail.h"
+#include "cactus.h"
+
 #include <boost/make_shared.hpp>
 #include "graphics/gfx_subsystem.h"
 #include "graphics/sprite.h"
@@ -105,6 +107,23 @@ boost::shared_ptr<Object> ObjectCreator::createObject(const std::string & type, 
 	}
 	else if (type == "bullet") {
 		return createBullet();
+	}
+	else if (type == "cactus") {
+	   boost::shared_ptr<Cactus> newCactus = boost::make_shared<Cactus>();
+	   
+	   newCactus->sprite = Owning(world.graphics.createSprite("../data/cactus1.png"));
+	   newCactus->sprite->setEventHandler(newCactus);
+
+	   newCactus->body = Owning(world.physics.createBody());
+	   newCactus->body->setDelegate(newCactus->sprite);
+	   newCactus->body->setOwner(newCactus);
+   
+	   newCactus->geom = Owning(world.physics.createRectGeom(newCactus->sprite->getSize()));
+	   newCactus->geom->setBody(newCactus->body);
+	   newCactus->geom->setCollisionId(3);
+	   newCactus->geom->setCollisionMask(0x0u);
+   
+	   return newCactus;
 	}
 	
 

@@ -9,6 +9,7 @@
 #include "snail.h"
 #include "math/rect.h"
 #include "object.h"
+#include "cactus_generator.h"
 
 #include <iostream>
 #include <boost/make_shared.hpp>
@@ -41,6 +42,12 @@ Game::Game()
    playerInput1.setActionDelegate(firstSnail->logic);
    playerInput2.setRefFrameDelegate(secondSnail->logic);
    playerInput2.setActionDelegate(secondSnail->logic);
+
+
+   cactusGenerator = Owning(boost::shared_ptr<CactusGenerator>(new CactusGenerator(creator, world)));
+   cactusGenerator->setPosition(vec2(400.0f, 630.0f));
+   world.scheduler.subscribe(0.1f, cactusGenerator); // update each 1/10 of a second, should be enough
+   
 }
 
 Game::~Game() {

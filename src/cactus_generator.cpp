@@ -1,0 +1,41 @@
+/*
+ * Snail Wail
+ * 
+ * (c) Copyright 2010 Peter Backman. All Rights Reserved. 
+ */
+
+#include "cactus_generator.h"
+#include <iostream>
+#include <boost/shared_ptr.hpp>
+#include "cactus.h"
+#include "object_creator.h"
+#include "world.h"
+#include "physics/body.h"
+
+CactusGenerator::CactusGenerator(ObjectCreator & creator, World & world)
+   : creator(creator)
+   , world(world)
+{
+   timeSinceCactus = 0.0f;
+}
+
+void CactusGenerator::setPosition(const vec2 & pos) {
+   origin = pos;
+}
+
+void CactusGenerator::update(float dt) {
+   timeSinceCactus += dt;
+   if (timeSinceCactus > 1.0f) {
+	  timeSinceCactus = 0.0f;
+	  std::cout << "new cactus" << std::endl;
+	  spawnCactus();
+   }
+   
+}
+
+void CactusGenerator::spawnCactus() {
+   boost::shared_ptr<Cactus> cactus = boost::dynamic_pointer_cast<Cactus>(creator.createObject("cactus", creator));
+   cactus->setPosition(origin);
+   cactus->body->addImpulse(vec2(0.0f, -140.0f));
+   world.insert(cactus);
+}

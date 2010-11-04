@@ -17,6 +17,7 @@
 #include "world.h"
 #include "ref.h"
 
+class CactusGenerator;
 class Snail;
  
 class Game {
@@ -31,6 +32,7 @@ public:
 private:
    Ref<Snail> firstSnail;
    Ref<Snail> secondSnail;
+   Ref<CactusGenerator> cactusGenerator;
    HiController playerInput1, playerInput2;
    
    World world;
