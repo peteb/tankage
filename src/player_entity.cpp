@@ -27,12 +27,15 @@ void PlayerEntity::setTarget(const Ref<Physics::Body> & newTarget) {
 }
 
 void PlayerEntity::shoot() {
+   const vec2 forward = weaponDir;
+   
    boost::shared_ptr<Bullet> bullet = boost::dynamic_pointer_cast<Bullet>(creator.createObject("bullet", creator));
-   bullet->setPosition(getPosition());
-   bullet->body->addImpulse(vec2(1000.0f, 0.0f));
+   bullet->setPosition(getPosition() + weaponPos);
+   bullet->body->addImpulse(vec2(1000.0f, 0.0f) * forward);
+   bullet->body->setOrientation(mat2(weaponDir, vec2(0.0f, 1.0f)));
    
    if (Ref<Physics::Body>::SharedPtr lockedTarget = target.lock())
-	  lockedTarget->addImpulse(vec2(-100.0f, 0.0f));
+	  lockedTarget->addImpulse(vec2(-100.0f, 0.0f) * forward);
 
    bullet->shooter = shooterId;
    world.insert(bullet);
@@ -67,10 +70,10 @@ void PlayerEntity::update(float dt) {
 
    if (Ref<Physics::Body>::SharedPtr lockedTarget = target.lock()) {
       vec2 pos = lockedTarget->getPosition();
-      pos.x = std::max(pos.x, -10.0f);
-      pos.x = std::min(pos.x, 890.0f);
-      pos.y = std::max(pos.y, 10.0f);
-      pos.y = std::min(pos.y, 600.0f - 10.0f);
+      pos.x = std::max(pos.x, 32.0f);
+      pos.x = std::min(pos.x, 800.0f - 32.0f);
+      pos.y = std::max(pos.y, 32.0f);
+      pos.y = std::min(pos.y, 600.0f - 32.0f);
 
       vec2 delta = vec2(xPos, pos.y) - pos;
 

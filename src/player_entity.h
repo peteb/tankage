@@ -33,6 +33,8 @@ public:
    
    // Updatable --------------------------------------------
    void trigger(const std::string & action, int state);
+
+   vec2 weaponDir, weaponPos;
    
 private:
    void shoot();

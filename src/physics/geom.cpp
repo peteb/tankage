@@ -38,6 +38,9 @@ void Physics::Geom::setOrientation(const mat2 & orient) {
 }
 
 mat2 Physics::Geom::getOrientation() const {
+   if (Ref<Physics::Body>::SharedPtr lockedBody = linkedBody.lock())
+	  return lockedBody->getOrientation();
+   
    return mat2::Identity;
 }
 

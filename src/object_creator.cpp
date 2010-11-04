@@ -45,7 +45,7 @@ boost::shared_ptr<Snail> ObjectCreator::createSnail(int team, ObjectCreator & cr
    if (team == 0)
       xPos = 100.0f;
    else
-      xPos = 600.0f;
+      xPos = 700.0f;
    
    boost::shared_ptr<Snail> newSnail = boost::make_shared<Snail>();
    
@@ -59,6 +59,16 @@ boost::shared_ptr<Snail> ObjectCreator::createSnail(int team, ObjectCreator & cr
    
    newSnail->logic = Owning(new PlayerEntity(xPos, newSnail.get(), creator, world));
    newSnail->logic->setTarget(Observing(newSnail->physBody.lock()));
+
+   if (team == 1) {
+	  newSnail->logic->weaponDir = vec2(-1.0f, 0.0f);
+	  newSnail->logic->weaponPos = vec2(-32.0f, 15.0f);
+   }
+   else {
+	  newSnail->logic->weaponDir = vec2(1.0f, 0.0f);
+	  newSnail->logic->weaponPos = vec2(32.0f, 5.0f);
+   }
+   
    world.scheduler.subscribe(0.0f, newSnail->logic); // kan man verkligen göra såhär?
 													 // hur hanteras aktivering/deaktivering?
 													 // när ett objekt skapas är det aktiverat,
@@ -80,7 +90,7 @@ boost::shared_ptr<Snail> ObjectCreator::createSnail(int team, ObjectCreator & cr
       newSnail->physGeom->setCollisionId(0);
    
    newSnail->physGeom->setCollisionMask(0x8u);
-   
+
    return newSnail;
 }
 

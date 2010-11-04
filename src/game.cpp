@@ -23,17 +23,19 @@ Game::Game()
    {
 	  Ref<Snail> snail = Owning(boost::dynamic_pointer_cast<Snail>(creator.createObject("snail1", creator)));
 	  world.insert(snail.lock());
+	  snail->setPosition(vec2(100.0f, 400.0f));
 	  firstSnail = Observing(snail);
    }
 
    {
 	  Ref<Snail> snail = Owning(boost::dynamic_pointer_cast<Snail>(creator.createObject("snail2", creator)));
 	  world.insert(snail.lock());
+	  snail->setPosition(vec2(700.0f, 400.0f));
 	  secondSnail = Observing(snail);
    }
 
-   firstSnail->setPosition(vec2(100.0f, 200.0f));
-   secondSnail->setPosition(vec2(600.0f, 200.0f));
+   firstSnail->setPosition(vec2(100.0f, 300.0f));
+   secondSnail->setPosition(vec2(700.0f, 300.0f));
    
    playerInput1.setRefFrameDelegate(firstSnail->logic);
    playerInput1.setActionDelegate(firstSnail->logic);

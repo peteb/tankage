@@ -35,6 +35,10 @@ vec2 vec2::operator * (float scalar) const {
    return vec2(x * scalar, y * scalar);
 }
 
+vec2 vec2::operator * (const vec2 & rh) const {
+   return vec2(x * rh.x, y * rh.y);
+}
+
 vec2 & vec2::operator += (const vec2 & rh) {
    x += rh.x;
    y += rh.y;

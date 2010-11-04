@@ -10,6 +10,7 @@ Physics::Body::Body(Physics::Subsystem & subsystem)
    : subsystem(subsystem)
    , position(vec2::Zero)
    , velocity(vec2::Zero)
+   , orientation(mat2::Identity)
 {
    
 }
@@ -42,11 +43,11 @@ vec2 Physics::Body::getPosition() const {
 }
 
 void Physics::Body::setOrientation(const mat2 & orient) {
-   
+   this->orientation = orient;
 }
 
 mat2 Physics::Body::getOrientation() const {
-   return mat2::Identity;
+   return orientation;
 }
 
 // void Physics::Body::setVelocity(const vec2 & vel) {

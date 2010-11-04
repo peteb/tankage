@@ -53,14 +53,15 @@ int main(int argc, char ** argv) {
    }
    
    const int windowWidth = 800, windowHeight = 600;
-   
+
+   glfwOpenWindowHint(GLFW_WINDOW_NO_RESIZE, 1);
+
    if (!glfwOpenWindow(windowWidth, windowHeight, 0, 0, 0, 0, 24, 0, GLFW_WINDOW)) {
       glfwTerminate();
       std::cerr << "Failed to open GLFW window" << std::endl;
       return EXIT_FAILURE;
    }
 
-//   glfwOpenWindowHint(GLFW_WINDOW_NO_RESIZE, 1);
    
    glfwSetWindowSizeCallback(WindowResize);
    glfwSetKeyCallback(KeyStateChange);

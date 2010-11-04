@@ -18,6 +18,7 @@ public:
    vec2 operator - (const vec2 & rh) const;
    vec2 operator - () const;
    vec2 operator * (float scalar) const;
+   vec2 operator * (const vec2 & rh) const;
    vec2 & operator += (const vec2 & rh);
    vec2 & operator -= (const vec2 & rh);
    

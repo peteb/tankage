@@ -49,6 +49,7 @@ namespace Physics {
       Ref<ReferenceFrame2> delegate;
 	  boost::weak_ptr<Object> owner;
       vec2 position, velocity;
+	  mat2 orientation;
    };
    
 }
