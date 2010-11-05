@@ -56,7 +56,7 @@ rect Sprite::getSize() const {
    return size;
 }
 
-boost::shared_ptr<Texture> Sprite::getTexture() const {
+boost::shared_ptr<Graphics::Texture> Sprite::getTexture() const {
    return texture;
 }
 

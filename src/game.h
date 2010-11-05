@@ -16,6 +16,7 @@
 #include "object_creator.h"
 #include "world.h"
 #include "ref.h"
+#include "health_meter.h"
 
 class CactusGenerator;
 class Snail;
@@ -34,6 +35,7 @@ private:
    Ref<Snail> secondSnail;
    Ref<CactusGenerator> cactusGenerator;
    HiController playerInput1, playerInput2;
+   HealthMeter snailHealth1, snailHealth2;
    
    World world;
    ObjectCreator creator;

@@ -11,19 +11,21 @@
 #include <boost/weak_ptr.hpp>
 #include <map>
 
-class Texture;
+namespace Graphics {
+   class Texture;
 
 // this is really both a cache and a loader
-class TextureLoader {
-public:
-   TextureLoader();
-   ~TextureLoader();
+   class TextureLoader {
+   public:
+	  TextureLoader();
+	  ~TextureLoader();
    
-   boost::shared_ptr<Texture> loadTexture(const std::string & name);
+	  boost::shared_ptr<Texture> loadTexture(const std::string & name);
    
-private:
-   typedef std::map<std::string, boost::weak_ptr<Texture> > TextureCache;
-   TextureCache cachedTextures; 
-};
+   private:
+	  typedef std::map<std::string, boost::weak_ptr<Texture> > TextureCache;
+	  TextureCache cachedTextures; 
+   };
+}
 
 #endif /* end of include guard: TEXTURE_LOADER_H_7GYX3QY2 */

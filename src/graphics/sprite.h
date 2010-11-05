@@ -15,10 +15,10 @@
 #include "graphics/vertex.h"
 #include "math/rect.h"
 
-class Texture;
 
 namespace Graphics {
    class BoundedSprite;
+   class Texture;
 
    class Subsystem;
 
@@ -33,7 +33,7 @@ namespace Graphics {
 
    class Sprite : public ReferenceFrame2 {
    private:
-      Sprite(const boost::shared_ptr<Texture> & texture, BoundedSprite * sceneNode);
+      Sprite(const boost::shared_ptr<Graphics::Texture> & texture, BoundedSprite * sceneNode);
 
       friend class Graphics::Subsystem;
 
@@ -51,13 +51,13 @@ namespace Graphics {
       // ------------------------------------------------------------
       
       rect getSize() const;
-      boost::shared_ptr<Texture> getTexture() const;
+      boost::shared_ptr<Graphics::Texture> getTexture() const;
       
       void setEventHandler(const boost::weak_ptr<SpriteEventHandler> & eventHandler);
       
    private:
       boost::weak_ptr<SpriteEventHandler> eventHandler;
-      boost::shared_ptr<Texture> texture;
+      boost::shared_ptr<Graphics::Texture> texture;
       rect size;
       vec2 position;
       mat2 orientation;

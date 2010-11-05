@@ -11,15 +11,14 @@
 #include <OpenGL/OpenGL.h>
 #include <boost/make_shared.hpp>
 
-using namespace Graphics;
  
-Subsystem::Subsystem() 
+Graphics::Subsystem::Subsystem() 
    : viewport(vec2::Zero)
 {
 }
 
 #include <iostream>
-void Subsystem::render(float dt) {
+void Graphics::Subsystem::render(float dt) {
    glClearColor(0.957, 0.917, 0.682, 1.0f);
    glClear(GL_COLOR_BUFFER_BIT);
 
@@ -51,12 +50,12 @@ void Subsystem::render(float dt) {
    
    int rendered = 0;
    
-   std::vector<BoundedSprite *>::iterator iter = sprites.begin();
+   std::vector<Graphics::BoundedSprite *>::iterator iter = sprites.begin();
    
    while (iter != sprites.end()) {
       BoundedSprite * bs = *iter;
       
-      if (boost::shared_ptr<Sprite> sprite = bs->sprite.lock()) {
+      if (boost::shared_ptr<Graphics::Sprite> sprite = bs->sprite.lock()) {
          if (rect::intersect(bs->boundingArea, viewport)) {
             if (!bs->visibleLastFrame || bs->firstFrame) {
                sprite->enteredView();
@@ -96,7 +95,7 @@ void Subsystem::render(float dt) {
          }
          else {
             if (bs->visibleLastFrame || bs->firstFrame) {
-               if (boost::shared_ptr<Sprite> sprite = bs->sprite.lock()) {
+               if (boost::shared_ptr<Graphics::Sprite> sprite = bs->sprite.lock()) {
                   sprite->leftView();
                }
             }
@@ -116,18 +115,18 @@ void Subsystem::render(float dt) {
   // std::cout << "Rendered: " << rendered << std::endl;
 }
 
-void Subsystem::resizeViewport(const rect & size) {
+void Graphics::Subsystem::resizeViewport(const rect & size) {
    viewport = size;
 }
 
-boost::shared_ptr<Sprite> Subsystem::createSprite(const std::string & fragments) {
-   boost::shared_ptr<Texture> spriteTexture = textureCache.loadTexture(fragments);
+boost::shared_ptr<Graphics::Sprite> Graphics::Subsystem::createSprite(const std::string & fragments) {
+   boost::shared_ptr<Graphics::Texture> spriteTexture = textureCache.loadTexture(fragments);
    
    BoundedSprite * node = new BoundedSprite;
    node->boundingArea = spriteTexture->getSize();
    node->boundingArea.origin = vec2::Zero;
 
-   boost::shared_ptr<Sprite> newSprite = boost::shared_ptr<Sprite>(
+   boost::shared_ptr<Graphics::Sprite> newSprite = boost::shared_ptr<Graphics::Sprite>(
       new Sprite(spriteTexture, node)
    );   
    node->sprite = newSprite;
@@ -135,4 +134,8 @@ boost::shared_ptr<Sprite> Subsystem::createSprite(const std::string & fragments)
    sprites.push_back(node);
    
    return newSprite;   
+}
+
+boost::shared_ptr<Graphics::Texture> Graphics::Subsystem::getTexture(const std::string & filename) {
+   return textureCache.loadTexture(filename);
 }

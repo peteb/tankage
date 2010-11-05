@@ -7,22 +7,22 @@
 #include "texture.h"
 #include <iostream>
 
-Texture::Texture(GLuint texId, const rect & size)
+Graphics::Texture::Texture(GLuint texId, const rect & size)
    : texId(texId)
    , size(size)
 {
    std::cout << "created texId " << texId << std::endl;
 }
 
-Texture::~Texture() {
+Graphics::Texture::~Texture() {
 	glBindTexture(GL_TEXTURE_2D, 0);
 	glDeleteTextures(1, &texId);
 }
 
-rect Texture::getSize() const {
+rect Graphics::Texture::getSize() const {
    return size;
 }
 
-GLuint Texture::getTexId() const {
+GLuint Graphics::Texture::getTexId() const {
    return texId;
 }

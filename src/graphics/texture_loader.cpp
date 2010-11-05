@@ -12,6 +12,8 @@
 #include <OpenGL/OpenGL.h>
 #include <boost/make_shared.hpp>
 
+using Graphics::TextureLoader;
+
 TextureLoader::TextureLoader() {
    ilInit();
 }
@@ -20,7 +22,7 @@ TextureLoader::~TextureLoader() {
    
 }
 
-boost::shared_ptr<Texture> TextureLoader::loadTexture(const std::string & name) {
+boost::shared_ptr<Graphics::Texture> TextureLoader::loadTexture(const std::string & name) {
    // check cache for texture
    TextureCache::iterator iter = cachedTextures.find(name);
    
@@ -28,7 +30,7 @@ boost::shared_ptr<Texture> TextureLoader::loadTexture(const std::string & name) 
       if (iter->second.expired()) // the cache entry expired
          cachedTextures.erase(iter);
       else
-         return boost::shared_ptr<Texture>(iter->second);
+         return boost::shared_ptr<Graphics::Texture>(iter->second);
    }
    
    // not found in cache, load
@@ -44,7 +46,7 @@ boost::shared_ptr<Texture> TextureLoader::loadTexture(const std::string & name) 
 			ss << errorCode << ", ";
 		}
 
-		throw std::runtime_error("failed to load image, " + ss.str());
+		throw std::runtime_error("failed to load image '" + name + "': " + ss.str());
 	}
 	
    ILuint width = ilGetInteger(IL_IMAGE_WIDTH);
@@ -67,8 +69,8 @@ boost::shared_ptr<Texture> TextureLoader::loadTexture(const std::string & name) 
    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
-   boost::shared_ptr<Texture> texture(
-      new Texture(newTexture, rect(width, height))
+   boost::shared_ptr<Graphics::Texture> texture(
+      new Graphics::Texture(newTexture, rect(width, height))
    );
    cachedTextures.insert(std::make_pair(name, texture));
    

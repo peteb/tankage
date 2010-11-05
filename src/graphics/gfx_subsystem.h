@@ -17,6 +17,7 @@
 namespace Graphics {
    class Sprite;
    class BoundedSprite;
+   class Texture;
    
    class Subsystem {
    public:
@@ -24,11 +25,12 @@ namespace Graphics {
       
       void render(float dt);
       void resizeViewport(const rect & size);
-      boost::shared_ptr<Sprite> createSprite(const std::string & fragments);
-      
+      boost::shared_ptr<Graphics::Sprite> createSprite(const std::string & fragments);
+	  boost::shared_ptr<Graphics::Texture> getTexture(const std::string & filename);
+
    private:
       TextureLoader textureCache;
-      std::vector<BoundedSprite *> sprites;
+      std::vector<Graphics::BoundedSprite *> sprites;
       rect viewport;
    };
 
