@@ -70,6 +70,8 @@ boost::shared_ptr<Snail> ObjectCreator::createSnail(int team, ObjectCreator & cr
 	  newSnail->logic->weaponDir = vec2(1.0f, 0.0f);
 	  newSnail->logic->weaponPos = vec2(32.0f, 5.0f);
    }
+
+   newSnail->setEventHandler(Observing(newSnail->logic));
    
    world.scheduler.subscribe(0.0f, newSnail->logic); // kan man verkligen göra såhär?
 													 // hur hanteras aktivering/deaktivering?

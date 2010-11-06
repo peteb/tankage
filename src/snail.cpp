@@ -27,15 +27,29 @@ void Snail::collided(const boost::shared_ptr<Physics::Geom> & with) {
 	  if (boost::shared_ptr<Bullet> bulletOwner = boost::dynamic_pointer_cast<Bullet>(lockedOwner)) {
 		 if (static_cast<void *>(bulletOwner->shooter) != static_cast<void *>(this)) { // hit by a bullet
 			bulletOwner->kill();
-			health -= 5.0f;
-			std::cout << "decreased health to " << health << std::endl;
+			increaseHealth(-5.0f);
 			physBody->addImpulse(with->getOrientation() * vec2(300.0f, 0.0f));
-			if (health <= 0.0f) {
-			   std::cout << "snail died" << std::endl;
-			   kill();
-			}
 		 }
 	  }
    }
    
+}
+
+void Snail::setEventHandler(const Ref<SnailEventHandler> & newHandler) {
+   eventHandler = newHandler;
+}
+
+void Snail::increaseHealth(int add) {
+   health += add;
+
+   if (Ref<SnailEventHandler>::SharedPtr lockedHandler = eventHandler.lock())
+	  lockedHandler->onHealthChange(health);
+   
+   std::cout << "decreased health to " << health << std::endl;
+
+   if (health <= 0.0f) {
+	  std::cout << "snail died" << std::endl;
+	  kill();
+   }
+
 }

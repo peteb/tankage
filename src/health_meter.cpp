@@ -27,8 +27,12 @@ void HealthMeter::draw() {
 	  
 	  if (valuesLeft >= 10.0f)
 		 texPos = vec2::Zero;
-	  else if (valuesLeft >= 5.0f)
-		 texPos = vec2(1.0f/2.0f, 0.0f);
+	  else if (valuesLeft >= 5.0f) {
+		 if (dir >= 0.0f)
+			texPos = vec2(1.0f/2.0f, 0.0f);
+		 else
+			texPos = vec2(1.0f/2.0f, 1.0f/2.0f);
+	  }
 	  else
 		 texPos = vec2(0.0f, 1.0f/2.0f);
 	  

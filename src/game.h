@@ -35,7 +35,7 @@ private:
    Ref<Snail> secondSnail;
    Ref<CactusGenerator> cactusGenerator;
    HiController playerInput1, playerInput2;
-   HealthMeter snailHealth1, snailHealth2;
+   Ref<HealthMeter> snailHealth1, snailHealth2;
    
    World world;
    ObjectCreator creator;

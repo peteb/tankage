@@ -12,17 +12,20 @@
 #include "triggerable.h"
 #include "updatable.h"
 #include "ref.h"
+#include "snail.h"
 
 class ObjectCreator;
 class World;
+class HealthMeter;
 
 namespace Physics {class Body; }
 
-class PlayerEntity : public ReferenceFrame2, public Triggerable, public Updatable {
+class PlayerEntity : public ReferenceFrame2, public Triggerable, public Updatable, public SnailEventHandler {
 public:
    PlayerEntity(float x, void * shooterId, ObjectCreator & creator, World & world);
    
    void setTarget(const Ref<Physics::Body> & newTarget);
+   void setHealthMeter(const Ref<HealthMeter> & newMeter);
    void update(float dt);
    
    // ReferenceFrame2 --------------------------------------
@@ -34,6 +37,8 @@ public:
    // Updatable --------------------------------------------
    void trigger(const std::string & action, int state);
 
+   void onHealthChange(float newHealth);
+
    vec2 weaponDir, weaponPos;
    
 private:
@@ -44,6 +49,7 @@ private:
    void * shooterId;
    
    float xPos;
+   Ref<HealthMeter> healthMeter;
    Ref<Physics::Body> target;
    ObjectCreator & creator;
    World & world;

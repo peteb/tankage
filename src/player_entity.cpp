@@ -10,6 +10,7 @@
 #include "world.h"
 #include "graphics/sprite.h"
 #include "physics/body.h"
+#include "health_meter.h"
 #include <algorithm>
 
 PlayerEntity::PlayerEntity(float x, void * shooterId, ObjectCreator & creator, World & world) 
@@ -123,3 +124,16 @@ void PlayerEntity::trigger(const std::string & action, int state) {
    else if (shooting == 1 && state == 0)
       shooting = 3;
 }
+
+
+void PlayerEntity::onHealthChange(float newHealth) {
+   std::cout << "new health: " << newHealth << std::endl;
+   if (Ref<HealthMeter>::SharedPtr lockedMeter = healthMeter.lock())
+	  lockedMeter->setValue(newHealth);
+}
+
+void PlayerEntity::setHealthMeter(const Ref<HealthMeter> & newMeter) {
+   healthMeter = newMeter;
+}
+
+

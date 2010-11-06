@@ -20,6 +20,13 @@ class PlayerEntity;
 class World;
 class vec2;
 
+class SnailEventHandler {
+public:
+   virtual ~SnailEventHandler() {}
+   
+   virtual void onHealthChange(float newValue) =0;
+};
+
 class Snail : public Object, public Physics::GeomEventHandler {
 public:
    Snail();
@@ -27,12 +34,16 @@ public:
    void setPosition(const vec2 & pos);
    void collided(const boost::shared_ptr<Physics::Geom> & with);
    
-   
-   
+   void setEventHandler(const Ref<SnailEventHandler> & newHandler);
+   void increaseHealth(int add);
+
+   Ref<SnailEventHandler> eventHandler;
    Ref<Graphics::Sprite> sprite;
    Ref<PlayerEntity> logic;
    Ref<Physics::Geom> physGeom;
    Ref<Physics::Body> physBody;
+
+private:
    int health;
 };
 

@@ -26,10 +26,12 @@ Game::Game()
 	  world.insert(snail.lock());
 	  snail->setPosition(vec2(100.0f, 400.0f));
 	  firstSnail = Observing(snail);
-	  snailHealth1.setValue(75.0f);
-	  snailHealth1.setPosition(vec2(20.0f, 20.0f));
-	  snailHealth1.setTexture(world.graphics.getTexture("../data/hearts.png"));
-	  snailHealth1.setDir(1.0f);
+	  snailHealth1 = Owning(new HealthMeter);
+	  snailHealth1->setValue(100.0f);
+	  snailHealth1->setPosition(vec2(20.0f, 20.0f));
+	  snailHealth1->setTexture(world.graphics.getTexture("../data/hearts.png"));
+	  snailHealth1->setDir(1.0f);
+	  firstSnail->logic->setHealthMeter(Observing(snailHealth1));
 	  // TODO: ska man kunna få texture från gfx_subsystem? yes, kör på det tills vidare. sen refactor
    }
 
@@ -38,11 +40,12 @@ Game::Game()
 	  world.insert(snail.lock());
 	  snail->setPosition(vec2(700.0f, 400.0f));
 	  secondSnail = Observing(snail);
-	  snailHealth2.setValue(100.0f);
-	  snailHealth2.setPosition(vec2(800.0f - 20.0f, 20.0f));
-	  snailHealth2.setTexture(world.graphics.getTexture("../data/hearts.png"));
-	  snailHealth2.setValue(40.0f);
-	  snailHealth2.setDir(-1.0f);
+	  snailHealth2 = Owning(new HealthMeter);
+	  snailHealth2->setValue(100.0f);
+	  snailHealth2->setPosition(vec2(800.0f - 20.0f, 20.0f));
+	  snailHealth2->setTexture(world.graphics.getTexture("../data/hearts.png"));
+	  snailHealth2->setDir(-1.0f);
+	  secondSnail->logic->setHealthMeter(Observing(snailHealth2));
    }
 
    firstSnail->setPosition(vec2(100.0f, 300.0f));
@@ -74,8 +77,8 @@ void Game::tick(float dt) {
    world.scheduler.update(dt);
    world.physics.update(dt);
    world.graphics.render(dt);
-   snailHealth1.draw();
-   snailHealth2.draw();
+   snailHealth1->draw();
+   snailHealth2->draw();
    world.update();
    
    // const float step_size = 1.0f / 40.0f;
