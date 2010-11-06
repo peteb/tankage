@@ -1,1 +1,49 @@
 A 2D game where two snails fight to the death. :->
+
+
+* First Working Prototype, Novemeber 4th
+** DONE Two snails (human vs. human)
+*** DONE Keyboard map
+** DONE One unlimited weapon
+** DONE Take damage and die
+*** DONE Snails have health which can be decreased
+*** DONE Trigger event on death
+** DONE Display health
+*** DONE A meter that displays the hearts
+*** DONE Create heart graphics
+*** DONE Update health meter using snail's health level
+** DONE Cactus generator
+*** DONE Add cactus type
+*** DONE Create the generator
+** DONE Snail agnostic weapons
+*** DONE Weapons have direction and position
+** DONE Restrict window size
+	
+
+* First Alpha, December 16th
+** TODO Orient bullet sprites correctly
+** TODO Improve existing graphics
+*** TODO Cactus graphics
+*** TODO Second snail
+*** TODO More visible bullets
+** TODO Sprite animations
+*** TODO Shooting
+** TODO Health bar animations
+** TODO Improve collision detection
+*** TODO Smaller collision areas
+*** TODO More collision areas
+** TODO Blood splatter
+** TODO Extend arsenal
+** TODO Power-ups
+** TODO Rounds
+** TODO Improve bullet collision detection
+** TODO Helmets
+** TODO Run on Windows
+   
+
+* Major Beta, January 20th
+** Collect feedback from first alpha
+** Proper player input configuration
+** AI
+** Menu system
+   
