@@ -16,8 +16,7 @@
 *** DONE Create the generator
 ** DONE Snail agnostic weapons
 *** DONE Weapons have direction and position
-** DONE Restrict window size
-	
+** TODO Restrict window size
 
 * First Alpha, December 16th
 ** TODO Orient bullet sprites correctly
