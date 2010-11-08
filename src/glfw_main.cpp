@@ -7,7 +7,7 @@
 #include <iostream>
 #include <map>
 
-#include "glfw.h"
+#include "gl/glfw.h"
 #include "game.h"
 
 static void main_loop(Game & game);
