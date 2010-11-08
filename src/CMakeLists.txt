@@ -24,10 +24,12 @@ add_executable(snail-wail
 
 find_package(Cocoa REQUIRED)
 find_package(glfw REQUIRED)
+find_package(Boost REQUIRED)
 
 include_directories(
   ${GLFW_INCLUDE_DIR} 
   ${Cocoa_INCLUDE_DIR}
+  ${Boost_INCLUDE_DIR}
   )
 
 target_link_libraries(snail-wail 
@@ -36,4 +38,5 @@ target_link_libraries(snail-wail
   math
   ${GLFW_LIBRARY} 
   ${Cocoa_LIBRARIES}
+  ${Boost_LIBRARIES}
   )
