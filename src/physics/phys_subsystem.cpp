@@ -102,6 +102,13 @@ void Subsystem::checkCollisions() {
    }
 }
 
+void Physics::Subsystem::drawGeoms() {
+   for (size_t i = 0; i < geoms.size(); ++i) {
+	  if (boost::shared_ptr<Physics::Geom> lockedGeom = geoms[i].lock())
+		 lockedGeom->draw();
+   }
+}
+
 boost::shared_ptr<Body> Subsystem::createBody() {
    boost::shared_ptr<Body> body = boost::shared_ptr<Body>(new Body(*this));
    bodies.push_back(body);

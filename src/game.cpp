@@ -79,7 +79,9 @@ void Game::tick(float dt) {
    world.graphics.render(dt);
    snailHealth1->draw();
    snailHealth2->draw();
+   world.physics.drawGeoms();
    world.update();
+
    
    // const float step_size = 1.0f / 40.0f;
    // accum_time += dt;

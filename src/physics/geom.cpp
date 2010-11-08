@@ -68,3 +68,26 @@ void Physics::Geom::collided(const boost::shared_ptr<Geom> & with) {
 		lockedPtr->collided(with);
 }
 
+#include <OpenGL/OpenGL.h>
+void Physics::Geom::draw() const {
+   vec2 position;
+   if (boost::shared_ptr<Physics::Body> lockedBody = linkedBody.lock())
+	  position = lockedBody->getPosition();
+   else if (boost::shared_ptr<ReferenceFrame2> lockedRef = refFrame.lock())
+	  position = lockedRef->getPosition();
+
+			
+   glBindTexture(GL_TEXTURE_2D, 0);
+   glColor4f(1.0f, 0.0f, 0.0f, 0.3f);
+   
+   glPushMatrix();
+   glTranslatef(position.x, position.y, 0.0f);
+   glBegin(GL_QUADS);
+   glVertex2f(-size.halfSize.x, -size.halfSize.y);
+   glVertex2f(size.halfSize.x, -size.halfSize.y);
+   glVertex2f(size.halfSize.x, size.halfSize.y);
+   glVertex2f(-size.halfSize.x, size.halfSize.y);
+   glEnd();
+   glPopMatrix();
+}
+

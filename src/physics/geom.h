@@ -38,7 +38,8 @@ namespace Physics {
 	  void setEventHandler(const Ref<GeomEventHandler> & eventHandler);
 
 	  rect getSize() const;
-      
+	  void draw() const;
+	  
       void setCollisionId(unsigned int collisionId);
       void setCollisionMask(const std::bitset<32> & mask);
 	  void collided(const boost::shared_ptr<Geom> & with);
