@@ -56,14 +56,14 @@ void Physics::Geom::setEventHandler(const Ref<GeomEventHandler> & eventHandler) 
 	this->eventHandler = eventHandler;
 }
 
-boost::weak_ptr<Object> Physics::Geom::getOwner() const {
+Ref<Object>::WeakPtr Physics::Geom::getOwner() const {
    if (Ref<Physics::Body>::SharedPtr lockedPtr = linkedBody.lock())
 	  return lockedPtr->getOwner();
 
    throw std::runtime_error("no body linked to geom");
 }
 
-void Physics::Geom::collided(const boost::shared_ptr<Geom> & with) {
+void Physics::Geom::collided(const Ref<Geom>::SharedPtr & with) {
 	if (Ref<GeomEventHandler>::SharedPtr lockedPtr = eventHandler.lock())
 		lockedPtr->collided(with);
 }
@@ -71,9 +71,9 @@ void Physics::Geom::collided(const boost::shared_ptr<Geom> & with) {
 #include <OpenGL/OpenGL.h>
 void Physics::Geom::draw() const {
    vec2 position;
-   if (boost::shared_ptr<Physics::Body> lockedBody = linkedBody.lock())
+   if (Ref<Physics::Body>::SharedPtr lockedBody = linkedBody.lock())
 	  position = lockedBody->getPosition();
-   else if (boost::shared_ptr<ReferenceFrame2> lockedRef = refFrame.lock())
+   else if (Ref<ReferenceFrame2>::SharedPtr lockedRef = refFrame.lock())
 	  position = lockedRef->getPosition();
 
 			

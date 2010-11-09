@@ -133,3 +133,11 @@
 2010-11-06
 	[25] logic for updating health meters on damage
 	[25] improved health graphics
+
+2010-11-08
+	[25] improved cmake
+	[25] improved cmake
+	[25] improved cmake, use smart pointers without boost
+	[25] still decoupling from boost smartptrs, improving ref.h
+	[25] final touches on the decoupling of boost
+	

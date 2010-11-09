@@ -20,11 +20,11 @@ void Snail::setPosition(const vec2 & pos) {
 }
 
 #include <iostream>
-void Snail::collided(const boost::shared_ptr<Physics::Geom> & with) {
+void Snail::collided(const Ref<Physics::Geom>::SharedPtr & with) {
    // TODO: this is ugly
    std::cout << "snail collided" << std::endl;
-   if (boost::shared_ptr<Object> lockedOwner = with->getOwner().lock()) {
-	  if (boost::shared_ptr<Bullet> bulletOwner = boost::dynamic_pointer_cast<Bullet>(lockedOwner)) {
+   if (Ref<Object>::SharedPtr lockedOwner = with->getOwner().lock()) {
+	  if (Ref<Bullet>::SharedPtr bulletOwner = Cast<Bullet>(lockedOwner)) {
 		 if (static_cast<void *>(bulletOwner->shooter) != static_cast<void *>(this)) { // hit by a bullet
 			bulletOwner->kill();
 			increaseHealth(-5.0f);

@@ -7,7 +7,6 @@
 #ifndef PLAYER_ENTITY_H_5TG24XG5
 #define PLAYER_ENTITY_H_5TG24XG5
 
-#include <boost/weak_ptr.hpp>
 #include "reference_frame2.h"
 #include "triggerable.h"
 #include "updatable.h"

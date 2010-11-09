@@ -12,8 +12,6 @@
 #include "cactus_generator.h"
 
 #include <iostream>
-#include <boost/make_shared.hpp>
-
 #include "ref.h"
 
 Game::Game()
@@ -22,8 +20,8 @@ Game::Game()
    , playerInput2("player2")
 {
    {
-	  Ref<Snail> snail = Owning(boost::dynamic_pointer_cast<Snail>(creator.createObject("snail1", creator)));
-	  world.insert(snail.lock());
+ 	  Ref<Snail> snail = Owning(Cast<Snail>(creator.createObject("snail1", creator)));
+ 	  world.insert(snail.lock());
 	  snail->setPosition(vec2(100.0f, 400.0f));
 	  firstSnail = Observing(snail);
 	  snailHealth1 = Owning(new HealthMeter);
@@ -36,8 +34,8 @@ Game::Game()
    }
 
    {
-	  Ref<Snail> snail = Owning(boost::dynamic_pointer_cast<Snail>(creator.createObject("snail2", creator)));
-	  world.insert(snail.lock());
+ 	  Ref<Snail> snail = Owning(Cast<Snail>(creator.createObject("snail2", creator)));
+ 	  world.insert(snail.lock());
 	  snail->setPosition(vec2(700.0f, 400.0f));
 	  secondSnail = Observing(snail);
 	  snailHealth2 = Owning(new HealthMeter);
@@ -57,7 +55,7 @@ Game::Game()
    playerInput2.setActionDelegate(Observing(secondSnail->logic));
 
 
-   cactusGenerator = Owning(boost::shared_ptr<CactusGenerator>(new CactusGenerator(creator, world)));
+   cactusGenerator = Owning(new CactusGenerator(creator, world));
    cactusGenerator->setPosition(vec2(350.0f, 630.0f));
    world.scheduler.subscribe(0.1f, cactusGenerator); // update each 1/10 of a second, should be enough
    

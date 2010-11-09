@@ -10,7 +10,7 @@
 
 using Graphics::Sprite;
  
-Sprite::Sprite(const boost::shared_ptr<Texture> & texture, BoundedSprite * sceneNode) 
+Sprite::Sprite(const Ref<Texture>::SharedPtr & texture, BoundedSprite * sceneNode) 
    : position(vec2::Zero) 
    , orientation(mat2::Identity)
    , texture(texture)
@@ -56,20 +56,20 @@ rect Sprite::getSize() const {
    return size;
 }
 
-boost::shared_ptr<Graphics::Texture> Sprite::getTexture() const {
+Ref<Graphics::Texture>::SharedPtr Sprite::getTexture() const {
    return texture;
 }
 
 void Sprite::enteredView() {
-   if (boost::shared_ptr<SpriteEventHandler> locked = eventHandler.lock())
+   if (Ref<SpriteEventHandler>::SharedPtr locked = eventHandler.lock())
       locked->enteredView();
 }
 
 void Sprite::leftView() {
-   if (boost::shared_ptr<SpriteEventHandler> locked = eventHandler.lock())
+   if (Ref<SpriteEventHandler>::SharedPtr locked = eventHandler.lock())
       locked->leftView();
 }
 
-void Sprite::setEventHandler(const boost::weak_ptr<SpriteEventHandler> & eventHandler) {
+void Sprite::setEventHandler(const Ref<SpriteEventHandler>::WeakPtr & eventHandler) {
    this->eventHandler = eventHandler;
 }

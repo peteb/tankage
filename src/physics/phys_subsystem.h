@@ -9,11 +9,10 @@
 
 #include <string>
 #include <vector>
-#include <boost/shared_ptr.hpp>
-#include <boost/weak_ptr.hpp>
 
 #include "math/vec2.h"
 #include "math/rect.h"
+#include "ref.h"
 
 namespace Physics {
    class Body;
@@ -25,19 +24,19 @@ namespace Physics {
       
       void update(float dt);
       void resizeArea(int width, int height);
-      void addBody(const boost::weak_ptr<Body> & body);
+      void addBody(const Ref<Body>::WeakPtr & body);
 	  void drawGeoms();
 	  
-      boost::shared_ptr<Body> createBody();
-      boost::shared_ptr<Geom> createRectGeom(const rect & size);
+      Ref<Body>::SharedPtr createBody();
+      Ref<Geom>::SharedPtr createRectGeom(const rect & size);
       
    private:
       void checkCollisions();
       
       // vec2 maxArea;
       // rect leftArea, rightArea;
-      std::vector<boost::weak_ptr<Body> > bodies;
-      std::vector<boost::weak_ptr<Geom> > geoms;
+      std::vector<Ref<Body>::WeakPtr> bodies;
+      std::vector<Ref<Geom>::WeakPtr> geoms;
    };
    
    

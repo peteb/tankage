@@ -7,29 +7,28 @@
 #ifndef WORLD_H_1FEL58C0
 #define WORLD_H_1FEL58C0
 
-#include <boost/shared_ptr.hpp>
-#include <boost/weak_ptr.hpp>
-
 #include "graphics/gfx_subsystem.h"
 #include "physics/phys_subsystem.h"
 #include "object_list.h"
 #include "scheduler.h"
+#include "ref.h"
 
 class Object;
  
 class World {
 public:
    template<typename T>
-   boost::weak_ptr<T> insert(const boost::shared_ptr<T> & object) {
+   typename Ref<typename T::element_type>::WeakPtr insert(const T & object) {
       liveObjects.add(object);   
       object->addedOwner(&liveObjects);
 
-      return object;      
+      return object;
    }
    
    void update() {
       liveObjects.eraseEnqueuedRemovals();
    }
+   
    Graphics::Subsystem graphics;
    Physics::Subsystem physics;
    ObjectList liveObjects;

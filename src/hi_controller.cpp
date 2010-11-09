@@ -6,7 +6,6 @@
 
 #include "hi_controller.h"
 
-#include <boost/shared_ptr.hpp>
 #include <iostream>
 
 #include "math/vec2.h"

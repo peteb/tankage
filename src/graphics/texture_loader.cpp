@@ -10,7 +10,6 @@
 #include <stdexcept>
 #include <sstream>
 #include <OpenGL/OpenGL.h>
-#include <boost/make_shared.hpp>
 
 using Graphics::TextureLoader;
 
@@ -22,7 +21,7 @@ TextureLoader::~TextureLoader() {
    
 }
 
-boost::shared_ptr<Graphics::Texture> TextureLoader::loadTexture(const std::string & name) {
+Ref<Graphics::Texture>::SharedPtr TextureLoader::loadTexture(const std::string & name) {
    // check cache for texture
    TextureCache::iterator iter = cachedTextures.find(name);
    
@@ -30,7 +29,7 @@ boost::shared_ptr<Graphics::Texture> TextureLoader::loadTexture(const std::strin
       if (iter->second.expired()) // the cache entry expired
          cachedTextures.erase(iter);
       else
-         return boost::shared_ptr<Graphics::Texture>(iter->second);
+         return Ref<Graphics::Texture>::SharedPtr(iter->second);
    }
    
    // not found in cache, load
@@ -69,7 +68,7 @@ boost::shared_ptr<Graphics::Texture> TextureLoader::loadTexture(const std::strin
    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
-   boost::shared_ptr<Graphics::Texture> texture(
+   Ref<Graphics::Texture>::SharedPtr texture(
       new Graphics::Texture(newTexture, rect(width, height))
    );
    cachedTextures.insert(std::make_pair(name, texture));

@@ -7,7 +7,6 @@
 #ifndef BULLET_H_1LH5R0L7
 #define BULLET_H_1LH5R0L7
 
-#include <boost/shared_ptr.hpp>
 #include "object.h"
 #include "reference_frame2.h"
 #include "graphics/sprite.h"

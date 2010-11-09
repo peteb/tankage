@@ -22,8 +22,8 @@ namespace Physics {
 	
 	class GeomEventHandler {
 	public:
-		virtual ~GeomEventHandler() {}
-		virtual void collided(const boost::shared_ptr<Geom> & with) {}
+	   virtual ~GeomEventHandler() {}
+	   virtual void collided(const Ref<Geom>::SharedPtr & with) {}
 	};
 
    class Geom : public ReferenceFrame2 {
@@ -42,9 +42,9 @@ namespace Physics {
 	  
       void setCollisionId(unsigned int collisionId);
       void setCollisionMask(const std::bitset<32> & mask);
-	  void collided(const boost::shared_ptr<Geom> & with);
+	  void collided(const Ref<Geom>::SharedPtr & with);
 
-	  boost::weak_ptr<Object> getOwner() const;
+	  Ref<Object>::WeakPtr getOwner() const;
 	  
 	  // ReferenceFrame2 --------------------------------------------
       void setPosition(const vec2 & newPos);

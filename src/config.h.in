@@ -1,0 +1,7 @@
+#ifndef CONFIG_H
+#define CONFIG_H
+
+#cmakedefine HAVE_TR1_MEMORY_H
+#cmakedefine HAVE_BOOST
+
+#endif // !CONFIG_H

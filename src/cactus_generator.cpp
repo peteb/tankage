@@ -6,7 +6,6 @@
 
 #include "cactus_generator.h"
 #include <iostream>
-#include <boost/shared_ptr.hpp>
 #include "cactus.h"
 #include "object_creator.h"
 #include "world.h"
@@ -34,7 +33,7 @@ void CactusGenerator::update(float dt) {
 }
 
 void CactusGenerator::spawnCactus() {
-   boost::shared_ptr<Cactus> cactus = boost::dynamic_pointer_cast<Cactus>(creator.createObject("cactus", creator));
+   Ref<Cactus>::SharedPtr cactus = Cast<Cactus>(creator.createObject("cactus", creator));
 
    vec2 startPos = origin;
    startPos.x += static_cast<float>(rand() % 50) * 1.5f;

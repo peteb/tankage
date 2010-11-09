@@ -7,7 +7,7 @@
 #include "object_list.h"
 #include <algorithm>
 
-void ObjectList::add(const boost::shared_ptr<Object> & object) {
+void ObjectList::add(const Ref<Object>::SharedPtr & object) {
    objects.push_back(object);
 }
 
@@ -18,7 +18,7 @@ class ExistsInPred {
 public:
    ExistsInPred(const T & list) : list(list) {}
    
-   bool operator() (const boost::shared_ptr<Object> & obj) {
+   bool operator() (const Ref<Object>::SharedPtr & obj) {
       return std::find(list.begin(), list.end(), obj.get()) != list.end();
    }
    

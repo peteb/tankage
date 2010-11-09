@@ -7,14 +7,14 @@
 #ifndef OBJECT_LIST_H_YW53G2SY
 #define OBJECT_LIST_H_YW53G2SY
 
-#include <boost/shared_ptr.hpp>
 #include <vector>
+#include "ref.h"
 
 class Object;
 
 class ObjectList {
 public:
-   void add(const boost::shared_ptr<Object> & object);
+   void add(const Ref<Object>::SharedPtr & object);
    void enqueueRemoval(Object * obj);
    void eraseEnqueuedRemovals();
    
@@ -22,7 +22,7 @@ public:
    // object should have a "kill" method, that removes the object from those lists
    
 private:
-   std::vector<boost::shared_ptr<Object> > objects;
+   std::vector<Ref<Object>::SharedPtr> objects;
    std::vector<Object *> enqueuedItems;
 };
 

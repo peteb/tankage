@@ -19,11 +19,11 @@ void Physics::Body::setDelegate(const Ref<ReferenceFrame2> & newTarget) {
    delegate = newTarget;
 }
 
-void Physics::Body::setOwner(const boost::weak_ptr<Object> & owner) {
+void Physics::Body::setOwner(const Ref<Object>::WeakPtr & owner) {
    this->owner = owner;
 }
 
-boost::weak_ptr<Object> Physics::Body::getOwner() const {
+Ref<Object>::WeakPtr Physics::Body::getOwner() const {
    return owner;
 }
 

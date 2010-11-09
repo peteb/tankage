@@ -7,7 +7,6 @@
 #ifndef BODY_H_JI764YY5
 #define BODY_H_JI764YY5
 
-#include <boost/weak_ptr.hpp>
 #include "reference_frame2.h"
 #include "ref.h"
 
@@ -34,8 +33,8 @@ namespace Physics {
 	  //void setVelocity(const vec2 & vel);
 	  vec2 getVelocity() const;
 
-	  void setOwner(const boost::weak_ptr<Object> & owner);
-	  boost::weak_ptr<Object> getOwner() const;
+	  void setOwner(const Ref<Object>::WeakPtr & owner);
+	  Ref<Object>::WeakPtr getOwner() const;
 	  
       // Referenceframe2 ---------------------------------------
       void setPosition(const vec2 & pos);
@@ -47,7 +46,7 @@ namespace Physics {
    private:
       Physics::Subsystem & subsystem;
       Ref<ReferenceFrame2> delegate;
-	  boost::weak_ptr<Object> owner;
+	  Ref<Object>::WeakPtr owner;
       vec2 position, velocity;
 	  mat2 orientation;
    };

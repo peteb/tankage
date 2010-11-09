@@ -7,15 +7,35 @@
 #ifndef REF_H_CKS8593L
 #define REF_H_CKS8593L
 
-#include <boost/shared_ptr.hpp>
-#include <boost/weak_ptr.hpp>
 #include <stdexcept>
+#include "config.h"
+
+#ifdef HAVE_TR1_MEMORY_H
+  #include <tr1/memory>
+  #define WEAK_PTR std::tr1::weak_ptr
+  #define SHARED_PTR std::tr1::shared_ptr
+
+#elif defined(HAVE_BOOST)
+  #include <boost/shared_ptr.hpp>
+  #include <boost/weak_ptr.hpp>
+  #define WEAK_PTR boost::weak_ptr
+  #define SHARED_PTR boost::shared_ptr
+
+#else
+  #error "No smart pointer implementation found"
+#endif
+
+
+
 
 template<typename T>
 class Ref {
 public:
+   typedef SHARED_PTR<T> SharedPtr;
+   typedef WEAK_PTR<T> WeakPtr;
+
    Ref() {owner = false; }
-   Ref(const boost::weak_ptr<T> & wp) {
+   Ref(const WeakPtr & wp) {
       setWeak(wp);
    }
 
@@ -26,15 +46,14 @@ public:
       owner = ref.owner;
    }
 
-   typedef boost::shared_ptr<T> SharedPtr;
    
-   void setWeak(const boost::weak_ptr<T> & wp) {
+   void setWeak(const WeakPtr & wp) {
       this->wp = wp;
       this->sp.reset();
       owner = false;
    }
 
-   void setOwning(const boost::shared_ptr<T> & sp) {
+   void setOwning(const SharedPtr & sp) {
 	  this->sp = sp;
 	  this->wp.reset();
 	  owner = true;
@@ -71,38 +90,25 @@ public:
    
 protected:
 	bool owner;
-	boost::shared_ptr<T> sp;
-	boost::weak_ptr<T> wp;
+	SharedPtr sp;
+	WeakPtr wp;
 };
 
-// template<typename T>
-// class OwningRef : public Ref<T> {
-// public:
-//    OwningRef() : Ref<T>() {}
-//    
-//    OwningRef(const boost::shared_ptr<T> & sp) {
-//       setOwning(sp);
-//    }
-// };
-// 
-// template<typename T>
-// class WeakRef : public Ref<T> {
-// public:
-//    WeakRef(const boost::weak_ptr<T> & wp) {
-//       setWeak(wp);
-//    }
-//    
-//    WeakRef(const OwningRef<T> & ref) {
-//       sp = ref.sp;
-//       wp = ref.wp;
-//       owner = ref.owner;
-//    }
-//    
-// };
+template<typename T, typename Source>
+typename Ref<T>::SharedPtr Cast(const Source & source) {
+#ifdef HAVE_TR1_MEMORY_H
+   return std::tr1::dynamic_pointer_cast<T>(source);
+#elif defined(HAVE_BOOST)
+   return boost::dynamic_pointer_cast<T>(source);
+#else
+#error "Can't cast, no smartptr implementer"
+#endif
+}
+
 
 template<typename T>
-Ref<T> Observing(const boost::shared_ptr<T> & sp) {
-   Ref<T> ret;
+Ref<typename T::element_type> Observing(const T & sp) {
+   Ref<typename T::element_type> ret;
    ret.setWeak(sp);
    return ret;
 }
@@ -115,8 +121,8 @@ Ref<T> Observing(const Ref<T> & ref) {
 }
 
 template<typename T>
-Ref<T> Owning(const boost::shared_ptr<T> & sp) {
-   Ref<T> ret;
+Ref<typename T::element_type> Owning(const T & sp) {
+   Ref<typename T::element_type> ret;
    ret.setOwning(sp);
    return ret;
 }

@@ -8,7 +8,6 @@
 #ifndef CACTUS_H
 #define CACTUS_H
 
-#include <boost/shared_ptr.hpp>
 #include "object.h"
 #include "reference_frame2.h"
 #include "graphics/sprite.h"
@@ -29,7 +28,7 @@ public:
    mat2 getOrientation() const;
    // ----------------------------------------------------------------
 
-   void collided(const boost::shared_ptr<Physics::Geom> & with);
+   void collided(const Ref<Physics::Geom>::SharedPtr & with);
    void leftView();
 
    Ref<Graphics::Sprite> sprite;

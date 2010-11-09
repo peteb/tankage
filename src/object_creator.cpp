@@ -9,14 +9,12 @@
 #include "snail.h"
 #include "cactus.h"
 
-#include <boost/make_shared.hpp>
 #include "graphics/gfx_subsystem.h"
 #include "graphics/sprite.h"
 #include "player_entity.h"
 #include "world.h"
 #include "physics/body.h"
 #include "physics/geom.h"
-
 #include "ref.h"
 
 ObjectCreator::ObjectCreator(World & world)
@@ -24,8 +22,8 @@ ObjectCreator::ObjectCreator(World & world)
 {
 }
 
-boost::shared_ptr<Bullet> ObjectCreator::createBullet() {
-   boost::shared_ptr<Bullet> newBullet = boost::make_shared<Bullet>();
+Ref<Bullet>::SharedPtr ObjectCreator::createBullet() {
+   Ref<Bullet>::SharedPtr newBullet(new Bullet);
 
    newBullet->sprite = Owning(world.graphics.createSprite("../data/bullet.png"));
    newBullet->sprite->setEventHandler(newBullet);
@@ -42,14 +40,14 @@ boost::shared_ptr<Bullet> ObjectCreator::createBullet() {
    return newBullet;
 }
 
-boost::shared_ptr<Snail> ObjectCreator::createSnail(int team, ObjectCreator & creator) {
+Ref<Snail>::SharedPtr ObjectCreator::createSnail(int team, ObjectCreator & creator) {
    float xPos = 0.0f;
    if (team == 0)
       xPos = 100.0f;
    else
       xPos = 700.0f;
    
-   boost::shared_ptr<Snail> newSnail = boost::make_shared<Snail>();
+   Ref<Snail>::SharedPtr newSnail(new Snail);
    
    if (team == 0)
       newSnail->sprite = Owning(world.graphics.createSprite("../data/snail_r.png"));
@@ -98,37 +96,37 @@ boost::shared_ptr<Snail> ObjectCreator::createSnail(int team, ObjectCreator & cr
    return newSnail;
 }
 
-boost::shared_ptr<Object> ObjectCreator::createObject(const std::string & type, ObjectCreator & creator) {
-	boost::shared_ptr<Object> retval;
-
-	if (type == "snail1") {
-		return createSnail(0, creator);
-	}
-	else if (type == "snail2") {
-		return createSnail(1, creator);
-	}
-	else if (type == "bullet") {
-		return createBullet();
-	}
-	else if (type == "cactus") {
-	   boost::shared_ptr<Cactus> newCactus = boost::make_shared<Cactus>();
-	   
-	   newCactus->sprite = Owning(world.graphics.createSprite("../data/cactus1.png"));
-	   newCactus->sprite->setEventHandler(newCactus);
-
-	   newCactus->body = Owning(world.physics.createBody());
-	   newCactus->body->setDelegate(newCactus->sprite);
-	   newCactus->body->setOwner(newCactus);
+Ref<Object>::SharedPtr ObjectCreator::createObject(const std::string & type, ObjectCreator & creator) {
+   Ref<Object>::SharedPtr retval;
    
-	   newCactus->geom = Owning(world.physics.createRectGeom(newCactus->sprite->getSize()));
-	   newCactus->geom->setBody(newCactus->body);
-	   newCactus->geom->setCollisionId(4);
-	   newCactus->geom->setCollisionMask(0x8u);
-	   newCactus->geom->setEventHandler(Observing(newCactus));
+   if (type == "snail1") {
+	  return createSnail(0, creator);
+   }
+   else if (type == "snail2") {
+	  return createSnail(1, creator);
+   }
+   else if (type == "bullet") {
+	  return createBullet();
+   }
+   else if (type == "cactus") {
+	  Ref<Cactus>::SharedPtr newCactus(new Cactus);
 	   
-	   return newCactus;
-	}
+	  newCactus->sprite = Owning(world.graphics.createSprite("../data/cactus1.png"));
+	  newCactus->sprite->setEventHandler(newCactus);
+
+	  newCactus->body = Owning(world.physics.createBody());
+	  newCactus->body->setDelegate(newCactus->sprite);
+	  newCactus->body->setOwner(newCactus);
+   
+	  newCactus->geom = Owning(world.physics.createRectGeom(newCactus->sprite->getSize()));
+	  newCactus->geom->setBody(newCactus->body);
+	  newCactus->geom->setCollisionId(4);
+	  newCactus->geom->setCollisionMask(0x8u);
+	  newCactus->geom->setEventHandler(Observing(newCactus));
+	   
+	  return newCactus;
+   }
 	
 
-	throw std::runtime_error("failed to create object of type '" + type + "', I don't know what it is!");
+   throw std::runtime_error("failed to create object of type '" + type + "', I don't know what it is!");
 }

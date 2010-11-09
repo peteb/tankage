@@ -7,7 +7,6 @@
 #ifndef SCHEDULER_H_KJ99TBMW
 #define SCHEDULER_H_KJ99TBMW
 
-#include <boost/weak_ptr.hpp>
 #include <vector>
 #include "ref.h"
 

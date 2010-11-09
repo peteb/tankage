@@ -9,7 +9,6 @@
 #include "graphics/vertex.h"
 #include "graphics/texture.h"
 #include <OpenGL/OpenGL.h>
-#include <boost/make_shared.hpp>
 
  
 Graphics::Subsystem::Subsystem() 
@@ -55,7 +54,7 @@ void Graphics::Subsystem::render(float dt) {
    while (iter != sprites.end()) {
       BoundedSprite * bs = *iter;
       
-      if (boost::shared_ptr<Graphics::Sprite> sprite = bs->sprite.lock()) {
+      if (Ref<Graphics::Sprite>::SharedPtr sprite = bs->sprite.lock()) {
          if (rect::intersect(bs->boundingArea, viewport)) {
             if (!bs->visibleLastFrame || bs->firstFrame) {
                sprite->enteredView();
@@ -95,7 +94,7 @@ void Graphics::Subsystem::render(float dt) {
          }
          else {
             if (bs->visibleLastFrame || bs->firstFrame) {
-               if (boost::shared_ptr<Graphics::Sprite> sprite = bs->sprite.lock()) {
+               if (Ref<Graphics::Sprite>::SharedPtr sprite = bs->sprite.lock()) {
                   sprite->leftView();
                }
             }
@@ -119,16 +118,14 @@ void Graphics::Subsystem::resizeViewport(const rect & size) {
    viewport = size;
 }
 
-boost::shared_ptr<Graphics::Sprite> Graphics::Subsystem::createSprite(const std::string & fragments) {
-   boost::shared_ptr<Graphics::Texture> spriteTexture = textureCache.loadTexture(fragments);
+Ref<Graphics::Sprite>::SharedPtr Graphics::Subsystem::createSprite(const std::string & fragments) {
+   Ref<Graphics::Texture>::SharedPtr spriteTexture = textureCache.loadTexture(fragments);
    
    BoundedSprite * node = new BoundedSprite;
    node->boundingArea = spriteTexture->getSize();
    node->boundingArea.origin = vec2::Zero;
 
-   boost::shared_ptr<Graphics::Sprite> newSprite = boost::shared_ptr<Graphics::Sprite>(
-      new Sprite(spriteTexture, node)
-   );   
+   Ref<Graphics::Sprite>::SharedPtr newSprite(new Sprite(spriteTexture, node));   
    node->sprite = newSprite;
    
    sprites.push_back(node);
@@ -136,6 +133,6 @@ boost::shared_ptr<Graphics::Sprite> Graphics::Subsystem::createSprite(const std:
    return newSprite;   
 }
 
-boost::shared_ptr<Graphics::Texture> Graphics::Subsystem::getTexture(const std::string & filename) {
+Ref<Graphics::Texture>::SharedPtr Graphics::Subsystem::getTexture(const std::string & filename) {
    return textureCache.loadTexture(filename);
 }

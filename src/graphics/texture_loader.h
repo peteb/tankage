@@ -7,9 +7,8 @@
 #ifndef TEXTURE_LOADER_H_7GYX3QY2
 #define TEXTURE_LOADER_H_7GYX3QY2
 
-#include <boost/shared_ptr.hpp>
-#include <boost/weak_ptr.hpp>
 #include <map>
+#include "ref.h"
 
 namespace Graphics {
    class Texture;
@@ -20,10 +19,10 @@ namespace Graphics {
 	  TextureLoader();
 	  ~TextureLoader();
    
-	  boost::shared_ptr<Texture> loadTexture(const std::string & name);
+	  Ref<Texture>::SharedPtr loadTexture(const std::string & name);
    
    private:
-	  typedef std::map<std::string, boost::weak_ptr<Texture> > TextureCache;
+	  typedef std::map<std::string, Ref<Texture>::WeakPtr > TextureCache;
 	  TextureCache cachedTextures; 
    };
 }

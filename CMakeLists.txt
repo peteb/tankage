@@ -1,12 +1,15 @@
 cmake_minimum_required (VERSION 2.4)
 project (SnailWail)
 
+include (CheckIncludeFileCXX)
 
-#add_definitions("-arch x86_64")
-#set(CMAKE_CXX_FLAGS "-std=c++0x")
+CHECK_INCLUDE_FILE_CXX("tr1/memory" HAVE_TR1_MEMORY_H)
 
+# if (DEFINED HAVE_TR1_MEMORY_H)
+#   MESSAGE("it does have tr1 memory: ${HAVE_TR1_MEMORY_H}")
+# endif (DEFINED HAVE_TR1_MEMORY_H)
 
-
+CONFIGURE_FILE(${PROJECT_SOURCE_DIR}/src/config.h.in ${PROJECT_SOURCE_DIR}/src/config.h)
 
 if(COMMAND cmake_policy)
   cmake_policy(SET CMP0003 NEW)

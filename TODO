@@ -16,7 +16,7 @@
 *** DONE Create the generator
 ** DONE Snail agnostic weapons
 *** DONE Weapons have direction and position
-** TODO Restrict window size
+** DONE Restrict window size
 
 * First Alpha, December 16th
 ** TODO Orient bullet sprites correctly
@@ -46,4 +46,4 @@
 ** Menu system
    
 * Engine
-** TODO how to draw graphics from sources other than graphics subsystem? physics, etc.
+** TODO Platform-independent render lists

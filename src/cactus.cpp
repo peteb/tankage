@@ -29,9 +29,9 @@ void Cactus::leftView() {
    kill();
 }
 
-void Cactus::collided(const boost::shared_ptr<Physics::Geom> & with) {
-   if (boost::shared_ptr<Object> lockedOwner = with->getOwner().lock()) {
-	  if (boost::shared_ptr<Bullet> bulletOwner = boost::dynamic_pointer_cast<Bullet>(lockedOwner)) {
+void Cactus::collided(const Ref<Physics::Geom>::SharedPtr & with) {
+   if (Ref<Object>::SharedPtr lockedOwner = with->getOwner().lock()) {
+	  if (Ref<Bullet>::SharedPtr bulletOwner = Cast<Bullet>(lockedOwner)) {
 		 bulletOwner->kill();
 	  }
    }

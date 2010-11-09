@@ -30,7 +30,7 @@ void PlayerEntity::setTarget(const Ref<Physics::Body> & newTarget) {
 void PlayerEntity::shoot() {
    const vec2 forward = weaponDir;
    
-   boost::shared_ptr<Bullet> bullet = boost::dynamic_pointer_cast<Bullet>(creator.createObject("bullet", creator));
+   Ref<Bullet>::SharedPtr bullet = Cast<Bullet>(creator.createObject("bullet", creator));
    bullet->setPosition(getPosition() + weaponPos);
    bullet->body->addImpulse(vec2(1000.0f, 0.0f) * forward);
    bullet->body->setOrientation(mat2(weaponDir, vec2(0.0f, 1.0f)));

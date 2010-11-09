@@ -5,9 +5,9 @@
  */
 
 #include <iostream>
-#include <boost/make_shared.hpp>
 #include <set>
 
+#include "ref.h"
 #include "phys_subsystem.h"
 #include "physics/body.h"
 #include "physics/geom.h"
@@ -23,12 +23,12 @@ Subsystem::Subsystem()
 }
 
 void Subsystem::update(float dt) {
-   std::vector<boost::weak_ptr<Body> >::iterator iter = bodies.begin();
+   std::vector<Ref<Body>::WeakPtr>::iterator iter = bodies.begin();
          
    //std::cout << "bodies: " << bodies.size() << std::endl;
    
    while (iter != bodies.end()) {
-      if (boost::shared_ptr<Body> body = iter->lock()) {
+      if (Ref<Body>::SharedPtr body = iter->lock()) {
          body->update(dt);
          ++iter;
       }      
@@ -52,18 +52,18 @@ void Subsystem::resizeArea(int width, int height) {
 void Subsystem::checkCollisions() {
    // first pass, generate <Rect, Geom> tupple, calculate bounding boxes
    // some kind of sorting might be possible here
-   typedef std::vector<std::pair<rect, boost::shared_ptr<Geom> > > GeomVector;
+   typedef std::vector<std::pair<rect, Ref<Geom>::SharedPtr > > GeomVector;
    GeomVector resGeoms;
 
-   std::vector<boost::weak_ptr<Geom> >::iterator iter = geoms.begin();
+   std::vector<Ref<Geom>::WeakPtr >::iterator iter = geoms.begin();
    
    while (iter != geoms.end()) {
-      if (boost::shared_ptr<Geom> lockedGeom = iter->lock()) {
+      if (Ref<Geom>::SharedPtr lockedGeom = iter->lock()) {
          rect fixedRect = lockedGeom->getSize();
          
-         if (boost::shared_ptr<Physics::Body> lockedBody = lockedGeom->linkedBody.lock())
+         if (Ref<Physics::Body>::SharedPtr lockedBody = lockedGeom->linkedBody.lock())
             fixedRect.origin = lockedBody->getPosition();
-         else if (boost::shared_ptr<ReferenceFrame2> lockedRef = lockedGeom->refFrame.lock())
+         else if (Ref<ReferenceFrame2>::SharedPtr lockedRef = lockedGeom->refFrame.lock())
             fixedRect.origin = lockedRef->getPosition();
          
          resGeoms.push_back(std::make_pair(fixedRect, lockedGeom));
@@ -104,20 +104,20 @@ void Subsystem::checkCollisions() {
 
 void Physics::Subsystem::drawGeoms() {
    for (size_t i = 0; i < geoms.size(); ++i) {
-	  if (boost::shared_ptr<Physics::Geom> lockedGeom = geoms[i].lock())
+	  if (Ref<Physics::Geom>::SharedPtr lockedGeom = geoms[i].lock())
 		 lockedGeom->draw();
    }
 }
 
-boost::shared_ptr<Body> Subsystem::createBody() {
-   boost::shared_ptr<Body> body = boost::shared_ptr<Body>(new Body(*this));
+Ref<Body>::SharedPtr Subsystem::createBody() {
+   Ref<Body>::SharedPtr body(new Body(*this));
    bodies.push_back(body);
    
    return body;
 }
 
-boost::shared_ptr<Geom> Subsystem::createRectGeom(const rect & size) {
-   boost::shared_ptr<Geom> geom = boost::shared_ptr<Geom>(new Geom(size));
+Ref<Geom>::SharedPtr Subsystem::createRectGeom(const rect & size) {
+   Ref<Geom>::SharedPtr geom(new Geom(size));
    geoms.push_back(geom);
    return geom;
 }

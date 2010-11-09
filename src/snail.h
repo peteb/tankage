@@ -7,7 +7,6 @@
 #ifndef SNAIL_H_7SGQH1KL
 #define SNAIL_H_7SGQH1KL
 
-#include <boost/shared_ptr.hpp>
 #include "object.h"
 #include "ref.h"
 #include "physics/geom.h"
@@ -32,7 +31,7 @@ public:
    Snail();
    
    void setPosition(const vec2 & pos);
-   void collided(const boost::shared_ptr<Physics::Geom> & with);
+   void collided(const Ref<Physics::Geom>::SharedPtr & with);
    
    void setEventHandler(const Ref<SnailEventHandler> & newHandler);
    void increaseHealth(int add);

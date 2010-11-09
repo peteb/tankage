@@ -4,7 +4,6 @@
  * (c) Copyright 2010 Peter Backman. All Rights Reserved. 
  */
 
-#include <boost/shared_ptr.hpp>
 #include "scheduler.h"
 #include "updatable.h"
 

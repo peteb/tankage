@@ -8,13 +8,11 @@
 #define SPRITE_H_CD2WG4HZ
 
 #include <vector>
-#include <boost/shared_ptr.hpp>
-#include <boost/weak_ptr.hpp>
 #include "math/vec2.h"
 #include "reference_frame2.h"
 #include "graphics/vertex.h"
 #include "math/rect.h"
-
+#include "ref.h"
 
 namespace Graphics {
    class BoundedSprite;
@@ -33,7 +31,7 @@ namespace Graphics {
 
    class Sprite : public ReferenceFrame2 {
    private:
-      Sprite(const boost::shared_ptr<Graphics::Texture> & texture, BoundedSprite * sceneNode);
+      Sprite(const Ref<Graphics::Texture>::SharedPtr & texture, BoundedSprite * sceneNode);
 
       friend class Graphics::Subsystem;
 
@@ -51,13 +49,13 @@ namespace Graphics {
       // ------------------------------------------------------------
       
       rect getSize() const;
-      boost::shared_ptr<Graphics::Texture> getTexture() const;
+      Ref<Graphics::Texture>::SharedPtr getTexture() const;
       
-      void setEventHandler(const boost::weak_ptr<SpriteEventHandler> & eventHandler);
+      void setEventHandler(const Ref<SpriteEventHandler>::WeakPtr & eventHandler);
       
    private:
-      boost::weak_ptr<SpriteEventHandler> eventHandler;
-      boost::shared_ptr<Graphics::Texture> texture;
+      Ref<SpriteEventHandler>::WeakPtr eventHandler;
+      Ref<Graphics::Texture>::SharedPtr texture;
       rect size;
       vec2 position;
       mat2 orientation;

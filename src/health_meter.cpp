@@ -64,7 +64,7 @@ void HealthMeter::setPosition(const vec2 & origin) {
    this->origin = origin;
 }
 
-void HealthMeter::setTexture(const boost::shared_ptr<Graphics::Texture> & newTexture) {
+void HealthMeter::setTexture(const Ref<Graphics::Texture>::SharedPtr & newTexture) {
    this->texture = newTexture;
 }
 

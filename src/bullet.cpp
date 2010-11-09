@@ -5,7 +5,7 @@
  */
 
 #include "bullet.h"
-#include "world.h"
+//#include "world.h"
 #include "physics/body.h"
 
 void Bullet::setPosition(const vec2 & pos) {
