@@ -102,11 +102,12 @@ void Subsystem::checkCollisions() {
    }
 }
 
-void Physics::Subsystem::drawGeoms() {
+void Physics::Subsystem::enqueueGeoms(const Ref<Graphics::RenderList>::SharedPtr & renderList) {
    for (size_t i = 0; i < geoms.size(); ++i) {
 	  if (Ref<Physics::Geom>::SharedPtr lockedGeom = geoms[i].lock())
-		 lockedGeom->draw();
+		 lockedGeom->enqueueRender(renderList);
    }
+
 }
 
 Ref<Body>::SharedPtr Subsystem::createBody() {

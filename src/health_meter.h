@@ -10,7 +10,7 @@
 #include "math/vec2.h"
 #include "ref.h"
 
-namespace Graphics {class Texture; }
+namespace Graphics {class Texture; class RenderList; }
 
 class HealthMeter {
 public:
@@ -19,6 +19,7 @@ public:
    void setPosition(const vec2 & origin);
    void setTexture(const Ref<Graphics::Texture>::SharedPtr & newTexture);
    void setDir(float dir);
+   void enqueueRender(const Ref<Graphics::RenderList>::SharedPtr & renderList);
    
 private:
    Ref<Graphics::Texture>::SharedPtr texture;

@@ -46,4 +46,6 @@
 ** Menu system
    
 * Engine
-** TODO Platform-independent render lists
+** TODO Platform-independent rendering in components (not in the gfx subsystem)
+** TODO Build: verify that TR1 can be used for smart pointers using a code test
+** TODO Build: detect whether there are smart pointer implementations in std::

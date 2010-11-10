@@ -10,6 +10,7 @@ add_library(graphics
    sprite.cpp
    texture.cpp
    texture_loader.cpp
+   render_list.cpp
 )
 
 include_directories(

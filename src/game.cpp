@@ -10,6 +10,7 @@
 #include "math/rect.h"
 #include "object.h"
 #include "cactus_generator.h"
+#include "graphics/render_list.h"
 
 #include <iostream>
 #include "ref.h"
@@ -57,7 +58,7 @@ Game::Game()
 
    cactusGenerator = Owning(new CactusGenerator(creator, world));
    cactusGenerator->setPosition(vec2(350.0f, 630.0f));
-   world.scheduler.subscribe(0.1f, cactusGenerator); // update each 1/10 of a second, should be enough
+   world.scheduler.subscribe(0.1f, cactusGenerator); // update every 1/10 of a second, should be enough
    
 }
 
@@ -69,17 +70,20 @@ void Game::tick(float dt) {
    playerInput1.update(dt);
    playerInput2.update(dt);
    
-//   firstSnail.lock()->logic->update(dt);
-//   secondSnail.lock()->logic->update(dt);
-   
    world.scheduler.update(dt);
    world.physics.update(dt);
-   world.graphics.render(dt);
    snailHealth1->draw();
    snailHealth2->draw();
-   world.physics.drawGeoms();
    world.update();
 
+   Ref<Graphics::RenderList>::SharedPtr renderList = world.graphics.createRenderList();
+   world.graphics.enqueueVisibleSprites(renderList);
+   //world.physics.enqueueGeoms(renderList);
+   snailHealth1->enqueueRender(renderList);
+   snailHealth2->enqueueRender(renderList);
+   
+   world.graphics.beginFrame();
+   renderList->render(world.graphics);
    
    // const float step_size = 1.0f / 40.0f;
    // accum_time += dt;

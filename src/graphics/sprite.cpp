@@ -7,6 +7,7 @@
 #include "graphics/sprite.h"
 #include "graphics/texture.h"
 #include "graphics/gfx_subsystem.h"
+#include "graphics/render_list.h"
 
 using Graphics::Sprite;
  
@@ -26,10 +27,10 @@ std::vector<Vertex2T2> Sprite::constructVertices() const {
    const float halfWidth = size.halfSize.x;
    const float halfHeight = size.halfSize.y;
 
-   vertices.push_back(Vertex2T2(vec2(-halfWidth, -halfHeight), vec2(0.0f, 0.0f)));
-   vertices.push_back(Vertex2T2(vec2( halfWidth, -halfHeight), vec2(1.0f, 0.0f)));
-   vertices.push_back(Vertex2T2(vec2( halfWidth,  halfHeight), vec2(1.0f, 1.0f)));
-   vertices.push_back(Vertex2T2(vec2(-halfWidth,  halfHeight), vec2(0.0f, 1.0f)));
+   vertices.push_back(Vertex2T2(vec2(-halfWidth, -halfHeight) + position, vec2(0.0f, 0.0f)));
+   vertices.push_back(Vertex2T2(vec2( halfWidth, -halfHeight) + position, vec2(1.0f, 0.0f)));
+   vertices.push_back(Vertex2T2(vec2( halfWidth,  halfHeight) + position, vec2(1.0f, 1.0f)));
+   vertices.push_back(Vertex2T2(vec2(-halfWidth,  halfHeight) + position, vec2(0.0f, 1.0f)));
 
    return vertices;
 }
@@ -73,3 +74,9 @@ void Sprite::leftView() {
 void Sprite::setEventHandler(const Ref<SpriteEventHandler>::WeakPtr & eventHandler) {
    this->eventHandler = eventHandler;
 }
+
+void Sprite::enqueueRender(const Ref<Graphics::RenderList>::SharedPtr & renderList) {
+   renderList->insert(texture, constructVertices());
+}
+
+// TODO: this shouldn't compile, we're not using enqueueRender anywhere. fix

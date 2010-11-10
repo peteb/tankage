@@ -15,6 +15,8 @@
 
 class Object;
 
+namespace Graphics {class RenderList; }
+
 namespace Physics {
 	class Subsystem;
 	class Body;
@@ -38,7 +40,7 @@ namespace Physics {
 	  void setEventHandler(const Ref<GeomEventHandler> & eventHandler);
 
 	  rect getSize() const;
-	  void draw() const;
+	  void enqueueRender(const Ref<Graphics::RenderList>::SharedPtr & renderList);
 	  
       void setCollisionId(unsigned int collisionId);
       void setCollisionMask(const std::bitset<32> & mask);

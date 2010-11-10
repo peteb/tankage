@@ -14,6 +14,8 @@
 #include "math/rect.h"
 #include "ref.h"
 
+namespace Graphics {class RenderList; }
+
 namespace Physics {
    class Body;
    class Geom;
@@ -25,7 +27,7 @@ namespace Physics {
       void update(float dt);
       void resizeArea(int width, int height);
       void addBody(const Ref<Body>::WeakPtr & body);
-	  void drawGeoms();
+	  void enqueueGeoms(const Ref<Graphics::RenderList>::SharedPtr & renderList);
 	  
       Ref<Body>::SharedPtr createBody();
       Ref<Geom>::SharedPtr createRectGeom(const rect & size);

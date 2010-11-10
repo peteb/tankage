@@ -17,7 +17,7 @@
 namespace Graphics {
    class BoundedSprite;
    class Texture;
-
+   class RenderList;
    class Subsystem;
 
    class SpriteEventHandler {
@@ -36,8 +36,8 @@ namespace Graphics {
       friend class Graphics::Subsystem;
 
    public:
-      std::vector<Vertex2T2> constructVertices() const;
-
+	  void enqueueRender(const Ref<Graphics::RenderList>::SharedPtr & renderList);
+	  
       void enteredView();
       void leftView();
       
@@ -54,6 +54,8 @@ namespace Graphics {
       void setEventHandler(const Ref<SpriteEventHandler>::WeakPtr & eventHandler);
       
    private:
+      std::vector<Vertex2T2> constructVertices() const;
+
       Ref<SpriteEventHandler>::WeakPtr eventHandler;
       Ref<Graphics::Texture>::SharedPtr texture;
       rect size;

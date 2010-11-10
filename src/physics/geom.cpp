@@ -6,6 +6,10 @@
 
 #include "geom.h"
 #include "body.h"
+#include "graphics/vertex.h"
+#include "graphics/render_list.h"
+#include <vector>
+
 Physics::Geom::Geom(const rect & size)
    : size(size)
    , collisionMask(0xFFFFFFFFu)
@@ -68,26 +72,22 @@ void Physics::Geom::collided(const Ref<Geom>::SharedPtr & with) {
 		lockedPtr->collided(with);
 }
 
-#include <OpenGL/OpenGL.h>
-void Physics::Geom::draw() const {
+void Physics::Geom::enqueueRender(const Ref<Graphics::RenderList>::SharedPtr & renderList) {
    vec2 position;
    if (Ref<Physics::Body>::SharedPtr lockedBody = linkedBody.lock())
 	  position = lockedBody->getPosition();
    else if (Ref<ReferenceFrame2>::SharedPtr lockedRef = refFrame.lock())
 	  position = lockedRef->getPosition();
 
-			
-   glBindTexture(GL_TEXTURE_2D, 0);
-   glColor4f(1.0f, 0.0f, 0.0f, 0.3f);
-   
-   glPushMatrix();
-   glTranslatef(position.x, position.y, 0.0f);
-   glBegin(GL_QUADS);
-   glVertex2f(-size.halfSize.x, -size.halfSize.y);
-   glVertex2f(size.halfSize.x, -size.halfSize.y);
-   glVertex2f(size.halfSize.x, size.halfSize.y);
-   glVertex2f(-size.halfSize.x, size.halfSize.y);
-   glEnd();
-   glPopMatrix();
+
+   std::vector<Vertex2T2> vertices;
+   vertices.reserve(4);
+   vertices.push_back(Vertex2T2(size.halfSize * vec2(-1.0f, -1.0f) + position, vec2(0.0f, 0.0f)));
+   vertices.push_back(Vertex2T2(size.halfSize * vec2(1.0f, -1.0f) + position, vec2(1.0f, 0.0f)));
+   vertices.push_back(Vertex2T2(size.halfSize * vec2(1.0f, 1.0f) + position, vec2(1.0f, 1.0f)));
+   vertices.push_back(Vertex2T2(size.halfSize * vec2(-1.0f, 1.0f) + position, vec2(0.0f, 1.0f)));
+		 
+   renderList->insert(Ref<Graphics::Texture>::SharedPtr(), vertices);
 }
+
 
