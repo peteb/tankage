@@ -11,6 +11,7 @@ add_library(graphics
    texture.cpp
    texture_loader.cpp
    render_list.cpp
+   material.cpp
 )
 
 include_directories(

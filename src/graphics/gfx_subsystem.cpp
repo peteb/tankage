@@ -153,20 +153,6 @@ void Graphics::Subsystem::enqueueVisibleSprites(const Ref<Graphics::RenderList>:
 }
 
 void Graphics::Subsystem::render(const Ref<Graphics::Texture>::SharedPtr & texture, const std::vector<Vertex2T2> & vertices) {
-   glEnable(GL_TEXTURE_2D);
-   if (texture.get())
-	  glBindTexture(GL_TEXTURE_2D, texture->getTexId());
-   else
-	  glBindTexture(GL_TEXTURE_2D, 0);
-   
-   glBegin(GL_QUADS);
-   glColor3f(1.0f, 1.0f, 1.0f);
-            
-   for (unsigned i = 0; i < vertices.size(); ++i) {
-	  const vec2 pos = vertices[i].pos;
-	  glTexCoord2f(vertices[i].tc.x, vertices[i].tc.y);
-	  glVertex2f(pos.x, pos.y);
-   }
       
    glEnd();
 }
