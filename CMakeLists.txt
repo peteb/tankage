@@ -7,7 +7,6 @@ include (CheckCXXSourceCompiles)
 #CHECK_INCLUDE_FILE_CXX("tr1/memory" HAVE_TR1_MEMORY_H)
 
 # check which smart pointers we can use (std, std::tr1, boost, ...)
-# TODO: add test for dynamic_pointer_cast
 
 SET(VERIFY_SMARTPTR_STD
   "class A {public: virtual ~A() {} }; class B : public A {}; int main() {std::shared_ptr<A> ptr1; std::weak_ptr<A> ptr2(ptr1); std::dynamic_pointer_cast<B>(ptr1); }")
@@ -21,10 +20,16 @@ if (NOT HAVE_STD_SMARTPTRS)
   CHECK_CXX_SOURCE_COMPILES("#include <tr1/memory>\n ${VERIFY_SMARTPTR_TR1}" HAVE_TR1_SMARTPTRS)
 
   if (NOT HAVE_TR1_SMARTPTRS)
-	find_package(Boost REQUIRED)
-	if (Boost_FOUND)
-	  SET(HAVE_BOOST 1)
-	endif (Boost_FOUND)
+	# check if the standard include file <memory> contains tr1; this is what MSVC does
+	CHECK_CXX_SOURCE_COMPILES("#include <memory>\n ${VERIFY_SMARTPTR_TR1}" HAVE_TR1_IN_STD_SMARTPTRS)
+
+	if (NOT HAVE_TR1_IN_STD_SMARTPTRS)
+	  # no smart pointer support in either tr1 nor sc++l, fall back to boost
+	  find_package(Boost REQUIRED)
+	  if (Boost_FOUND)
+		SET(HAVE_BOOST 1)
+	  endif (Boost_FOUND)
+	endif (NOT HAVE_TR1_IN_STD_SMARTPTRS)
   endif (NOT HAVE_TR1_SMARTPTRS)
 endif (NOT HAVE_STD_SMARTPTRS)
 

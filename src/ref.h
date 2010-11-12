@@ -10,16 +10,30 @@
 #include <stdexcept>
 #include "config.h"
 
-#ifdef HAVE_TR1_MEMORY_H
+#ifdef HAVE_TR1_SMARTPTRS
   #include <tr1/memory>
   #define WEAK_PTR std::tr1::weak_ptr
   #define SHARED_PTR std::tr1::shared_ptr
+  #define DYNAMIC_PTR_CAST std::tr1::dynamic_pointer_cast
+
+#elif HAVE_TR1_IN_STD_SMARTPTRS
+  #include <memory>
+  #define WEAK_PTR std::tr1::weak_ptr
+  #define SHARED_PTR std::tr1::shared_ptr
+  #define DYNAMIC_PTR_CAST std::tr1::dynamic_pointer_cast
+
+#elif HAVE_STD_SMARTPTRS
+  #include <memory>
+  #define WEAK_PTR std:::weak_ptr
+  #define SHARED_PTR std::shared_ptr
+  #define DYNAMIC_PTR_CAST std::dynamic_pointer_cast
 
 #elif defined(HAVE_BOOST)
   #include <boost/shared_ptr.hpp>
   #include <boost/weak_ptr.hpp>
   #define WEAK_PTR boost::weak_ptr
   #define SHARED_PTR boost::shared_ptr
+  #define DYNAMIC_PTR_CAST boost::dynamic_pointer_cast
 
 #else
   #error "No smart pointer implementation found"
@@ -96,13 +110,7 @@ protected:
 
 template<typename T, typename Source>
 typename Ref<T>::SharedPtr Cast(const Source & source) {
-#ifdef HAVE_TR1_MEMORY_H
-   return std::tr1::dynamic_pointer_cast<T>(source);
-#elif defined(HAVE_BOOST)
-   return boost::dynamic_pointer_cast<T>(source);
-#else
-#error "Can't cast, no smartptr implementer"
-#endif
+   return DYNAMIC_PTR_CAST<T>(source);
 }
 
 
@@ -134,5 +142,8 @@ Ref<T> Owning(T * ptr) {
    return ret;
 }
 
+#undef SHARED_PTR
+#undef WEAK_PTR
+#undef DYNAMIC_POINTER_CAST
 
 #endif /* end of include guard: REF_H_CKS8593L */

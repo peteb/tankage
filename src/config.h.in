@@ -1,8 +1,10 @@
 #ifndef CONFIG_H
 #define CONFIG_H
 
-#cmakedefine HAVE_STD_SMARTPTRS
-#cmakedefine HAVE_TR1_SMARTPTRS
+// smart pointer support:
+#cmakedefine HAVE_TR1_SMARTPTRS        //< support through TR1
+#cmakedefine HAVE_TR1_IN_STD_SMARTPTRS //< TR1 smartptrs are included in <memory> 
+#cmakedefine HAVE_STD_SMARTPTRS        //< the stdlib contains smartptrs directly (possibly using c++0x)
 #cmakedefine HAVE_BOOST
 
 #endif // !CONFIG_H
