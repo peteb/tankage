@@ -98,7 +98,9 @@ void HealthMeter::enqueueRender(const Ref<Graphics::RenderList>::SharedPtr & ren
 	  valuesLeft -= 10.0f;
    }
 
-   renderList->insert(texture, vertices);
+   //renderList->insert(texture, vertices);
+   renderList->insert(Ref<Graphics::Renderer>::SharedPtr(), Ref<Graphics::Mesh>::SharedPtr());
+	  
 }
 
 void HealthMeter::setPosition(const vec2 & origin) {

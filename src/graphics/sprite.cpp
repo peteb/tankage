@@ -76,7 +76,8 @@ void Sprite::setEventHandler(const Ref<SpriteEventHandler>::WeakPtr & eventHandl
 }
 
 void Sprite::enqueueRender(const Ref<Graphics::RenderList>::SharedPtr & renderList) {
-   renderList->insert(texture, constructVertices());
+   //renderList->insert(Ref<Graphics::Renderer>::SharedPtr(), constructVertices());
+   renderList->insert(Ref<Graphics::Renderer>::SharedPtr(), Ref<Graphics::Mesh>::SharedPtr());
 }
 
 // TODO: this shouldn't compile, we're not using enqueueRender anywhere. fix

@@ -76,14 +76,14 @@ void Game::tick(float dt) {
    snailHealth2->draw();
    world.update();
 
-   Ref<Graphics::RenderList>::SharedPtr renderList = world.graphics.createRenderList();
+   Ref<Graphics::RenderList>::SharedPtr renderList(new Graphics::RenderList);
    world.graphics.enqueueVisibleSprites(renderList);
-   //world.physics.enqueueGeoms(renderList);
+   world.physics.enqueueGeoms(renderList);
    snailHealth1->enqueueRender(renderList);
    snailHealth2->enqueueRender(renderList);
    
    world.graphics.beginFrame();
-   renderList->render(world.graphics);
+   renderList->render(world.graphics.getContext());
    
    // const float step_size = 1.0f / 40.0f;
    // accum_time += dt;

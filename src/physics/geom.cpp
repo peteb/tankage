@@ -87,7 +87,8 @@ void Physics::Geom::enqueueRender(const Ref<Graphics::RenderList>::SharedPtr & r
    vertices.push_back(Vertex2T2(size.halfSize * vec2(1.0f, 1.0f) + position, vec2(1.0f, 1.0f)));
    vertices.push_back(Vertex2T2(size.halfSize * vec2(-1.0f, 1.0f) + position, vec2(0.0f, 1.0f)));
 		 
-   renderList->insert(Ref<Graphics::Texture>::SharedPtr(), vertices);
+   //renderList->insert(Ref<Graphics::Renderer>::SharedPtr(), vertices);
+   renderList->insert(Ref<Graphics::Renderer>::SharedPtr(), Ref<Graphics::Mesh>::SharedPtr());
 }
 
 

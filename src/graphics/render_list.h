@@ -7,32 +7,24 @@
 #ifndef GRAPHICS_RENDER_LIST_H
 #define GRAPHICS_RENDER_LIST_H
 
-#include <vector>
-#include "vertex.h"
 #include "ref.h"
-#include <vector>
 #include <utility>
+#include <vector>
 
 namespace Graphics {
-   class Texture;
-   class Subsystem;
+   class Renderer;
+   class Mesh;
+   class RenderContext;
    
    class RenderList {
    public:
-	  virtual ~RenderList() {}
-	  virtual void insert(const Ref<Graphics::Texture>::SharedPtr & texture, const std::vector<Vertex2T2> & modelData) =0;
-	  virtual void render(Graphics::Subsystem & renderer) =0;
-   };
+	  ~RenderList();
+	  
+	  void insert(const Ref<Renderer>::SharedPtr & renderer, const Ref<Mesh>::SharedPtr & modelData);
+	  void render(Graphics::RenderContext & context);
 
-   class NonSortingRenderList : public RenderList {
-   public:
-	  ~NonSortingRenderList();
-	  
-	  void insert(const Ref<Graphics::Texture>::SharedPtr & texture, const std::vector<Vertex2T2> & modelData);
-	  void render(Graphics::Subsystem & renderer);
-	  
    private:
-	  typedef std::pair<Ref<Graphics::Texture>::SharedPtr, std::vector<Vertex2T2> > Model;
+	  typedef std::pair<Ref<Renderer>::SharedPtr, Ref<Mesh>::SharedPtr> Model;
 
 	  std::vector<Model *> models;
    };

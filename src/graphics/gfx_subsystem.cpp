@@ -152,9 +152,13 @@ void Graphics::Subsystem::enqueueVisibleSprites(const Ref<Graphics::RenderList>:
    }
 }
 
-void Graphics::Subsystem::render(const Ref<Graphics::Texture>::SharedPtr & texture, const std::vector<Vertex2T2> & vertices) {
+//void Graphics::Subsystem::render(const Ref<Graphics::Texture>::SharedPtr & texture, const std::vector<Vertex2T2> & vertices) {
       
-   glEnd();
+//glEnd();
+//}
+
+Graphics::RenderContext & Graphics::Subsystem::getContext() {
+   return renderCtx;
 }
 
 void Graphics::Subsystem::resizeViewport(const rect & size) {
@@ -210,8 +214,8 @@ Ref<Graphics::Texture>::SharedPtr Graphics::Subsystem::getTexture(const std::str
    return textureCache.loadTexture(filename);
 }
 
-Ref<Graphics::RenderList>::SharedPtr Graphics::Subsystem::createRenderList() {
-   Ref<Graphics::RenderList>::SharedPtr newList(new Graphics::NonSortingRenderList);
+// Ref<Graphics::RenderList>::SharedPtr Graphics::Subsystem::createRenderList() {
+//    Ref<Graphics::RenderList>::SharedPtr newList(new Graphics::NonSortingRenderList);
 
-   return newList;
-}
+//    return newList;
+// }

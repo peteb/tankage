@@ -5,23 +5,27 @@
  */
 
 #include "render_list.h"
-#include "graphics/gfx_subsystem.h"
+#include "gfx_subsystem.h"
+#include "renderer.h"
 
-Graphics::NonSortingRenderList::~NonSortingRenderList() {
+using namespace Graphics;
+
+RenderList::~RenderList() {
    for (size_t i = 0; i < models.size(); ++i) {
 	  delete models[i];
    }
 }
 
-void Graphics::NonSortingRenderList::insert(const Ref<Graphics::Texture>::SharedPtr & texture,
-											const std::vector<Vertex2T2> & modelData)
+void RenderList::insert(const Ref<Renderer>::SharedPtr & renderer,
+						const Ref<Mesh>::SharedPtr & modelData)
 {
-   models.push_back(new Model(texture, modelData));
+   models.push_back(new Model(renderer, modelData));
 }
 
-void Graphics::NonSortingRenderList::render(Graphics::Subsystem & renderer) {
+void RenderList::render(RenderContext & context) {
    for (size_t i = 0; i < models.size(); ++i) {
-	  renderer.render(models[i]->first, models[i]->second);
+	  if (models[i]->second.get())
+		 models[i]->first->render(*models[i]->second.get(), context);
    }
-
+   
 }

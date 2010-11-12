@@ -13,6 +13,7 @@
 #include "texture_loader.h"
 #include "ref.h"
 #include "vertex.h"
+#include "render_context.h"
 
 namespace Graphics {
    class Sprite;
@@ -28,16 +29,18 @@ namespace Graphics {
       void resizeViewport(const rect & size);
       Ref<Graphics::Sprite>::SharedPtr createSprite(const std::string & fragments);
 	  Ref<Graphics::Texture>::SharedPtr getTexture(const std::string & filename);
-	  Ref<Graphics::RenderList>::SharedPtr createRenderList();
+	  //  Ref<Graphics::RenderList>::SharedPtr createRenderList();
 	  void enqueueVisibleSprites(const Ref<Graphics::RenderList>::SharedPtr & renderList);
 
 	  void beginFrame();
-	  void render(const Ref<Graphics::Texture>::SharedPtr & texture, const std::vector<Vertex2T2> & vertices);
+//	  void render(const Ref<Graphics::Texture>::SharedPtr & texture, const std::vector<Vertex2T2> & vertices);
+	  Graphics::RenderContext & getContext();
 	  
    private:
       TextureLoader textureCache;
       std::vector<Graphics::BoundedSprite *> sprites;
       rect viewport;
+	  Graphics::RenderContext renderCtx;
    };
 
    class BoundedSprite {

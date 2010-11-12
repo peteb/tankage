@@ -37,7 +37,7 @@
 ** TODO Improve bullet collision detection
 ** TODO Helmets
 ** TODO Run on Windows
-** TODO Destructible cactii   
+** TODO Destructible cactii
 
 * Major Beta, January 20th
 ** Collect feedback from first alpha
@@ -46,6 +46,10 @@
 ** Menu system
    
 * Engine
-** TODO Platform-independent rendering in components (not in the gfx subsystem)
-** TODO Build: verify that TR1 can be used for smart pointers using a code test
-** TODO Build: detect whether there are smart pointer implementations in std::
+** DONE Platform-independent rendering in components (not in the gfx subsystem)
+** DONE Build: verify that TR1 can be used for smart pointers using a code test
+** DONE Build: detect whether there are smart pointer implementations in std::
+** TODO Implement new design regarding rendering context, renderers, meshes, etc.
+** TODO Remove friend for Sprite, add sprite event handler. the bounded sprite should register for position/orientation changes in the sprite
+   
+   
