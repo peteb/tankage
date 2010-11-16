@@ -10,7 +10,10 @@
 #include "graphics/render_list.h"
 
 using Graphics::Sprite;
- 
+using Graphics::Texture;
+using Graphics::BoundedSprite;
+using Graphics::SpriteEventHandler;
+
 Sprite::Sprite(const Ref<Texture>::SharedPtr & texture, BoundedSprite * sceneNode) 
    : position(vec2::Zero) 
    , orientation(mat2::Identity)

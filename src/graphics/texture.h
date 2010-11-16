@@ -7,7 +7,13 @@
 #ifndef TEXTURE_H_61TB0IDZ
 #define TEXTURE_H_61TB0IDZ
 
+#ifdef __APPLE__
 #include <OpenGL/OpenGL.h>
+#else
+#include <windows.h>
+#include <GL/GL.h>
+#endif
+
 #include "math/rect.h"
 
 namespace Graphics {

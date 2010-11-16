@@ -4,3 +4,6 @@ add_library(physics
    body.cpp
    geom.cpp
 )
+if (HAVE_BOOST)
+  include_directories(${Boost_INCLUDE_DIR})
+endif (HAVE_BOOST)

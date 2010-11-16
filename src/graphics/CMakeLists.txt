@@ -11,9 +11,12 @@ add_library(graphics
    texture.cpp
    texture_loader.cpp
    render_list.cpp
-   material.cpp
    render_context.cpp
 )
+
+if (HAVE_BOOST)
+  include_directories(${Boost_INCLUDE_DIR})
+endif (HAVE_BOOST)
 
 include_directories(
    ${IL_INCLUDE_DIR}

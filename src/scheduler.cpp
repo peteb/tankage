@@ -38,7 +38,7 @@ void Scheduler::update(float dt) {
    // TODO: make sure no modifications to the scheduledItems list can be done
    //       while this method is running. new items should be added to another list first
    
-   for (int i = 0; i < listSize; ++i) {
+   for (std::vector<Item>::size_type i = 0; i < listSize; ++i) {
       Item & item = scheduledItems[i];
       if (!item.trigger(dt)) {
          scheduledItems[i] = scheduledItems[std::max(0u, listSize - 1)];

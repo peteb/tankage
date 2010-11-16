@@ -78,7 +78,7 @@ int main(int argc, char ** argv) {
 
 void main_loop(Game & game) {
    bool running = true;
-   float last_tick = glfwGetTime();
+   float last_tick = static_cast<float>(glfwGetTime());
    int lastWidth = -1, lastHeight = -1;
    
    while (running) {      

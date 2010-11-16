@@ -9,7 +9,13 @@
 #include <IL/IL.h>
 #include <stdexcept>
 #include <sstream>
+
+#ifdef __APPLE__
 #include <OpenGL/OpenGL.h>
+#else
+#include <windows.h>
+#include <GL/GL.h>
+#endif
 
 using Graphics::TextureLoader;
 
@@ -69,7 +75,7 @@ Ref<Graphics::Texture>::SharedPtr TextureLoader::loadTexture(const std::string &
    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
    Ref<Graphics::Texture>::SharedPtr texture(
-      new Graphics::Texture(newTexture, rect(width, height))
+      new Graphics::Texture(newTexture, rect(static_cast<float>(width), static_cast<float>(height)))
    );
    cachedTextures.insert(std::make_pair(name, texture));
    
