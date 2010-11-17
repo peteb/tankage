@@ -14,7 +14,7 @@
 namespace OpenGL {
    
    class Device : public Graphics::Device {
-   public:
+   public:	  
 	  OpenGL::RenderContext * createContext();
 	  OpenGL::Texture * createTexture(const void * data, int width, int height, int bpp, int format);
    };

@@ -13,13 +13,13 @@
 #include "texture_loader.h"
 #include "ref.h"
 #include "vertex.h"
-#include "render_context.h"
 
 namespace Graphics {
    class Sprite;
    class BoundedSprite;
    class Texture;
    class RenderList;
+   class RenderContext;
    
    class Subsystem {
    public:
@@ -32,6 +32,8 @@ namespace Graphics {
 	  //  Ref<Graphics::RenderList>::SharedPtr createRenderList();
 	  void enqueueVisibleSprites(const Ref<Graphics::RenderList>::SharedPtr & renderList);
 
+	  RenderContext * getContext();
+	  
 	  void beginFrame();
 //	  void render(const Ref<Graphics::Texture>::SharedPtr & texture, const std::vector<Vertex2T2> & vertices);
 	  
@@ -40,6 +42,7 @@ namespace Graphics {
       std::vector<Graphics::BoundedSprite *> sprites;
       rect viewport;
 	  Graphics::Device * renderDevice;
+	  Graphics::RenderContext * renderContext;
    };
 
    class BoundedSprite {

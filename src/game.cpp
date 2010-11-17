@@ -72,8 +72,8 @@ void Game::tick(float dt) {
    
    world.scheduler.update(dt);
    world.physics.update(dt);
-   snailHealth1->draw();
-   snailHealth2->draw();
+//    snailHealth1->draw();
+//    snailHealth2->draw();
    world.update();
 
    Ref<Graphics::RenderList>::SharedPtr renderList(new Graphics::RenderList);
@@ -83,7 +83,7 @@ void Game::tick(float dt) {
    snailHealth2->enqueueRender(renderList);
    
    world.graphics.beginFrame();
-   renderList->render(world.graphics.getContext());
+   renderList->render(*world.graphics.getContext());
    
    // const float step_size = 1.0f / 40.0f;
    // accum_time += dt;

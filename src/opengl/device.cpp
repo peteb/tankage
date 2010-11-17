@@ -10,9 +10,6 @@
 #include "opengl.h"
 #include "render_context.h"
 
-
-#include <OpenGL/OpenGL.h>
-
 OpenGL::RenderContext * OpenGL::Device::createContext() {
    return NULL;
 }

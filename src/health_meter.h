@@ -15,7 +15,7 @@ namespace Graphics {class Texture; class RenderList; }
 class HealthMeter {
 public:
    void setValue(float value);
-   void draw();
+//   void draw();
    void setPosition(const vec2 & origin);
    void setTexture(const Ref<Graphics::Texture>::SharedPtr & newTexture);
    void setDir(float dir);

@@ -39,11 +39,12 @@ Ref<Graphics::Texture>::SharedPtr TextureLoader::loadTexture(const std::string &
          return Ref<Graphics::Texture>::SharedPtr(iter->second);
    }
 
-   // Not found in cache, load
+   // Not found in cache, verify we've got a device
    if (!creator) {
 	  throw std::runtime_error("no creator device specified for texture loader");
    }
-   
+
+   // Load the bitmap data
    ILuint newImage = 0;
    ilGenImages(1, &newImage);
    ilBindImage(newImage);

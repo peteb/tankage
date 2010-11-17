@@ -10,16 +10,14 @@
 #include "graphics/texture.h"
 #include "graphics/render_list.h"
 
-#ifdef __APPLE__
-#include <OpenGL/OpenGL.h>
-#else
-#include <windows.h>
-#include <GL/GL.h>
-#endif
- 
+#include "opengl/device.h"
+
 Graphics::Subsystem::Subsystem() 
    : viewport(vec2::Zero)
 {
+   renderDevice = new OpenGL::Device;
+   renderContext = renderDevice->createContext();
+   textureCache.setDevice(renderDevice);
 }
 
 #include <iostream>
@@ -156,12 +154,6 @@ void Graphics::Subsystem::enqueueVisibleSprites(const Ref<Graphics::RenderList>:
    }
 }
 
-// TODO: fix this so that the sprite delegates to the BoundedSprite. 
-//       the sprite shouldn't be directly bound to the BoundedSprite, it should work through a delegate
-// TODO: the subsystem should have a function, createVolume(size, position, orientation)
-// TODO: NAAHHH the sprite can be strongly bound to the boundedsprite. maybe they should be the same even,
-//       causing a strong association between the sprite and the gfx subsystem
-//       
 /*
   Sprite * guySprite = graphics.createSprite();
   vad ska klassen göra?
@@ -233,8 +225,7 @@ Ref<Graphics::Texture>::SharedPtr Graphics::Subsystem::getTexture(const std::str
    return textureCache.loadTexture(filename);
 }
 
-// Ref<Graphics::RenderList>::SharedPtr Graphics::Subsystem::createRenderList() {
-//    Ref<Graphics::RenderList>::SharedPtr newList(new Graphics::NonSortingRenderList);
+Graphics::RenderContext * Graphics::Subsystem::getContext() {
+   return renderContext;
+}
 
-//    return newList;
-// }

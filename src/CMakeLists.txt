@@ -49,6 +49,7 @@ include_directories(
 
 target_link_libraries(snail-wail 
   graphics 
+  opengl
   physics 
   math
   ${GLFW_LIBRARY} 
