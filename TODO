@@ -52,4 +52,4 @@
 ** TODO Implement new design regarding rendering context, renderers, meshes, etc.
 ** TODO Remove friend for Sprite, add sprite event handler. the bounded sprite should register for position/orientation changes in the sprite
 ** TODO Add correct event handling (multitargets)
-   
+** DONE Verify that smartptrs are implemented by boost   
