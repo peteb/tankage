@@ -22,10 +22,10 @@ namespace Graphics {
 	  
 	  void insert(const Ref<Renderer>::SharedPtr & renderer, const Ref<Mesh>::SharedPtr & modelData);
 	  void render(Graphics::RenderContext & context);
-
+	  
    private:
 	  typedef std::pair<Ref<Renderer>::SharedPtr, Ref<Mesh>::SharedPtr> Model;
-
+	  
 	  std::vector<Model *> models;
    };
 }

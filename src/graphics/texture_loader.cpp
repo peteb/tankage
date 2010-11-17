@@ -6,20 +6,16 @@
 
 #include "texture_loader.h"
 #include "texture.h"
+#include "device.h"
 #include <IL/IL.h>
 #include <stdexcept>
 #include <sstream>
 
-#ifdef __APPLE__
-#include <OpenGL/OpenGL.h>
-#else
-#include <windows.h>
-#include <GL/GL.h>
-#endif
-
 using Graphics::TextureLoader;
 
-TextureLoader::TextureLoader() {
+TextureLoader::TextureLoader()
+   : creator(NULL)
+{
    ilInit();
 }
 
@@ -27,8 +23,13 @@ TextureLoader::~TextureLoader() {
    
 }
 
+void TextureLoader::setDevice(Graphics::Device * device) {
+   this->creator = device;
+}
+
+
 Ref<Graphics::Texture>::SharedPtr TextureLoader::loadTexture(const std::string & name) {
-   // check cache for texture
+   // Check cache for texture
    TextureCache::iterator iter = cachedTextures.find(name);
    
    if (iter != cachedTextures.end()) {
@@ -37,22 +38,26 @@ Ref<Graphics::Texture>::SharedPtr TextureLoader::loadTexture(const std::string &
       else
          return Ref<Graphics::Texture>::SharedPtr(iter->second);
    }
+
+   // Not found in cache, load
+   if (!creator) {
+	  throw std::runtime_error("no creator device specified for texture loader");
+   }
    
-   // not found in cache, load
    ILuint newImage = 0;
-	ilGenImages(1, &newImage);
-	ilBindImage(newImage);
+   ilGenImages(1, &newImage);
+   ilBindImage(newImage);
 
-	if (ilLoadImage(name.c_str()) == IL_FALSE) {
-		std::stringstream ss;
+   if (ilLoadImage(name.c_str()) == IL_FALSE) {
+	  std::stringstream ss;
 
-		ILenum errorCode;
-		while ((errorCode = ilGetError()) != IL_NO_ERROR) {
-			ss << errorCode << ", ";
-		}
+	  ILenum errorCode;
+	  while ((errorCode = ilGetError()) != IL_NO_ERROR) {
+		 ss << errorCode << ", ";
+	  }
 
-		throw std::runtime_error("failed to load image '" + name + "': " + ss.str());
-	}
+	  throw std::runtime_error("failed to load image '" + name + "': " + ss.str());
+   }
 	
    ILuint width = ilGetInteger(IL_IMAGE_WIDTH);
    ILuint height = ilGetInteger(IL_IMAGE_HEIGHT);
@@ -60,25 +65,10 @@ Ref<Graphics::Texture>::SharedPtr TextureLoader::loadTexture(const std::string &
    ILuint bpp = ilGetInteger(IL_IMAGE_BPP);
    
    const void * data = ilGetData();
-   
-   // generate texture
-   GLuint newTexture;
-   glEnable(GL_TEXTURE_2D);
-   glGenTextures(1, &newTexture);
-   glBindTexture(GL_TEXTURE_2D, newTexture);
-   glTexImage2D(
-      GL_TEXTURE_2D, 0, bpp, width, height, 0, format,
-      GL_UNSIGNED_BYTE, data
-   );
-   
-   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+   Ref<Graphics::Texture>::SharedPtr texture(creator->createTexture(data, width, height, bpp, format));
 
-   Ref<Graphics::Texture>::SharedPtr texture(
-      new Graphics::Texture(newTexture, rect(static_cast<float>(width), static_cast<float>(height)))
-   );
    cachedTextures.insert(std::make_pair(name, texture));
-   
+      
    return texture;
 }
 

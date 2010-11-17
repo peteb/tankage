@@ -23,7 +23,7 @@ Graphics::Subsystem::Subsystem()
 }
 
 #include <iostream>
-void Graphics::Subsystem::render(float dt) {
+/*void Graphics::Subsystem::render(float dt) {
    glClearColor(0.957f, 0.917f, 0.682f, 1.0f);
    glClear(GL_COLOR_BUFFER_BIT);
 
@@ -118,7 +118,7 @@ void Graphics::Subsystem::render(float dt) {
    }
    
   // std::cout << "Rendered: " << rendered << std::endl;
-}
+  }*/
 
 void Graphics::Subsystem::enqueueVisibleSprites(const Ref<Graphics::RenderList>::SharedPtr & renderList) {
    std::vector<Graphics::BoundedSprite *>::iterator iter = sprites.begin();
@@ -176,9 +176,9 @@ void Graphics::Subsystem::enqueueVisibleSprites(const Ref<Graphics::RenderList>:
 //glEnd();
 //}
 
-Graphics::RenderContext & Graphics::Subsystem::getContext() {
-   return renderCtx;
-}
+// Graphics::RenderContext & Graphics::Subsystem::getContext() {
+//    return renderCtx;
+// }
 
 void Graphics::Subsystem::resizeViewport(const rect & size) {
    viewport = size;

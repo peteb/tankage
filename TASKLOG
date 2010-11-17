@@ -145,8 +145,14 @@
 	[25] decoupling components from opengl by introducing a renderlist
 	[25] decoupling
 	[25] finalized decoupling
-	
+
+*** Sprint finished, goal (7) reached (12)
+
 2010-11-12
 	[25] improved buildsystem and worked on the rendering architecture
 	[25] added the classes for the rendering system, some refining of the design
+	
+2010-11-17
+	[25] rendering architecture
+	[25] same
 	

@@ -34,13 +34,12 @@ namespace Graphics {
 
 	  void beginFrame();
 //	  void render(const Ref<Graphics::Texture>::SharedPtr & texture, const std::vector<Vertex2T2> & vertices);
-	  Graphics::RenderContext & getContext();
 	  
    private:
       TextureLoader textureCache;
       std::vector<Graphics::BoundedSprite *> sprites;
       rect viewport;
-	  Graphics::RenderContext renderCtx;
+	  Graphics::Device * renderDevice;
    };
 
    class BoundedSprite {

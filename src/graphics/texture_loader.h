@@ -12,18 +12,21 @@
 
 namespace Graphics {
    class Texture;
-
-// this is really both a cache and a loader
+   class Device;
+   
+   // this is really both a cache and a loader
    class TextureLoader {
    public:
 	  TextureLoader();
 	  ~TextureLoader();
-   
-	  Ref<Texture>::SharedPtr loadTexture(const std::string & name);
+
+	  void setDevice(Graphics::Device * device);
+	  Ref<Graphics::Texture>::SharedPtr loadTexture(const std::string & name);
    
    private:
 	  typedef std::map<std::string, Ref<Texture>::WeakPtr > TextureCache;
-	  TextureCache cachedTextures; 
+	  TextureCache cachedTextures;
+	  Graphics::Device * creator;
    };
 }
 

@@ -8,10 +8,8 @@ find_package(jpeg)
 add_library(graphics 
    gfx_subsystem.cpp
    sprite.cpp
-   texture.cpp
    texture_loader.cpp
    render_list.cpp
-   render_context.cpp
 )
 
 if (HAVE_BOOST) # this seems to be necessary when generating VS projects

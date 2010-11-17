@@ -24,8 +24,12 @@ void RenderList::insert(const Ref<Renderer>::SharedPtr & renderer,
 
 void RenderList::render(RenderContext & context) {
    for (size_t i = 0; i < models.size(); ++i) {
-	  if (models[i]->second.get())
-		 models[i]->first->render(*models[i]->second.get(), context);
+	  Renderer * renderer = models[i]->first.get();
+	  Mesh * meshData = models[i]->second.get();
+	  
+	  if (meshData) {
+		renderer->render(*meshData, context);
+	  }
    }
    
 }

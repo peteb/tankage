@@ -16,7 +16,6 @@ namespace Graphics {
 	  virtual ~Renderer() {}
 
 	  virtual void render(const Mesh & mesh, RenderContext & rc) {}
-	  
    };
 
 }

@@ -7,12 +7,16 @@
 #ifndef GRAPHICS_RENDER_CONTEXT_H
 #define GRAPHICS_RENDER_CONTEXT_H
 
+#include "ref.h"
+
 namespace Graphics {
+   class Texture;
+   
    class RenderContext {
    public:
-	  virtual ~RenderContext();
+	  virtual ~RenderContext() {}
 
-	  virtual void setColor(float r, float g, float b, float a);
+	  virtual void setTexture(const Ref<Texture>::SharedPtr & texture) =0;
    };
 }
 
