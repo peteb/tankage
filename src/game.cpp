@@ -95,7 +95,7 @@ void Game::tick(float dt) {
 
 void Game::windowChangedSize(int width, int height) {
    std::cout << "Window changed size: " << width << ", " << height << std::endl;
-   world.graphics.resizeViewport(rect(vec2::Zero, width, height));
+   world.graphics.resizeViewport(rect(vec2::Zero, static_cast<float>(width), static_cast<float>(height)));
    world.physics.resizeArea(width, height);
 }
 

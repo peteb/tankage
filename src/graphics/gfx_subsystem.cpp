@@ -10,8 +10,12 @@
 #include "graphics/texture.h"
 #include "graphics/render_list.h"
 
+#ifdef __APPLE__
 #include <OpenGL/OpenGL.h>
-
+#else
+#include <windows.h>
+#include <GL/GL.h>
+#endif
  
 Graphics::Subsystem::Subsystem() 
    : viewport(vec2::Zero)
@@ -20,7 +24,7 @@ Graphics::Subsystem::Subsystem()
 
 #include <iostream>
 void Graphics::Subsystem::render(float dt) {
-   glClearColor(0.957, 0.917, 0.682, 1.0f);
+   glClearColor(0.957f, 0.917f, 0.682f, 1.0f);
    glClear(GL_COLOR_BUFFER_BIT);
 
    vec2 min, max;
@@ -181,7 +185,7 @@ void Graphics::Subsystem::resizeViewport(const rect & size) {
 }
 
 void Graphics::Subsystem::beginFrame() {
-   glClearColor(0.957, 0.917, 0.682, 1.0f);
+   glClearColor(0.957f, 0.917f, 0.682f, 1.0f);
    glClear(GL_COLOR_BUFFER_BIT);
 
    vec2 min, max;

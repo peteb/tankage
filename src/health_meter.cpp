@@ -5,10 +5,16 @@
  */
 
 #include "health_meter.h"
-#include <OpenGL/OpenGL.h>
 #include "graphics/texture.h"
 #include "graphics/render_list.h"
 #include "graphics/vertex.h"
+
+#ifdef __APPLE__
+#include <OpenGL/OpenGL.h>
+#else
+#include <windows.h>
+#include <GL/GL.h>
+#endif
 
 void HealthMeter::setValue(float value) {
    this->value = value;

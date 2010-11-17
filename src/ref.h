@@ -48,6 +48,8 @@ public:
    typedef SHARED_PTR<T> SharedPtr;
    typedef WEAK_PTR<T> WeakPtr;
 
+   template<typename T> friend class Ref;
+
    Ref() {owner = false; }
    Ref(const WeakPtr & wp) {
       setWeak(wp);
@@ -60,7 +62,7 @@ public:
       owner = ref.owner;
    }
 
-   
+
    void setWeak(const WeakPtr & wp) {
       this->wp = wp;
       this->sp.reset();
@@ -95,9 +97,6 @@ public:
 	  
 	  return ret;
    }
-
-   template<typename Other>
-   friend class Ref<T>;
    
    // friend class WeakRef<T>;
    // friend class OwningRef<T>;

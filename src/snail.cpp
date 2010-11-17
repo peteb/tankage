@@ -12,7 +12,7 @@
 #include "bullet.h"
 
 Snail::Snail() {
-   health = 100.0f;
+   health = 100;
 }
 
 void Snail::setPosition(const vec2 & pos) {
@@ -27,7 +27,7 @@ void Snail::collided(const Ref<Physics::Geom>::SharedPtr & with) {
 	  if (Ref<Bullet>::SharedPtr bulletOwner = Cast<Bullet>(lockedOwner)) {
 		 if (static_cast<void *>(bulletOwner->shooter) != static_cast<void *>(this)) { // hit by a bullet
 			bulletOwner->kill();
-			increaseHealth(-5.0f);
+			increaseHealth(-5);
 			physBody->addImpulse(with->getOrientation() * vec2(300.0f, 0.0f));
 		 }
 	  }
@@ -43,7 +43,7 @@ void Snail::increaseHealth(int add) {
    health += add;
 
    if (Ref<SnailEventHandler>::SharedPtr lockedHandler = eventHandler.lock())
-	  lockedHandler->onHealthChange(health);
+	  lockedHandler->onHealthChange(static_cast<float>(health));
    
    std::cout << "decreased health to " << health << std::endl;
 

@@ -22,7 +22,18 @@ add_executable(snail-wail
   )
 
 
-find_package(Cocoa REQUIRED)
+if (APPLE)
+  find_package(Cocoa REQUIRED)
+  include_directories(
+    ${Cocoa_INCLUDE_DIR}
+    )
+
+  target_link_libraries(snail-wail 
+    ${Cocoa_LIBRARIES}
+    )
+endif (APPLE)
+
+
 find_package(glfw REQUIRED)
 
 if (HAVE_BOOST)
