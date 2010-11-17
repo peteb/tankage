@@ -1,3 +1,5 @@
+# -*- mode: cmake -*-
+
 cmake_minimum_required (VERSION 2.4)
 project (SnailWail)
 
@@ -32,7 +34,7 @@ if (NOT HAVE_STD_SMARTPTRS)
 		SET(HAVE_BOOST 1)
 
 		# really verify that boost provides this
-		CHECK_CXX_SOURCE_COMPILES("#include <boost/shared_ptr.hpp>\n#include <boost/weak_ptr.hpp>\n ${VERIFY_SMARTPTR_BOOST}")
+		CHECK_CXX_SOURCE_COMPILES("#include <boost/shared_ptr.hpp>\n#include <boost/weak_ptr.hpp>\n ${VERIFY_SMARTPTR_BOOST}" HAVE_BOOST_SMARTPTRS)
 	  endif (Boost_FOUND)
 	endif (NOT HAVE_TR1_IN_STD_SMARTPTRS)
   endif (NOT HAVE_TR1_SMARTPTRS)

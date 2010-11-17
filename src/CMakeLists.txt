@@ -1,4 +1,4 @@
-# -*- Mode: cmake -*-
+# -*- mode: cmake -*-
 
 add_subdirectory(graphics)
 add_subdirectory(physics)
@@ -27,7 +27,7 @@ if (APPLE)
   include_directories(
     ${Cocoa_INCLUDE_DIR}
     )
-
+  
   target_link_libraries(snail-wail 
     ${Cocoa_LIBRARIES}
     )

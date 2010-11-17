@@ -28,11 +28,11 @@
   #define SHARED_PTR std::shared_ptr
   #define DYNAMIC_PTR_CAST std::dynamic_pointer_cast
 
-#elif defined(HAVE_BOOST)
+#elif defined(HAVE_BOOST) // TODO: HAVE_BOOST_SMARTPTRS?
   #include <boost/shared_ptr.hpp>
   #include <boost/weak_ptr.hpp>
   #define WEAK_PTR boost::weak_ptr
-  #define SHARED_PTR boost::shared_ptr
+  #Define SHARED_PTR boost::shared_ptr
   #define DYNAMIC_PTR_CAST boost::dynamic_pointer_cast
 
 #else
@@ -48,7 +48,7 @@ public:
    typedef SHARED_PTR<T> SharedPtr;
    typedef WEAK_PTR<T> WeakPtr;
 
-   template<typename T> friend class Ref;
+   template<typename FriendT> friend class Ref;
 
    Ref() {owner = false; }
    Ref(const WeakPtr & wp) {
