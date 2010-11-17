@@ -31,9 +31,9 @@
 *** TODO Smaller collision areas
 *** TODO More collision areas
 ** TODO Blood splatter
-** TODO Extend arsenal
+** TODO Extend arsenal with rocket launcher
 ** TODO Power-ups
-** TODO Rounds
+** TODO Rounds (3 rounds per game)
 ** TODO Improve bullet collision detection
 ** TODO Helmets
 ** TODO Run on Windows
@@ -51,5 +51,5 @@
 ** DONE Build: detect whether there are smart pointer implementations in std::
 ** TODO Implement new design regarding rendering context, renderers, meshes, etc.
 ** TODO Remove friend for Sprite, add sprite event handler. the bounded sprite should register for position/orientation changes in the sprite
-   
+** TODO Add correct event handling (multitargets)
    

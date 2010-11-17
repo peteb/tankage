@@ -148,3 +148,5 @@
 	
 2010-11-12
 	[25] improved buildsystem and worked on the rendering architecture
+	[25] added the classes for the rendering system, some refining of the design
+	

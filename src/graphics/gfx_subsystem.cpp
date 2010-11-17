@@ -152,6 +152,21 @@ void Graphics::Subsystem::enqueueVisibleSprites(const Ref<Graphics::RenderList>:
    }
 }
 
+// TODO: fix this so that the sprite delegates to the BoundedSprite. 
+//       the sprite shouldn't be directly bound to the BoundedSprite, it should work through a delegate
+// TODO: the subsystem should have a function, createVolume(size, position, orientation)
+// TODO: NAAHHH the sprite can be strongly bound to the boundedsprite. maybe they should be the same even,
+//       causing a strong association between the sprite and the gfx subsystem
+//       
+/*
+  Sprite * guySprite = graphics.createSprite();
+  vad ska klassen göra?
+  * ha en rect
+  * ha en lista över objekt (position, bounding box)
+  * kunna ta ut de objekt som intersectar recten
+  
+ */
+
 //void Graphics::Subsystem::render(const Ref<Graphics::Texture>::SharedPtr & texture, const std::vector<Vertex2T2> & vertices) {
       
 //glEnd();
