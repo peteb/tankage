@@ -13,16 +13,24 @@ OpenGL::Texture::Texture(GLuint texId, const rect & size)
 {
 }
 
-OpenGL::Texture::~Texture() {
+OpenGL::Texture::Texture(const Texture & other)
+  : texId(0)
+{
+}
+
+OpenGL::Texture::~Texture()
+{
 	glBindTexture(GL_TEXTURE_2D, 0);
 	glDeleteTextures(1, &texId);
 }
 
-rect OpenGL::Texture::getSize() const {
+rect OpenGL::Texture::getSize() const
+{
    return size;
 }
 
-GLuint OpenGL::Texture::getTexId() const {
+GLuint OpenGL::Texture::getTexId() const
+{
    return texId;
 }
 

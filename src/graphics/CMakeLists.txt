@@ -10,6 +10,7 @@ add_library(graphics
    sprite.cpp
    texture_loader.cpp
    render_list.cpp
+   texture_fx.cpp
 )
 
 if (HAVE_BOOST) # this seems to be necessary when generating VS projects

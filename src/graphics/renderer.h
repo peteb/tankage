@@ -7,6 +7,8 @@
 #ifndef GRAPHICS_RENDERER_H
 #define GRAPHICS_RENDERER_H
 
+#include "ref.h"
+
 namespace Graphics {
    class Mesh;
    class RenderContext;
@@ -15,7 +17,7 @@ namespace Graphics {
    public:
 	  virtual ~Renderer() {}
 
-	  virtual void render(const Mesh & mesh, RenderContext & rc) {}
+	  virtual void render(const Ref<Graphics::Mesh>::SharedPtr & mesh, RenderContext & rc) {}
    };
 
 }

@@ -12,11 +12,14 @@
 #include "opengl.h"
 
 
-namespace OpenGL {
+namespace OpenGL
+{
    class Device;
    
-   class Texture : public Graphics::Texture {
+   class Texture : public Graphics::Texture
+   {
    public:
+	  Texture(GLuint texId, const rect & size);
 	  ~Texture();
    
 	  rect getSize() const;
@@ -24,13 +27,10 @@ namespace OpenGL {
 	  void bind() const;
 	  
    private:
-	  Texture(GLuint texId, const rect & size);
-	  Texture(const Texture & other) {}
+	  Texture(const Texture & other);
 	  
-	  friend class OpenGL::Device;
-
-	  rect size;
-	  GLuint texId;
+	  const rect size;
+	  const GLuint texId;
    };
 
 }
