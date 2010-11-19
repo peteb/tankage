@@ -15,6 +15,7 @@ namespace Graphics {
 	  virtual ~Texture() {}
    
 	  virtual rect getSize() const =0;
+	  virtual void bind() const =0;
    };
 }
 

@@ -25,3 +25,7 @@ rect OpenGL::Texture::getSize() const {
 GLuint OpenGL::Texture::getTexId() const {
    return texId;
 }
+
+void OpenGL::Texture::bind() const {
+   glBindTexture(GL_TEXTURE_2D, texId);
+}

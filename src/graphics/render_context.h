@@ -16,7 +16,9 @@ namespace Graphics {
    public:
 	  virtual ~RenderContext() {}
 
-	  virtual void setTexture(const Ref<Texture>::SharedPtr & texture) =0;
+	  virtual void bind() const =0;
+	  
+	  //virtual void setTexture(const Ref<Texture>::SharedPtr & texture) =0;
    };
 }
 

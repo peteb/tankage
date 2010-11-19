@@ -12,8 +12,8 @@
 namespace OpenGL {
    class RenderContext : public Graphics::RenderContext {
    public:
-	  void setTexture(const Ref<Graphics::Texture>::SharedPtr & texture);
-	  
+	  // void setTexture(const Ref<Graphics::Texture>::SharedPtr & texture);
+	  void bind() const;
    };
 
 }

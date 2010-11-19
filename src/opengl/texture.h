@@ -21,7 +21,8 @@ namespace OpenGL {
    
 	  rect getSize() const;
 	  GLuint getTexId() const;
-   
+	  void bind() const;
+	  
    private:
 	  Texture(GLuint texId, const rect & size);
 	  Texture(const Texture & other) {}
