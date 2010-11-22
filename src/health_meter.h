@@ -10,19 +10,18 @@
 #include "math/vec2.h"
 #include "ref.h"
 
-namespace Graphics {class Texture; class RenderList; }
+namespace Graphics {class Renderer; class RenderList; }
 
 class HealthMeter {
 public:
    void setValue(float value);
-//   void draw();
    void setPosition(const vec2 & origin);
-   void setTexture(const Ref<Graphics::Texture>::SharedPtr & newTexture);
+   void setRenderer(const Ref<Graphics::Renderer>::SharedPtr & newRenderer);
    void setDir(float dir);
    void enqueueRender(const Ref<Graphics::RenderList>::SharedPtr & renderList);
    
 private:
-   Ref<Graphics::Texture>::SharedPtr texture;
+   Ref<Graphics::Renderer>::SharedPtr renderer;
    float value, dir;
    vec2 origin;
 };

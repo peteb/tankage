@@ -11,6 +11,7 @@
 #include "object.h"
 #include "cactus_generator.h"
 #include "graphics/render_list.h"
+#include "graphics/texture_fx.h"
 
 #include <iostream>
 #include "ref.h"
@@ -20,6 +21,10 @@ Game::Game()
    , playerInput1("player1")
    , playerInput2("player2")
 {
+   Ref<Graphics::TextureFx>::SharedPtr heartFx(new Graphics::TextureFx);
+   heartFx->setTexture(Owning(world.graphics.getTexture("../data/hearts.png")));
+   heartFx->setRenderContext(Owning(world.graphics.getRenderContext()));
+   
    {
  	  Ref<Snail> snail = Owning(Cast<Snail>(creator.createObject("snail1", creator)));
  	  world.insert(snail.lock());
@@ -28,7 +33,7 @@ Game::Game()
 	  snailHealth1 = Owning(new HealthMeter);
 	  snailHealth1->setValue(100.0f);
 	  snailHealth1->setPosition(vec2(20.0f, 20.0f));
-	  snailHealth1->setTexture(world.graphics.getTexture("../data/hearts.png"));
+	  snailHealth1->setRenderer(heartFx);
 	  snailHealth1->setDir(1.0f);
 	  firstSnail->logic->setHealthMeter(Observing(snailHealth1));
 	  // TODO: ska man kunna få texture från gfx_subsystem? yes, kör på det tills vidare. sen refactor
@@ -42,7 +47,7 @@ Game::Game()
 	  snailHealth2 = Owning(new HealthMeter);
 	  snailHealth2->setValue(100.0f);
 	  snailHealth2->setPosition(vec2(800.0f - 20.0f, 20.0f));
-	  snailHealth2->setTexture(world.graphics.getTexture("../data/hearts.png"));
+	  snailHealth2->setRenderer(heartFx);
 	  snailHealth2->setDir(-1.0f);
 	  secondSnail->logic->setHealthMeter(Observing(snailHealth2));
    }
@@ -72,8 +77,6 @@ void Game::tick(float dt) {
    
    world.scheduler.update(dt);
    world.physics.update(dt);
-//    snailHealth1->draw();
-//    snailHealth2->draw();
    world.update();
 
    Ref<Graphics::RenderList>::SharedPtr renderList(new Graphics::RenderList);
@@ -83,7 +86,7 @@ void Game::tick(float dt) {
    snailHealth2->enqueueRender(renderList);
    
    world.graphics.beginFrame();
-   renderList->render(*world.graphics.getContext());
+   world.graphics.render(renderList);
    
    // const float step_size = 1.0f / 40.0f;
    // accum_time += dt;

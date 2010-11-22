@@ -14,14 +14,14 @@
 namespace Graphics {
    class Renderer;
    class Mesh;
-   class RenderContext;
+   class Device;
    
    class RenderList {
    public:
 	  ~RenderList();
 	  
 	  void insert(const Ref<Renderer>::SharedPtr & renderer, const Ref<Mesh>::SharedPtr & modelData);
-	  void render(Graphics::RenderContext & context);
+	  void render(Graphics::Device & target);
 	  
    private:
 	  typedef std::pair<Ref<Renderer>::SharedPtr, Ref<Mesh>::SharedPtr> Model;

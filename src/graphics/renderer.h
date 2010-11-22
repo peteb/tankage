@@ -8,16 +8,18 @@
 #define GRAPHICS_RENDERER_H
 
 #include "ref.h"
+#include "math/rect.h"
 
 namespace Graphics {
    class Mesh;
-   class RenderContext;
+   class Device;
    
    class Renderer {
    public:
 	  virtual ~Renderer() {}
 
-	  virtual void render(const Ref<Graphics::Mesh>::SharedPtr & mesh, RenderContext & rc) {}
+     virtual void render(const Ref<Graphics::Mesh>::SharedPtr & mesh, Device & target) =0;
+     virtual rect getNativeSize() const =0;
    };
 
 }

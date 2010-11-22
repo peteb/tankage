@@ -22,13 +22,13 @@ void RenderList::insert(const Ref<Renderer>::SharedPtr & renderer,
    models.push_back(new Model(renderer, modelData));
 }
 
-void RenderList::render(RenderContext & context) {
+void RenderList::render(Device & target) {
    for (size_t i = 0; i < models.size(); ++i) {
 	  const Ref<Renderer>::SharedPtr & renderer = models[i]->first;
 	  const Ref<Mesh>::SharedPtr & meshData = models[i]->second;
 	  
-	  if (meshData) {
-		renderer->render(meshData, context);
+	  if (meshData && renderer) { // TODO: add default renderer
+		  renderer->render(meshData, target);
 	  }
    }
    

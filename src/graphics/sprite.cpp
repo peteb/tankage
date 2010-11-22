@@ -6,21 +6,18 @@
 
 #include "graphics/sprite.h"
 #include "graphics/texture.h"
-#include "graphics/gfx_subsystem.h"
 #include "graphics/render_list.h"
+#include "graphics/mesh.h"
 
 using Graphics::Sprite;
-using Graphics::Texture;
-using Graphics::BoundedSprite;
+using Graphics::Renderer;
 using Graphics::SpriteEventHandler;
 
-Sprite::Sprite(const Ref<Texture>::SharedPtr & texture, BoundedSprite * sceneNode) 
-   : position(vec2::Zero) 
-   , orientation(mat2::Identity)
-   , texture(texture)
-   , sceneNode(sceneNode)
+Sprite::Sprite(const Ref<Renderer>::SharedPtr & renderer, const rect & size) 
+   : orientation(mat2::Identity)
+   , renderer(renderer)
+   , size(size)
 {
-   size = texture->getSize();
 }
 
 std::vector<Vertex2T2> Sprite::constructVertices() const {
@@ -46,8 +43,6 @@ rect Sprite::getBoundingBox() const {
 
 void Sprite::setPosition(const vec2 & newPos) {
    this->position = newPos;
-   if (sceneNode)
-      sceneNode->boundingArea.origin = newPos;
 }
 
 vec2 Sprite::getPosition() const {
@@ -66,10 +61,6 @@ rect Sprite::getSize() const {
    return size;
 }
 
-Ref<Graphics::Texture>::SharedPtr Sprite::getTexture() const {
-   return texture;
-}
-
 void Sprite::enteredView() {
    if (Ref<SpriteEventHandler>::SharedPtr locked = eventHandler.lock())
       locked->enteredView();
@@ -85,8 +76,10 @@ void Sprite::setEventHandler(const Ref<SpriteEventHandler>::WeakPtr & eventHandl
 }
 
 void Sprite::enqueueRender(const Ref<Graphics::RenderList>::SharedPtr & renderList) {
-   //renderList->insert(Ref<Graphics::Renderer>::SharedPtr(), constructVertices());
-   renderList->insert(Ref<Graphics::Renderer>::SharedPtr(), Ref<Graphics::Mesh>::SharedPtr());
+   Ref<Graphics::Mesh>::SharedPtr mesh(new Graphics::Mesh);
+   mesh->vertices = constructVertices();
+   
+   renderList->insert(renderer, mesh);
 }
 
 // TODO: this shouldn't compile, we're not using enqueueRender anywhere. fix

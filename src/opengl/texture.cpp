@@ -35,5 +35,6 @@ GLuint OpenGL::Texture::getTexId() const
 }
 
 void OpenGL::Texture::bind() const {
+   glEnable(GL_TEXTURE_2D);
    glBindTexture(GL_TEXTURE_2D, texId);
 }

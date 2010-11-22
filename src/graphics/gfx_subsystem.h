@@ -13,10 +13,10 @@
 #include "texture_loader.h"
 #include "ref.h"
 #include "vertex.h"
+#include "sprite_culler.h"
 
 namespace Graphics {
    class Sprite;
-   class BoundedSprite;
    class Texture;
    class RenderList;
    class RenderContext;
@@ -28,21 +28,19 @@ namespace Graphics {
       void render(float dt);
       void resizeViewport(const rect & size);
       Ref<Graphics::Sprite>::SharedPtr createSprite(const std::string & fragments);
-	  Ref<Graphics::Texture>::SharedPtr getTexture(const std::string & filename);
-	  //  Ref<Graphics::RenderList>::SharedPtr createRenderList();
-	  void enqueueVisibleSprites(const Ref<Graphics::RenderList>::SharedPtr & renderList);
-
-	  RenderContext * getContext();
-	  
-	  void beginFrame();
-//	  void render(const Ref<Graphics::Texture>::SharedPtr & texture, const std::vector<Vertex2T2> & vertices);
-	  
+      Ref<Graphics::Texture>::SharedPtr getTexture(const std::string & filename);
+      void enqueueVisibleSprites(const Ref<Graphics::RenderList>::SharedPtr & renderList);
+      Ref<Graphics::RenderContext>::SharedPtr getRenderContext() const;
+      
+      void beginFrame();
+      void render(const Ref<Graphics::RenderList>::SharedPtr & renderList);
+      
    private:
+      SpriteCuller screen;
       TextureLoader textureCache;
-      std::vector<Graphics::BoundedSprite *> sprites;
       rect viewport;
-	  Graphics::Device * renderDevice;
-	  Graphics::RenderContext * renderContext;
+      Graphics::Device * renderDevice;
+      Ref<Graphics::RenderContext> renderContext;
    };
 
    class BoundedSprite {

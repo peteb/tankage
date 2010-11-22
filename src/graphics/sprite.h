@@ -15,10 +15,8 @@
 #include "ref.h"
 
 namespace Graphics {
-   class BoundedSprite;
-   class Texture;
+   class Renderer;
    class RenderList;
-   class Subsystem;
 
    class SpriteEventHandler {
    public:
@@ -30,14 +28,10 @@ namespace Graphics {
    
 
    class Sprite : public ReferenceFrame2 {
-   private:
-      Sprite(const Ref<Graphics::Texture>::SharedPtr & texture, BoundedSprite * sceneNode);
-
-      friend class Graphics::Subsystem;
-
    public:
-	  void enqueueRender(const Ref<Graphics::RenderList>::SharedPtr & renderList);
-	  
+      Sprite(const Ref<Graphics::Renderer>::SharedPtr & renderer, const rect & size);
+
+	   void enqueueRender(const Ref<Graphics::RenderList>::SharedPtr & renderList);
       void enteredView();
       void leftView();
       
@@ -49,19 +43,17 @@ namespace Graphics {
       // ------------------------------------------------------------
       
       rect getSize() const;
-      Ref<Graphics::Texture>::SharedPtr getTexture() const;
-	  rect getBoundingBox() const;
+	   rect getBoundingBox() const;
       void setEventHandler(const Ref<SpriteEventHandler>::WeakPtr & eventHandler);
       
    private:
       std::vector<Vertex2T2> constructVertices() const;
 
       Ref<SpriteEventHandler>::WeakPtr eventHandler;
-      Ref<Graphics::Texture>::SharedPtr texture;
+      Ref<Graphics::Renderer>::SharedPtr renderer;
       rect size;
       vec2 position;
       mat2 orientation;
-      BoundedSprite * sceneNode;
    };
    
 }

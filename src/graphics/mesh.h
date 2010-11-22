@@ -8,10 +8,13 @@
 #ifndef GRAPHICS_MESH_H
 #define GRAPHICS_MESH_H
 
+#include <vector>
+#include "vertex.h"
+
 namespace Graphics {
    class Mesh {
    public:
-
+      std::vector<Vertex2T2> vertices;
    };
 
 }

@@ -27,7 +27,7 @@ namespace Physics {
       void update(float dt);
       void resizeArea(int width, int height);
       void addBody(const Ref<Body>::WeakPtr & body);
-	  void enqueueGeoms(const Ref<Graphics::RenderList>::SharedPtr & renderList);
+	   void enqueueGeoms(const Ref<Graphics::RenderList>::SharedPtr & renderList);
 	  
       Ref<Body>::SharedPtr createBody();
       Ref<Geom>::SharedPtr createRectGeom(const rect & size);

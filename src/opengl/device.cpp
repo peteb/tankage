@@ -9,9 +9,11 @@
 #include "math/rect.h"
 #include "opengl.h"
 #include "render_context.h"
+#include "graphics/vertex.h"
+#include "graphics/mesh.h"
 
 OpenGL::RenderContext * OpenGL::Device::createContext() {
-   return NULL;
+   return new OpenGL::RenderContext;
 }
 
 OpenGL::Texture * OpenGL::Device::createTexture(const void * data, int width, int height, int bpp, int format) {
@@ -30,3 +32,13 @@ OpenGL::Texture * OpenGL::Device::createTexture(const void * data, int width, in
    return new OpenGL::Texture(newTexture, rect(width, height));
 }
 
+void OpenGL::Device::drawMesh(const Ref<Graphics::Mesh>::SharedPtr & mesh) {
+   glBegin(GL_QUADS);
+   for (size_t i = 0; i < mesh->vertices.size(); ++i) {
+      const Vertex2T2 & vertex = mesh->vertices[i];
+      glTexCoord2f(vertex.tc.x, vertex.tc.y);
+      glVertex2f(vertex.pos.x, vertex.pos.y);
+      
+   }
+   glEnd();
+}
