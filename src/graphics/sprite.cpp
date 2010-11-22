@@ -38,6 +38,12 @@ std::vector<Vertex2T2> Sprite::constructVertices() const {
    return vertices;
 }
 
+rect Sprite::getBoundingBox() const {
+   rect ret = getSize();
+   ret.origin = position;
+   return ret;
+}
+
 void Sprite::setPosition(const vec2 & newPos) {
    this->position = newPos;
    if (sceneNode)

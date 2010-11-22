@@ -5,4 +5,3 @@
  */
 
 #include "renderer.h"
-

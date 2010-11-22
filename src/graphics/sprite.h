@@ -50,7 +50,7 @@ namespace Graphics {
       
       rect getSize() const;
       Ref<Graphics::Texture>::SharedPtr getTexture() const;
-      
+	  rect getBoundingBox() const;
       void setEventHandler(const Ref<SpriteEventHandler>::WeakPtr & eventHandler);
       
    private:
