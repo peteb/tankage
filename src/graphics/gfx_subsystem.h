@@ -39,23 +39,9 @@ namespace Graphics {
       SpriteCuller screen;
       TextureLoader textureCache;
       rect viewport;
-      Graphics::Device * renderDevice;
+      Ref<Graphics::Device> renderDevice;
       Ref<Graphics::RenderContext> renderContext;
    };
-
-   class BoundedSprite {
-   private:
-      BoundedSprite() {visibleLastFrame = false; firstFrame = true; }
-      
-      Ref<Graphics::Sprite>::WeakPtr sprite;
-
-   public:
-      rect boundingArea;
-      bool visibleLastFrame, firstFrame;
-      
-      friend class Graphics::Subsystem;
-   };
-
 }
 
 #endif /* end of include guard: GFX_SUBSYSTEM_H_EAH7WN3F */

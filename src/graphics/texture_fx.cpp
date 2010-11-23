@@ -11,20 +11,24 @@
 
 void Graphics::TextureFx::render(const Ref<Graphics::Mesh>::SharedPtr & mesh, Graphics::Device & target)
 {
+   context->setBlend(true);
    texture->bind();
    context->bind();
    target.drawMesh(mesh);
 }
+
 
 void Graphics::TextureFx::setTexture(const Ref<Graphics::Texture> & texture)
 {
    this->texture = texture;
 }
 
+
 void Graphics::TextureFx::setRenderContext(const Ref<Graphics::RenderContext> & context) 
 {
    this->context = context;
 }
+
 
 rect Graphics::TextureFx::getNativeSize() const 
 {

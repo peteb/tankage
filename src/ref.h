@@ -82,15 +82,29 @@ public:
 		 return wp.lock();
    }
 
+
    template<typename OtherT>
-   Ref<T> & operator = (const Ref<OtherT> & other) {
+   Ref<T> & operator = (const Ref<OtherT> & other)
+   {
 	  this->sp = other.sp;
 	  this->wp = other.wp;
 	  owner = other.owner;
    }
-	
+
+   
    // and just for convenience...
-   SharedPtr operator -> () const {
+   SharedPtr operator -> () const
+   {
+	  SharedPtr ret = lock();
+	  if (!ret)
+		 throw std::runtime_error("null pointer exception!");
+	  
+	  return ret;
+   }
+
+   
+   SharedPtr operator * () const
+   {
 	  SharedPtr ret = lock();
 	  if (!ret)
 		 throw std::runtime_error("null pointer exception!");

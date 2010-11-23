@@ -20,13 +20,13 @@ namespace Graphics {
 	  TextureLoader();
 	  ~TextureLoader();
 
-	  void setDevice(Graphics::Device * device);
+	  void setDevice(const Ref<Graphics::Device>::SharedPtr & device);
 	  Ref<Graphics::Texture>::SharedPtr loadTexture(const std::string & name);
    
    private:
 	  typedef std::map<std::string, Ref<Texture>::WeakPtr > TextureCache;
 	  TextureCache cachedTextures;
-	  Graphics::Device * creator;
+	  Ref<Graphics::Device>::SharedPtr creator;
    };
 }
 

@@ -9,18 +9,23 @@
 
 #include "ref.h"
 
+class rect;
+
 namespace Graphics {
    class RenderContext;
    class Texture;
    class Mesh;
+   class Color4;
    
    class Device {
    public:
-	   virtual ~Device() {}
+	  virtual ~Device() {}
 	  
-	   virtual Graphics::RenderContext * createContext() =0;
-	   virtual Graphics::Texture * createTexture(const void * data, int width, int height, int bpp, int format) =0;
+	  virtual Graphics::RenderContext * createContext() =0;
+	  virtual Graphics::Texture * createTexture(const void * data, int width, int height, int bpp, int format) =0;
       virtual void drawMesh(const Ref<Graphics::Mesh>::SharedPtr & mesh) =0;
+	  virtual void setOrtho(const rect & viewport) =0;
+	  virtual void clearColor(const Graphics::Color4 & color) =0;
    };
 
 }

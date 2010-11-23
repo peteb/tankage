@@ -14,21 +14,25 @@
 using Graphics::TextureLoader;
 
 TextureLoader::TextureLoader()
-   : creator(NULL)
 {
    ilInit();
 }
 
-TextureLoader::~TextureLoader() {
+
+TextureLoader::~TextureLoader()
+{
    
 }
 
-void TextureLoader::setDevice(Graphics::Device * device) {
+
+void TextureLoader::setDevice(const Ref<Graphics::Device>::SharedPtr & device)
+{
    this->creator = device;
 }
 
 
-Ref<Graphics::Texture>::SharedPtr TextureLoader::loadTexture(const std::string & name) {
+Ref<Graphics::Texture>::SharedPtr TextureLoader::loadTexture(const std::string & name)
+{
    // Check cache for texture
    TextureCache::iterator iter = cachedTextures.find(name);
    

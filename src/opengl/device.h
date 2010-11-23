@@ -21,8 +21,9 @@ namespace OpenGL {
    public:	  
 	  OpenGL::RenderContext * createContext();
 	  OpenGL::Texture * createTexture(const void * data, int width, int height, int bpp, int format);
-     void drawMesh(const Ref<Graphics::Mesh>::SharedPtr & mesh);
-     
+	  void drawMesh(const Ref<Graphics::Mesh>::SharedPtr & mesh);
+	  void setOrtho(const rect & viewport);
+	  void clearColor(const Graphics::Color4 & color);
    };
 }
 

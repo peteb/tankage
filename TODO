@@ -49,15 +49,16 @@
 ** DONE Platform-independent rendering in components (not in the gfx subsystem)
 ** DONE Build: verify that TR1 can be used for smart pointers using a code test
 ** DONE Build: detect whether there are smart pointer implementations in std::
-** TODO Implement new design regarding rendering context, renderers, meshes, etc.
-** TODO Remove friend for Sprite, add sprite event handler.
+** DONE Implement new design regarding rendering context, renderers, meshes, etc.
+** DONE Remove friend for Sprite, add sprite event handler.
 ** TODO Add correct event handling (multitargets)
 ** DONE Verify that smartptrs are implemented by boost   
-** TODO Remove the old way of doing rendering
-** TODO Implement SpriteCuller <-- do this now, put it in graphics subsystem
-** TODO Use Mesh and renderer, create a TextureRenderer
+** DONE Remove the old way of doing rendering
+** DONE Implement SpriteCuller
+** DONE Use Mesh and renderer, create a TextureRenderer
 It should be easy to draw all the sprites visible, like graphics.render()
 but it should also be easy to add custom stuff to the renderlists that are used in gfx_subsystem
 
 ** TODO Add doxygen comments
 ** TODO Unit tests using Gtest
+   
