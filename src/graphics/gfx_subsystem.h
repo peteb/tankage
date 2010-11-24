@@ -20,22 +20,25 @@ namespace Graphics {
    class Texture;
    class RenderList;
    class RenderContext;
+   class Renderer;
    
    class Subsystem {
    public:
       Subsystem();
       
-      void render(float dt);
       void resizeViewport(const rect & size);
       Ref<Graphics::Sprite>::SharedPtr createSprite(const std::string & fragments);
-      Ref<Graphics::Texture>::SharedPtr getTexture(const std::string & filename);
-      void enqueueVisibleSprites(const Ref<Graphics::RenderList>::SharedPtr & renderList);
+	  Ref<Graphics::Renderer>::SharedPtr getRenderer(const std::string & name);
+	  
+	  void enqueueVisibleSprites(const Ref<Graphics::RenderList>::SharedPtr & renderList);
       Ref<Graphics::RenderContext>::SharedPtr getRenderContext() const;
       
       void beginFrame();
       void render(const Ref<Graphics::RenderList>::SharedPtr & renderList);
       
    private:
+      Ref<Graphics::Texture>::SharedPtr getTexture(const std::string & filename);
+
       SpriteCuller screen;
       TextureLoader textureCache;
       rect viewport;

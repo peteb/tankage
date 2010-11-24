@@ -21,10 +21,8 @@ Game::Game()
    , playerInput1("player1")
    , playerInput2("player2")
 {
-   Ref<Graphics::TextureFx>::SharedPtr heartFx(new Graphics::TextureFx);
-   heartFx->setTexture(Owning(world.graphics.getTexture("../data/hearts.png")));
-   heartFx->setRenderContext(Owning(world.graphics.getRenderContext()));
-   
+   Ref<Graphics::Renderer>::SharedPtr heartFx = world.graphics.getRenderer("../data/hearts.png");   
+
    {
  	  Ref<Snail> snail = Owning(Cast<Snail>(creator.createObject("snail1", creator)));
  	  world.insert(snail.lock());

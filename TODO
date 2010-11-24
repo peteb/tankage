@@ -61,4 +61,5 @@ but it should also be easy to add custom stuff to the renderlists that are used 
 
 ** TODO Add doxygen comments
 ** TODO Unit tests using Gtest
-   
+** TODO Create renderer factory
+

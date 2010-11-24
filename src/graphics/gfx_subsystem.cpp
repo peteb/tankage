@@ -12,6 +12,7 @@
 #include "texture_fx.h"
 #include "opengl/device.h"
 #include "color.h"
+#include "texture_fx.h"
 
 Graphics::Subsystem::Subsystem() 
    : viewport(vec2::Zero)
@@ -38,8 +39,6 @@ void Graphics::Subsystem::beginFrame()
 {
    renderDevice->setOrtho(viewport);
    renderDevice->clearColor(Graphics::Color4(0.957f, 0.917f, 0.682f, 1.0f));
-   
-   bool showBoundingAreas = false;
 }
 
 
@@ -68,6 +67,15 @@ Ref<Graphics::Texture>::SharedPtr Graphics::Subsystem::getTexture(const std::str
    return textureCache.loadTexture(filename);
 }
 
+
+Ref<Graphics::Renderer>::SharedPtr Graphics::Subsystem::getRenderer(const std::string & name)
+{
+   Ref<Graphics::TextureFx>::SharedPtr newRenderer(new Graphics::TextureFx);
+   newRenderer->setTexture(Owning(getTexture(name)));
+   newRenderer->setRenderContext(renderContext);
+   
+   return newRenderer;
+}
 
 Ref<Graphics::RenderContext>::SharedPtr Graphics::Subsystem::getRenderContext() const
 {
