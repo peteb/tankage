@@ -78,6 +78,8 @@ void Game::tick(float dt) {
    world.update();
 
    Ref<Graphics::RenderList>::SharedPtr renderList(new Graphics::RenderList);
+   renderList->setDefaultRenderer(Owning(world.graphics.getRenderer("../data/hearts.png")));
+	  
    world.graphics.enqueueVisibleSprites(renderList);
    world.physics.enqueueGeoms(renderList);
    snailHealth1->enqueueRender(renderList);
