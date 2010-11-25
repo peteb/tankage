@@ -11,6 +11,7 @@
 
 namespace Graphics {
    class Texture;
+   class Color;
    
    class RenderContext {
    public:
@@ -18,6 +19,7 @@ namespace Graphics {
 
 	  virtual void bind() const =0;
 	  virtual void setBlend(bool useBlending) =0;
+	  virtual void setColor(const Graphics::Color & color) =0;
 	  
 	  //virtual void setTexture(const Ref<Texture>::SharedPtr & texture) =0;
    };

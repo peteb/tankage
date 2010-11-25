@@ -6,7 +6,7 @@
 
 #include "color.h"
 
-Graphics::Color4::Color4(float r, float g, float b, float a)
+Graphics::Color::Color(float r, float g, float b, float a)
    : r(r), g(g), b(b), a(a)
 {
 

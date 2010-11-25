@@ -9,10 +9,10 @@
 
 namespace Graphics
 {
-   class Color4
+   class Color
    {
    public:
-	  Color4(float r, float g, float b, float a);
+	  Color(float r, float g, float b, float a);
 
 	  float r, g, b, a;
    };

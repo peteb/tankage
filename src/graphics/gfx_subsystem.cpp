@@ -38,7 +38,7 @@ void Graphics::Subsystem::resizeViewport(const rect & size)
 void Graphics::Subsystem::beginFrame()
 {
    renderDevice->setOrtho(viewport);
-   renderDevice->clearColor(Graphics::Color4(0.957f, 0.917f, 0.682f, 1.0f));
+   renderDevice->clearColor(Graphics::Color(0.957f, 0.917f, 0.682f, 1.0f));
 }
 
 

@@ -8,6 +8,7 @@
 #define GRAPHICS_TEXTURE_FX_H
 
 #include "graphics/renderer.h"
+#include "graphics/color.h"
 #include "ref.h"
 #include "math/rect.h"
 
@@ -20,15 +21,19 @@ namespace Graphics
    class TextureFx : public Graphics::Renderer
    {
    public:
-	   void render(const Ref<Graphics::Mesh>::SharedPtr & mesh, Graphics::Device & target);
+      TextureFx();
+      
+      void render(const Ref<Graphics::Mesh>::SharedPtr & mesh, Graphics::Device & target);
 	   
-	   void setTexture(const Ref<Graphics::Texture> & texture);
+      void setTexture(const Ref<Graphics::Texture> & texture);
+      void setColor(const Graphics::Color & color);
       void setRenderContext(const Ref<Graphics::RenderContext> & context);
       rect getNativeSize() const;
       
    private:
-	   Ref<Graphics::Texture> texture;
+      Ref<Graphics::Texture> texture;
       Ref<Graphics::RenderContext> context;
+      Graphics::Color color;
    };
 
 }

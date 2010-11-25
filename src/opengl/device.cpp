@@ -73,7 +73,7 @@ void OpenGL::Device::setOrtho(const rect & viewport)
    
 }
 
-void OpenGL::Device::clearColor(const Graphics::Color4 & color)
+void OpenGL::Device::clearColor(const Graphics::Color & color)
 {
    glClearColor(color.r, color.g, color.b, color.a);
    glClear(GL_COLOR_BUFFER_BIT);

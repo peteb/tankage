@@ -34,6 +34,7 @@ private:
    Ref<Snail> firstSnail;
    Ref<Snail> secondSnail;
    Ref<CactusGenerator> cactusGenerator;
+   Ref<Graphics::Renderer> defaultRenderer;
    HiController playerInput1, playerInput2;
    Ref<HealthMeter> snailHealth1, snailHealth2;
    

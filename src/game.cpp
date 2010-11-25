@@ -12,6 +12,7 @@
 #include "cactus_generator.h"
 #include "graphics/render_list.h"
 #include "graphics/texture_fx.h"
+#include "graphics/color.h"
 
 #include <iostream>
 #include "ref.h"
@@ -62,7 +63,9 @@ Game::Game()
    cactusGenerator = Owning(new CactusGenerator(creator, world));
    cactusGenerator->setPosition(vec2(350.0f, 630.0f));
    world.scheduler.subscribe(0.1f, cactusGenerator); // update every 1/10 of a second, should be enough
-   
+
+   defaultRenderer = Owning(world.graphics.getRenderer("../data/geom.png"));
+   Cast<Graphics::TextureFx>(defaultRenderer.lock())->setColor(Graphics::Color(1.0f, 1.0f, 1.0f, 0.5));
 }
 
 Game::~Game() {
@@ -78,7 +81,7 @@ void Game::tick(float dt) {
    world.update();
 
    Ref<Graphics::RenderList>::SharedPtr renderList(new Graphics::RenderList);
-   renderList->setDefaultRenderer(Owning(world.graphics.getRenderer("../data/hearts.png")));
+   renderList->setDefaultRenderer(defaultRenderer); //Owning(world.graphics.getRenderer("../data/hearts.png")));
 	  
    world.graphics.enqueueVisibleSprites(renderList);
    world.physics.enqueueGeoms(renderList);

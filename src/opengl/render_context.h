@@ -8,6 +8,7 @@
 #define OPENGL_RENDER_CONTEXT_H
 
 #include "graphics/render_context.h"
+#include "graphics/color.h"
 
 namespace OpenGL {
    class RenderContext : public Graphics::RenderContext {
@@ -17,9 +18,11 @@ namespace OpenGL {
 	  // void setTexture(const Ref<Graphics::Texture>::SharedPtr & texture);
 	  void bind() const;
 	  void setBlend(bool useBlending);
+	  void setColor(const Graphics::Color & color);
 
    private:
 	  bool useBlending;
+	  Graphics::Color color;
    };
 
 }
