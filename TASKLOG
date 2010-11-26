@@ -172,3 +172,5 @@
 2010-11-23
     [25] finalized the big architeture improvement
     
+2010-11-25
+	[25] added a default renderer and geoms can be rendered

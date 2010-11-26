@@ -31,8 +31,9 @@ Ref<Bullet>::SharedPtr ObjectCreator::createBullet() {
    newBullet->body = Owning(world.physics.createBody());
    newBullet->body->setDelegate(newBullet->sprite);
    newBullet->body->setOwner(newBullet);
-   
-   newBullet->geom = Owning(world.physics.createRectGeom(newBullet->sprite->getSize()));
+
+   const rect bulletSize(32, 8);
+   newBullet->geom = Owning(world.physics.createRectGeom(bulletSize));
    newBullet->geom->setBody(newBullet->body);
    newBullet->geom->setCollisionId(3);
    newBullet->geom->setCollisionMask(0x0u);
@@ -81,8 +82,9 @@ Ref<Snail>::SharedPtr ObjectCreator::createSnail(int team, ObjectCreator & creat
 													 // kanske att man registrerar sånt?
 													 // äh, det blir jobb för senare. nu ska allt vara
 													 // komponenter iaf, i en lista. behöver inte vara listor än
-   
-   newSnail->physGeom = Owning(world.physics.createRectGeom(newSnail->sprite->getSize()));
+
+   const rect snailSize(50, 40);
+   newSnail->physGeom = Owning(world.physics.createRectGeom(snailSize));
    newSnail->physGeom->setRefFrame(Observing(newSnail->sprite.lock()));
    newSnail->physGeom->setEventHandler(Observing(newSnail));
    
@@ -117,8 +119,9 @@ Ref<Object>::SharedPtr ObjectCreator::createObject(const std::string & type, Obj
 	  newCactus->body = Owning(world.physics.createBody());
 	  newCactus->body->setDelegate(newCactus->sprite);
 	  newCactus->body->setOwner(newCactus);
-   
-	  newCactus->geom = Owning(world.physics.createRectGeom(newCactus->sprite->getSize()));
+
+	  const rect cactusSize(32, 36);
+	  newCactus->geom = Owning(world.physics.createRectGeom(cactusSize));
 	  newCactus->geom->setBody(newCactus->body);
 	  newCactus->geom->setCollisionId(4);
 	  newCactus->geom->setCollisionMask(0x8u);

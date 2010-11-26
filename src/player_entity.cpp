@@ -32,7 +32,7 @@ void PlayerEntity::shoot() {
    
    Ref<Bullet>::SharedPtr bullet = Cast<Bullet>(creator.createObject("bullet", creator));
    bullet->setPosition(getPosition() + weaponPos);
-   bullet->body->addImpulse(vec2(1000.0f, 0.0f) * forward);
+   bullet->body->addImpulse(vec2(1400.0f, 0.0f) * forward);
    bullet->body->setOrientation(mat2(weaponDir, vec2(0.0f, 1.0f)));
    
    if (Ref<Physics::Body>::SharedPtr lockedTarget = target.lock())

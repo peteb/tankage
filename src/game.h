@@ -37,7 +37,8 @@ private:
    Ref<Graphics::Renderer> defaultRenderer;
    HiController playerInput1, playerInput2;
    Ref<HealthMeter> snailHealth1, snailHealth2;
-   
+
+   bool drawGeoms;
    World world;
    ObjectCreator creator;
 };
