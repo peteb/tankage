@@ -18,7 +18,6 @@ class Object;
 namespace Graphics {class RenderList; class Renderer; }
 
 namespace Physics {
-	class Subsystem;
 	class Body;
 	class Geom;
 	
@@ -28,25 +27,25 @@ namespace Physics {
 	   virtual void collided(const Ref<Geom>::SharedPtr & with) {}
 	};
 
-   class Geom : public ReferenceFrame2 {
-   private:
-      Geom(const rect & size);
-      
-      friend class Physics::Subsystem;
-      
+   class Geom : public ReferenceFrame2 {      
    public:
+	  friend class Subsystem; // TODO: get rid of this
+	  
+      Geom(const rect & size);
+
       void setBody(const Ref<Physics::Body> & body);
       void setRefFrame(const Ref<ReferenceFrame2> & refFrame);
-	   void setEventHandler(const Ref<GeomEventHandler> & eventHandler);
-      
-	   rect getSize() const;
-	   void enqueueRender(const Ref<Graphics::RenderList>::SharedPtr & renderList);
+	  void setEventHandler(const Ref<GeomEventHandler> & eventHandler);
+      void setOffset(const vec2 & offset);
+	  
+	  rect getSize() const;
+	  void enqueueRender(const Ref<Graphics::RenderList>::SharedPtr & renderList);
 	  
       void setCollisionId(unsigned int collisionId);
       void setCollisionMask(const std::bitset<32> & mask);
-	   void collided(const Ref<Geom>::SharedPtr & with);
-
-	   Ref<Object>::WeakPtr getOwner() const;
+	  void collided(const Ref<Geom>::SharedPtr & with);
+	  
+	  Ref<Object>::WeakPtr getOwner() const;
 	  
 	   // ReferenceFrame2 --------------------------------------------
       void setPosition(const vec2 & newPos);
@@ -56,16 +55,16 @@ namespace Physics {
       // ------------------------------------------------------------
    
    private:
-	   Ref<Physics::Body> linkedBody;
-	   Ref<ReferenceFrame2> refFrame;
-	   Ref<GeomEventHandler> eventHandler;
-	         
-	   rect size;
+	  Ref<Physics::Body> linkedBody;
+	  Ref<ReferenceFrame2> refFrame;
+	  Ref<GeomEventHandler> eventHandler;
+	  
+	  rect size;
       
-	   std::bitset<32> collisionMask;
-	   unsigned int collisionId;
+	  std::bitset<32> collisionMask;
+	  unsigned int collisionId;
 	   
-	   vec2 position;
+	  vec2 position;
    };
 }
 

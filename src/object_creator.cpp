@@ -51,24 +51,15 @@ Ref<Snail>::SharedPtr ObjectCreator::createSnail(int team, ObjectCreator & creat
    Ref<Snail>::SharedPtr newSnail(new Snail);
    
    if (team == 0)
-      newSnail->sprite = Owning(world.graphics.createSprite("../data/snail_r.png"));
-   else
       newSnail->sprite = Owning(world.graphics.createSprite("../data/snail_l.png"));
+   else
+      newSnail->sprite = Owning(world.graphics.createSprite("../data/snail_r.png"));
 
    newSnail->physBody = Owning(world.physics.createBody());
    newSnail->physBody->setDelegate(Observing(newSnail->sprite.lock()));
    
    newSnail->logic = Owning(new PlayerEntity(xPos, newSnail.get(), creator, world));
    newSnail->logic->setTarget(Observing(newSnail->physBody.lock()));
-
-   if (team == 1) {
-	  newSnail->logic->weaponDir = vec2(-1.0f, 0.0f);
-	  newSnail->logic->weaponPos = vec2(-32.0f, 15.0f);
-   }
-   else {
-	  newSnail->logic->weaponDir = vec2(1.0f, 0.0f);
-	  newSnail->logic->weaponPos = vec2(32.0f, 5.0f);
-   }
 
    newSnail->setEventHandler(Observing(newSnail->logic));
    
@@ -83,10 +74,23 @@ Ref<Snail>::SharedPtr ObjectCreator::createSnail(int team, ObjectCreator & creat
 													 // äh, det blir jobb för senare. nu ska allt vara
 													 // komponenter iaf, i en lista. behöver inte vara listor än
 
-   const rect snailSize(50, 40);
+   const rect snailSize(56, 39);
    newSnail->physGeom = Owning(world.physics.createRectGeom(snailSize));
    newSnail->physGeom->setRefFrame(Observing(newSnail->sprite.lock()));
    newSnail->physGeom->setEventHandler(Observing(newSnail));
+
+
+   // TODO: this is ugly
+   if (team == 1) {
+	  newSnail->physGeom->setOffset(vec2(2.0f, -4.0f));
+	  newSnail->logic->weaponDir = vec2(-1.0f, 0.0f);
+	  newSnail->logic->weaponPos = vec2(-50.0f, 1.0f);
+   }
+   else { // first snail. not obvious.
+	  newSnail->physGeom->setOffset(vec2(2.0f, -5.0f));
+	  newSnail->logic->weaponDir = vec2(1.0f, 0.0f);
+	  newSnail->logic->weaponPos = vec2(50.0f, 1.0f);
+   }
    
    if (team == 0)
       newSnail->physGeom->setCollisionId(1);
@@ -120,13 +124,13 @@ Ref<Object>::SharedPtr ObjectCreator::createObject(const std::string & type, Obj
 	  newCactus->body->setDelegate(newCactus->sprite);
 	  newCactus->body->setOwner(newCactus);
 
-	  const rect cactusSize(32, 36);
+	  const rect cactusSize(18, 34);
 	  newCactus->geom = Owning(world.physics.createRectGeom(cactusSize));
 	  newCactus->geom->setBody(newCactus->body);
 	  newCactus->geom->setCollisionId(4);
 	  newCactus->geom->setCollisionMask(0x8u);
 	  newCactus->geom->setEventHandler(Observing(newCactus));
-	   
+	  newCactus->geom->setOffset(vec2(-1.0f, -2.0f));
 	  return newCactus;
    }
 	

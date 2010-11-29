@@ -62,9 +62,9 @@ void Subsystem::checkCollisions() {
          rect fixedRect = lockedGeom->getSize();
          
          if (Ref<Physics::Body>::SharedPtr lockedBody = lockedGeom->linkedBody.lock())
-            fixedRect.origin = lockedBody->getPosition();
+            fixedRect.origin += lockedBody->getPosition();
          else if (Ref<ReferenceFrame2>::SharedPtr lockedRef = lockedGeom->refFrame.lock())
-            fixedRect.origin = lockedRef->getPosition();
+            fixedRect.origin += lockedRef->getPosition();
          
          resGeoms.push_back(std::make_pair(fixedRect, lockedGeom));
          ++iter;

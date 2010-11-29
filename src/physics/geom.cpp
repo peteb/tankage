@@ -38,6 +38,11 @@ vec2 Physics::Geom::getPosition() const {
    return position;
 }
 
+void Physics::Geom::setOffset(const vec2 & offset)
+{
+   size.origin = offset;
+}
+
 void Physics::Geom::setOrientation(const mat2 & orient) {
    
 }
@@ -80,7 +85,9 @@ void Physics::Geom::enqueueRender(const Ref<Graphics::RenderList>::SharedPtr & r
    else if (Ref<ReferenceFrame2>::SharedPtr lockedRef = refFrame.lock())
 	  position = lockedRef->getPosition();
 
-
+   position += size.origin;
+   
+   // TODO: get vertices from size instead
    std::vector<Vertex2T2> vertices;
    vertices.reserve(4);
    vertices.push_back(Vertex2T2(size.halfSize * vec2(-1.0f, -1.0f) + position, vec2(0.0f, 0.0f)));

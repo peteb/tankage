@@ -21,25 +21,42 @@
 * First Alpha, December 16th
 ** TODO Orient bullet sprites correctly
 ** TODO Improve existing graphics
-*** TODO Cactus graphics
-*** TODO Second snail
-*** TODO More visible bullets
+*** DONE Cactus graphics
+*** DONE Second snail
+*** TODO Make bullets more apparent
 ** TODO Sprite animations
 *** TODO Shooting
-** TODO Health bar animations
+*** TODO Getting hit
+*** TODO Idle
+** TODO Health bar animations (when low on health)
 ** TODO Improve collision detection
-*** TODO Smaller collision areas
-*** TODO More collision areas
-** TODO Blood splatter
+*** DONE Better-fitting collision areas
+*** TODO More collision areas (body, helmet)
+** TODO Blood splatter (particle system)
 ** TODO Extend arsenal with rocket launcher
+*** TODO Create rocket projectile
+**** TODO Graphics (the rocket + smoketrail [particle system])
+**** TODO Physics
+**** TODO Logic	(homing)
+*** TODO A new weapon: rocket launcher
+**** TODO Graphics for the weapon
+**** TODO When out of rockets, switch to first weapon	 
 ** TODO Power-ups
+*** TODO Rocket launcher (or additional rockets)
+*** TODO Additional health	
 ** TODO Rounds (3 rounds per game)
-** TODO Improve bullet collision detection
+** TODO Make bullet collision detection independent of game speed  
 ** TODO Helmets
+*** Helmets protect against headshots? Should there be special damage for headshots?
+*** TODO Helmets take x amount of damage until they expire	
 ** TODO Run on Windows
 ** TODO Destructible cactii
 
+** TODO Shouldn't be possible to shoot when dead
+   
 * Major Beta, January 20th
+** Helmets can detach from snail and then be picked-up again
+** "Walker" power-up
 ** Collect feedback from first alpha
 ** Proper player input configuration
 ** AI
@@ -56,11 +73,13 @@
 ** DONE Remove the old way of doing rendering
 ** DONE Implement SpriteCuller
 ** DONE Use Mesh and renderer, create a TextureRenderer
-It should be easy to draw all the sprites visible, like graphics.render()
-but it should also be easy to add custom stuff to the renderlists that are used in gfx_subsystem
-
 ** TODO Add doxygen comments
 ** TODO Unit tests using Gtest
-** TODO Create renderer factory
+** TODO Create renderer factory with cache
 ** DONE Use environment variable to toggle rendering of geoms
 ** TODO Geom offset   
+** TODO SDL support
+** TODO ImageIO support
+** TODO SDL_image support
+** TODO Make CMake output more pretty (smart ptr detection, etc)
+** TODO Fix design of physical geoms. it's borken
