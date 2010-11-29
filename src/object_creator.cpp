@@ -63,17 +63,8 @@ Ref<Snail>::SharedPtr ObjectCreator::createSnail(int team, ObjectCreator & creat
 
    newSnail->setEventHandler(Observing(newSnail->logic));
    
-   world.scheduler.subscribe(0.0f, newSnail->logic); // kan man verkligen göra såhär?
-													 // hur hanteras aktivering/deaktivering?
-													 // när ett objekt skapas är det aktiverat,
-													 // men hur vet snigeln att den ska bli avaktiverad
-													 // hos schedulern?
-													 // något borde säga åt subsystemet att komponeten
-													 // ska aktiveras, så inte subsystemet behöver jobba.
-													 // kanske att man registrerar sånt?
-													 // äh, det blir jobb för senare. nu ska allt vara
-													 // komponenter iaf, i en lista. behöver inte vara listor än
-
+   world.scheduler.subscribe(0.0f, newSnail->logic);
+   
    const rect snailSize(56, 39);
    newSnail->physGeom = Owning(world.physics.createRectGeom(snailSize));
    newSnail->physGeom->setRefFrame(Observing(newSnail->sprite.lock()));

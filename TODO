@@ -77,9 +77,10 @@
 ** TODO Unit tests using Gtest
 ** TODO Create renderer factory with cache
 ** DONE Use environment variable to toggle rendering of geoms
-** TODO Geom offset   
+** DONE Geom offset   
 ** TODO SDL support
 ** TODO ImageIO support
 ** TODO SDL_image support
 ** TODO Make CMake output more pretty (smart ptr detection, etc)
 ** TODO Fix design of physical geoms. it's borken
+** TODO AtlasSprite, setup a grid and select cell
