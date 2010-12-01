@@ -16,13 +16,12 @@ Snail::Snail() {
 }
 
 void Snail::setPosition(const vec2 & pos) {
-   physBody.lock()->setPosition(pos);   
+   physBody.lock()->setPosition(pos);
+   helmet.lock()->setPosition(pos);
 }
 
-#include <iostream>
 void Snail::collided(const Ref<Physics::Geom>::SharedPtr & with) {
    // TODO: this is ugly
-   std::cout << "snail collided" << std::endl;
    if (Ref<Object>::SharedPtr lockedOwner = with->getOwner().lock()) {
 	  if (Ref<Bullet>::SharedPtr bulletOwner = Cast<Bullet>(lockedOwner)) {
 		 if (static_cast<void *>(bulletOwner->shooter) != static_cast<void *>(this)) { // hit by a bullet
@@ -38,6 +37,8 @@ void Snail::collided(const Ref<Physics::Geom>::SharedPtr & with) {
 void Snail::setEventHandler(const Ref<SnailEventHandler> & newHandler) {
    eventHandler = newHandler;
 }
+
+#include <iostream>
 
 void Snail::increaseHealth(int add) {
    health += add;

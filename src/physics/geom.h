@@ -47,7 +47,7 @@ namespace Physics {
 	  
 	  Ref<Object>::WeakPtr getOwner() const;
 	  
-	   // ReferenceFrame2 --------------------------------------------
+	  // ReferenceFrame2 --------------------------------------------
       void setPosition(const vec2 & newPos);
       vec2 getPosition() const;
       void setOrientation(const mat2 & orient);

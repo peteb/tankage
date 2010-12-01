@@ -38,10 +38,11 @@ public:
 
    Ref<SnailEventHandler> eventHandler;
    Ref<Graphics::Sprite> sprite;
+   Ref<Graphics::Sprite> helmet;
    Ref<PlayerEntity> logic;
    Ref<Physics::Geom> physGeom;
    Ref<Physics::Body> physBody;
-
+   
 private:
    int health;
 };

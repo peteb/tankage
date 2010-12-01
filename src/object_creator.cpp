@@ -55,6 +55,12 @@ Ref<Snail>::SharedPtr ObjectCreator::createSnail(int team, ObjectCreator & creat
    else
       newSnail->sprite = Owning(world.graphics.createSprite("../data/snail_r.png"));
 
+
+   newSnail->helmet = Owning(world.graphics.createSprite("../data/helmets.png"));
+   newSnail->helmet->setGrid(2, 2);
+   
+   newSnail->sprite->setDelegate(Observing(newSnail->helmet));
+   
    newSnail->physBody = Owning(world.physics.createBody());
    newSnail->physBody->setDelegate(Observing(newSnail->sprite.lock()));
    
@@ -76,11 +82,15 @@ Ref<Snail>::SharedPtr ObjectCreator::createSnail(int team, ObjectCreator & creat
 	  newSnail->physGeom->setOffset(vec2(2.0f, -4.0f));
 	  newSnail->logic->weaponDir = vec2(-1.0f, 0.0f);
 	  newSnail->logic->weaponPos = vec2(-50.0f, 1.0f);
+	  newSnail->helmet->setCell(1, 0);
+	  newSnail->helmet->setOffset(vec2(-15.0f, -15.0f));
    }
    else { // first snail. not obvious.
 	  newSnail->physGeom->setOffset(vec2(2.0f, -5.0f));
 	  newSnail->logic->weaponDir = vec2(1.0f, 0.0f);
 	  newSnail->logic->weaponPos = vec2(50.0f, 1.0f);
+	  newSnail->helmet->setCell(0, 0);
+	  newSnail->helmet->setOffset(vec2(19.0f, -16.0f));
    }
    
    if (team == 0)

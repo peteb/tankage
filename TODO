@@ -83,4 +83,9 @@
 ** TODO SDL_image support
 ** TODO Make CMake output more pretty (smart ptr detection, etc)
 ** TODO Fix design of physical geoms. it's borken
-** TODO AtlasSprite, setup a grid and select cell
+** TODO AtlasSprite, setup a grid and select cell. put it in sprite
+** TODO Geoms should have a priority
+** TODO Finer collision areas for geoms (one big-pass, then a finer-grained pass customized by the geom)
+** TODO Update the logic at a certain interval
+** TODO Update next state instead of current state in logic, let graphics interpolate
+   
