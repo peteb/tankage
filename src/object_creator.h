@@ -13,6 +13,7 @@ class Bullet;
 class Snail;
 class World;
 class Object;
+class Helmet;
 
 class ObjectCreator {
 public:
@@ -23,7 +24,8 @@ public:
 private:
    Ref<Bullet>::SharedPtr createBullet();
    Ref<Snail>::SharedPtr createSnail(int team, ObjectCreator & creator);
-
+   Ref<Helmet>::SharedPtr createHelmet(int dir);
+   
    World & world;
 };
 

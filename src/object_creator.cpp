@@ -16,6 +16,7 @@
 #include "physics/body.h"
 #include "physics/geom.h"
 #include "ref.h"
+#include "helmet.h"
 
 ObjectCreator::ObjectCreator(World & world)
    : world(world)
@@ -77,22 +78,23 @@ Ref<Snail>::SharedPtr ObjectCreator::createSnail(int team, ObjectCreator & creat
    newSnail->physGeom->setEventHandler(Observing(newSnail));
 
 
+
    // TODO: this is ugly
    if (team == 1) {
 	  newSnail->physGeom->setOffset(vec2(2.0f, -4.0f));
 	  newSnail->logic->weaponDir = vec2(-1.0f, 0.0f);
 	  newSnail->logic->weaponPos = vec2(-50.0f, 1.0f);
 	  newSnail->helmet->setCell(1, 0);
-	  newSnail->helmet->setOffset(vec2(-15.0f, -15.0f));
+	  newSnail->helmet->setOffset(vec2(-15.0f, -14.0f));
    }
    else { // first snail. not obvious.
 	  newSnail->physGeom->setOffset(vec2(2.0f, -5.0f));
 	  newSnail->logic->weaponDir = vec2(1.0f, 0.0f);
 	  newSnail->logic->weaponPos = vec2(50.0f, 1.0f);
 	  newSnail->helmet->setCell(0, 0);
-	  newSnail->helmet->setOffset(vec2(19.0f, -16.0f));
+	  newSnail->helmet->setOffset(vec2(20.0f, -15.0f));
    }
-   
+
    if (team == 0)
       newSnail->physGeom->setCollisionId(1);
    else
@@ -132,9 +134,19 @@ Ref<Object>::SharedPtr ObjectCreator::createObject(const std::string & type, Obj
 	  newCactus->geom->setCollisionMask(0x8u);
 	  newCactus->geom->setEventHandler(Observing(newCactus));
 	  newCactus->geom->setOffset(vec2(-1.0f, -2.0f));
+
 	  return newCactus;
    }
 	
 
    throw std::runtime_error("failed to create object of type '" + type + "', I don't know what it is!");
+}
+
+Ref<Helmet>::SharedPtr ObjectCreator::createHelmet(int dir) {
+   Ref<Helmet>::SharedPtr newHelmet(new Helmet);
+   newHelmet->sprite = Owning(world.graphics.createSprite("../data/helmets.png"));
+   newHelmet->sprite->setGrid(2, 2);
+   newHelmet->sprite->setCell(0, 0);
+
+   return newHelmet;
 }

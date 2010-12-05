@@ -186,3 +186,7 @@
 	[25] worked on sprite delegates
 	[25] sprite delegates and the helmet, making it look good
 	[25] atlas sprite feature
+
+2010-12-05
+    [25] improved the helmet, added helmet object type
+    [25] worked on system design relating to helmet and relative positions

@@ -9,6 +9,7 @@
 #include "graphics/render_list.h"
 #include "graphics/mesh.h"
 #include <cmath>
+#include <iostream>
 
 using Graphics::Sprite;
 using Graphics::Renderer;
@@ -30,21 +31,10 @@ std::vector<Vertex2T2> Sprite::constructVertices() const {
    
    rect offsetRect = size;
    offsetRect.origin += position + offset;
+
    vec2 ul, lr;
    offsetRect.getCoords(ul, lr);
-
-//     ul.x = floor(ul.x) + 0.5;
-//     ul.y = floor(ul.y) + 0.5;
-//     lr.x = floor(lr.x) + 0.5;
-//     lr.y = floor(lr.y) + 0.5;
-//   lr.x = ul.x + 64.0f;
-//   lr.y = ul.y + 64.0f;
-
    
-//    float t1x = 0.5f/64.0f;
-//    float t1y = 0.5f/64.0f;
-//    float t2x = (64.0f-0.5f)/64.0f;
-//    float t2y = (64.0f-0.5f)/64.0f;
 
    float cw = 1.0f / static_cast<float>(columns);
    float ch = 1.0f / static_cast<float>(rows);

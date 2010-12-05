@@ -15,5 +15,7 @@ public:
    virtual void trigger(const std::string & action, int state) = 0;
 };
 
+// TODO: delegate = stream output, ref<grej>.
+// setDelegate(Owning(new TransformForwarder(helmetSprite, vec2(blah blah), mat(blah)))
 
 #endif /* end of include guard: TRIGGERABLE_H_YUJ548TD */

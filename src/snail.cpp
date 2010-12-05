@@ -15,9 +15,28 @@ Snail::Snail() {
    health = 100;
 }
 
+// TODO: fix event system.
+
 void Snail::setPosition(const vec2 & pos) {
    physBody.lock()->setPosition(pos);
-   helmet.lock()->setPosition(pos);
+   // updateHelmet();
+}
+
+vec2 Snail::getPosition() const {
+   return physBody->getPosition();
+}
+
+mat2 Snail::getOrientation() const {
+   return physBody->getOrientation();
+}
+
+void Snail::setOrientation(const mat2 & newOrientation) {
+   physBody->setOrientation(newOrientation);
+}
+
+void Snail::updateHelmet() {
+//   helmet.lock()->setPosition(pos);
+
 }
 
 void Snail::collided(const Ref<Physics::Geom>::SharedPtr & with) {

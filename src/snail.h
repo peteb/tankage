@@ -11,6 +11,7 @@
 #include "ref.h"
 #include "physics/geom.h"
 #include "physics/body.h"
+#include "reference_frame2.h"
 
 namespace Graphics {class Sprite; class Subsystem; }
 namespace Physics {class Geom; }
@@ -26,11 +27,15 @@ public:
    virtual void onHealthChange(float newValue) =0;
 };
 
-class Snail : public Object, public Physics::GeomEventHandler {
+class Snail : public Object, public ReferenceFrame2, public Physics::GeomEventHandler {
 public:
    Snail();
    
    void setPosition(const vec2 & pos);
+   vec2 getPosition() const;
+   mat2 getOrientation() const;
+   void setOrientation(const mat2 & newOrientation);
+
    void collided(const Ref<Physics::Geom>::SharedPtr & with);
    
    void setEventHandler(const Ref<SnailEventHandler> & newHandler);
@@ -44,6 +49,8 @@ public:
    Ref<Physics::Body> physBody;
    
 private:
+   void updateHelmet();
+   
    int health;
 };
 

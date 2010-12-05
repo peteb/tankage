@@ -36,7 +36,6 @@ Game::Game()
 	  snailHealth1->setRenderer(heartFx);
 	  snailHealth1->setDir(1.0f);
 	  firstSnail->logic->setHealthMeter(Observing(snailHealth1));
-	  // TODO: ska man kunna få texture från gfx_subsystem? yes, kör på det tills vidare. sen refactor
    }
 
    {
