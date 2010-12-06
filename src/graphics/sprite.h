@@ -50,12 +50,12 @@ namespace Graphics {
       rect getSize() const;
 	  rect getBoundingBox() const;
       void setEventHandler(const Ref<SpriteEventHandler>::WeakPtr & eventHandler);
-	  void setDelegate(const Ref<Graphics::Sprite> & delegate);
+	  void setDelegate(const Ref<ReferenceFrame2> & delegate);
       
    private:
       std::vector<Vertex2T2> constructVertices() const;
 
-	  Ref<Graphics::Sprite> delegate;
+	  Ref<ReferenceFrame2> delegate;
       Ref<SpriteEventHandler>::WeakPtr eventHandler;
       Ref<Graphics::Renderer>::SharedPtr renderer;
       rect size, originalSize;

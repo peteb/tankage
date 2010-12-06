@@ -61,7 +61,7 @@ rect Sprite::getBoundingBox() const {
 void Sprite::setPosition(const vec2 & newPos) {
    this->position = newPos;
 
-   if (Ref<Graphics::Sprite>::SharedPtr lockedDelegate = delegate.lock())
+   if (Ref<ReferenceFrame2>::SharedPtr lockedDelegate = delegate.lock())
 	  lockedDelegate->setPosition(newPos);
 }
 
@@ -99,7 +99,7 @@ void Sprite::setEventHandler(const Ref<SpriteEventHandler>::WeakPtr & eventHandl
    this->eventHandler = eventHandler;
 }
 
-void Sprite::setDelegate(const Ref<Graphics::Sprite> & delegate) {
+void Sprite::setDelegate(const Ref<ReferenceFrame2> & delegate) {
    this->delegate = delegate;
 }
 

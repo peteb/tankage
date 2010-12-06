@@ -21,6 +21,7 @@ add_executable(snail-wail
   cactus_generator.cpp
   health_meter.cpp
   helmet.cpp
+  reframe_transformer.cpp
   )
 
 

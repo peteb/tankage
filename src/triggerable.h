@@ -17,5 +17,7 @@ public:
 
 // TODO: delegate = stream output, ref<grej>.
 // setDelegate(Owning(new TransformForwarder(helmetSprite, vec2(blah blah), mat(blah)))
+// two ways of doing this, either with the TransformForwarder, or with an event. TODO: event!
+// TODO: maybe, Owning -> owning? Then Cast -> cast, too. so maybe not. maybe do like in llvm?
 
 #endif /* end of include guard: TRIGGERABLE_H_YUJ548TD */
