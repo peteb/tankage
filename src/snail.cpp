@@ -19,7 +19,6 @@ Snail::Snail() {
 
 void Snail::setPosition(const vec2 & pos) {
    physBody.lock()->setPosition(pos);
-   // updateHelmet();
 }
 
 vec2 Snail::getPosition() const {
@@ -32,11 +31,6 @@ mat2 Snail::getOrientation() const {
 
 void Snail::setOrientation(const mat2 & newOrientation) {
    physBody->setOrientation(newOrientation);
-}
-
-void Snail::updateHelmet() {
-//   helmet.lock()->setPosition(pos);
-
 }
 
 void Snail::collided(const Ref<Physics::Geom>::SharedPtr & with) {

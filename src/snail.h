@@ -19,6 +19,7 @@ namespace Physics {class Geom; }
 class PlayerEntity;
 class World;
 class vec2;
+class Helmet;
 
 class SnailEventHandler {
 public:
@@ -43,14 +44,12 @@ public:
 
    Ref<SnailEventHandler> eventHandler;
    Ref<Graphics::Sprite> sprite;
-   Ref<Graphics::Sprite> helmet;
+   Ref<Helmet> helmet;
    Ref<PlayerEntity> logic;
    Ref<Physics::Geom> physGeom;
    Ref<Physics::Body> physBody;
    
 private:
-   void updateHelmet();
-   
    int health;
 };
 

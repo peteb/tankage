@@ -175,6 +175,8 @@
 2010-11-25
 	[25] added a default renderer and geoms can be rendered
 
+*** Sprite finished, goal (7) not reached (6) total: 87
+
 2010-11-26
 	[25] some minor stuff with collision meshes
 
@@ -187,6 +189,12 @@
 	[25] sprite delegates and the helmet, making it look good
 	[25] atlas sprite feature
 
+*** Sprite finished, goal (7) not reached (6) total: 93
+
 2010-12-05
     [25] improved the helmet, added helmet object type
     [25] worked on system design relating to helmet and relative positions
+
+2010-12-06
+    [25] offsets between sprites are now done using the ReframeTransformer
+    

@@ -58,8 +58,6 @@ Ref<Snail>::SharedPtr ObjectCreator::createSnail(int team, ObjectCreator & creat
       newSnail->sprite = Owning(world.graphics.createSprite("../data/snail_r.png"));
 
 
-   newSnail->helmet = Owning(world.graphics.createSprite("../data/helmets.png"));
-   newSnail->helmet->setGrid(2, 2);
    
                                  
    
@@ -84,31 +82,35 @@ Ref<Snail>::SharedPtr ObjectCreator::createSnail(int team, ObjectCreator & creat
    
    // TODO: this is ugly
    if (team == 1) {
-	  newSnail->physGeom->setOffset(vec2(2.0f, -4.0f));
+      newSnail->helmet = Owning(createHelmet(-1));
+	  newSnail->physGeom->setOffset(vec2(3.0f, -4.0f));
 	  newSnail->logic->weaponDir = vec2(-1.0f, 0.0f);
 	  newSnail->logic->weaponPos = vec2(-50.0f, 1.0f);
-	  newSnail->helmet->setCell(1, 0);
       helmetOffset = vec2(-15.0f, -14.0f);
-//	  newSnail->helmet->setOffset(vec2(-15.0f, -14.0f));
    }
    else { // first snail. not obvious.
+      newSnail->helmet = Owning(createHelmet(1));
+
 	  newSnail->physGeom->setOffset(vec2(2.0f, -5.0f));
 	  newSnail->logic->weaponDir = vec2(1.0f, 0.0f);
 	  newSnail->logic->weaponPos = vec2(50.0f, 1.0f);
-	  newSnail->helmet->setCell(0, 0);
       helmetOffset = vec2(20.0f, -15.0f);
-//	  newSnail->helmet->setOffset(vec2(20.0f, -15.0f));
    }
 
    newSnail->sprite->setDelegate(Owning(new ReframeTransformer(newSnail->helmet, helmetOffset)));
 
-   if (team == 0)
+   if (team == 0) {
       newSnail->physGeom->setCollisionId(1);
-   else
+      newSnail->helmet->geom->setCollisionId(1);
+   }
+   else {
       newSnail->physGeom->setCollisionId(0);
+      newSnail->helmet->geom->setCollisionId(0);
+   }
    
    newSnail->physGeom->setCollisionMask(0x8u);
-
+   newSnail->helmet->geom->setCollisionMask(0x8u);
+   
    return newSnail;
 }
 
@@ -151,9 +153,23 @@ Ref<Object>::SharedPtr ObjectCreator::createObject(const std::string & type, Obj
 
 Ref<Helmet>::SharedPtr ObjectCreator::createHelmet(int dir) {
    Ref<Helmet>::SharedPtr newHelmet(new Helmet);
+
+   // sprite
    newHelmet->sprite = Owning(world.graphics.createSprite("../data/helmets.png"));
    newHelmet->sprite->setGrid(2, 2);
-   newHelmet->sprite->setCell(0, 0);
 
+   if (dir > 0)
+      newHelmet->sprite->setCell(0, 0);
+   else
+      newHelmet->sprite->setCell(1, 0);
+   
+   // body
+   newHelmet->body = Owning(world.physics.createBody());
+   newHelmet->body->setDelegate(newHelmet->sprite);
+   newHelmet->body->setOwner(newHelmet);
+      
+   newHelmet->geom = Owning(world.physics.createRectGeom(rect(26, 26)));
+   newHelmet->geom->setBody(newHelmet->body);
+   
    return newHelmet;
 }
