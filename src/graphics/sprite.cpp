@@ -30,7 +30,7 @@ std::vector<Vertex2T2> Sprite::constructVertices() const {
    vertices.reserve(4);
    
    rect offsetRect = size;
-   offsetRect.origin += position + offset;
+   offsetRect.origin += position;
 
    vec2 ul, lr;
    offsetRect.getCoords(ul, lr);
@@ -54,7 +54,7 @@ std::vector<Vertex2T2> Sprite::constructVertices() const {
 
 rect Sprite::getBoundingBox() const {
    rect ret = getSize();
-   ret.origin = position + offset;
+   ret.origin = position;
    return ret;
 }
 
@@ -63,10 +63,6 @@ void Sprite::setPosition(const vec2 & newPos) {
 
    if (Ref<ReferenceFrame2>::SharedPtr lockedDelegate = delegate.lock())
 	  lockedDelegate->setPosition(newPos);
-}
-
-void Sprite::setOffset(const vec2 & offset) {
-   this->offset = offset;
 }
 
 vec2 Sprite::getPosition() const {
@@ -123,4 +119,3 @@ void Sprite::enqueueRender(const Ref<Graphics::RenderList>::SharedPtr & renderLi
    renderList->insert(renderer, mesh);
 }
 
-// TODO: this shouldn't compile, we're not using enqueueRender anywhere. fix

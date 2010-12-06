@@ -92,3 +92,4 @@
 ** TODO Should GraphicsContext really work by binding?   
 ** TODO Should event handling really need subclassing???
 ** TODO Pick sprite cell from orientation   
+** TODO enqueueRender member functions are not that efficient, improve!

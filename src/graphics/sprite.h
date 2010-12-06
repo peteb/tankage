@@ -46,7 +46,6 @@ namespace Graphics {
 	  void setGrid(int columns, int rows);
 	  void setCell(int x, int y);
 	  
-	  void setOffset(const vec2 & offset);
       rect getSize() const;
 	  rect getBoundingBox() const;
       void setEventHandler(const Ref<SpriteEventHandler>::WeakPtr & eventHandler);
@@ -59,7 +58,7 @@ namespace Graphics {
       Ref<SpriteEventHandler>::WeakPtr eventHandler;
       Ref<Graphics::Renderer>::SharedPtr renderer;
       rect size, originalSize;
-      vec2 position, offset;
+      vec2 position;
       mat2 orientation;
 	  int columns, rows;
 	  int cellX, cellY;
