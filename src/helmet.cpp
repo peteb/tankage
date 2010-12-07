@@ -17,6 +17,9 @@ void Helmet::collided(const Ref<Physics::Geom>::SharedPtr & with) {
       lockedOwner->kill();
       health -= 20;
 
+      if (Ref<Physics::Body>::SharedPtr lockedBody = snailBody.lock())
+         lockedBody->addImpulse(with->getOrientation() * vec2(100.0f, 50.0f));
+
       if (health <= 0) {
          kill();
       }

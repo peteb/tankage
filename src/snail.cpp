@@ -40,7 +40,9 @@ void Snail::collided(const Ref<Physics::Geom>::SharedPtr & with) {
 		 if (static_cast<void *>(bulletOwner->shooter) != static_cast<void *>(this)) { // hit by a bullet
 			bulletOwner->kill();
 			increaseHealth(-5);
-			physBody->addImpulse(with->getOrientation() * vec2(300.0f, 0.0f));
+            float slump = static_cast<float>(2 - rand() % 4) / 2.0f;
+            
+			physBody->addImpulse(with->getOrientation() * vec2(300.0f, slump * 100.0f));
 		 }
 	  }
    }

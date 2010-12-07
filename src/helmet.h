@@ -31,7 +31,8 @@ public:
    Ref<Graphics::Sprite> sprite;
    Ref<Physics::Geom> geom;
    Ref<Physics::Body> body;
-
+   Ref<Physics::Body> snailBody;
+   
 private:
    int health;
 };

@@ -24,10 +24,12 @@ void CactusGenerator::setPosition(const vec2 & pos) {
 
 void CactusGenerator::update(float dt) {
    timeSinceCactus += dt;
-   if (timeSinceCactus > 1.0f) {
+   if (timeSinceCactus > 0.5f) {
 	  timeSinceCactus = 0.0f;
 	  std::cout << "new cactus" << std::endl;
-	  spawnCactus();
+
+      if (rand() % 10 < 5)
+         spawnCactus();
    }
    
 }

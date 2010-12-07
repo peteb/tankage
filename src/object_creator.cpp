@@ -99,6 +99,7 @@ Ref<Snail>::SharedPtr ObjectCreator::createSnail(int team, ObjectCreator & creat
    }
 
    newSnail->helmet = Observing(newHelmet);
+   newSnail->helmet->snailBody = Observing(newSnail->physBody);
    newSnail->sprite->setDelegate(Owning(new ReframeTransformer(newSnail->helmet, helmetOffset)));
    world.insert(newHelmet.lock());
    
