@@ -23,15 +23,13 @@
 ** TODO Improve existing graphics
 *** DONE Cactus graphics
 *** DONE Second snail
-*** TODO Make bullets more apparent
 ** TODO Sprite animations
 *** TODO Shooting
 *** TODO Getting hit
-*** TODO Idle
 ** TODO Health bar animations (when low on health)
-** TODO Improve collision detection
+** DONE Improve collision detection
 *** DONE Better-fitting collision areas
-*** TODO More collision areas (body, helmet)
+*** DONE More collision areas (body, helmet)
 ** TODO Blood splatter (particle system)
 ** TODO Extend arsenal with rocket launcher
 *** TODO Create rocket projectile
@@ -43,25 +41,30 @@
 **** TODO When out of rockets, switch to first weapon	 
 ** TODO Power-ups
 *** TODO Rocket launcher (or additional rockets)
-*** TODO Additional health	
-** TODO Rounds (3 rounds per game)
-** TODO Make bullet collision detection independent of game speed  
+*** TODO Replenish some of the health	
 ** TODO Helmets
-*** Helmets protect against headshots? Should there be special damage for headshots?
+*** DONE Helmets kill bullets and protect the snail   
+*** TODO Add a small impulse to the player when its helmet is hit
 *** TODO Helmets take x amount of damage until they expire	
 ** TODO Run on Windows
 ** TODO Destructible cactii
-
-** TODO Shouldn't be possible to shoot when dead
-   
+*** TODO New graphics
+**** TODO A half cactus
+**** TODO A stub
+*** TODO Detect bullet collisions     
+** TODO Shouldn't be possible to shoot when dead   
 * Major Beta, January 20th
+** The first weapon shouldn't fire rapidly
 ** Helmets can detach from snail and then be picked-up again
 ** "Walker" power-up
 ** Collect feedback from first alpha
 ** Proper player input configuration
 ** AI
-** Menu system
-   
+** Menu system   
+** Rounds (3 rounds per game)
+** Sprite animations
+*** Idle animation
+** Improve graphics    
 * Engine
 ** DONE Platform-independent rendering in components (not in the gfx subsystem)
 ** DONE Build: verify that TR1 can be used for smart pointers using a code test
@@ -84,11 +87,11 @@
 ** TODO Make CMake output more pretty (smart ptr detection, etc)
 ** TODO Fix design of physical geoms. it's borken
 ** DONE AtlasSprite, setup a grid and select cell. put it in sprite
-** TODO Geoms should have a priority
+** DONE Geoms should have a priority
 ** TODO Finer collision areas for geoms (one big-pass, then a finer-grained pass customized by the geom)
 ** TODO Update the logic at a certain interval
 ** TODO Update next state instead of current state in logic, let graphics interpolate
-** TODO Two sprites, one delegate of the other, shouldn't flicker when moving together
+** DONE Two sprites, one delegate of the other, shouldn't flicker when moving together
 ** TODO Should GraphicsContext really work by binding?   
 ** TODO Should event handling really need subclassing???
 ** TODO Pick sprite cell from orientation   

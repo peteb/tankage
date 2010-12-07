@@ -197,4 +197,7 @@
 
 2010-12-06
     [25] offsets between sprites are now done using the ReframeTransformer
-    
+    [25] worked on making geoms have priority levels
+
+2010-12-07
+    [25] helmet vs bullet is now handled correctly

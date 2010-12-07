@@ -168,8 +168,12 @@ Ref<Helmet>::SharedPtr ObjectCreator::createHelmet(int dir) {
    newHelmet->body->setDelegate(newHelmet->sprite);
    newHelmet->body->setOwner(newHelmet);
       
-   newHelmet->geom = Owning(world.physics.createRectGeom(rect(26, 26)));
+   newHelmet->geom = Owning(world.physics.createRectGeom(rect(24, 14)));
    newHelmet->geom->setBody(newHelmet->body);
-   
+   newHelmet->geom->setPriority(-20);
+   newHelmet->geom->setEventHandler(Observing(newHelmet));
+   newHelmet->geom->setOffset(vec2(1.0f * static_cast<float>(dir), -6.0f));
+
    return newHelmet;
 }
+// TODO now: helmet damage

@@ -12,10 +12,20 @@ Data should flow, not be pushed/pulled! Chain consumers using delegates. Remembe
 that this is what the Ref class is meant for; to plug in adapters and converters
 between two objects.
 
-
 ### Example
     sprite->setDelegate(Owning(new Animator(otherSprite)))
        
+### Cons
+
+* Indirections and pointer locking when a property changes,
+  ref.lock() -> Adapter.setPosition -> ref.lock() -> delegate.setPosition.
+  Suggestions; a functor that takes a RefFrame, has some state (coord, orient)
+  and returns a new reframe.
+  A way of cutting down ref.locks and indirections would be to change setPosition/
+  setOrientation into setReferenceFrame. setRefFrame/getRefFrame.
+* Object bloat, the converter probably has some state (coord, orient) and a ref
+  delegate. The delegating object has a ref delegate. Each ref is at least a shared_ptr
+  and a weak_ptr, and maybe even a T*.
    
 Classes
 -------

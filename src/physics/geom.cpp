@@ -16,6 +16,7 @@ Physics::Geom::Geom(const rect & size)
    , collisionMask(0xFFFFFFFFu)
 {
    collisionId = 0;
+   priority = 0;
 }
 
 void Physics::Geom::setBody(const Ref<Physics::Body> & body) {
@@ -98,4 +99,12 @@ void Physics::Geom::enqueueRender(const Ref<Graphics::RenderList>::SharedPtr & r
    Ref<Graphics::Mesh>::SharedPtr mesh(new Graphics::Mesh); // TODO: not good to allocate every time
    mesh->vertices = vertices;
    renderList->insert(Ref<Graphics::Renderer>::SharedPtr(), mesh);
+}
+
+void Physics::Geom::setPriority(int prio) {
+   this->priority = prio;
+}
+
+int Physics::Geom::getPriority() const {
+   return priority;
 }

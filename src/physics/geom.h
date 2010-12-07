@@ -37,7 +37,9 @@ namespace Physics {
       void setRefFrame(const Ref<ReferenceFrame2> & refFrame);
 	  void setEventHandler(const Ref<GeomEventHandler> & eventHandler);
       void setOffset(const vec2 & offset);
-	  
+	  void setPriority(int prio);
+      int getPriority() const;
+
 	  rect getSize() const;
 	  void enqueueRender(const Ref<Graphics::RenderList>::SharedPtr & renderList);
 	  
@@ -60,6 +62,7 @@ namespace Physics {
 	  Ref<GeomEventHandler> eventHandler;
 	  
 	  rect size;
+      int priority;
       
 	  std::bitset<32> collisionMask;
 	  unsigned int collisionId;

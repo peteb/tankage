@@ -6,6 +6,7 @@
 
 #include <iostream>
 #include <set>
+#include <limits>
 
 #include "ref.h"
 #include "phys_subsystem.h"
@@ -80,26 +81,39 @@ void Subsystem::checkCollisions() {
    // second pass, check collisions
    for (GeomVector::iterator it1 = resGeoms.begin(); it1 != resGeoms.end(); ++it1) {      
       for (GeomVector::iterator it2 = resGeoms.begin(); it2 != resGeoms.end(); ++it2) {
+         std::vector<std::pair<int, Ref<Geom>::SharedPtr > > possibleCollisions;
+         int lowestPriority = std::numeric_limits<int>::max();
+         
 		 if (it1->second.get() != it2->second.get()) { 
-			if (it1->second->collisionMask.test(it2->second->collisionId) ||
-				it2->second->collisionMask.test(it1->second->collisionId)) {
+			if (it1->second->collisionMask.test(it2->second->collisionId) /*||
+                                                                            it2->second->collisionMask.test(it1->second->collisionId)*/) {
 
 			   if (rect::intersect(it1->first, it2->first) && collided.find(std::make_pair(it2->second.get(), it1->second.get())) == collided.end() ) {
-				  if (it1->second->collisionMask.test(it2->second->collisionId))
-					 it1->second->collided(it2->second);
-				  if (it2->second->collisionMask.test(it1->second->collisionId))
-					 it2->second->collided(it1->second);
+//                   if (it1->second->collisionMask.test(it2->second->collisionId))
+// 					 it1->second->collided(it2->second);
+// 				  if (it2->second->collisionMask.test(it1->second->collisionId))
+// 					 it2->second->collided(it1->second);
+                  if (it1->second->collisionMask.test(it2->second->collisionId)) {
+					 possibleCollisions.push_back(std::make_pair(it2->second->getPriority(), it2->second));
+                     lowestPriority = std::min(it2->second->getPriority(), lowestPriority);
+                  }
 				  
-				  std::cout << "COLLISION " << it1->second.get() << " - " << it2->second.get() << std::endl;
-
-				  collided.insert(std::make_pair(it1->second.get(), it2->second.get()));
+                  collided.insert(std::make_pair(it1->second.get(), it2->second.get()));
 			   }
 			   
 			}
 			
 		 }
+
+         for (size_t i = 0; i < possibleCollisions.size(); ++i) {
+            if (possibleCollisions[i].first == lowestPriority) {
+               it1->second->collided(possibleCollisions[i].second);
+            }
+         }
+         
       }
    }
+   
 }
 
 void Physics::Subsystem::enqueueGeoms(const Ref<Graphics::RenderList>::SharedPtr & renderList) {
