@@ -8,9 +8,18 @@
 #include "physics/body.h"
 #include "bullet.h"
 
+Helmet::Helmet() {
+   health = 100;
+}
+
 void Helmet::collided(const Ref<Physics::Geom>::SharedPtr & with) {
    if (Ref<Object>::SharedPtr lockedOwner = with->getOwner().lock()) {
       lockedOwner->kill();
+      health -= 20;
+
+      if (health <= 0) {
+         kill();
+      }
    }
 }
 

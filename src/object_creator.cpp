@@ -81,24 +81,27 @@ Ref<Snail>::SharedPtr ObjectCreator::createSnail(int team, ObjectCreator & creat
    vec2 helmetOffset;
    
    // TODO: this is ugly
+   Ref<Helmet> newHelmet;
+   
    if (team == 1) {
-      newSnail->helmet = Owning(createHelmet(-1));
+      newHelmet = Owning(createHelmet(-1));
 	  newSnail->physGeom->setOffset(vec2(3.0f, -4.0f));
 	  newSnail->logic->weaponDir = vec2(-1.0f, 0.0f);
 	  newSnail->logic->weaponPos = vec2(-50.0f, 1.0f);
       helmetOffset = vec2(-15.0f, -14.0f);
    }
    else { // first snail. not obvious.
-      newSnail->helmet = Owning(createHelmet(1));
-
+      newHelmet = Owning(createHelmet(1));
 	  newSnail->physGeom->setOffset(vec2(2.0f, -5.0f));
 	  newSnail->logic->weaponDir = vec2(1.0f, 0.0f);
 	  newSnail->logic->weaponPos = vec2(50.0f, 1.0f);
       helmetOffset = vec2(20.0f, -15.0f);
    }
 
+   newSnail->helmet = Observing(newHelmet);
    newSnail->sprite->setDelegate(Owning(new ReframeTransformer(newSnail->helmet, helmetOffset)));
-
+   world.insert(newHelmet.lock());
+   
    if (team == 0) {
       newSnail->physGeom->setCollisionId(1);
       newSnail->helmet->geom->setCollisionId(1);

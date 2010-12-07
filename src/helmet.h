@@ -17,6 +17,8 @@ namespace Graphics {class Sprite; }
 
 class Helmet : public Object, public ReferenceFrame2, public Physics::GeomEventHandler {
 public:
+   Helmet();
+   
    void collided(const Ref<Physics::Geom>::SharedPtr & with);
 
    // ReferenceFrame2
@@ -29,6 +31,9 @@ public:
    Ref<Graphics::Sprite> sprite;
    Ref<Physics::Geom> geom;
    Ref<Physics::Body> body;
+
+private:
+   int health;
 };
 
 #endif // !HELMET_H
