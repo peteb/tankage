@@ -28,7 +28,7 @@ Game::Game()
    {
  	  Ref<Snail> snail = Owning(Cast<Snail>(creator.createObject("snail1", creator)));
  	  world.insert(snail.lock());
-	  snail->setPosition(vec2(100.0f, 400.0f));
+	  snail->setTransform(CoordSystemData2(vec2(100.0f, 400.0f), mat2::Identity));
       firstSnail = Observing(snail);
       snailHealth1 = Owning(new HealthMeter);
 	  snailHealth1->setValue(100.0f);
@@ -41,7 +41,7 @@ Game::Game()
    {
       Ref<Snail> snail = Owning(Cast<Snail>(creator.createObject("snail2", creator)));
       world.insert(snail.lock());
-      snail->setPosition(vec2(700.0f, 400.0f));
+      snail->setTransform(CoordSystemData2(vec2(700.0f, 400.0f), mat2::Identity));
       secondSnail = Observing(snail);
       snailHealth2 = Owning(new HealthMeter);
       snailHealth2->setValue(100.0f);
@@ -51,8 +51,8 @@ Game::Game()
       secondSnail->logic->setHealthMeter(Observing(snailHealth2));
    }
 
-   firstSnail->setPosition(vec2(100.0f, 300.0f));
-   secondSnail->setPosition(vec2(700.0f, 300.0f));
+   firstSnail->setTransform(CoordSystemData2(vec2(100.0f, 300.0f), mat2::Identity));
+   secondSnail->setTransform(CoordSystemData2(vec2(700.0f, 300.0f), mat2::Identity));
    
    playerInput1.setRefFrameDelegate(Observing(firstSnail->logic));
    playerInput1.setActionDelegate(Observing(firstSnail->logic));

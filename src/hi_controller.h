@@ -10,7 +10,7 @@
 #include <vector>
 #include "ref.h"
 
-class ReferenceFrame2;
+class CoordSystem2;
 class Triggerable;
 
 class HiController {
@@ -21,11 +21,11 @@ public:
    void startDirection(int dir);
    void stopDirection(int dir);
    void update(float dt);
-   void setRefFrameDelegate(const Ref<ReferenceFrame2> & newTarget);
+   void setRefFrameDelegate(const Ref<CoordSystem2> & newTarget);
    void setActionDelegate(const Ref<Triggerable> & newTarget);
    
 private:
-   Ref<ReferenceFrame2> reframeDelegate;
+   Ref<CoordSystem2> reframeDelegate;
    Ref<Triggerable> actionDelegate;
    std::vector<bool> activeDirs;
    std::string identifier;

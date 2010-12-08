@@ -15,7 +15,7 @@ Physics::Body::Body(Physics::Subsystem & subsystem)
    
 }
 
-void Physics::Body::setDelegate(const Ref<ReferenceFrame2> & newTarget) {
+void Physics::Body::setDelegate(const Ref<CoordSystem2> & newTarget) {
    delegate = newTarget;
 }
 
@@ -28,27 +28,21 @@ Ref<Object>::WeakPtr Physics::Body::getOwner() const {
 }
 
 void Physics::Body::update(float dt) {
-   if (Ref<ReferenceFrame2>::SharedPtr target = delegate.lock()) {
+   if (Ref<CoordSystem2>::SharedPtr target = delegate.lock()) {
       position += velocity * dt;
-      target->setPosition(position);  
+      target->setTransform(CoordSystemData2(position, orientation));  
    }
 }
 
-void Physics::Body::setPosition(const vec2 & pos) {
-   position = pos;
+void Physics::Body::setTransform(const CoordSystemData2 & cs) {
+   orientation = cs.orientation;
+   position = cs.position;
 }
 
-vec2 Physics::Body::getPosition() const {
-   return position;
+CoordSystemData2 Physics::Body::getTransform() const {
+   return CoordSystemData2(position, orientation);
 }
 
-void Physics::Body::setOrientation(const mat2 & orient) {
-   this->orientation = orient;
-}
-
-mat2 Physics::Body::getOrientation() const {
-   return orientation;
-}
 
 // void Physics::Body::setVelocity(const vec2 & vel) {
 //    velocity = vel;

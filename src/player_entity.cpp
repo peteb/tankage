@@ -31,9 +31,9 @@ void PlayerEntity::shoot() {
    const vec2 forward = weaponDir;
    
    Ref<Bullet>::SharedPtr bullet = Cast<Bullet>(creator.createObject("bullet", creator));
-   bullet->setPosition(getPosition() + weaponPos);
+   bullet->setTransform(CoordSystemData2(getTransform().position + weaponPos, getTransform().orientation));
    bullet->body->addImpulse(vec2(1400.0f, 0.0f) * forward);
-   bullet->body->setOrientation(mat2(weaponDir, vec2(0.0f, 1.0f)));
+   bullet->body->setTransform(CoordSystemData2(bullet->body->getTransform().position, mat2(weaponDir, vec2(0.0f, 1.0f))));
    
    if (Ref<Physics::Body>::SharedPtr lockedTarget = target.lock())
 	  lockedTarget->addImpulse(vec2(-100.0f, 0.0f) * forward);
@@ -70,7 +70,7 @@ void PlayerEntity::update(float dt) {
 	  } */
 
    if (Ref<Physics::Body>::SharedPtr lockedTarget = target.lock()) {
-      vec2 pos = lockedTarget->getPosition();
+      vec2 pos = lockedTarget->getTransform().position;
       pos.x = std::max(pos.x, 32.0f);
       pos.x = std::min(pos.x, 800.0f - 32.0f);
       pos.y = std::max(pos.y, 32.0f);
@@ -84,32 +84,16 @@ void PlayerEntity::update(float dt) {
 	  }
 
 	  lockedTarget->addImpulse(-lockedTarget->getVelocity() * 0.005f);
-	  lockedTarget->setPosition(pos + delta * 5.0f * dt);
+	  lockedTarget->setTransform(CoordSystemData2(pos + delta * 5.0f * dt, lockedTarget->getTransform().orientation));
    }
 }
 
-void PlayerEntity::setPosition(const vec2 & newPos) {
-   if (Ref<Physics::Body>::SharedPtr acquiredTarget = target.lock())
-      acquiredTarget->setPosition(newPos);
+void PlayerEntity::setTransform(const CoordSystemData2 & cs) {
+   target->setTransform(cs);
 }
 
-vec2 PlayerEntity::getPosition() const {
-   if (Ref<Physics::Body>::SharedPtr acquiredTarget = target.lock())
-      return acquiredTarget->getPosition();
-
-   return vec2::Zero;
-}
-
-void PlayerEntity::setOrientation(const mat2 & newOrientation) {
-   if (Ref<Physics::Body>::SharedPtr acquiredTarget = target.lock())
-      acquiredTarget->setOrientation(newOrientation);   
-}
-
-mat2 PlayerEntity::getOrientation() const {
-   if (Ref<Physics::Body>::SharedPtr acquiredTarget = target.lock())
-      return acquiredTarget->getOrientation();
-   
-   return mat2::Identity;
+CoordSystemData2 PlayerEntity::getTransform() const {
+   return target->getTransform();
 }
 
 #include <iostream>

@@ -6,14 +6,14 @@
 
 #include "reframe_transformer.h"
 
-ReframeTransformer::ReframeTransformer(const Ref<ReferenceFrame2> & delegate, const vec2 & coord, const mat2 & orient)
+ReframeTransformer::ReframeTransformer(const Ref<CoordSystem2> & delegate, const vec2 & coord, const mat2 & orient)
    : delegate(delegate)
    , coord(coord)
    , orient(orient)
 {
 }
 
-vec2 ReframeTransformer::getPosition() const {
+/*vec2 ReframeTransformer::getPosition() const {
    if (Ref<ReferenceFrame2>::SharedPtr lockedDelegate = delegate.lock())
       return lockedDelegate->getPosition() - coord;
 
@@ -36,6 +36,17 @@ void ReframeTransformer::setOrientation(const mat2 & newOrientation) {
    if (Ref<ReferenceFrame2>::SharedPtr lockedDelegate = delegate.lock())
       lockedDelegate->setOrientation(newOrientation); // TODO  
 
+}
+
+*/
+void ReframeTransformer::setTransform(const CoordSystemData2 & cs) {
+   if (Ref<CoordSystem2>::SharedPtr lockedDelegate = delegate.lock()) {
+      lockedDelegate->setTransform(CoordSystemData2(cs.position + coord, orient));
+   }
+}
+
+CoordSystemData2 ReframeTransformer::getTransform() const {
+   return CoordSystemData2(delegate->getTransform().position - coord, orient);  
 }
 
 

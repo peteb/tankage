@@ -39,7 +39,7 @@ void CactusGenerator::spawnCactus() {
 
    vec2 startPos = origin;
    startPos.x += static_cast<float>(rand() % 50) * 1.5f;
-   cactus->setPosition(startPos);
+   cactus->setTransform(CoordSystemData2(startPos, cactus->getTransform().orientation));
    
    cactus->body->addImpulse(vec2(0.0f, -140.0f));
    world.insert(cactus);

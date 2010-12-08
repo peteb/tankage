@@ -8,7 +8,7 @@
 #define BULLET_H_1LH5R0L7
 
 #include "object.h"
-#include "reference_frame2.h"
+#include "coord_system2.h"
 #include "graphics/sprite.h"
 #include "ref.h"
 
@@ -17,14 +17,11 @@ namespace Physics {class Body; class Geom; }
 
 class World;
 
-class Bullet : public Object, public ReferenceFrame2, public Graphics::SpriteEventHandler {
+class Bullet : public Object, public CoordSystem2, public Graphics::SpriteEventHandler {
 public:
-   // ReferenceFrame2 ------------------------------------------------
-   void setPosition(const vec2 & pos);
-   vec2 getPosition() const;
-   void setOrientation(const mat2 & orient);
-   mat2 getOrientation() const;
-   // ----------------------------------------------------------------
+   void setTransform(const CoordSystemData2 & cs);
+   CoordSystemData2 getTransform() const;
+   
    
    void leftView();
 

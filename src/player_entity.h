@@ -7,7 +7,7 @@
 #ifndef PLAYER_ENTITY_H_5TG24XG5
 #define PLAYER_ENTITY_H_5TG24XG5
 
-#include "reference_frame2.h"
+#include "coord_system2.h"
 #include "triggerable.h"
 #include "updatable.h"
 #include "ref.h"
@@ -19,7 +19,7 @@ class HealthMeter;
 
 namespace Physics {class Body; }
 
-class PlayerEntity : public ReferenceFrame2, public Triggerable, public Updatable, public SnailEventHandler {
+class PlayerEntity : public CoordSystem2, public Triggerable, public Updatable, public SnailEventHandler {
 public:
    PlayerEntity(float x, void * shooterId, ObjectCreator & creator, World & world);
    
@@ -27,11 +27,9 @@ public:
    void setHealthMeter(const Ref<HealthMeter> & newMeter);
    void update(float dt);
    
-   // ReferenceFrame2 --------------------------------------
-   void setPosition(const vec2 & newPos);
-   vec2 getPosition() const;
-   void setOrientation(const mat2 & newOrientation);
-   mat2 getOrientation() const;
+   // CoordSystem2 --------------------------------------
+   void setTransform(const CoordSystemData2 & cs);
+   CoordSystemData2 getTransform() const;
    
    // Updatable --------------------------------------------
    void trigger(const std::string & action, int state);

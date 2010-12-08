@@ -13,7 +13,7 @@
 
 Physics::Geom::Geom(const rect & size)
    : size(size)
-   , collisionMask(0xFFFFFFFFu)
+   , collisionMask(0xFFFFFFFFU)
 {
    collisionId = 0;
    priority = 0;
@@ -23,7 +23,7 @@ void Physics::Geom::setBody(const Ref<Physics::Body> & body) {
    this->linkedBody = body;
 }
 
-void Physics::Geom::setRefFrame(const Ref<ReferenceFrame2> & refFrame) {
+void Physics::Geom::setRefFrame(const Ref<CoordSystem2> & refFrame) {
    this->refFrame = refFrame;
 }
 
@@ -31,28 +31,24 @@ rect Physics::Geom::getSize() const {
    return size;
 }
 
-void Physics::Geom::setPosition(const vec2 & newPos) {
-   this->position = newPos;
-}
-
-vec2 Physics::Geom::getPosition() const {
-   return position;
-}
-
-void Physics::Geom::setOffset(const vec2 & offset)
-{
+void Physics::Geom::setOffset(const vec2 & offset) {
    size.origin = offset;
 }
 
-void Physics::Geom::setOrientation(const mat2 & orient) {
+
+// mat2 Physics::Geom::getOrientation() const {
+//    if (Ref<Physics::Body>::SharedPtr lockedBody = linkedBody.lock())
+// 	  return lockedBody->getOrientation();
    
+//    return mat2::Identity;
+// }
+
+void Physics::Geom::setTransform(const CoordSystemData2 & cs) {
+   position = cs.position;
 }
 
-mat2 Physics::Geom::getOrientation() const {
-   if (Ref<Physics::Body>::SharedPtr lockedBody = linkedBody.lock())
-	  return lockedBody->getOrientation();
-   
-   return mat2::Identity;
+CoordSystemData2 Physics::Geom::getTransform() const {
+   return CoordSystemData2(position, mat2::Identity);
 }
 
 void Physics::Geom::setCollisionId(unsigned int collisionId) {
@@ -82,9 +78,9 @@ void Physics::Geom::collided(const Ref<Geom>::SharedPtr & with) {
 void Physics::Geom::enqueueRender(const Ref<Graphics::RenderList>::SharedPtr & renderList) {
    vec2 position;
    if (Ref<Physics::Body>::SharedPtr lockedBody = linkedBody.lock())
-	  position = lockedBody->getPosition();
-   else if (Ref<ReferenceFrame2>::SharedPtr lockedRef = refFrame.lock())
-	  position = lockedRef->getPosition();
+	  position = lockedBody->getTransform().position;
+   else if (Ref<CoordSystem2>::SharedPtr lockedRef = refFrame.lock())
+	  position = lockedRef->getTransform().position;
 
    position += size.origin;
    

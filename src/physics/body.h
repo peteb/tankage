@@ -7,7 +7,7 @@
 #ifndef BODY_H_JI764YY5
 #define BODY_H_JI764YY5
 
-#include "reference_frame2.h"
+#include "coord_system2.h"
 #include "ref.h"
 
 class Object;
@@ -18,7 +18,7 @@ namespace Physics {
    /*
     * A physical body that can be acted upon through forces
     */
-   class Body : public ReferenceFrame2 {
+   class Body : public CoordSystem2 {
    private:
       Body(Physics::Subsystem & subsystem); 
       
@@ -27,7 +27,7 @@ namespace Physics {
       friend class Physics::Subsystem;
 
       void update(float dt);
-      void setDelegate(const Ref<ReferenceFrame2> & newTarget);
+      void setDelegate(const Ref<CoordSystem2> & newTarget);
 
 	  void addImpulse(const vec2 & vel);
 	  //void setVelocity(const vec2 & vel);
@@ -36,16 +36,13 @@ namespace Physics {
 	  void setOwner(const Ref<Object>::WeakPtr & owner);
 	  Ref<Object>::WeakPtr getOwner() const;
 	  
-      // Referenceframe2 ---------------------------------------
-      void setPosition(const vec2 & pos);
-      vec2 getPosition() const;
-      void setOrientation(const mat2 & orient);
-      mat2 getOrientation() const;
-      // -------------------------------------------------------
+      // CoordSystem2 ---------------------------------------
+      void setTransform(const CoordSystemData2 & cs);
+      CoordSystemData2 getTransform() const;
       
    private:
       Physics::Subsystem & subsystem;
-      Ref<ReferenceFrame2> delegate;
+      Ref<CoordSystem2> delegate;
 	  Ref<Object>::WeakPtr owner;
       vec2 position, velocity;
 	  mat2 orientation;

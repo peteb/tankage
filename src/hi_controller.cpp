@@ -38,18 +38,19 @@ void HiController::stopDirection(int dir) {
 void HiController::update(float dt) {
    static const float speed = 300.0f;
    
-   if (Ref<ReferenceFrame2>::SharedPtr acquiredTarget = reframeDelegate.lock()) {
+   if (Ref<CoordSystem2>::SharedPtr acquiredTarget = reframeDelegate.lock()) {
       for (unsigned i = 0; i < activeDirs.size(); ++i) {
          if (activeDirs[i])
-            acquiredTarget->setPosition(
-               acquiredTarget->getPosition() + dirToVecMap[i] * speed * dt
+            acquiredTarget->setTransform(
+               /* FIXME */
+               CoordSystemData2(acquiredTarget->getTransform().position + dirToVecMap[i] * speed * dt, acquiredTarget->getTransform().orientation)
             );
       }
    }
 }
 
 void HiController::setRefFrameDelegate(
-   const Ref<ReferenceFrame2> & newTarget) 
+   const Ref<CoordSystem2> & newTarget) 
 {
    this->reframeDelegate = newTarget;
 }

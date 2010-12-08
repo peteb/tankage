@@ -10,23 +10,20 @@
 #include "object.h"
 #include "physics/geom.h"
 #include "ref.h"
-#include "reference_frame2.h"
+#include "coord_system2.h"
 
 namespace Physics {class Geom; class Body; }
 namespace Graphics {class Sprite; }
 
-class Helmet : public Object, public ReferenceFrame2, public Physics::GeomEventHandler {
+class Helmet : public Object, public CoordSystem2, public Physics::GeomEventHandler {
 public:
    Helmet();
    
    void collided(const Ref<Physics::Geom>::SharedPtr & with);
 
-   // ReferenceFrame2
-   vec2 getPosition() const;
-   void setPosition(const vec2 & newPos);
-   mat2 getOrientation() const;
-   void setOrientation(const mat2 & newOrientation);
-   // !ReferenceFrame2
+   // CoordSystem2
+   void setTransform(const CoordSystemData2 & cs);
+   CoordSystemData2 getTransform() const;
    
    Ref<Graphics::Sprite> sprite;
    Ref<Physics::Geom> geom;

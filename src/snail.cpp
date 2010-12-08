@@ -17,21 +17,14 @@ Snail::Snail() {
 
 // TODO: fix event system.
 
-void Snail::setPosition(const vec2 & pos) {
-   physBody.lock()->setPosition(pos);
+void Snail::setTransform(const CoordSystemData2 & cs) {
+   physBody->setTransform(cs);
 }
 
-vec2 Snail::getPosition() const {
-   return physBody->getPosition();
+CoordSystemData2 Snail::getTransform() const {
+   return physBody->getTransform();
 }
 
-mat2 Snail::getOrientation() const {
-   return physBody->getOrientation();
-}
-
-void Snail::setOrientation(const mat2 & newOrientation) {
-   physBody->setOrientation(newOrientation);
-}
 
 void Snail::collided(const Ref<Physics::Geom>::SharedPtr & with) {
    // TODO: this is ugly
@@ -42,7 +35,7 @@ void Snail::collided(const Ref<Physics::Geom>::SharedPtr & with) {
 			increaseHealth(-5);
             float slump = static_cast<float>(2 - rand() % 4) / 2.0f;
             
-			physBody->addImpulse(with->getOrientation() * vec2(300.0f, slump * 100.0f));
+			physBody->addImpulse(with->getTransform().orientation * vec2(300.0f, slump * 100.0f));
 		 }
 	  }
    }

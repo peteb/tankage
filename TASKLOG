@@ -201,3 +201,7 @@
 
 2010-12-07
     [25] helmet vs bullet is now handled correctly
+    [25] helmets can now take damage from bullets, also, the collision responses were refined
+    
+2010-12-08
+    [2h] refactoring, adding comment headers, changed ReferenceFrame into CoordSystem

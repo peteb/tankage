@@ -9,21 +9,14 @@
 #include "physics/body.h"
 #include "bullet.h"
 
-void Cactus::setPosition(const vec2 & pos) {
-   body.lock()->setPosition(pos);
+void Cactus::setTransform(const CoordSystemData2 & cs) {
+   body->setTransform(cs);
 }
 
-vec2 Cactus::getPosition() const {
-   return body.lock()->getPosition();
+CoordSystemData2 Cactus::getTransform() const {
+   return body->getTransform();
 }
 
-void Cactus::setOrientation(const mat2 & orient) {
-   body.lock()->setOrientation(orient);
-}
-
-mat2 Cactus::getOrientation() const {
-   return body.lock()->getOrientation();
-}
 
 void Cactus::leftView() {
    kill();

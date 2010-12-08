@@ -9,7 +9,7 @@
 #define CACTUS_H
 
 #include "object.h"
-#include "reference_frame2.h"
+#include "coord_system2.h"
 #include "graphics/sprite.h"
 #include "ref.h"
 #include "physics/geom.h"
@@ -19,15 +19,12 @@ namespace Physics {class Body; class Geom; }
 
 class World;
 
-class Cactus : public Object, public ReferenceFrame2, public Graphics::SpriteEventHandler, public Physics::GeomEventHandler {
+class Cactus : public Object, public CoordSystem2, public Graphics::SpriteEventHandler, public Physics::GeomEventHandler {
 public:
-   // ReferenceFrame2 ------------------------------------------------
-   void setPosition(const vec2 & pos);
-   vec2 getPosition() const;
-   void setOrientation(const mat2 & orient);
-   mat2 getOrientation() const;
-   // ----------------------------------------------------------------
-
+   // CoordSystem2 ------------------------------------------------
+   void setTransform(const CoordSystemData2 & cs);
+   CoordSystemData2 getTransform() const;
+   
    void collided(const Ref<Physics::Geom>::SharedPtr & with);
    void leftView();
 

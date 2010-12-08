@@ -1,29 +1,40 @@
-/*
- * Snail Wail
- * 
- * (c) Copyright 2010 Peter Backman. All Rights Reserved. 
- */
+//===- CoordSysTransformer.h ------------------------------------*- c++ -*-===//
+//
+//                                   Snail Wail
+// 
+// (c) Copyright 2010 Peter Backman. All Rights Reserved. 
+//
+//===----------------------------------------------------------------------===//
+//
+// This file declares the CoordSysTransformer class.
+//
+//===----------------------------------------------------------------------===//
 
-#ifndef REFRAME_TRANSFORMER_H
-#define REFRAME_TRANSFORMER_H
+#ifndef COORDSYS_TRANSFORMER_H
+#define COORDSYS_TRANSFORMER_H
 
-#include "reference_frame2.h"
+#include "coord_system2.h"
 #include "ref.h"
 
-class ReframeTransformer : public ReferenceFrame2 {
+/// This class provides a converter for describing a parent-child relationship
+/// between two coordinate systems.
+class ReframeTransformer : public CoordSystem2 {
 public:
-   ReframeTransformer(const Ref<ReferenceFrame2> & delegate, const vec2 & coord, const mat2 & orient = mat2::Identity);
+
+   /// CoordSysTransformer ctor - Binds the transformer to the child and sets
+   /// the transformation to make.
+   ReframeTransformer(const Ref<CoordSystem2> & delegate,
+                      const vec2 & coord,
+                      const mat2 & orient = mat2::Identity);
    
-   vec2 getPosition() const;
-   void setPosition(const vec2 & newPos);
-   mat2 getOrientation() const;
-   void setOrientation(const mat2 & newOrientation);
+   void setTransform(const CoordSystemData2 & cs);
+   CoordSystemData2 getTransform() const;
 
 
 private:
-   Ref<ReferenceFrame2> delegate;
+   Ref<CoordSystem2> delegate;
    vec2 coord;
    mat2 orient;
 };
 
-#endif // !REFRAME_TRANSFORMER_H
+#endif // !COORDSYS_TRANSFORMER_H

@@ -8,21 +8,14 @@
 //#include "world.h"
 #include "physics/body.h"
 
-void Bullet::setPosition(const vec2 & pos) {
-   body.lock()->setPosition(pos);
+void Bullet::setTransform(const CoordSystemData2 & cs) {
+   body->setTransform(cs);
 }
 
-vec2 Bullet::getPosition() const {
-   return body.lock()->getPosition();
+CoordSystemData2 Bullet::getTransform() const {
+   return body->getTransform();
 }
 
-void Bullet::setOrientation(const mat2 & orient) {
-   body.lock()->setOrientation(orient);
-}
-
-mat2 Bullet::getOrientation() const {
-   return body.lock()->getOrientation();
-}
 
 
 void Bullet::leftView() {

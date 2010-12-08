@@ -18,7 +18,7 @@ void Helmet::collided(const Ref<Physics::Geom>::SharedPtr & with) {
       health -= 20;
 
       if (Ref<Physics::Body>::SharedPtr lockedBody = snailBody.lock())
-         lockedBody->addImpulse(with->getOrientation() * vec2(100.0f, 50.0f));
+         lockedBody->addImpulse(with->getTransform().orientation * vec2(100.0f, 50.0f));
 
       if (health <= 0) {
          kill();
@@ -26,19 +26,12 @@ void Helmet::collided(const Ref<Physics::Geom>::SharedPtr & with) {
    }
 }
 
-vec2 Helmet::getPosition() const {
-   return body->getPosition();
+void Helmet::setTransform(const CoordSystemData2 & cs) {
+   body->setTransform(cs);
 }
 
-void Helmet::setPosition(const vec2 & newPos) {
-   body->setPosition(newPos);
+CoordSystemData2 Helmet::getTransform() const {
+   return body->getTransform();
 }
 
-mat2 Helmet::getOrientation() const {
-   return body->getOrientation();
-}
-
-void Helmet::setOrientation(const mat2 & newOrientation) {
-
-}
 

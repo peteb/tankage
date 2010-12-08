@@ -58,24 +58,18 @@ rect Sprite::getBoundingBox() const {
    return ret;
 }
 
-void Sprite::setPosition(const vec2 & newPos) {
-   this->position = newPos;
+void Sprite::setTransform(const CoordSystemData2 & cs) {
+   position = cs.position;
+   orientation = cs.orientation;
 
-   if (Ref<ReferenceFrame2>::SharedPtr lockedDelegate = delegate.lock())
-	  lockedDelegate->setPosition(newPos);
+   if (Ref<CoordSystem2>::SharedPtr lockedDelegate = delegate.lock())
+      lockedDelegate->setTransform(cs);
 }
 
-vec2 Sprite::getPosition() const {
-   return position;
+CoordSystemData2 Sprite::getTransform() const {
+   return CoordSystemData2(position, orientation);
 }
 
-void Sprite::setOrientation(const mat2 & orient) {
-   this->orientation = orient;
-}
-
-mat2 Sprite::getOrientation() const {
-   return orientation;
-}
 
 rect Sprite::getSize() const {
    return size;
@@ -95,7 +89,7 @@ void Sprite::setEventHandler(const Ref<SpriteEventHandler>::WeakPtr & eventHandl
    this->eventHandler = eventHandler;
 }
 
-void Sprite::setDelegate(const Ref<ReferenceFrame2> & delegate) {
+void Sprite::setDelegate(const Ref<CoordSystem2> & delegate) {
    this->delegate = delegate;
 }
 

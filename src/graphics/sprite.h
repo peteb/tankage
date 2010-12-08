@@ -9,7 +9,7 @@
 
 #include <vector>
 #include "math/vec2.h"
-#include "reference_frame2.h"
+#include "coord_system2.h"
 #include "graphics/vertex.h"
 #include "math/rect.h"
 #include "ref.h"
@@ -27,7 +27,7 @@ namespace Graphics {
    };
    
 
-   class Sprite : public ReferenceFrame2 {
+   class Sprite : public CoordSystem2 {
    public:
       Sprite(const Ref<Graphics::Renderer>::SharedPtr & renderer, const rect & size);
 	  
@@ -35,13 +35,9 @@ namespace Graphics {
       void enteredView();
       void leftView();
       
-      // ReferenceFrame2 --------------------------------------------
-      void setPosition(const vec2 & newPos);
-      vec2 getPosition() const;
-      void setOrientation(const mat2 & orient);
-      mat2 getOrientation() const;
-      // ------------------------------------------------------------
-
+      // CoordSystem2 --------------------------------------------
+      void setTransform(const CoordSystemData2 & cs);
+      CoordSystemData2 getTransform() const;
 
 	  void setGrid(int columns, int rows);
 	  void setCell(int x, int y);
@@ -49,12 +45,12 @@ namespace Graphics {
       rect getSize() const;
 	  rect getBoundingBox() const;
       void setEventHandler(const Ref<SpriteEventHandler>::WeakPtr & eventHandler);
-	  void setDelegate(const Ref<ReferenceFrame2> & delegate);
+	  void setDelegate(const Ref<CoordSystem2> & delegate);
       
    private:
       std::vector<Vertex2T2> constructVertices() const;
 
-	  Ref<ReferenceFrame2> delegate;
+	  Ref<CoordSystem2> delegate;
       Ref<SpriteEventHandler>::WeakPtr eventHandler;
       Ref<Graphics::Renderer>::SharedPtr renderer;
       rect size, originalSize;
