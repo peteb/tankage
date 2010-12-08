@@ -1,8 +1,15 @@
-/*
- * Snail Wail
- * 
- * (c) Copyright 2010 Peter Backman. All Rights Reserved. 
- */
+//===- ref.h - Reference class definition -----------------------*- c++ -*-===//
+//
+//                                   Snail Wail
+// 
+// (c) Copyright 2010 Peter Backman. All Rights Reserved. 
+//
+//===----------------------------------------------------------------------===//
+//
+// This file declares the Ref class and helper functions.
+//
+//===----------------------------------------------------------------------===//
+
 
 #ifndef REF_H_CKS8593L
 #define REF_H_CKS8593L
@@ -41,7 +48,8 @@
 
 
 
-
+/// A class that can, at run-time, decide whether it wants to share the object
+/// it's pointing at (shared_ptr), or just observe it (weak_ptr.)
 template<typename T>
 class Ref {
 public:
@@ -112,21 +120,20 @@ public:
 	  return ret;
    }
    
-   // friend class WeakRef<T>;
-   // friend class OwningRef<T>;
-   
 protected:
 	bool owner;
 	SharedPtr sp;
 	WeakPtr wp;
 };
 
+/// Downcasts a reference, similar to dynamic_cast.
 template<typename T, typename Source>
 typename Ref<T>::SharedPtr Cast(const Source & source) {
    return DYNAMIC_PTR_CAST<T>(source);
 }
 
-
+/// Creates an observing reference; when the object pointed at is deleted, the
+/// reference will be invalidated.
 template<typename T>
 Ref<typename T::element_type> Observing(const T & sp) {
    Ref<typename T::element_type> ret;
@@ -141,6 +148,8 @@ Ref<T> Observing(const Ref<T> & ref) {
    return ret;
 }
 
+/// Creates a reference that shares the object pointed at; it will live as long
+/// as the reference lives.
 template<typename T>
 Ref<typename T::element_type> Owning(const T & sp) {
    Ref<typename T::element_type> ret;
