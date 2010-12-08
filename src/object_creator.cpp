@@ -17,7 +17,7 @@
 #include "physics/geom.h"
 #include "ref.h"
 #include "helmet.h"
-#include "reframe_transformer.h"
+#include "coordsystem_transformer.h"
 
 ObjectCreator::ObjectCreator(World & world)
    : world(world)
@@ -100,7 +100,12 @@ Ref<Snail>::SharedPtr ObjectCreator::createSnail(int team, ObjectCreator & creat
 
    newSnail->helmet = Observing(newHelmet);
    newSnail->helmet->snailBody = Observing(newSnail->physBody);
-   newSnail->sprite->setDelegate(Owning(new ReframeTransformer(newSnail->helmet, helmetOffset)));
+   newSnail->sprite->setDelegate(Owning(
+      new CoordSystemTransformer<CoordSystem2>(
+         newSnail->helmet,
+         CoordSystem2::data_type(helmetOffset, mat2::Identity)
+         )
+   ));
    world.insert(newHelmet.lock());
    
    if (team == 0) {

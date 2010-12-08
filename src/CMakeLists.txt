@@ -1,4 +1,4 @@
-# -*- mode: cmake -*-
+# -*- cmake -*-
 
 add_subdirectory(graphics)
 add_subdirectory(physics)
@@ -21,7 +21,7 @@ add_executable(snail-wail
   cactus_generator.cpp
   health_meter.cpp
   helmet.cpp
-  reframe_transformer.cpp
+  coord_system2.cpp
   )
 
 

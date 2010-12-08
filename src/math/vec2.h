@@ -28,6 +28,7 @@ public:
    vec2 & normalize();
    
    static const vec2 Zero;
+   static const vec2 Identity;
    
    float x, y;
 };

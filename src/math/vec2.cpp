@@ -9,6 +9,7 @@
 #include "vec2.h"
 
 const vec2 vec2::Zero(0.0f, 0.0f);
+const vec2 vec2::Identity(0.0f, 0.0f);
  
 vec2::vec2() {
    x = y = 0.0f;

@@ -16,22 +16,41 @@
 #include "math/vec2.h"
 #include "math/mat2.h"
 
-/// CoordSysData2 describes a coordinate system in two dimensions.
+/// CoordSystemData2 describes a coordinate system in two dimensions.
 class CoordSystemData2 {
 public:
-   CoordSystemData2(const vec2 & pos, const mat2 & orient) : position(pos), orientation(orient) {}
+   typedef vec2 position_type; ///< translation/position type
+   typedef mat2 orientation_type; ///< rotation/orientation type
+
+   static CoordSystemData2 Identity; ///< the identity coordinate system,
+                                     ///applying a transform using the identity
+                                     ///will result in no change.
+
+   CoordSystemData2(const position_type & pos, const orientation_type & orient);
    
-   vec2 position;
-   mat2 orientation;
+   /// Transforms the coordinate system through translation and matrix
+   /// multiplication. 
+   CoordSystemData2 & transform(const CoordSystemData2 & other);
+
+   /// Calculates the inverse coordinate system.
+   CoordSystemData2 getInverse() const;
+
+   
+   position_type position;
+   orientation_type orientation;
 };
 
-/// Coordinate system interface.
+/// Interface for modifying and retrieving a coordinate system.
 class CoordSystem2 {
 public:
+   typedef CoordSystemData2 data_type; ///< the concrete data type of the
+                                       ///interface; the kind of data that it
+                                       ///works on.
+
    virtual ~CoordSystem2() {}
 
-   virtual void setTransform(const CoordSystemData2 & cs) =0;
-   virtual CoordSystemData2 getTransform() const =0;
+   virtual void setTransform(const data_type & cs) =0;
+   virtual data_type getTransform() const =0;
 };
 
 #endif /* end of include guard: COORDSYSTEM2_H */
