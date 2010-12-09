@@ -185,4 +185,4 @@ Ref<Helmet>::SharedPtr ObjectCreator::createHelmet(int dir) {
 
    return newHelmet;
 }
-// TODO now: helmet damage
+

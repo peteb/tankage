@@ -51,7 +51,8 @@ void HealthMeter::enqueueRender(const Ref<Graphics::RenderList>::SharedPtr & ren
 	  valuesLeft -= 10.0f;
    }
    
-   Ref<Graphics::Mesh>::SharedPtr mesh(new Graphics::Mesh); // TODO: this is really bad
+   Ref<Graphics::Mesh>::SharedPtr mesh(new Graphics::Mesh);
+   // TODO: this is really bad
    mesh->vertices = vertices;
 
    renderList->insert(renderer, mesh);

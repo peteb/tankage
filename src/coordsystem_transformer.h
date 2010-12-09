@@ -16,28 +16,7 @@
 #include "coord_system2.h"
 #include "ref.h"
 
-/*
-ReframeTransformer::ReframeTransformer(const Ref<CoordSystem2> & delegate, const vec2 & coord, const mat2 & orient)
-   : delegate(delegate)
-   , coord(coord)
-   , orient(orient)
-{
-}
-
-void ReframeTransformer::setTransform(const CoordSystemData2 & cs) {
-   if (Ref<CoordSystem2>::SharedPtr lockedDelegate = delegate.lock()) {
-      lockedDelegate->setTransform(CoordSystemData2(cs.position + coord, orient));
-   }
-}
-
-CoordSystemData2 ReframeTransformer::getTransform() const {
-   return CoordSystemData2(delegate->getTransform().position - coord, orient);  
-}
-*/
-
-
-
-/// This class provides a converter that describes a parent-child relationship
+/// This class is a converter that describes a parent-child relationship
 /// between two coordinate systems.
 template<typename CoordSysT>
 class CoordSystemTransformer : public CoordSysT {
@@ -52,7 +31,8 @@ public:
    {
    }
 
-   
+   /// Transforms the incoming coordinate system with the one in the transformer
+   /// and updates the delegate with it.
    void setTransform(const typename CoordSysT::data_type & cs) {
       typedef typename CoordSysT::data_type CsFrameT;
       
@@ -61,7 +41,9 @@ public:
          lockedDelegate->setTransform(newFrame);
       }
    }
-   
+
+   /// Retrieves the coordinate system of the delegate and applies the inverted
+   /// coordinate system of the transformer.
    typename CoordSysT::data_type getTransform() const {
       typedef typename CoordSysT::data_type CsFrameT;
 
@@ -70,7 +52,7 @@ public:
          return CsFrameT(delegateFrame).transform(frame.getInverse());
       }
       
-      return  CoordSysT::data_type::Identity;
+      return CoordSysT::data_type::Identity;
    }
 
 

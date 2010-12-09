@@ -21,7 +21,7 @@
 ** DONE Restrict window size
 
 * First Alpha, December 16th
-** TODO Orient bullet sprites correctly
+** DONE Orient bullet sprites correctly
 ** DONE Improve existing graphics
 *** DONE Cactus graphics
 *** DONE Second snail
@@ -102,5 +102,6 @@
 ** TODO Should event handling really need subclassing???
 ** TODO Pick sprite cell from orientation   
 ** TODO enqueueRender member functions are not that efficient, improve!
-** TODO setPosition/setOrientation -> setReferenceFrame
+** DONE setPosition/setOrientation -> setReferenceFrame
 ** TODO Improve engine in general (file headers mostly)
+** TODO Investigate whether an object should aggregate a coordsys instead of inherit

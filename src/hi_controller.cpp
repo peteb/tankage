@@ -40,11 +40,11 @@ void HiController::update(float dt) {
    
    if (Ref<CoordSystem2>::SharedPtr acquiredTarget = reframeDelegate.lock()) {
       for (unsigned i = 0; i < activeDirs.size(); ++i) {
-         if (activeDirs[i])
-            acquiredTarget->setTransform(
-               /* FIXME */
-               CoordSystemData2(acquiredTarget->getTransform().position + dirToVecMap[i] * speed * dt, acquiredTarget->getTransform().orientation)
-            );
+         if (activeDirs[i]) {
+            CoordSystemData2 newTransform = acquiredTarget->getTransform();
+            newTransform.position += dirToVecMap[i] * speed * dt;
+            acquiredTarget->setTransform(newTransform);
+         }
       }
    }
 }

@@ -30,12 +30,15 @@ std::vector<Vertex2T2> Sprite::constructVertices() const {
    vertices.reserve(4);
    
    rect offsetRect = size;
-   offsetRect.origin += position;
-
    vec2 ul, lr;
    offsetRect.getCoords(ul, lr);
-   
 
+   // TODO: clean this up with a CoordSystemData
+   ul = orientation * ul;
+   lr = orientation * lr;
+   ul += position;
+   lr += position;
+   
    float cw = 1.0f / static_cast<float>(columns);
    float ch = 1.0f / static_cast<float>(rows);
 

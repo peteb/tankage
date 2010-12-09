@@ -27,25 +27,25 @@ namespace Graphics {
    /// mesh is added without a renderer.   
    class RenderList {
    public:
-	  ~RenderList();
+      ~RenderList();
 
       /// Insert a model/mesh into the list using the renderer, or the default
       /// renderer will be used.
-	  void insert(const Ref<Renderer>::SharedPtr & renderer,
+      void insert(const Ref<Renderer>::SharedPtr & renderer,
                   const Ref<Mesh>::SharedPtr & modelData);
 
       /// Renders all the meshes (using their associated renderers) of the list.
-	  void render(Graphics::Device & target);
+      void render(Graphics::Device & target);
 
       /// Sets the default renderer which will be used if a mesh is added
       /// without a renderer.
-	  void setDefaultRenderer(const Ref<Graphics::Renderer> & renderer);
+      void setDefaultRenderer(const Ref<Graphics::Renderer> & renderer);
 	  
    private:
-	  typedef std::pair<Ref<Renderer>::SharedPtr, Ref<Mesh>::SharedPtr> Model;
+      typedef std::pair<Ref<Renderer>::SharedPtr, Ref<Mesh>::SharedPtr> Model;
 	  
-	  std::vector<Model *> models;
-	  Ref<Graphics::Renderer> defaultRenderer;
+      std::vector<Model *> models;
+      Ref<Graphics::Renderer> defaultRenderer;
    };
 }
 

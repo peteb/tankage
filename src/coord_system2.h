@@ -6,7 +6,9 @@
 //
 //===----------------------------------------------------------------------===//
 //
-// This file declares the CoordSystemData2 class and CoordSystem2 interface.
+// This file declares the CoordSystemData2 class and CoordSystem2
+// interface. These classes are the basis for managing two-dimensional
+// coordinate systems in the engine.
 //
 //===----------------------------------------------------------------------===//
 
@@ -16,7 +18,8 @@
 #include "math/vec2.h"
 #include "math/mat2.h"
 
-/// CoordSystemData2 describes a coordinate system in two dimensions.
+/// CoordSystemData2 describes a coordinate system in two dimensions containing
+/// a position/translation and orientation/rotation.
 class CoordSystemData2 {
 public:
    typedef vec2 position_type; ///< translation/position type
@@ -49,7 +52,12 @@ public:
 
    virtual ~CoordSystem2() {}
 
+   /// Updates the coordinate system with the new one. A successive call to
+   /// getTransform should return the same value as was given to setTransform
+   /// unless it's a read-only coordinate system.
    virtual void setTransform(const data_type & cs) =0;
+
+   /// Returns the coordinate system.
    virtual data_type getTransform() const =0;
 };
 

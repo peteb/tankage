@@ -1,11 +1,18 @@
-/*
- * Snail Wail
- * 
- * (c) Copyright 2010 Peter Backman. All Rights Reserved. 
- */
+//===- sprite.h - Sprite class definition -----------------------*- c++ -*-===//
+//
+//                                   Snail Wail
+// 
+// (c) Copyright 2010 Peter Backman. All Rights Reserved. 
+//
+//===----------------------------------------------------------------------===//
+//
+// This file declares the Sprite class.
+//
+//===----------------------------------------------------------------------===//
 
-#ifndef SPRITE_H_CD2WG4HZ
-#define SPRITE_H_CD2WG4HZ
+
+#ifndef SPRITE_H
+#define SPRITE_H
 
 #include <vector>
 #include "math/vec2.h"
@@ -62,4 +69,4 @@ namespace Graphics {
    
 }
 
-#endif /* end of include guard: SPRITE_H_CD2WG4HZ */
+#endif /* end of include guard: SPRITE_H */

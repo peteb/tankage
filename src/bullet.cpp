@@ -15,9 +15,6 @@ void Bullet::setTransform(const CoordSystemData2 & cs) {
 CoordSystemData2 Bullet::getTransform() const {
    return body->getTransform();
 }
-
-
-
 void Bullet::leftView() {
    kill();
 }

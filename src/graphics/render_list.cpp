@@ -36,7 +36,7 @@ void RenderList::render(Device & target)
 	  const Ref<Renderer>::SharedPtr & renderer = models[i]->first;
 	  const Ref<Mesh>::SharedPtr & meshData = models[i]->second;
 	  
-	  if (meshData && renderer) { // TODO: add default renderer
+	  if (meshData && renderer) {
 		  renderer->render(meshData, target);
 	  }
    }
