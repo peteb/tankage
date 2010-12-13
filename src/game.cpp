@@ -90,8 +90,8 @@ void Game::tick(float dt) {
    }
    
    world.graphics.enqueueVisibleSprites(renderList);
-   snailHealth1->enqueueRender(renderList);
-   snailHealth2->enqueueRender(renderList);
+   snailHealth1->enqueueRender(renderList, dt);
+   snailHealth2->enqueueRender(renderList, dt);
    
    world.graphics.beginFrame();
    world.graphics.render(renderList);

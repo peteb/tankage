@@ -25,10 +25,7 @@
 ** DONE Improve existing graphics
 *** DONE Cactus graphics
 *** DONE Second snail
-** TODO Sprite animations
-*** TODO Shooting
-*** TODO Getting hit
-** TODO Health bar animations (when low on health)
+** DONE Health bar animations (when low on health)
 ** DONE Improve collision detection
 *** DONE Better-fitting collision areas
 *** DONE More collision areas (body, helmet)
@@ -43,7 +40,8 @@
 **** TODO When out of rockets, switch to first weapon	 
 ** TODO Power-ups
 *** TODO Rocket launcher (or additional rockets)
-*** TODO Replenish some of the health	
+*** TODO Replenish some of the health
+**** A cool animation on the health bar?     
 ** DONE Helmets
 *** DONE Helmets kill bullets and protect the snail   
 *** DONE Add a small impulse to the player when its helmet is hit
@@ -54,8 +52,13 @@
 **** TODO A half cactus
 **** TODO A stub
 *** TODO Detect bullet collisions     
-** TODO Shouldn't be possible to shoot when dead   
+** TODO Shouldn't be possible to shoot when dead
+** TODO Point of contact in geom collisions
+** TODO Restore snail collision response   
 * Major Beta, January 20th
+** TODO Sprite animations
+*** TODO Shooting
+*** TODO Getting hit
 ** The first weapon shouldn't fire rapidly
 ** Helmets can detach from snail and then be picked-up again
 ** Collect feedback from first alpha
@@ -102,6 +105,7 @@
 ** TODO Should event handling really need subclassing???
 ** TODO Pick sprite cell from orientation   
 ** TODO enqueueRender member functions are not that efficient, improve!
+*** Store vertices internally? Add vertices to a generic interface class?   
 ** DONE setPosition/setOrientation -> setReferenceFrame
-** TODO Improve engine in general (file headers mostly)
+** TODO Improve engine in general (file headers, function documentation)
 ** TODO Investigate whether an object should aggregate a coordsys instead of inherit
