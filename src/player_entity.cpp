@@ -98,7 +98,8 @@ void PlayerEntity::update(float dt) {
 }
 
 void PlayerEntity::setTransform(const CoordSystemData2 & cs) {
-   target->setTransform(cs);
+   if (Ref<Physics::Body>::SharedPtr lockedBody = target.lock())
+      lockedBody->setTransform(cs);
 }
 
 CoordSystemData2 PlayerEntity::getTransform() const {

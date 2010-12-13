@@ -59,8 +59,8 @@ void HealthMeter::enqueueRender(const Ref<Graphics::RenderList>::SharedPtr & ren
       // calculate a scalar if we're low on health
       float scale = 1.0f;
       if (!ghostHeart && i < 4 && value <= 40.0f) {
-         const float scaleSpeed = 50.0f - value;
-         scale = 1.25f + 0.25f * sin(t * scaleSpeed);
+         const float scaleSpeed = (60.0f - value) / 1.5f;
+         scale = 1.25f + 0.25f * sin((1.0 + t) * scaleSpeed);
       }
 
       // create the mesh data
