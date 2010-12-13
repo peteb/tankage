@@ -47,14 +47,16 @@
 *** DONE Add a small impulse to the player when its helmet is hit
 *** DONE Helmets take x amount of damage until they expire	
 ** TODO Run on Windows
-** TODO Destructible cactii
-*** TODO New graphics
-**** TODO A half cactus
-**** TODO A stub
-*** TODO Detect bullet collisions     
+** DONE Destructible cactii
+*** DONE New graphics
+**** DONE Somewhat damaged, broken in half, stub
+*** DONE Detect bullet collisions
+*** DONE Remove phys geom when dead    
 ** DONE Shouldn't be possible to shoot when dead
 ** TODO Point of contact in geom collisions
-** TODO Restore snail collision response   
+** TODO Restore snail collision response
+** TODO Get hurt by cactii
+** TODO Minimum amount of time between taking damage   
 * Major Beta, January 20th
 ** TODO Sprite animations
 *** TODO Shooting

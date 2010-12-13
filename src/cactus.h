@@ -21,6 +21,8 @@ class World;
 
 class Cactus : public Object, public CoordSystem2, public Graphics::SpriteEventHandler, public Physics::GeomEventHandler {
 public:
+   Cactus();
+   
    // CoordSystem2 ------------------------------------------------
    void setTransform(const CoordSystemData2 & cs);
    CoordSystemData2 getTransform() const;
@@ -31,6 +33,11 @@ public:
    Ref<Graphics::Sprite> sprite;
    Ref<Physics::Body> body;
    Ref<Physics::Geom> geom;
+
+private:
+   void increaseHealth(float by);
+   
+   float health;
 };
 
 #endif /* end of include guard: CACTUS_H */

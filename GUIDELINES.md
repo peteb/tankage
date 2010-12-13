@@ -26,9 +26,21 @@ between two objects.
 * Object bloat, the converter probably has some state (coord, orient) and a ref
   delegate. The delegating object has a ref delegate. Each ref is at least a shared_ptr
   and a weak_ptr, and maybe even a T*.
+
+
    
+Commenting
+----------
+Files that are part of the core/the engine should be fully commented with
+file header, class header, members, etc.
+
+
 Classes
 -------
+A class should strive to be self-sufficient; it shouldn't rely on external
+procedures to get created. The constructor should be enough. Additional data
+should be supplied using member functions.
+
 A class is broken if it fullfills any of the points below:
 
 * It's got a non-descriptive name. It should be easy to tell what a class does

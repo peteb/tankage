@@ -120,6 +120,12 @@ public:
 	  return ret;
    }
    
+   static Ref<T> Null() {
+      Ref<T> ret;
+      ret.setOwning(SharedPtr());
+      return ret;
+   }
+   
 protected:
 	bool owner;
 	SharedPtr sp;

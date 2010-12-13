@@ -9,6 +9,11 @@
 #include "physics/body.h"
 #include "bullet.h"
 
+Cactus::Cactus()
+   : health(100.0f)
+{
+}
+
 void Cactus::setTransform(const CoordSystemData2 & cs) {
    body->setTransform(cs);
 }
@@ -26,7 +31,22 @@ void Cactus::collided(const Ref<Physics::Geom>::SharedPtr & with) {
    if (Ref<Object>::SharedPtr lockedOwner = with->getOwner().lock()) {
 	  if (Ref<Bullet>::SharedPtr bulletOwner = Cast<Bullet>(lockedOwner)) {
 		 bulletOwner->kill();
+         increaseHealth(-45.0f);
 	  }
    }
 }
 
+void Cactus::increaseHealth(float by) {
+   health += by;
+
+   if (health <= 0.0f) {
+      sprite->setCell(3, 0);
+      geom = Ref<Physics::Geom>::Null();
+   }
+   else if (health <= 50.0f) {
+      sprite->setCell(2, 0);
+   }
+   else if (health <= 75.0f) {
+      sprite->setCell(1, 0);
+   }
+}

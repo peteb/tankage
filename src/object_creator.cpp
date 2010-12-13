@@ -138,7 +138,10 @@ Ref<Object>::SharedPtr ObjectCreator::createObject(const std::string & type, Obj
    else if (type == "cactus") {
 	  Ref<Cactus>::SharedPtr newCactus(new Cactus);
 	   
-	  newCactus->sprite = Owning(world.graphics.createSprite("../data/cactus1.png"));
+	  newCactus->sprite = Owning(world.graphics.createSprite("../data/cactii.png"));
+      newCactus->sprite->setGrid(4, 2);
+      newCactus->sprite->setCell(0, 0);
+      
 	  newCactus->sprite->setEventHandler(newCactus);
 
 	  newCactus->body = Owning(world.physics.createBody());
@@ -151,7 +154,6 @@ Ref<Object>::SharedPtr ObjectCreator::createObject(const std::string & type, Obj
 	  newCactus->geom->setCollisionId(4);
 	  newCactus->geom->setCollisionMask(0x8u);
 	  newCactus->geom->setEventHandler(Observing(newCactus));
-	  newCactus->geom->setOffset(vec2(-1.0f, -2.0f));
 
 	  return newCactus;
    }
