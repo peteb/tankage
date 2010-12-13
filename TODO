@@ -52,14 +52,13 @@
 **** TODO A half cactus
 **** TODO A stub
 *** TODO Detect bullet collisions     
-** TODO Shouldn't be possible to shoot when dead
+** DONE Shouldn't be possible to shoot when dead
 ** TODO Point of contact in geom collisions
 ** TODO Restore snail collision response   
 * Major Beta, January 20th
 ** TODO Sprite animations
 *** TODO Shooting
 *** TODO Getting hit
-** The first weapon shouldn't fire rapidly
 ** Helmets can detach from snail and then be picked-up again
 ** Collect feedback from first alpha
 ** Proper player input configuration

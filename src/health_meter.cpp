@@ -22,8 +22,6 @@ void HealthMeter::setValue(float value) {
       t = 0.0f;
    
    this->value = value;
-
-   
 }
 
 void HealthMeter::enqueueRender(const Ref<Graphics::RenderList>::SharedPtr & renderList, float dt) {

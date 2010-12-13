@@ -12,6 +12,7 @@
 #include "physics/body.h"
 #include "health_meter.h"
 #include <algorithm>
+#include <iostream>
 
 PlayerEntity::PlayerEntity(float x, void * shooterId, ObjectCreator & creator, World & world) 
    : creator(creator)
@@ -29,6 +30,12 @@ void PlayerEntity::setTarget(const Ref<Physics::Body> & newTarget) {
 
 void PlayerEntity::shoot() {
    const vec2 forward = weaponDir;
+
+   // TODO: more generic handling of this. weapon should have a coordsystem
+   if (!target.lock()) {
+      std::cout << "Target failed to be locked, not shooting" << std::endl;
+      return;
+   }
    
    Ref<Bullet>::SharedPtr bullet = Cast<Bullet>(creator.createObject("bullet", creator));
    bullet->setTransform(CoordSystemData2(getTransform().position + weaponPos, getTransform().orientation));
@@ -95,10 +102,12 @@ void PlayerEntity::setTransform(const CoordSystemData2 & cs) {
 }
 
 CoordSystemData2 PlayerEntity::getTransform() const {
-   return target->getTransform();
+   if (Ref<Physics::Body>::SharedPtr lockedTarget = target.lock())
+      return lockedTarget->getTransform();
+
+   return CoordSystemData2::Identity;
 }
 
-#include <iostream>
 // 1 = on, 0 = off, -1 = one-shot
 void PlayerEntity::trigger(const std::string & action, int state) {
    std::cout << "received event: " << action << std::endl;

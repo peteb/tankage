@@ -10,6 +10,7 @@
 #include "world.h"
 #include "player_entity.h"
 #include "bullet.h"
+#include "helmet.h"
 
 Snail::Snail() {
    health = 100;
@@ -59,6 +60,8 @@ void Snail::increaseHealth(int add) {
    if (health <= 0.0f) {
 	  std::cout << "snail died" << std::endl;
 	  kill();
+      if (Ref<Helmet>::SharedPtr lockedHelmet = helmet.lock())
+         lockedHelmet->kill();
    }
 
 }
