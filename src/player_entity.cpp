@@ -59,8 +59,11 @@ void PlayerEntity::update(float dt) {
    
    
    if (shooting == 1 || shooting == 3) {
-      tshot = 0.0f;
-      shoot();
+      
+      if (tshot >= 0.4) {
+         tshot = 0.0f;
+         shoot();
+      }
       
       if (shooting == 1)
          shooting = 2;
