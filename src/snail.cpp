@@ -12,6 +12,8 @@
 #include "bullet.h"
 #include "helmet.h"
 
+#include <iostream>
+
 Snail::Snail() {
    health = 100;
 }
@@ -35,8 +37,8 @@ void Snail::collided(const Ref<Physics::Geom>::SharedPtr & with) {
 			bulletOwner->kill();
 			increaseHealth(-5);
             float slump = static_cast<float>(2 - rand() % 4) / 2.0f;
-            
-			physBody->addImpulse(with->getTransform().orientation * vec2(300.0f, slump * 100.0f));
+            const vec2 delta = getTransform().position - bulletOwner->getTransform().position;
+			physBody->addImpulse(delta * 8.0f); //vec2(300.0f, slump * 100.0f));
 		 }
 	  }
    }
@@ -46,8 +48,6 @@ void Snail::collided(const Ref<Physics::Geom>::SharedPtr & with) {
 void Snail::setEventHandler(const Ref<SnailEventHandler> & newHandler) {
    eventHandler = newHandler;
 }
-
-#include <iostream>
 
 void Snail::increaseHealth(int add) {
    health += add;

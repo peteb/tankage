@@ -53,10 +53,12 @@
 *** DONE Detect bullet collisions
 *** DONE Remove phys geom when dead    
 ** DONE Shouldn't be possible to shoot when dead
-** TODO Point of contact in geom collisions
-** TODO Restore snail collision response
+** DONE Point of contact in geom collisions
+** DONE Restore snail collision response
 ** TODO Get hurt by cactii
-** TODO Minimum amount of time between taking damage   
+** TODO Minimum amount of time between taking damage
+*** A way to messure time is needed. how should it be done? preferably not centralized   
+*** Timers?
 * Major Beta, January 20th
 ** TODO Sprite animations
 *** TODO Shooting

@@ -72,7 +72,7 @@ Ref<Object>::WeakPtr Physics::Geom::getOwner() const {
 
 void Physics::Geom::collided(const Ref<Geom>::SharedPtr & with) {
 	if (Ref<GeomEventHandler>::SharedPtr lockedPtr = eventHandler.lock())
-		lockedPtr->collided(with);
+       lockedPtr->collided(with);
 }
 
 void Physics::Geom::enqueueRender(const Ref<Graphics::RenderList>::SharedPtr & renderList) {
