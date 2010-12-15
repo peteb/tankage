@@ -40,7 +40,9 @@
 **** TODO When out of rockets, switch to first weapon	 
 ** TODO Power-ups
 *** TODO Rocket launcher (or additional rockets)
+**** DONE Graphics    
 *** TODO Replenish some of the health
+**** DONE Power-up graphics    
 **** A cool animation on the health bar?     
 ** DONE Helmets
 *** DONE Helmets kill bullets and protect the snail   

@@ -28,6 +28,8 @@ CoordSystemData2 Snail::getTransform() const {
    return physBody->getTransform();
 }
 
+// TODO: en klass; Item. Skjuta på den ska anropa en medlem i snigeln
+// antar att det blir downcast i alla fall.
 
 void Snail::collided(const Ref<Physics::Geom>::SharedPtr & with) {
    // TODO: this is ugly
@@ -36,9 +38,8 @@ void Snail::collided(const Ref<Physics::Geom>::SharedPtr & with) {
 		 if (static_cast<void *>(bulletOwner->shooter) != static_cast<void *>(this)) { // hit by a bullet
 			bulletOwner->kill();
 			increaseHealth(-5);
-            float slump = static_cast<float>(2 - rand() % 4) / 2.0f;
             const vec2 delta = getTransform().position - bulletOwner->getTransform().position;
-			physBody->addImpulse(delta * 8.0f); //vec2(300.0f, slump * 100.0f));
+			physBody->addImpulse(delta * 8.0f);
 		 }
 	  }
    }

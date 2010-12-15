@@ -22,6 +22,7 @@ add_executable(snail-wail
   health_meter.cpp
   helmet.cpp
   coord_system2.cpp
+  powerup.cpp
   )
 
 

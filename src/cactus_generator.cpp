@@ -10,6 +10,7 @@
 #include "object_creator.h"
 #include "world.h"
 #include "physics/body.h"
+#include "powerup.h"
 
 CactusGenerator::CactusGenerator(ObjectCreator & creator, World & world)
    : creator(creator)
@@ -35,12 +36,22 @@ void CactusGenerator::update(float dt) {
 }
 
 void CactusGenerator::spawnCactus() {
-   Ref<Cactus>::SharedPtr cactus = Cast<Cactus>(creator.createObject("cactus", creator));
-
    vec2 startPos = origin;
    startPos.x += static_cast<float>(rand() % 50) * 1.5f;
-   cactus->setTransform(CoordSystemData2(startPos, cactus->getTransform().orientation));
+   int type = rand() % 10;
+
    
-   cactus->body->addImpulse(vec2(0.0f, -140.0f));
-   world.insert(cactus);
+   if (type < 9) {
+      Ref<Cactus>::SharedPtr cactus = Cast<Cactus>(creator.createObject("cactus", creator));
+      cactus->setTransform(CoordSystemData2(startPos, cactus->getTransform().orientation));
+   
+      cactus->body->addImpulse(vec2(0.0f, -140.0f));
+      world.insert(cactus);
+   }
+   else {
+      Ref<PowerUp>::SharedPtr powerup = Cast<PowerUp>(creator.createObject("healthbox", creator));
+      powerup->body->setTransform(CoordSystemData2(startPos, powerup->body->getTransform().orientation));
+      powerup->body->addImpulse(vec2(0.0f, -140.0f));
+      world.insert(powerup);
+   }
 }

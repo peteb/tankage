@@ -39,7 +39,7 @@ void PlayerEntity::shoot() {
    
    Ref<Bullet>::SharedPtr bullet = Cast<Bullet>(creator.createObject("bullet", creator));
    bullet->setTransform(CoordSystemData2(getTransform().position + weaponPos, getTransform().orientation));
-   bullet->body->addImpulse(vec2(1400.0f, 0.0f) * forward);
+   bullet->body->addImpulse(vec2(2200.0f, 0.0f) * forward);
    bullet->body->setTransform(
       CoordSystemData2(bullet->body->getTransform().position, mat2(weaponDir, vec2(0.0f, 1.0f)))
    );

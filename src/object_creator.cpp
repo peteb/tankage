@@ -18,6 +18,7 @@
 #include "ref.h"
 #include "helmet.h"
 #include "coordsystem_transformer.h"
+#include "powerup.h"
 
 ObjectCreator::ObjectCreator(World & world)
    : world(world)
@@ -156,6 +157,20 @@ Ref<Object>::SharedPtr ObjectCreator::createObject(const std::string & type, Obj
 	  newCactus->geom->setEventHandler(Observing(newCactus));
 
 	  return newCactus;
+   }
+   else if (type == "healthbox") {
+      Ref<PowerUp>::SharedPtr newPowerup(new PowerUp);
+      newPowerup->sprite = Owning(world.graphics.createSprite("../data/health_powerup.png"));
+
+      newPowerup->body = Owning(world.physics.createBody());
+      newPowerup->body->setDelegate(newPowerup->sprite);
+      newPowerup->body->setOwner(newPowerup); // I guess this is for cascade kill
+
+      newPowerup->geom = Owning(world.physics.createRectGeom(newPowerup->sprite->getSize()));
+      newPowerup->geom->setBody(newPowerup->body);
+      newPowerup->geom->setCollisionId(4);
+      
+      return newPowerup;
    }
 	
 
