@@ -8,6 +8,7 @@
 #include "bullet.h"
 #include "snail.h"
 #include "cactus.h"
+#include "missile.h"
 
 #include "graphics/gfx_subsystem.h"
 #include "graphics/sprite.h"
@@ -135,6 +136,24 @@ Ref<Object>::SharedPtr ObjectCreator::createObject(const std::string & type, Obj
    }
    else if (type == "bullet") {
 	  return createBullet();
+   }
+   else if (type == "missile") {
+      Ref<Missile>::SharedPtr newMissile(new Missile);
+
+      newMissile->sprite = Owning(world.graphics.createSprite("../data/missile.png"));
+//      newMissile->sprite->setEventHandler(newMissile);
+      
+      newMissile->body = Owning(world.physics.createBody());
+      newMissile->body->setDelegate(newMissile->sprite);
+      newMissile->body->setOwner(newMissile);
+      
+      const rect bulletSize(32, 8);
+      newMissile->geom = Owning(world.physics.createRectGeom(bulletSize));
+      newMissile->geom->setBody(newMissile->body);
+      newMissile->geom->setCollisionId(3);
+      newMissile->geom->setCollisionMask(0x0u);
+
+      return newMissile;
    }
    else if (type == "cactus") {
 	  Ref<Cactus>::SharedPtr newCactus(new Cactus);

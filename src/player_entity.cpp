@@ -11,6 +11,7 @@
 #include "graphics/sprite.h"
 #include "physics/body.h"
 #include "health_meter.h"
+#include "missile.h"
 #include <algorithm>
 #include <iostream>
 
@@ -37,9 +38,16 @@ void PlayerEntity::shoot() {
       return;
    }
    
-   Ref<Bullet>::SharedPtr bullet = Cast<Bullet>(creator.createObject("bullet", creator));
+//    Ref<Bullet>::SharedPtr bullet = Cast<Bullet>(creator.createObject("bullet", creator));
+//    bullet->setTransform(CoordSystemData2(getTransform().position + weaponPos, getTransform().orientation));
+//    bullet->body->addImpulse(vec2(2200.0f, 0.0f) * forward);
+//    bullet->body->setTransform(
+//       CoordSystemData2(bullet->body->getTransform().position, mat2(weaponDir, vec2(0.0f, 1.0f)))
+//    );
+
+   Ref<Missile>::SharedPtr bullet = Cast<Missile>(creator.createObject("missile", creator));
    bullet->setTransform(CoordSystemData2(getTransform().position + weaponPos, getTransform().orientation));
-   bullet->body->addImpulse(vec2(2200.0f, 0.0f) * forward);
+   bullet->body->addImpulse(vec2(100.0f, 0.0f) * forward);
    bullet->body->setTransform(
       CoordSystemData2(bullet->body->getTransform().position, mat2(weaponDir, vec2(0.0f, 1.0f)))
    );

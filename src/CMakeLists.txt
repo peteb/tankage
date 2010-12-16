@@ -23,6 +23,7 @@ add_executable(snail-wail
   helmet.cpp
   coord_system2.cpp
   powerup.cpp
+  missile.cpp
   )
 
 
