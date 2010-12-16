@@ -11,6 +11,7 @@
 #include "player_entity.h"
 #include "bullet.h"
 #include "helmet.h"
+#include "missile.h"
 
 #include <iostream>
 
@@ -42,6 +43,15 @@ void Snail::collided(const Ref<Physics::Geom>::SharedPtr & with) {
 			physBody->addImpulse(delta * 8.0f);
 		 }
 	  }
+      else if (Ref<Missile>::SharedPtr lockedMissile = Cast<Missile>(lockedOwner)) {
+		 if (lockedMissile->shooter.lock().get() != this) { // hit by a bullet
+			lockedMissile->kill();
+			increaseHealth(-20);
+            const vec2 delta = getTransform().position - lockedMissile->getTransform().position;
+			physBody->addImpulse(delta * 30.0f);
+		 }
+         
+      }
    }
    
 }

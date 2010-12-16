@@ -8,6 +8,7 @@
 #include "world.h"
 #include "physics/body.h"
 #include "bullet.h"
+#include "missile.h"
 
 Cactus::Cactus()
    : health(100.0f)
@@ -33,6 +34,11 @@ void Cactus::collided(const Ref<Physics::Geom>::SharedPtr & with) {
 		 bulletOwner->kill();
          increaseHealth(-45.0f);
 	  }
+	  if (Ref<Missile>::SharedPtr lockedMissile = Cast<Missile>(lockedOwner)) {
+		 lockedMissile->kill();
+         increaseHealth(-100.0f);
+	  }
+
    }
 }
 

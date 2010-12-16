@@ -47,13 +47,13 @@ void PlayerEntity::shoot() {
 
    Ref<Missile>::SharedPtr bullet = Cast<Missile>(creator.createObject("missile", creator));
    bullet->setTransform(CoordSystemData2(getTransform().position + weaponPos, getTransform().orientation));
-   bullet->body->addImpulse(vec2(100.0f, 0.0f) * forward);
+   bullet->body->addImpulse(vec2(300.0f, 0.0f) * forward);
    bullet->body->setTransform(
       CoordSystemData2(bullet->body->getTransform().position, mat2(weaponDir, vec2(0.0f, 1.0f)))
    );
   
    if (Ref<Physics::Body>::SharedPtr lockedTarget = target.lock())
-	  lockedTarget->addImpulse(vec2(-100.0f, 0.0f) * forward);
+	  lockedTarget->addImpulse(vec2(-800.0f, 0.0f) * forward);
 
    bullet->shooter = shooter;
    world.insert(bullet);

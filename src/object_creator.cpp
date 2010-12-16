@@ -152,7 +152,7 @@ Ref<Object>::SharedPtr ObjectCreator::createObject(const std::string & type, Obj
       newMissile->geom->setBody(newMissile->body);
       newMissile->geom->setCollisionId(3);
       newMissile->geom->setCollisionMask(0x0u);
-
+            
       return newMissile;
    }
    else if (type == "cactus") {
