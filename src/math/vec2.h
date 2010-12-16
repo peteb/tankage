@@ -26,6 +26,8 @@ public:
    
    float getMagnitude() const;
    vec2 & normalize();
+
+   static float DotProduct(const vec2 & v1, const vec2 & v2);
    
    static const vec2 Zero;
    static const vec2 Identity;

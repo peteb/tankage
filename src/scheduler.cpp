@@ -6,6 +6,7 @@
 
 #include "scheduler.h"
 #include "updatable.h"
+#include <algorithm>
 
 Scheduler::Item::Item(float interval, const Ref<Updatable> & receiver)
    : receiver(receiver)
@@ -29,12 +30,15 @@ bool Scheduler::Item::trigger(float dt) {
 
 
 void Scheduler::subscribe(float interval, const Ref<Updatable> & receiver) {
-   scheduledItems.push_back(Item(interval, receiver));
+   addedItems.push_back(Item(interval, receiver));
 }
 
 void Scheduler::update(float dt) {
-   unsigned listSize = scheduledItems.size();
+   std::copy(addedItems.begin(), addedItems.end(), std::back_inserter(scheduledItems));
+   addedItems.clear();
    
+   unsigned listSize = scheduledItems.size();
+
    // TODO: make sure no modifications to the scheduledItems list can be done
    //       while this method is running. new items should be added to another list first
    
@@ -45,7 +49,7 @@ void Scheduler::update(float dt) {
          listSize--;
       }
    }
-   
+
    scheduledItems.erase(scheduledItems.begin() + listSize, scheduledItems.end());
 }
 

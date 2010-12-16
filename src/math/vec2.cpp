@@ -72,3 +72,7 @@ vec2::operator std::string() const {
    ss << x << ", " << y;
    return ss.str();
 }
+
+float vec2::DotProduct(const vec2 & v1, const vec2 & v2) {
+   return v1.x * v2.x + v1.y * v2.y;
+}

@@ -34,10 +34,10 @@ std::vector<Vertex2T2> Sprite::constructVertices() const {
    offsetRect.getCoords(ul, lr);
 
    // TODO: clean this up with a CoordSystemData
-   ul = orientation * ul;
-   lr = orientation * lr;
-   ul += position;
-   lr += position;
+   ul = ul;
+   lr = lr;
+//   ul += position;
+//   lr += position;
    
    float cw = 1.0f / static_cast<float>(columns);
    float ch = 1.0f / static_cast<float>(rows);
@@ -52,6 +52,10 @@ std::vector<Vertex2T2> Sprite::constructVertices() const {
    vertices.push_back(Vertex2T2(lr, vec2(t2x, t2y)));
    vertices.push_back(Vertex2T2(vec2(ul.x, lr.y), vec2(t1x, t2y)));
 
+   for (size_t i = 0; i < vertices.size(); ++i) {
+      vertices[i].pos = position + orientation * vertices[i].pos;
+   }
+   
    return vertices;
 }
 
@@ -64,7 +68,7 @@ rect Sprite::getBoundingBox() const {
 void Sprite::setTransform(const CoordSystemData2 & cs) {
    position = cs.position;
    orientation = cs.orientation;
-
+   
    if (Ref<CoordSystem2>::SharedPtr lockedDelegate = delegate.lock())
       lockedDelegate->setTransform(cs);
 }

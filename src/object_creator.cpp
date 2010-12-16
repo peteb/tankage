@@ -141,7 +141,7 @@ Ref<Object>::SharedPtr ObjectCreator::createObject(const std::string & type, Obj
       Ref<Missile>::SharedPtr newMissile(new Missile);
 
       newMissile->sprite = Owning(world.graphics.createSprite("../data/missile.png"));
-//      newMissile->sprite->setEventHandler(newMissile);
+      newMissile->sprite->setEventHandler(newMissile);
       
       newMissile->body = Owning(world.physics.createBody());
       newMissile->body->setDelegate(newMissile->sprite);
@@ -152,7 +152,9 @@ Ref<Object>::SharedPtr ObjectCreator::createObject(const std::string & type, Obj
       newMissile->geom->setBody(newMissile->body);
       newMissile->geom->setCollisionId(3);
       newMissile->geom->setCollisionMask(0x0u);
-            
+
+      world.scheduler.subscribe(0.1f, Observing(newMissile));
+      
       return newMissile;
    }
    else if (type == "cactus") {

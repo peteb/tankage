@@ -53,6 +53,8 @@ Game::Game()
 
    firstSnail->setTransform(CoordSystemData2(vec2(100.0f, 300.0f), mat2::Identity));
    secondSnail->setTransform(CoordSystemData2(vec2(700.0f, 300.0f), mat2::Identity));
+   firstSnail->enemy = secondSnail.lock();
+   secondSnail->enemy = firstSnail.lock();
    
    playerInput1.setRefFrameDelegate(Observing(firstSnail->logic));
    playerInput1.setActionDelegate(Observing(firstSnail->logic));
@@ -95,13 +97,6 @@ void Game::tick(float dt) {
    
    world.graphics.beginFrame();
    world.graphics.render(renderList);
-   
-   // const float step_size = 1.0f / 40.0f;
-   // accum_time += dt;
-   // 
-   // for (int i = 0; i < accum_time / step_size; ++i) {
-   //    world.quickStep(step_size);
-   // }   
 }
 
 void Game::windowChangedSize(int width, int height) {

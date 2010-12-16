@@ -47,6 +47,7 @@ public:
    Ref<PlayerEntity> logic;
    Ref<Physics::Geom> physGeom;
    Ref<Physics::Body> physBody;
+   Ref<Snail>::WeakPtr enemy;
    
 private:
    int health;

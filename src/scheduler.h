@@ -29,7 +29,7 @@ public:
    void update(float dt);
    
 private:
-   std::vector<Item> scheduledItems;
+   std::vector<Item> scheduledItems, addedItems;
 };
 
 
