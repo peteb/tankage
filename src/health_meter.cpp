@@ -14,14 +14,17 @@
 
 HealthMeter::HealthMeter()
    : t(0.0f)
+   , valueShown(0.0f)
+   , value(0.0f)
 {
 }
 
-void HealthMeter::setValue(float value) {
-   if (this->value >= 50.0f && value < 50.0f)
-      t = 0.0f;
+void HealthMeter::setValue(float value, float animationSpeed) {
+//   if (this->value >= 50.0f && value < 50.0f) // reset animation timer
+//      t = 0.0f;
    
    this->value = value;
+   this->animationSpeed = animationSpeed;
 }
 
 void HealthMeter::enqueueRender(const Ref<Graphics::RenderList>::SharedPtr & renderList, float dt) {
@@ -32,7 +35,7 @@ void HealthMeter::enqueueRender(const Ref<Graphics::RenderList>::SharedPtr & ren
    size.halfSize = size.halfSize;
 
    float x = 0.0f;
-   float valuesLeft = value;
+   float valuesLeft = ceil(valueShown);
    
    for (int i = 0; i < 10; ++i) {
 	  vec2 texPos = vec2::Zero;
@@ -58,8 +61,8 @@ void HealthMeter::enqueueRender(const Ref<Graphics::RenderList>::SharedPtr & ren
 
       // calculate a scalar if we're low on health
       float scale = 1.0f;
-      if (!ghostHeart && i < 4 && value <= 40.0f) {
-         const float scaleSpeed = (60.0f - value) / 1.5f;
+      if (!ghostHeart && i < 4 && valueShown <= 40.0f) {
+         const float scaleSpeed = (60.0f - valueShown) / 1.5f;
          scale = 1.25f + 0.25f * sin((1.0 + t) * scaleSpeed);
       }
 
@@ -99,6 +102,14 @@ void HealthMeter::enqueueRender(const Ref<Graphics::RenderList>::SharedPtr & ren
 
    renderList->insert(renderer, mesh);
    t += dt;
+
+   if (static_cast<int>(value) != static_cast<int>(valueShown)) {
+      // update valueShown (animating changes in value)
+      float diff = value - valueShown;
+      float udiff = diff / fabs(diff); // unit difference
+      
+      valueShown += udiff * dt * animationSpeed;
+   }
 }
 
 void HealthMeter::setPosition(const vec2 & origin) {

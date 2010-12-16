@@ -40,7 +40,7 @@ void Graphics::SpriteCuller::enqueueVisibleSprites(const Ref<Graphics::RenderLis
          }
          else {
 			// If it's completely outside the viewport
-			if (metadata.visibleLastFrame || metadata.firstFrame) {
+			if (metadata.visibleLastFrame && !metadata.firstFrame) {
                if (Ref<Graphics::Sprite>::SharedPtr sprite = metadata.sprite.lock()) {
                   sprite->leftView();
                }

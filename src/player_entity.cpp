@@ -14,14 +14,14 @@
 #include <algorithm>
 #include <iostream>
 
-PlayerEntity::PlayerEntity(float x, void * shooterId, ObjectCreator & creator, World & world) 
+PlayerEntity::PlayerEntity(float x, const Ref<Snail>::WeakPtr & shooter, ObjectCreator & creator, World & world) 
    : creator(creator)
    , world(world)
+   , shooter(shooter)
 {
    xPos = x;
    shooting = 0;
    tshot = 0.0f;
-   this->shooterId = shooterId;
 }
 
 void PlayerEntity::setTarget(const Ref<Physics::Body> & newTarget) {
@@ -47,7 +47,7 @@ void PlayerEntity::shoot() {
    if (Ref<Physics::Body>::SharedPtr lockedTarget = target.lock())
 	  lockedTarget->addImpulse(vec2(-100.0f, 0.0f) * forward);
 
-   bullet->shooter = shooterId;
+   bullet->shooter = shooter;
    world.insert(bullet);
    //world.add(bullet);
 }
@@ -125,10 +125,16 @@ void PlayerEntity::trigger(const std::string & action, int state) {
 }
 
 
-void PlayerEntity::onHealthChange(float newHealth) {
+void PlayerEntity::onHealthChange(float newHealth, float diff) {
    std::cout << "new health: " << newHealth << std::endl;
-   if (Ref<HealthMeter>::SharedPtr lockedMeter = healthMeter.lock())
-	  lockedMeter->setValue(newHealth);
+   if (Ref<HealthMeter>::SharedPtr lockedMeter = healthMeter.lock()) {
+      float speed = 200.0f;
+      if (diff > 0.0f) {
+         speed = 90.0f;
+      }
+      
+      lockedMeter->setValue(newHealth, speed);
+   }
 }
 
 void PlayerEntity::setHealthMeter(const Ref<HealthMeter> & newMeter) {

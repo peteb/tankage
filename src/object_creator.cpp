@@ -65,7 +65,7 @@ Ref<Snail>::SharedPtr ObjectCreator::createSnail(int team, ObjectCreator & creat
    newSnail->physBody = Owning(world.physics.createBody());
    newSnail->physBody->setDelegate(Observing(newSnail->sprite.lock()));
    
-   newSnail->logic = Owning(new PlayerEntity(xPos, newSnail.get(), creator, world));
+   newSnail->logic = Owning(new PlayerEntity(xPos, newSnail, creator, world));
    newSnail->logic->setTarget(Observing(newSnail->physBody.lock()));
 
    newSnail->setEventHandler(Observing(newSnail->logic));
@@ -161,7 +161,8 @@ Ref<Object>::SharedPtr ObjectCreator::createObject(const std::string & type, Obj
    else if (type == "healthbox") {
       Ref<PowerUp>::SharedPtr newPowerup(new PowerUp);
       newPowerup->sprite = Owning(world.graphics.createSprite("../data/health_powerup.png"));
-
+      newPowerup->sprite->setEventHandler(newPowerup);
+      
       newPowerup->body = Owning(world.physics.createBody());
       newPowerup->body->setDelegate(newPowerup->sprite);
       newPowerup->body->setOwner(newPowerup); // I guess this is for cascade kill
@@ -169,6 +170,7 @@ Ref<Object>::SharedPtr ObjectCreator::createObject(const std::string & type, Obj
       newPowerup->geom = Owning(world.physics.createRectGeom(newPowerup->sprite->getSize()));
       newPowerup->geom->setBody(newPowerup->body);
       newPowerup->geom->setCollisionId(4);
+      newPowerup->geom->setEventHandler(Observing(newPowerup));
       
       return newPowerup;
    }

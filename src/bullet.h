@@ -16,6 +16,7 @@
 namespace Physics {class Body; class Geom; }
 
 class World;
+class Snail;
 
 class Bullet : public Object, public CoordSystem2, public Graphics::SpriteEventHandler {
 public:
@@ -25,7 +26,7 @@ public:
    
    void leftView();
 
-   void * shooter;
+   Ref<Snail>::WeakPtr shooter;
    Ref<Graphics::Sprite> sprite;
    Ref<Physics::Body> body;
    Ref<Physics::Geom> geom;

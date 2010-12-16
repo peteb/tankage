@@ -12,6 +12,8 @@
 #include "physics/body.h"
 #include "powerup.h"
 
+// TODO: the name of this class isn't great. it also spawns power-ups
+
 CactusGenerator::CactusGenerator(ObjectCreator & creator, World & world)
    : creator(creator)
    , world(world)
@@ -44,7 +46,6 @@ void CactusGenerator::spawnCactus() {
    if (type < 9) {
       Ref<Cactus>::SharedPtr cactus = Cast<Cactus>(creator.createObject("cactus", creator));
       cactus->setTransform(CoordSystemData2(startPos, cactus->getTransform().orientation));
-   
       cactus->body->addImpulse(vec2(0.0f, -140.0f));
       world.insert(cactus);
    }

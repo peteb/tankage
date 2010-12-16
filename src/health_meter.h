@@ -16,7 +16,7 @@ class HealthMeter {
 public:
    HealthMeter();
    
-   void setValue(float value);
+   void setValue(float value, float animationSpeed = 200.0f);
    void setPosition(const vec2 & origin);
    void setRenderer(const Ref<Graphics::Renderer>::SharedPtr & newRenderer);
    void setDir(float dir);
@@ -24,7 +24,7 @@ public:
    
 private:
    Ref<Graphics::Renderer>::SharedPtr renderer;
-   float value, dir;
+   float value, valueShown, dir, animationSpeed;
    vec2 origin;
    float t;
 };

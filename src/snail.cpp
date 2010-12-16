@@ -34,11 +34,11 @@ CoordSystemData2 Snail::getTransform() const {
 void Snail::collided(const Ref<Physics::Geom>::SharedPtr & with) {
    // TODO: this is ugly
    if (Ref<Object>::SharedPtr lockedOwner = with->getOwner().lock()) {
-	  if (Ref<Bullet>::SharedPtr bulletOwner = Cast<Bullet>(lockedOwner)) {
-		 if (static_cast<void *>(bulletOwner->shooter) != static_cast<void *>(this)) { // hit by a bullet
-			bulletOwner->kill();
+	  if (Ref<Bullet>::SharedPtr lockedBullet = Cast<Bullet>(lockedOwner)) {
+		 if (lockedBullet->shooter.lock().get() != this) { // hit by a bullet
+			lockedBullet->kill();
 			increaseHealth(-5);
-            const vec2 delta = getTransform().position - bulletOwner->getTransform().position;
+            const vec2 delta = getTransform().position - lockedBullet->getTransform().position;
 			physBody->addImpulse(delta * 8.0f);
 		 }
 	  }
@@ -51,15 +51,14 @@ void Snail::setEventHandler(const Ref<SnailEventHandler> & newHandler) {
 }
 
 void Snail::increaseHealth(int add) {
-   health += add;
+   health = std::min(100, health + add);
 
-   if (Ref<SnailEventHandler>::SharedPtr lockedHandler = eventHandler.lock())
-	  lockedHandler->onHealthChange(static_cast<float>(health));
+   if (Ref<SnailEventHandler>::SharedPtr lockedHandler = eventHandler.lock()) {      
+	  lockedHandler->onHealthChange(static_cast<float>(health), add);
+   }
    
-   std::cout << "decreased health to " << health << std::endl;
-
    if (health <= 0.0f) {
-	  std::cout << "snail died" << std::endl;
+	  std::cout << "snail died :-(" << std::endl;
 	  kill();
       if (Ref<Helmet>::SharedPtr lockedHelmet = helmet.lock())
          lockedHelmet->kill();

@@ -20,12 +20,13 @@ class PlayerEntity;
 class World;
 class vec2;
 class Helmet;
+class HealthMeter;
 
 class SnailEventHandler {
 public:
    virtual ~SnailEventHandler() {}
    
-   virtual void onHealthChange(float newValue) =0;
+   virtual void onHealthChange(float newValue, float diff) =0;
 };
 
 class Snail : public Object, public CoordSystem2, public Physics::GeomEventHandler {

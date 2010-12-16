@@ -21,7 +21,7 @@ namespace Physics {class Body; }
 
 class PlayerEntity : public CoordSystem2, public Triggerable, public Updatable, public SnailEventHandler {
 public:
-   PlayerEntity(float x, void * shooterId, ObjectCreator & creator, World & world);
+   PlayerEntity(float x, const Ref<Snail>::WeakPtr & shooterId, ObjectCreator & creator, World & world);
    
    void setTarget(const Ref<Physics::Body> & newTarget);
    void setHealthMeter(const Ref<HealthMeter> & newMeter);
@@ -34,7 +34,7 @@ public:
    // Updatable --------------------------------------------
    void trigger(const std::string & action, int state);
 
-   void onHealthChange(float newHealth);
+   void onHealthChange(float newHealth, float diff);
 
    vec2 weaponDir, weaponPos;
    
@@ -43,7 +43,7 @@ private:
    
    int shooting;
    float tshot;
-   void * shooterId;
+   Ref<Snail>::WeakPtr shooter;
    
    float xPos;
    Ref<HealthMeter> healthMeter;

@@ -221,4 +221,10 @@
     [25] snails will now respond to bullets like balls in pong
     [25] worked on power-up graphics
     [25] power-up graphics for rockets
+  
+2010-12-15
+    [25] added a basic powerup
 
+2010-12-16
+    [25] made the powerup add health to the one shooting at it and the health bar now animates changes
+    
