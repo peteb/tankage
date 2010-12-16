@@ -53,9 +53,9 @@ namespace Physics {
       void setTransform(const CoordSystemData2 & cs);
       CoordSystemData2 getTransform() const;
       
-   
+	  Ref<Physics::Body> linkedBody;   
    private:
-	  Ref<Physics::Body> linkedBody;
+
 	  Ref<CoordSystem2> refFrame;
 	  Ref<GeomEventHandler> eventHandler;
 	  

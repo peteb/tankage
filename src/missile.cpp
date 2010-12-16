@@ -10,7 +10,7 @@
 
 Missile::Missile()
    : timeSinceUpdate(0.0f)
-   , fuel(2.0f)
+   , fuel(1.4f)
 {
 }
 
@@ -26,11 +26,15 @@ void Missile::leftView() {
    kill();
 }
 
+void Missile::setFuel(float fuel) {
+   this->fuel = fuel;
+}
+
 void Missile::update(float dt) {
    timeSinceUpdate += dt;
    fuel -= dt;
    
-   if (timeSinceUpdate >= 0.1f && fuel > 0.0f) {
+   if (timeSinceUpdate >= 0.01f && fuel > 0.0f) {
       // TODO: fix this ugly way of handling target seeking!
       
       if (Ref<Snail>::SharedPtr lockedTarget = target.lock()) {
@@ -41,14 +45,13 @@ void Missile::update(float dt) {
          vec2 udiff = diff;
          udiff.normalize();
 
-         vec2 impulse = (udiff - uvel * 0.9f) * 200.0f + uvel * 30.0f;
+         vec2 impulse = (udiff - uvel * 1.0f) * 200.0f + uvel * 40.0f;
          
-         body->addImpulse(impulse); //300.0f);
+         body->addImpulse(impulse * 200.0f * dt); //300.0f);
          vel = body->getVelocity();
          vel.normalize();
          
          mat2 spriteOrient(vel, vec2(-vel.y, vel.x));
-         
          body->setTransform(CoordSystemData2(body->getTransform().position, spriteOrient));
       }
       

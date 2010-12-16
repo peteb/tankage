@@ -27,7 +27,8 @@ public:
 
    void update(float dt);   
    void leftView();
-
+   void setFuel(float fuel);
+   
    Ref<Snail>::WeakPtr shooter;
    Ref<Snail>::WeakPtr target;
    Ref<Graphics::Sprite> sprite;
