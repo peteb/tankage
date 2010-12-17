@@ -52,6 +52,7 @@ void PlayerEntity::shoot() {
       CoordSystemData2(bullet->body->getTransform().position, mat2(weaponDir, vec2(0.0f, 1.0f)))
    );
    bullet->target = shooter.lock()->enemy;
+   bullet->shooter = shooter;
    
    if (Ref<Physics::Body>::SharedPtr lockedTarget = target.lock())
 	  lockedTarget->addImpulse(vec2(-800.0f, 0.0f) * forward);
@@ -80,7 +81,7 @@ void PlayerEntity::update(float dt) {
          shooting = 0;
    }
    else if (shooting == 2) {
-      if (tshot >= 0.01) {
+      if (tshot >= 0.4) {
          tshot = 0.0f;
          shoot();
       }

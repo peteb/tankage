@@ -17,7 +17,7 @@ void PowerUp::collided(const Ref<Physics::Geom>::SharedPtr & with) {
 	  if (Ref<Projectile>::SharedPtr lockedProjectile = Cast<Projectile>(lockedOwner)) {
 		 lockedProjectile->kill();
          this->kill();
-         
+
          if (Ref<Snail>::SharedPtr lockedSnail = lockedProjectile->shooter.lock()) {
             lockedSnail->increaseHealth(35);
          }

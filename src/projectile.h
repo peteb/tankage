@@ -20,6 +20,8 @@ class Snail;
 
 class Projectile : public Object, public CoordSystem2, public Graphics::SpriteEventHandler {
 public:
+   virtual ~Projectile() {}
+   
    void setTransform(const CoordSystemData2 & cs);
    CoordSystemData2 getTransform() const;
       

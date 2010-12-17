@@ -14,18 +14,6 @@ Missile::Missile()
 {
 }
 
-void Missile::setTransform(const CoordSystemData2 & cs) {
-   body->setTransform(cs);
-}
-
-CoordSystemData2 Missile::getTransform() const {
-   return body->getTransform();
-}
-
-void Missile::leftView() {
-   kill();
-}
-
 void Missile::setFuel(float fuel) {
    this->fuel = fuel;
 }

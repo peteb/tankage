@@ -35,15 +35,7 @@ CoordSystemData2 Snail::getTransform() const {
 void Snail::collided(const Ref<Physics::Geom>::SharedPtr & with) {
    // TODO: this is ugly
    if (Ref<Object>::SharedPtr lockedOwner = with->getOwner().lock()) {
-	  if (Ref<Projectile>::SharedPtr lockedProjectile = Cast<Projectile>(lockedOwner)) {
-		 if (lockedProjectile->shooter.lock().get() != this) { // hit by a bullet
-			lockedProjectile->kill();
-			increaseHealth(-5);
-            const vec2 delta = getTransform().position - lockedProjectile->getTransform().position;
-			physBody->addImpulse(delta * 8.0f);
-		 }
-	  }
-      else if (Ref<Missile>::SharedPtr lockedMissile = Cast<Missile>(lockedOwner)) {
+      if (Ref<Missile>::SharedPtr lockedMissile = Cast<Missile>(lockedOwner)) {
 		 if (lockedMissile->shooter.lock().get() != this) { // hit by a bullet
 			lockedMissile->kill();
 			increaseHealth(-20);
@@ -52,6 +44,14 @@ void Snail::collided(const Ref<Physics::Geom>::SharedPtr & with) {
 		 }
          
       }
+	  else if (Ref<Projectile>::SharedPtr lockedProjectile = Cast<Projectile>(lockedOwner)) {
+		 if (lockedProjectile->shooter.lock().get() != this) { // hit by a bullet
+			lockedProjectile->kill();
+			increaseHealth(-5);
+            const vec2 delta = getTransform().position - lockedProjectile->getTransform().position;
+			physBody->addImpulse(delta * 8.0f);
+		 }
+	  }
    }
    
 }
