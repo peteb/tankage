@@ -6,7 +6,6 @@ add_subdirectory(math)
 add_subdirectory(opengl)
 
 add_executable(snail-wail
-  bullet.cpp
   game.cpp
   glfw_main.cpp
   hi_controller.cpp
@@ -24,6 +23,7 @@ add_executable(snail-wail
   coord_system2.cpp
   powerup.cpp
   missile.cpp
+  projectile.cpp
   )
 
 

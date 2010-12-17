@@ -9,7 +9,7 @@
 #include "graphics/sprite.h"
 #include "world.h"
 #include "player_entity.h"
-#include "bullet.h"
+#include "projectile.h"
 #include "helmet.h"
 #include "missile.h"
 
@@ -35,11 +35,11 @@ CoordSystemData2 Snail::getTransform() const {
 void Snail::collided(const Ref<Physics::Geom>::SharedPtr & with) {
    // TODO: this is ugly
    if (Ref<Object>::SharedPtr lockedOwner = with->getOwner().lock()) {
-	  if (Ref<Bullet>::SharedPtr lockedBullet = Cast<Bullet>(lockedOwner)) {
-		 if (lockedBullet->shooter.lock().get() != this) { // hit by a bullet
-			lockedBullet->kill();
+	  if (Ref<Projectile>::SharedPtr lockedProjectile = Cast<Projectile>(lockedOwner)) {
+		 if (lockedProjectile->shooter.lock().get() != this) { // hit by a bullet
+			lockedProjectile->kill();
 			increaseHealth(-5);
-            const vec2 delta = getTransform().position - lockedBullet->getTransform().position;
+            const vec2 delta = getTransform().position - lockedProjectile->getTransform().position;
 			physBody->addImpulse(delta * 8.0f);
 		 }
 	  }

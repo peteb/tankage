@@ -7,7 +7,7 @@
 #include "cactus.h"
 #include "world.h"
 #include "physics/body.h"
-#include "bullet.h"
+#include "projectile.h"
 #include "missile.h"
 
 Cactus::Cactus()
@@ -30,7 +30,7 @@ void Cactus::leftView() {
 
 void Cactus::collided(const Ref<Physics::Geom>::SharedPtr & with) {
    if (Ref<Object>::SharedPtr lockedOwner = with->getOwner().lock()) {
-	  if (Ref<Bullet>::SharedPtr bulletOwner = Cast<Bullet>(lockedOwner)) {
+	  if (Ref<Projectile>::SharedPtr bulletOwner = Cast<Projectile>(lockedOwner)) {
 		 bulletOwner->kill();
          increaseHealth(-45.0f);
 	  }

@@ -9,7 +9,7 @@
 
 #include "ref.h"
 
-class Bullet;
+class Projectile;
 class Snail;
 class World;
 class Object;
@@ -22,7 +22,7 @@ public:
    Ref<Object>::SharedPtr createObject(const std::string & type, ObjectCreator & creator);
 
 private:
-   Ref<Bullet>::SharedPtr createBullet();
+   Ref<Projectile>::SharedPtr createProjectile();
    Ref<Snail>::SharedPtr createSnail(int team, ObjectCreator & creator);
    Ref<Helmet>::SharedPtr createHelmet(int dir);
    

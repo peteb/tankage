@@ -5,7 +5,7 @@
  */
 
 #include "powerup.h"
-#include "bullet.h"
+#include "projectile.h"
 #include "snail.h"
 
 void PowerUp::leftView() {
@@ -14,11 +14,11 @@ void PowerUp::leftView() {
 
 void PowerUp::collided(const Ref<Physics::Geom>::SharedPtr & with) {
    if (Ref<Object>::SharedPtr lockedOwner = with->getOwner().lock()) {
-	  if (Ref<Bullet>::SharedPtr lockedBullet = Cast<Bullet>(lockedOwner)) {
-		 lockedBullet->kill();
+	  if (Ref<Projectile>::SharedPtr lockedProjectile = Cast<Projectile>(lockedOwner)) {
+		 lockedProjectile->kill();
          this->kill();
          
-         if (Ref<Snail>::SharedPtr lockedSnail = lockedBullet->shooter.lock()) {
+         if (Ref<Snail>::SharedPtr lockedSnail = lockedProjectile->shooter.lock()) {
             lockedSnail->increaseHealth(35);
          }
 	  }

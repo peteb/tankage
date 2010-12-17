@@ -5,7 +5,7 @@
  */
 
 #include "object_creator.h"
-#include "bullet.h"
+#include "projectile.h"
 #include "snail.h"
 #include "cactus.h"
 #include "missile.h"
@@ -26,23 +26,23 @@ ObjectCreator::ObjectCreator(World & world)
 {
 }
 
-Ref<Bullet>::SharedPtr ObjectCreator::createBullet() {
-   Ref<Bullet>::SharedPtr newBullet(new Bullet);
+Ref<Projectile>::SharedPtr ObjectCreator::createProjectile() {
+   Ref<Projectile>::SharedPtr newProjectile(new Projectile);
 
-   newBullet->sprite = Owning(world.graphics.createSprite("../data/bullet.png"));
-   newBullet->sprite->setEventHandler(newBullet);
+   newProjectile->sprite = Owning(world.graphics.createSprite("../data/bullet.png"));
+   newProjectile->sprite->setEventHandler(newProjectile);
 
-   newBullet->body = Owning(world.physics.createBody());
-   newBullet->body->setDelegate(newBullet->sprite);
-   newBullet->body->setOwner(newBullet);
+   newProjectile->body = Owning(world.physics.createBody());
+   newProjectile->body->setDelegate(newProjectile->sprite);
+   newProjectile->body->setOwner(newProjectile);
 
    const rect bulletSize(32, 8);
-   newBullet->geom = Owning(world.physics.createRectGeom(bulletSize));
-   newBullet->geom->setBody(newBullet->body);
-   newBullet->geom->setCollisionId(3);
-   newBullet->geom->setCollisionMask(0x0u);
+   newProjectile->geom = Owning(world.physics.createRectGeom(bulletSize));
+   newProjectile->geom->setBody(newProjectile->body);
+   newProjectile->geom->setCollisionId(3);
+   newProjectile->geom->setCollisionMask(0x0u);
    
-   return newBullet;
+   return newProjectile;
 }
 
 Ref<Snail>::SharedPtr ObjectCreator::createSnail(int team, ObjectCreator & creator) {
@@ -135,7 +135,7 @@ Ref<Object>::SharedPtr ObjectCreator::createObject(const std::string & type, Obj
 	  return createSnail(1, creator);
    }
    else if (type == "bullet") {
-	  return createBullet();
+	  return createProjectile();
    }
    else if (type == "missile") {
       Ref<Missile>::SharedPtr newMissile(new Missile);

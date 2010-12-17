@@ -33,8 +33,8 @@
 ** TODO Extend arsenal with rocket launcher
 *** TODO Create rocket projectile
 **** TODO Graphics (the rocket + smoketrail [particle system])
-**** TODO Physics
-**** TODO Logic	(homing)
+**** DONE Physics
+**** DONE Logic	(homing)
 *** TODO A new weapon: rocket launcher
 **** TODO Graphics for the weapon
 **** TODO When out of rockets, switch to first weapon	 
@@ -114,3 +114,6 @@
 ** DONE setPosition/setOrientation -> setReferenceFrame
 ** TODO Improve engine in general (file headers, function documentation)
 ** TODO Investigate whether an object should aggregate a coordsys instead of inherit
+** TODO Redo collision response using collision categories/types
+** TODO Projectile class (bullet and missile are projectiles)
+** TODO ProjectileWeapon class    

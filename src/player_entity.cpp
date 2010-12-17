@@ -5,7 +5,7 @@
  */
 
 #include "player_entity.h"
-#include "bullet.h"
+#include "projectile.h"
 #include "object_creator.h"
 #include "world.h"
 #include "graphics/sprite.h"
@@ -38,7 +38,7 @@ void PlayerEntity::shoot() {
       return;
    }
    
-//    Ref<Bullet>::SharedPtr bullet = Cast<Bullet>(creator.createObject("bullet", creator));
+//    Ref<Projectile>::SharedPtr bullet = Cast<Projectile>(creator.createObject("bullet", creator));
 //    bullet->setTransform(CoordSystemData2(getTransform().position + weaponPos, getTransform().orientation));
 //    bullet->body->addImpulse(vec2(2200.0f, 0.0f) * forward);
 //    bullet->body->setTransform(
@@ -80,7 +80,7 @@ void PlayerEntity::update(float dt) {
          shooting = 0;
    }
    else if (shooting == 2) {
-      if (tshot >= 0.4) {
+      if (tshot >= 0.01) {
          tshot = 0.0f;
          shoot();
       }

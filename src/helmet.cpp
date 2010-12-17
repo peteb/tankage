@@ -6,7 +6,7 @@
 
 #include "helmet.h"
 #include "physics/body.h"
-#include "bullet.h"
+#include "projectile.h"
 #include "missile.h"
 
 Helmet::Helmet() {
@@ -15,7 +15,7 @@ Helmet::Helmet() {
 
 void Helmet::collided(const Ref<Physics::Geom>::SharedPtr & with) {
    if (Ref<Object>::SharedPtr lockedOwner = with->getOwner().lock()) {
-      if (Cast<Bullet>(with->getOwner().lock())) {
+      if (Cast<Projectile>(with->getOwner().lock())) {
          lockedOwner->kill();
          health -= 20;
          

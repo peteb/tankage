@@ -4,17 +4,16 @@
  * (c) Copyright 2010 Peter Backman. All Rights Reserved. 
  */
 
-#include "bullet.h"
-//#include "world.h"
+#include "projectile.h"
 #include "physics/body.h"
 
-void Bullet::setTransform(const CoordSystemData2 & cs) {
+void Projectile::setTransform(const CoordSystemData2 & cs) {
    body->setTransform(cs);
 }
 
-CoordSystemData2 Bullet::getTransform() const {
+CoordSystemData2 Projectile::getTransform() const {
    return body->getTransform();
 }
-void Bullet::leftView() {
+void Projectile::leftView() {
    kill();
 }
