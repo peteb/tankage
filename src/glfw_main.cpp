@@ -7,7 +7,12 @@
 #include <iostream>
 #include <map>
 
+#ifdef __linux__
+#include "GL/glfw.h"
+#else 
 #include "gl/glfw.h"
+#endif
+
 #include "game.h"
 
 static void main_loop(Game & game);

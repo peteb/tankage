@@ -33,6 +33,9 @@ FIND_PATH(GLFW_INCLUDE_DIR glfw.h DOC "Path to GLFW include directory."
   PATHS
   /usr/include/
   /usr/local/include/
+  # By default headers are under GL subfolder
+  /usr/include/GL
+  /usr/local/include/GL	
 )
 DBG_MSG("GLFW_INCLUDE_DIR = ${GLFW_INCLUDE_DIR}")
 

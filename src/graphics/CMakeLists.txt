@@ -2,8 +2,10 @@
 
 find_package(OpenGL REQUIRED)
 find_package(DevIL REQUIRED)
-find_package(png) # for DevIL, not necessary if the symbols are already linked into DevIL..
-find_package(jpeg)
+
+# FIXME: Following modules are not added in the repository!!!
+#find_package(png) # for DevIL, not necessary if the symbols are already linked into DevIL..
+#find_package(jpeg)
 
 add_library(graphics 
    gfx_subsystem.cpp

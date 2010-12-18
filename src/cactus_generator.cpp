@@ -12,6 +12,8 @@
 #include "physics/body.h"
 #include "powerup.h"
 
+#include <cstdlib>
+
 // TODO: the name of this class isn't great. it also spawns power-ups
 
 CactusGenerator::CactusGenerator(ObjectCreator & creator, World & world)

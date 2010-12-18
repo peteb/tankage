@@ -10,6 +10,8 @@
 #ifdef __APPLE__
 #include <OpenGL/OpenGL.h>
 #include "gl/glfw.h"
+#elif __linux__
+#include <GL/gl.h>
 #else
 #include <windows.h>
 #include <GL/GL.h>
