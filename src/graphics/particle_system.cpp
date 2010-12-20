@@ -6,3 +6,16 @@
 
 #include "particle_system.h"
 
+Graphics::ParticleSystem::ParticleSystem(const Ref<Graphics::Renderer>::SharedPtr &renderer)
+   : renderer(renderer)
+{
+}
+
+void Graphics::ParticleSystem::addParticle(const vec2 &pos) {
+
+}
+
+void Graphics::ParticleSystem::enqueueVertices(const Ref<RenderList>::SharedPtr &renderList) {
+   
+}
+

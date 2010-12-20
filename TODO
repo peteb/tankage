@@ -104,7 +104,7 @@
 ** DONE Geoms should have a priority
 ** TODO Finer collision areas for geoms (one big-pass, then a finer-grained pass customized by the geom)
 ** TODO Update the logic at a certain interval
-** TODO Update next state instead of current state in logic, let graphics interpolate
+** TODO Update next state instead of current state in logic, let graphics interpolate (?)
 ** DONE Two sprites, one delegate of the other, shouldn't flicker when moving together
 ** TODO Should GraphicsContext really work by binding?   
 ** TODO Should event handling really need subclassing???
@@ -117,4 +117,8 @@
 ** TODO Redo collision response using collision categories/types
 ** DONE Projectile class (bullet and missile are projectiles)
 ** TODO ProjectileWeapon class    
-** TODO Sprite should not know about cells, but offsets and widths
+** TODO Sprite should not know about cells, but offsets and widths. maybe sprites
+   can get a transformation from a CoordSystem for the offsets
+** TODO Rename mat2 -> Matrix2, vec2 -> Vector2, etc. so it conforms to style
+** TODO Invert dependency of renderable <-> renderlist. list.insert(object) (?)
+   Do some research on this. Push or pull?
