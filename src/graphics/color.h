@@ -7,15 +7,16 @@
 #ifndef GRAPHICS_COLOR_H
 #define GRAPHICS_COLOR_H
 
-namespace Graphics
-{
-   class Color
-   {
-   public:
-	  Color(float r, float g, float b, float a);
+namespace Graphics {
 
-	  float r, g, b, a;
-   };
+class Color {
+public:
+  Color(float r, float g, float b, float a);
+ 
+  static Color White;
+  
+  float r, g, b, a;
+};
    
 }
 

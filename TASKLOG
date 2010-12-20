@@ -234,4 +234,6 @@
 
 2010-12-20
     [25] worked on particle system and pulled in Ubuntu support
+    [25] more particle system work, got a basic system up and running
+    [25] particle system work, added color to vertices
     
