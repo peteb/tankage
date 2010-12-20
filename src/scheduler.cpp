@@ -45,7 +45,7 @@ void Scheduler::update(float dt) {
    for (std::vector<Item>::size_type i = 0; i < listSize; ++i) {
       Item & item = scheduledItems[i];
       if (!item.trigger(dt)) {
-         scheduledItems[i] = scheduledItems[std::max(0u, listSize - 1)];
+         scheduledItems[i] = scheduledItems[std::max(0U, listSize - 1)];
          listSize--;
       }
    }

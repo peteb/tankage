@@ -122,3 +122,5 @@
 ** TODO Rename mat2 -> Matrix2, vec2 -> Vector2, etc. so it conforms to style
 ** TODO Invert dependency of renderable <-> renderlist. list.insert(object) (?)
    Do some research on this. Push or pull?
+
+** TODO Optimize performance of enqueueRender, Mesh, etc. No copies!

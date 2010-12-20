@@ -17,6 +17,7 @@
 #include "world.h"
 #include "ref.h"
 #include "health_meter.h"
+#include "graphics/particle_system.h"
 
 class CactusGenerator;
 class Snail;
@@ -38,6 +39,7 @@ private:
    HiController playerInput1, playerInput2;
    Ref<HealthMeter> snailHealth1, snailHealth2;
 
+   Graphics::ParticleSystem particles;
    bool drawGeoms;
    World world;
    ObjectCreator creator;
