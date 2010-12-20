@@ -5,13 +5,13 @@
  */
 
 #include "cactus_generator.h"
-#include <iostream>
 #include "cactus.h"
 #include "object_creator.h"
 #include "world.h"
 #include "physics/body.h"
 #include "powerup.h"
 
+#include <iostream>
 #include <cstdlib>
 
 // TODO: the name of this class isn't great. it also spawns power-ups

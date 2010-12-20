@@ -1,8 +1,14 @@
-/*
- * Snail Wail
- * 
- * (c) Copyright 2010 Peter Backman. All Rights Reserved. 
- */
+//===- mat2.h - Two-dimensional matrix --------------------------*- c++ -*-===//
+//
+//                                   Snail Wail
+// 
+// (c) Copyright 2010 Peter Backman. All Rights Reserved. 
+//
+//===----------------------------------------------------------------------===//
+//
+// This file declares the 2D matrix class.
+//
+//===----------------------------------------------------------------------===//
 
 #ifndef MAT2_H_LF0Q48ED
 #define MAT2_H_LF0Q48ED
@@ -11,10 +17,11 @@
 
 class mat2 {
 public:
-   mat2(const vec2 & x, const vec2 & y);
+   mat2(const vec2 &x, const vec2 &y);
    mat2(float e11, float e12, float e21, float e22);
    
-   vec2 operator * (const vec2 & v) const;
+   vec2 operator * (const vec2 &v) const;
+   mat2 operator * (const mat2 &m) const;
    
    vec2 getX() const;
    vec2 getY() const;

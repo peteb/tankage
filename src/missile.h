@@ -13,9 +13,6 @@
 
 class Snail;
 
-namespace Graphics {class Sprite; }
-namespace Physics {class Geom; class Body; }
-
 class Missile : public Projectile, public Updatable {
 public:
    Missile();

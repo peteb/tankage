@@ -24,6 +24,7 @@ add_executable(snail-wail
   powerup.cpp
   missile.cpp
   projectile.cpp
+  projectile_weapon.cpp
   )
 
 

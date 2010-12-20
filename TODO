@@ -115,5 +115,6 @@
 ** TODO Improve engine in general (file headers, function documentation)
 ** TODO Investigate whether an object should aggregate a coordsys instead of inherit
 ** TODO Redo collision response using collision categories/types
-** TODO Projectile class (bullet and missile are projectiles)
+** DONE Projectile class (bullet and missile are projectiles)
 ** TODO ProjectileWeapon class    
+** TODO Sprite should not know about cells, but offsets and widths

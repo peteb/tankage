@@ -49,7 +49,7 @@ public:
 
       if (typename Ref<CoordSysT>::SharedPtr lockedDelegate = delegate.lock()) {
          CsFrameT delegateFrame = lockedDelegate->getTransform();
-         return CsFrameT(delegateFrame).transform(frame.getInverse());
+         return delegateFrame.transform(frame.inverse());
       }
       
       return CoordSysT::data_type::Identity;

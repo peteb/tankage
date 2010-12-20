@@ -7,11 +7,11 @@
 #include <iostream>
 #include <map>
 
-#ifdef __linux__
+// #ifdef __linux__
 #include "GL/glfw.h"
-#else 
-#include "gl/glfw.h"
-#endif
+// #else 
+// #include "gl/glfw.h"
+// #endif
 
 #include "game.h"
 

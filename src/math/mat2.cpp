@@ -10,7 +10,7 @@ mat2 mat2::Identity(1.0f, 0.0f, 0.0f, 1.0f);
 mat2 mat2::Zero(0.0f, 0.0f, 0.0f, 0.0f);
 
 
-mat2::mat2(const vec2 & x, const vec2 & y) {
+mat2::mat2(const vec2 &x, const vec2 &y) {
    elements[0][0] = x.x;
    elements[0][1] = x.y;
    elements[1][0] = y.x;
@@ -32,9 +32,13 @@ vec2 mat2::getY() const {
    return vec2(elements[1][0], elements[1][1]);
 }
 
-vec2 mat2::operator * (const vec2 & v) const {
+vec2 mat2::operator * (const vec2 &v) const {
    float x = v.x * elements[0][0] + v.y * elements[1][0];
    float y = v.x * elements[0][1] + v.y * elements[1][1];
    
    return vec2(x, y);
+}
+
+mat2 mat2::operator * (const mat2 &m) const {
+   return mat2::Zero;
 }

@@ -8,12 +8,7 @@
 #include "texture.h"
 #include "device.h"
 
-#ifdef __linux__
 #include <IL/il.h>
-#else 
-#include <IL/IL.h>
-#endif
-
 #include <stdexcept>
 #include <sstream>
 

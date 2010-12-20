@@ -1,11 +1,13 @@
 # -*- mode: cmake -*-
 
+cmake_minimum_required (VERSION 2.8) # FIXME: is this the earliest version with
+                                     # support for PNG and JPEG?
+
 find_package(OpenGL REQUIRED)
 find_package(DevIL REQUIRED)
 
-# FIXME: Following modules are not added in the repository!!!
-#find_package(png) # for DevIL, not necessary if the symbols are already linked into DevIL..
-#find_package(jpeg)
+find_package(PNG) # for DevIL, not necessary if the symbols are already linked into DevIL..
+find_package(JPEG)
 
 add_library(graphics 
    gfx_subsystem.cpp
