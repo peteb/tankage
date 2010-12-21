@@ -2,6 +2,6 @@
 Ubuntu (10.10) Development Environment
 ======================================
 All tools and libraries required can be fetched by default package manager
-    $ sudo apt-get install cmake g++ libboost-dev libdevil-dev libglfw-dev 
-      libgl1-mesa-dev libglu1-mesa-dev
+    $ sudo apt-get install cmake g++ libdevil-dev libglfw-dev libgl1-mesa-dev 
+      libglu1-mesa-dev
 
