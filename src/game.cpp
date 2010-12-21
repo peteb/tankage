@@ -104,7 +104,7 @@ void Game::tick(float dt) {
 
 
    static float accumTime = 0.0f;
-   if (accumTime >= 0.05f) {
+   if (accumTime >= 0.1f) {
       particles.addParticle(vec2(10.0f, 100.0f));
       accumTime = 0.0f;
    }

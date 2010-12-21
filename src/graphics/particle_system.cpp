@@ -22,7 +22,9 @@ void Graphics::ParticleSystem::enqueueVertices(const Ref<RenderList>::SharedPtr 
   std::vector<Vertex2T2> vertices;
   const vec2 halfSize(6.0f, 6.0f);
    
-  for (size_t i = 0, e = particles.size(); i < e; ) {
+  size_t e = particles.size();
+  
+  for (size_t i = 0; i < e; ) {
     Graphics::Particle &particle = particles[i];
 
     if (particle.ttd <= 0.0f) {
@@ -46,7 +48,9 @@ void Graphics::ParticleSystem::enqueueVertices(const Ref<RenderList>::SharedPtr 
     ++i;
   }
 
-  // TODO: fix the emitter!
+  particles.erase(particles.begin() + e, particles.end());
+  
+  // FIXME: fix the emitter!
    
   Ref<Graphics::Mesh>::SharedPtr mesh(new Graphics::Mesh);
   mesh->vertices = vertices;

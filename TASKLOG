@@ -210,6 +210,8 @@
 2010-12-09
     [25] fixed the orientation of sprites
 
+*** Sprint finished, goal (7) reached (9) total: 102
+
 2010-12-13
     [25] added animation on the health bar
     [25] graphics for damaged cactus
@@ -232,8 +234,11 @@
     [25] refining missile behavior
     [25] refined missile behavior
 
+*** Sprint finished, goal (7) reached (14) total: 116
+
 2010-12-20
     [25] worked on particle system and pulled in Ubuntu support
     [25] more particle system work, got a basic system up and running
     [25] particle system work, added color to vertices
+    [25] further improvements on smoke particle system
     
