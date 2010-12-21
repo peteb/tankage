@@ -15,6 +15,8 @@
 
 #include "game.h"
 
+#include <cstdlib>
+
 static void main_loop(Game & game);
 static Game * gameInstance = 0;
 
