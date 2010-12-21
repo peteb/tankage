@@ -10,18 +10,29 @@
 #include "updatable.h"
 #include "ref.h"
 
+class CoordSystem2;
+
 namespace Graphics {
 
 class ParticleSystem;
    
 class ParticleEmitter : public Updatable {
 public:
-   void setParticleSystem(const Ref<ParticleSystem>::WeakPtr &psys);
-   
-   void update(float dt);
+  ParticleEmitter();
+  
+  void setParticleSystem(const Ref<ParticleSystem>::WeakPtr &psys);
+  void setCoordSystem(const Ref<CoordSystem2> &newCs);
+  
+  void update(float dt);
 
 private:
-   Ref<ParticleSystem>::WeakPtr particleSystem;
+  void emit();
+  
+  Ref<ParticleSystem>::WeakPtr particleSystem;
+  Ref<CoordSystem2> origin;
+
+  float emitInterval;
+  float secondsSinceEmit;
 };
 
 }

@@ -69,8 +69,9 @@ Game::Game()
    defaultRenderer = Owning(world.graphics.getRenderer("../data/geom.png"));
    Cast<Graphics::TextureFx>(defaultRenderer.lock())->setColor(Graphics::Color(1.0f, 1.0f, 1.0f, 0.5));
 
-   particles.setRenderer(world.graphics.getRenderer("../data/smoke.png"));
-
+   particles = Owning(new Graphics::ParticleSystem);
+   particles->setRenderer(world.graphics.getRenderer("../data/smoke.png"));
+   
    drawGeoms = (getenv("DRAW_GEOMS") != 0);
 }
 
@@ -97,7 +98,7 @@ void Game::tick(float dt) {
    world.graphics.enqueueVisibleSprites(renderList);
    snailHealth1->enqueueRender(renderList, dt);
    snailHealth2->enqueueRender(renderList, dt);
-   particles.enqueueVertices(renderList, dt);
+   particles->enqueueVertices(renderList, dt);
    
    world.graphics.beginFrame();
    world.graphics.render(renderList);
@@ -105,7 +106,7 @@ void Game::tick(float dt) {
 
    static float accumTime = 0.0f;
    if (accumTime >= 0.1f) {
-      particles.addParticle(vec2(10.0f, 100.0f));
+      particles->addParticle(vec2(10.0f, 100.0f));
       accumTime = 0.0f;
    }
 
