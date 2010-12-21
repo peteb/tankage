@@ -71,6 +71,10 @@ Game::Game()
 
    particles = Owning(new Graphics::ParticleSystem);
    particles->setRenderer(world.graphics.getRenderer("../data/smoke.png"));
+
+   emitter = Owning(new Graphics::ParticleEmitter);
+   emitter->setParticleSystem(particles.lock());
+   emitter->setCoordSystem(Owning(new CoordSystemLeaf2(vec2(100.0f, 100.0f), mat2::Identity)));
    
    drawGeoms = (getenv("DRAW_GEOMS") != 0);
 }
@@ -103,14 +107,8 @@ void Game::tick(float dt) {
    world.graphics.beginFrame();
    world.graphics.render(renderList);
 
+   emitter->update(dt);
 
-   static float accumTime = 0.0f;
-   if (accumTime >= 0.1f) {
-      particles->addParticle(vec2(10.0f, 100.0f));
-      accumTime = 0.0f;
-   }
-
-   accumTime += dt;
 }
 
 void Game::windowChangedSize(int width, int height) {
