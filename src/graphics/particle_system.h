@@ -18,19 +18,20 @@ class RenderList;
 class Renderer;
    
 struct Particle {
-   vec2 pos;
-   float ttd;
+  vec2 pos;
+  vec2 vel;
+  float ttd;
 };
    
 class ParticleSystem {
 public:
-   void setRenderer(const Ref<Graphics::Renderer>::SharedPtr &renderer);
-   void addParticle(const vec2 &pos);
-   void enqueueVertices(const Ref<RenderList>::SharedPtr &renderList, float dt);
+  void setRenderer(const Ref<Graphics::Renderer>::SharedPtr &renderer);
+  void addParticle(const vec2 &pos, const vec2 &velocity);
+  void enqueueVertices(const Ref<RenderList>::SharedPtr &renderList, float dt);
 
 private:
-   std::vector<Particle> particles;
-   Ref<Graphics::Renderer>::SharedPtr renderer;
+  std::vector<Particle> particles;
+  Ref<Graphics::Renderer>::SharedPtr renderer;
 };
 
 

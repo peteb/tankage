@@ -19,14 +19,15 @@ class ParticleSystem;
 class ParticleEmitter : public Updatable {
 public:
   ParticleEmitter();
+  virtual ~ParticleEmitter() {}
   
   void setParticleSystem(const Ref<ParticleSystem>::WeakPtr &psys);
   void setCoordSystem(const Ref<CoordSystem2> &newCs);
   
   void update(float dt);
 
-private:
-  void emit();
+protected:
+  virtual void emit();
   
   Ref<ParticleSystem>::WeakPtr particleSystem;
   Ref<CoordSystem2> origin;

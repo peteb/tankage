@@ -14,8 +14,8 @@ void Graphics::ParticleSystem::setRenderer(const Ref<Graphics::Renderer>::Shared
   this->renderer = renderer;
 }
 
-void Graphics::ParticleSystem::addParticle(const vec2 &pos) {
-  particles.push_back((Graphics::Particle){pos, 1.2f});
+void Graphics::ParticleSystem::addParticle(const vec2 &pos, const vec2 &velocity) {
+  particles.push_back((Graphics::Particle){pos, velocity, 1.2f});
 }
 
 void Graphics::ParticleSystem::enqueueVertices(const Ref<RenderList>::SharedPtr &renderList, float dt) {
@@ -43,7 +43,7 @@ void Graphics::ParticleSystem::enqueueVertices(const Ref<RenderList>::SharedPtr 
     vertices.push_back(Vertex2T2(pos + halfSize * vec2( 1.0f,  1.0f) * scale, vec2(1.0f, 1.0f), color));
     vertices.push_back(Vertex2T2(pos + halfSize * vec2(-1.0f,  1.0f) * scale, vec2(0.0f, 1.0f), color));
 
-    particle.pos += vec2(200.0f, 200.0f) * dt;
+    particle.pos += particle.vel * dt;
     particle.ttd -= dt;
     ++i;
   }
