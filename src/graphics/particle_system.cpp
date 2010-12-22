@@ -8,6 +8,7 @@
 #include "graphics/render_list.h"
 #include "graphics/mesh.h"
 #include "graphics/color.h"
+
 #include <algorithm>
 
 void Graphics::ParticleSystem::setRenderer(const Ref<Graphics::Renderer>::SharedPtr &renderer) {
@@ -28,7 +29,7 @@ void Graphics::ParticleSystem::enqueueVertices(const Ref<RenderList>::SharedPtr 
     Graphics::Particle &particle = particles[i];
 
     if (particle.ttd <= 0.0f) {
-      particles[i] = particles[std::max(1UL, e) - 1UL];
+      particles[i] = particles[std::max(1U, e) - 1UL];
       --e;
       continue;
     }
