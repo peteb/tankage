@@ -127,5 +127,5 @@
 ** TODO Optimize performance of enqueueRender, Mesh, etc. No copies!
 =======
 ** TODO Sprite should not know about cells, but offsets and widths
-** TODO CMake should create and use 'bin' and 'build' directories 
+** DONE CMake should create and use 'bin' and 'build' directories 
 >>>>>>> upstream/master
