@@ -117,6 +117,7 @@
 ** TODO Redo collision response using collision categories/types
 ** DONE Projectile class (bullet and missile are projectiles)
 ** TODO ProjectileWeapon class    
+<<<<<<< HEAD
 ** TODO Sprite should not know about cells, but offsets and widths. maybe sprites
    can get a transformation from a CoordSystem for the offsets
 ** TODO Rename mat2 -> Matrix2, vec2 -> Vector2, etc. so it conforms to style
@@ -124,3 +125,7 @@
    Do some research on this. Push or pull?
 
 ** TODO Optimize performance of enqueueRender, Mesh, etc. No copies!
+=======
+** TODO Sprite should not know about cells, but offsets and widths
+** TODO CMake should create and use 'bin' and 'build' directories 
+>>>>>>> upstream/master

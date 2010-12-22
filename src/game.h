@@ -7,8 +7,6 @@
 #ifndef GAME_H_RGVIQMD1
 #define GAME_H_RGVIQMD1
 
-#include <boost/shared_ptr.hpp>
-
 #include "graphics/gfx_subsystem.h"
 #include "physics/phys_subsystem.h"
 #include "hi_controller.h"
