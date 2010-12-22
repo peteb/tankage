@@ -40,10 +40,7 @@ public:
    vec2 weaponDir, weaponPos;
    
 private:
-   void shoot();
    
-   int shooting;
-   float tshot;
    Ref<Snail>::WeakPtr shooter;
    
    float xPos;

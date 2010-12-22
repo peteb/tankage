@@ -23,8 +23,6 @@ PlayerEntity::PlayerEntity(float x, const Ref<Snail>::WeakPtr & shooter, ObjectC
    , shooter(shooter)
 {
    xPos = x;
-   shooting = 0;
-   tshot = 0.0f;
    weapon = Owning(new ProjectileWeapon(0.1f));
 }
 
@@ -32,7 +30,7 @@ void PlayerEntity::setTarget(const Ref<Physics::Body> & newTarget) {
    this->target = newTarget;
 }
 
-void PlayerEntity::shoot() {
+/*void PlayerEntity::shoot() {
    const vec2 forward = weaponDir;
 
    // TODO: more generic handling of this. weapon should have a coordsystem
@@ -48,56 +46,38 @@ void PlayerEntity::shoot() {
 //       CoordSystemData2(bullet->body->getTransform().position, mat2(weaponDir, vec2(0.0f, 1.0f)))
 //    );
 
-   Ref<Missile>::SharedPtr bullet = Cast<Missile>(creator.createObject("missile", creator));
-   bullet->setTransform(CoordSystemData2(getTransform().position + weaponPos, getTransform().orientation));
-   bullet->body->addImpulse(vec2(500.0f, 0.0f) * forward);
-   bullet->body->setTransform(
-      CoordSystemData2(bullet->body->getTransform().position, mat2(weaponDir, vec2(0.0f, 1.0f)))
-   );
-   bullet->target = shooter.lock()->enemy;
-   bullet->shooter = shooter;
-   
-   if (Ref<Physics::Body>::SharedPtr lockedTarget = target.lock())
-	  lockedTarget->addImpulse(vec2(-800.0f, 0.0f) * forward);
 
-   bullet->shooter = shooter;
-   world.insert(bullet);
+
+//    Ref<Missile>::SharedPtr bullet = Cast<Missile>(creator.createObject("missile", creator));
+//    bullet->setTransform(CoordSystemData2(getTransform().position + weaponPos, getTransform().orientation));
+//    bullet->body->addImpulse(vec2(500.0f, 0.0f) * forward);
+//    bullet->body->setTransform(
+//       CoordSystemData2(bullet->body->getTransform().position, mat2(weaponDir, vec2(0.0f, 1.0f)))
+//    );
+//    bullet->target = shooter.lock()->enemy;
+//    bullet->shooter = shooter;
+   
+//    if (Ref<Physics::Body>::SharedPtr lockedTarget = target.lock())
+// 	  lockedTarget->addImpulse(vec2(-800.0f, 0.0f) * forward);
+
+//    bullet->shooter = shooter;
+//    world.insert(bullet);
+
+
    //world.add(bullet);
-}
+   }*/
 
 // TODO: setPosition+getPosition on body to restrict
 
 void PlayerEntity::update(float dt) {
-   tshot += dt;
-   
    if (Ref<ProjectileWeapon>::SharedPtr lockedWeapon = weapon.lock()) {
+      // Update the current weapon
       lockedWeapon->update(dt);
    }
    
-   if (shooting == 1 || shooting == 3) {
-      
-      if (tshot >= 0.4) {
-         tshot = 0.0f;
-         shoot();
-      }
-      
-      if (shooting == 1)
-         shooting = 2;
-      else
-         shooting = 0;
-   }
-   else if (shooting == 2) {
-      if (tshot >= 0.4) {
-         tshot = 0.0f;
-         shoot();
-      }
-   }
    
-   
-   /*  if (Ref<Physics::Body>::SharedPtr acquiredTarget = target.lock()) {
-	  } */
-
    if (Ref<Physics::Body>::SharedPtr lockedTarget = target.lock()) {
+      // Restrain the snail's body to the screen
       vec2 pos = lockedTarget->getTransform().position;
       pos.x = std::max(pos.x, 32.0f);
       pos.x = std::min(pos.x, 800.0f - 32.0f);
@@ -140,13 +120,6 @@ void PlayerEntity::trigger(const std::string &action, int state) {
          lockedWeapon->stopShooting();
       }
    }
-   
-   if (shooting == 2 && state == 0) // event triggered already, remove
-      shooting = 0;
-   else if (shooting == 0 && state == 1) // not been set for shooting yet
-      shooting = 1;
-   else if (shooting == 1 && state == 0)
-      shooting = 3;
 }
 
 
