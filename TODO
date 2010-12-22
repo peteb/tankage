@@ -31,8 +31,8 @@
 *** DONE More collision areas (body, helmet)
 ** TODO Blood splatter (particle system)
 ** TODO Extend arsenal with rocket launcher
-*** TODO Create rocket projectile
-**** TODO Graphics (the rocket + smoketrail [particle system])
+*** DONE Create rocket projectile
+**** DONE Graphics (the rocket + smoketrail [particle system])
 **** DONE Physics
 **** DONE Logic	(homing)
 *** TODO A new weapon: rocket launcher

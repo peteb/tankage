@@ -26,7 +26,7 @@ CoordSystemData2::CoordSystemData2(const position_type &pos,
 CoordSystemData2 CoordSystemData2::transform(const CoordSystemData2 &other) const {
    CoordSystemData2 ret = *this;
    ret.position += other.position;
-   // TODO: orientation. do it now.
+   // FIXME: orientation. do it now.
    return ret;
 }
 

@@ -161,7 +161,17 @@ Ref<Object>::SharedPtr ObjectCreator::createObject(const std::string & type, Obj
           smokeParticles.lock()) {
          newMissile->smokeEmitter = Owning(new Graphics::ParticleEmitter);
          newMissile->smokeEmitter->setParticleSystem(lockedParticles);
-         newMissile->smokeEmitter->setCoordSystem(Observing(newMissile));
+    
+         // Set the coordinate system as a transformation of the missile's
+         // coordinate system so the particles start a bit behind the missile
+         newMissile->smokeEmitter->setCoordSystem(
+            Owning(new CoordSystemTransformer<CoordSystem2>(
+                      Observing(newMissile),
+                      CoordSystem2::data_type(vec2(0.0f, 0.0f),
+                                              mat2::Identity)
+                      )
+               )
+            );
       }
       
       world.scheduler.subscribe(0.1f, Observing(newMissile));
