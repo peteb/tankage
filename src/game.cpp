@@ -68,13 +68,6 @@ Game::Game()
 
    defaultRenderer = Owning(world.graphics.getRenderer("../data/geom.png"));
    Cast<Graphics::TextureFx>(defaultRenderer.lock())->setColor(Graphics::Color(1.0f, 1.0f, 1.0f, 0.5));
-
-   particles = Owning(new Graphics::ParticleSystem);
-   particles->setRenderer(world.graphics.getRenderer("../data/smoke.png"));
-
-   emitter = Owning(new Graphics::ParticleEmitter);
-   emitter->setParticleSystem(particles.lock());
-   emitter->setCoordSystem(Owning(new CoordSystemLeaf2(vec2(100.0f, 100.0f), mat2::Identity)));
    
    drawGeoms = (getenv("DRAW_GEOMS") != 0);
 }
@@ -102,12 +95,9 @@ void Game::tick(float dt) {
    world.graphics.enqueueVisibleSprites(renderList);
    snailHealth1->enqueueRender(renderList, dt);
    snailHealth2->enqueueRender(renderList, dt);
-   particles->enqueueVertices(renderList, dt);
    
    world.graphics.beginFrame();
    world.graphics.render(renderList);
-
-   emitter->update(dt);
 
 }
 
