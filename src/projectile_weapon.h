@@ -7,6 +7,10 @@
 #ifndef PROJECTILE_WEAPON_H
 #define PROJECTILE_WEAPON_H
 
+#include "ref.h"
+
+class CoordSystem2;
+
 // TODO: move target into Projectile
 
 enum {
@@ -18,6 +22,8 @@ enum {
 class ProjectileWeapon {
 public:
    ProjectileWeapon(float interval);
+
+   void setCoordSystem(const Ref<CoordSystem2> &newCs);
    
    void startShooting();
    void stopShooting();
@@ -26,6 +32,8 @@ public:
    virtual void shoot();
 
 private:
+   Ref<CoordSystem2> origin;
+   
    float interval;
    float secondsSinceShot;
    unsigned shooting; // state of the gun

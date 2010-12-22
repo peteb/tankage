@@ -13,6 +13,10 @@ ProjectileWeapon::ProjectileWeapon(float interval)
 {
 }
 
+void ProjectileWeapon::setCoordSystem(const Ref<CoordSystem2> &newCs) {
+  // Sets the origin for spawned projectiles
+  this->origin = newCs;
+}
 
 void ProjectileWeapon::startShooting() {
   shooting |= (SHOT_FIRST | SHOT_SHOOTING);

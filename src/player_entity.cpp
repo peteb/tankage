@@ -13,17 +13,29 @@
 #include "health_meter.h"
 #include "missile.h"
 #include "projectile_weapon.h"
+#include "coordsystem_transformer.h"
+#include "missile_launcher.h"
 
 #include <algorithm>
 #include <iostream>
 
-PlayerEntity::PlayerEntity(float x, const Ref<Snail>::WeakPtr & shooter, ObjectCreator & creator, World & world) 
+PlayerEntity::PlayerEntity(float x, const Ref<Snail>::WeakPtr &shooter, ObjectCreator & creator, World & world) 
    : creator(creator)
    , world(world)
    , shooter(shooter)
 {
    xPos = x;
-   weapon = Owning(new ProjectileWeapon(0.1f));
+   weapon = Owning(new MissileLauncher);
+
+   // Set the origin of the weapon. Ugly, it's using the shooter!
+   weapon->setCoordSystem(
+      Owning(
+         new CoordSystemTransformer<CoordSystem2>(
+            Observing(shooter.lock()),
+            CoordSystem2::data_type(vec2::Zero, mat2::Identity)
+            )
+         )
+      );
 }
 
 void PlayerEntity::setTarget(const Ref<Physics::Body> & newTarget) {
