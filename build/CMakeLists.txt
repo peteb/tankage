@@ -42,16 +42,25 @@ endif (NOT HAVE_STD_SMARTPTRS)
 
 ADD_DEFINITIONS(-g)
 
-CONFIGURE_FILE(${PROJECT_SOURCE_DIR}/src/config.h.in ${PROJECT_SOURCE_DIR}/src/config.h)
+set(PROJECT_ROOT_DIR ${PROJECT_SOURCE_DIR}/..)
+
+set(EXECUTABLE_OUTPUT_PATH ${PROJECT_ROOT_DIR}/bin)
+set(LIBRARY_OUTPUT_PATH ${PROJECT_ROOT_DIR}/bin)
+
+CONFIGURE_FILE(${PROJECT_ROOT_DIR}/src/config.h.in ${PROJECT_ROOT_DIR}/src/config.h)
 
 if(COMMAND cmake_policy)
   cmake_policy(SET CMP0003 NEW)
   cmake_policy(SET CMP0011 NEW)
 endif(COMMAND cmake_policy)
 
-set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/Modules/")
+set(CMAKE_MODULE_PATH "${PROJECT_ROOT_DIR}/cmake/Modules/")
 
-include_directories ("${PROJECT_SOURCE_DIR}/inc/" "${PROJECT_SOURCE_DIR}/src/")
+include_directories ("${PROJECT_ROOT_DIR}/inc/" "${PROJECT_ROOT_DIR}/src/")
 
-add_subdirectory (src)
+add_subdirectory (${PROJECT_ROOT_DIR}/src CMakeFiles/Src)
+
+add_custom_target(clean-gen
+	rm -rf CMakeFiles CMakeCache.txt Makefile cmake_install.cmake ../bin
+)
 
