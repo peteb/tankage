@@ -16,6 +16,7 @@
 class ObjectCreator;
 class World;
 class HealthMeter;
+class ProjectileWeapon;
 
 namespace Physics {class Body; }
 
@@ -48,6 +49,7 @@ private:
    float xPos;
    Ref<HealthMeter> healthMeter;
    Ref<Physics::Body> target;
+   Ref<ProjectileWeapon> weapon;
    ObjectCreator & creator;
    World & world;
 };

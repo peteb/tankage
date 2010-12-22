@@ -12,6 +12,8 @@
 #include "physics/body.h"
 #include "health_meter.h"
 #include "missile.h"
+#include "projectile_weapon.h"
+
 #include <algorithm>
 #include <iostream>
 
@@ -23,6 +25,7 @@ PlayerEntity::PlayerEntity(float x, const Ref<Snail>::WeakPtr & shooter, ObjectC
    xPos = x;
    shooting = 0;
    tshot = 0.0f;
+   weapon = Owning(new ProjectileWeapon(0.1f));
 }
 
 void PlayerEntity::setTarget(const Ref<Physics::Body> & newTarget) {
@@ -67,6 +70,9 @@ void PlayerEntity::shoot() {
 void PlayerEntity::update(float dt) {
    tshot += dt;
    
+   if (Ref<ProjectileWeapon>::SharedPtr lockedWeapon = weapon.lock()) {
+      lockedWeapon->update(dt);
+   }
    
    if (shooting == 1 || shooting == 3) {
       
@@ -123,8 +129,17 @@ CoordSystemData2 PlayerEntity::getTransform() const {
 }
 
 // 1 = on, 0 = off, -1 = one-shot
-void PlayerEntity::trigger(const std::string & action, int state) {
+void PlayerEntity::trigger(const std::string &action, int state) {
    std::cout << "received event: " << action << std::endl;
+
+   if (Ref<ProjectileWeapon>::SharedPtr lockedWeapon = weapon.lock()) {
+      if (state == 1) {
+         lockedWeapon->startShooting();
+      }
+      else if (state == 0) {
+         lockedWeapon->stopShooting();
+      }
+   }
    
    if (shooting == 2 && state == 0) // event triggered already, remove
       shooting = 0;
@@ -147,7 +162,7 @@ void PlayerEntity::onHealthChange(float newHealth, float diff) {
    }
 }
 
-void PlayerEntity::setHealthMeter(const Ref<HealthMeter> & newMeter) {
+void PlayerEntity::setHealthMeter(const Ref<HealthMeter> &newMeter) {
    healthMeter = newMeter;
 }
 

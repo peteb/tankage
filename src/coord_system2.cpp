@@ -17,40 +17,40 @@ CoordSystemData2 CoordSystemData2::Identity(position_type::Identity,
 
 CoordSystemData2::CoordSystemData2(const position_type &pos,
                                    const orientation_type &orient)
-   : position(pos)
-   , orientation(orient)
+  : position(pos)
+  , orientation(orient)
 {
-
+  
 }
 
 CoordSystemData2 CoordSystemData2::transform(const CoordSystemData2 &other) const {
-   CoordSystemData2 ret = *this;
-   ret.position += other.position;
-   // FIXME: orientation. do it now.
-   return ret;
+  CoordSystemData2 ret = *this;
+  ret.position += other.position;
+  // FIXME: orientation. do it now.
+  return ret;
 }
 
 CoordSystemData2 CoordSystemData2::inverse() const {
-   return CoordSystemData2(-position, orientation);
+  return CoordSystemData2(-position, orientation);
 }
 
 
 CoordSystemLeaf2::CoordSystemLeaf2(const data_type::position_type &pos,
                                    const data_type::orientation_type &orient)
-   : coordSystem(CoordSystemData2(pos, orient))
+  : coordSystem(CoordSystemData2(pos, orient))
 {
 }
 
 CoordSystemLeaf2::CoordSystemLeaf2(const data_type &coordSystem)
-   : coordSystem(coordSystem)
+  : coordSystem(coordSystem)
 {
 }
-   
+
 void CoordSystemLeaf2::setTransform(const data_type &cs) {
-   coordSystem = cs;
+  coordSystem = cs;
 }
 
 CoordSystemLeaf2::data_type CoordSystemLeaf2::getTransform() const {
-   return coordSystem;
+  return coordSystem;
 }
 
