@@ -118,3 +118,4 @@
 ** DONE Projectile class (bullet and missile are projectiles)
 ** TODO ProjectileWeapon class    
 ** TODO Sprite should not know about cells, but offsets and widths
+** TODO CMake should create and use 'bin' and 'build' directories 
