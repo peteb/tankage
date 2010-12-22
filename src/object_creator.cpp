@@ -10,6 +10,8 @@
 #include "cactus.h"
 #include "missile.h"
 
+#include "graphics/particle_system.h"
+#include "graphics/particle_emitter.h"
 #include "graphics/gfx_subsystem.h"
 #include "graphics/sprite.h"
 #include "player_entity.h"
@@ -24,6 +26,8 @@
 ObjectCreator::ObjectCreator(World & world)
    : world(world)
 {
+   smokeParticles = Owning(new Graphics::ParticleSystem);
+   smokeParticles->setRenderer(world.graphics.getRenderer("../data/smoke.png"));
 }
 
 Ref<Projectile>::SharedPtr ObjectCreator::createProjectile() {
@@ -153,6 +157,13 @@ Ref<Object>::SharedPtr ObjectCreator::createObject(const std::string & type, Obj
       newMissile->geom->setCollisionId(3);
       newMissile->geom->setCollisionMask(0x0u);
 
+      if (Ref<Graphics::ParticleSystem>::SharedPtr lockedParticles =
+          smokeParticles.lock()) {
+         newMissile->smokeEmitter = Owning(new Graphics::ParticleEmitter);
+         newMissile->smokeEmitter->setParticleSystem(lockedParticles);
+         newMissile->smokeEmitter->setCoordSystem(Observing(newMissile));
+      }
+      
       world.scheduler.subscribe(0.1f, Observing(newMissile));
       
       return newMissile;

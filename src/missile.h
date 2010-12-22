@@ -13,17 +13,22 @@
 
 class Snail;
 
+namespace Graphics {
+class ParticleEmitter;
+}
+
 class Missile : public Projectile, public Updatable {
 public:
-   Missile();
+  Missile();
    
-   void update(float dt);   
-   void setFuel(float fuel);
-   
-   Ref<Snail>::WeakPtr target;
-
+  void update(float dt);   
+  void setFuel(float fuel);
+  
+  Ref<Snail>::WeakPtr target;
+  Ref<Graphics::ParticleEmitter> smokeEmitter;
+  
 private:
-   float timeSinceUpdate, fuel;
+  float timeSinceUpdate, fuel;
 };
 
 #endif // !MISSILE_H

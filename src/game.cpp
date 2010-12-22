@@ -13,6 +13,7 @@
 #include "graphics/render_list.h"
 #include "graphics/texture_fx.h"
 #include "graphics/color.h"
+#include "graphics/particle_system.h"
 
 #include <iostream>
 #include <cstdlib>
@@ -95,7 +96,8 @@ void Game::tick(float dt) {
    world.graphics.enqueueVisibleSprites(renderList);
    snailHealth1->enqueueRender(renderList, dt);
    snailHealth2->enqueueRender(renderList, dt);
-   
+
+   creator.smokeParticles->enqueueVertices(renderList, dt);
    world.graphics.beginFrame();
    world.graphics.render(renderList);
 

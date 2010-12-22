@@ -244,4 +244,6 @@
     
 2010-12-22
     [25] fixing the particle emitter
+    [25] merged the particle system stuff into master and worked on getting a
+         particle emitter for the missiles
     
