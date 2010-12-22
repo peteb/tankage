@@ -23,7 +23,7 @@ void Missile::update(float dt) {
    fuel -= dt;
    
    if (timeSinceUpdate >= 0.01f && fuel > 0.0f) {
-      // TODO: fix this ugly way of handling target seeking!
+      // FIXME: fix this ugly way of handling target seeking!
       
       if (Ref<Snail>::SharedPtr lockedTarget = target.lock()) {
          vec2 vel = body->getVelocity();

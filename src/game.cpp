@@ -68,7 +68,7 @@ Game::Game()
 
    defaultRenderer = Owning(world.graphics.getRenderer("../data/geom.png"));
    Cast<Graphics::TextureFx>(defaultRenderer.lock())->setColor(Graphics::Color(1.0f, 1.0f, 1.0f, 0.5));
-
+   
    drawGeoms = (getenv("DRAW_GEOMS") != 0);
 }
 
@@ -86,17 +86,19 @@ void Game::tick(float dt) {
 
    Ref<Graphics::RenderList>::SharedPtr renderList(new Graphics::RenderList);
    renderList->setDefaultRenderer(defaultRenderer); //Owning(world.graphics.getRenderer("../data/hearts.png")));
-
+   
    if (drawGeoms) {
       world.physics.enqueueGeoms(renderList);
    }
    
+
    world.graphics.enqueueVisibleSprites(renderList);
    snailHealth1->enqueueRender(renderList, dt);
    snailHealth2->enqueueRender(renderList, dt);
    
    world.graphics.beginFrame();
    world.graphics.render(renderList);
+
 }
 
 void Game::windowChangedSize(int width, int height) {

@@ -17,6 +17,8 @@ add_library(graphics
    texture_fx.cpp
    sprite_culler.cpp
    color.cpp
+   particle_system.cpp
+   particle_emitter.cpp
 )
 
 if (HAVE_BOOST) # this seems to be necessary when generating VS projects
