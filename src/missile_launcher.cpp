@@ -18,7 +18,7 @@ MissileLauncher::MissileLauncher(ObjectCreator &creator, World &world,
   , world(world)
   , shooter(shooter)
 {
-  missiles = 3;
+  missiles = 4;
 }
 
 void MissileLauncher::shoot() {
@@ -57,4 +57,8 @@ void MissileLauncher::shoot() {
 
 bool MissileLauncher::isDepleted() const {
   return (missiles <= 0);
+}
+
+void MissileLauncher::addAmmo(int amount) {
+  missiles += amount;
 }

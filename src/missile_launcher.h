@@ -21,6 +21,7 @@ public:
   
   void shoot();
   bool isDepleted() const;
+  void addAmmo(int amount);
   
 private:
   ObjectCreator &creator;

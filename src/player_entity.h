@@ -17,6 +17,7 @@ class ObjectCreator;
 class World;
 class HealthMeter;
 class ProjectileWeapon;
+class MissileLauncher;
 
 namespace Physics {class Body; }
 
@@ -30,6 +31,7 @@ public:
   void setHealthMeter(const Ref<HealthMeter> & newMeter);
   void update(float dt);
   void setWeapon(const Ref<ProjectileWeapon> &weapon);
+  void giveItems(const std::string &itemName, int quantity);
   
   // CoordSystem2 --------------------------------------
   void setTransform(const CoordSystemData2 & cs);
@@ -45,11 +47,15 @@ public:
 private:
    
   Ref<Snail>::WeakPtr shooter;
-  
+  float timeSinceDepleted;
   float xPos;
+  bool autoShoot;
   Ref<HealthMeter> healthMeter;
   Ref<Physics::Body> target;
   Ref<ProjectileWeapon> weapon, backupWeapon;
+  Ref<MissileLauncher> missileLauncher;
+  // FIXME: more generic solution for handling of different weapons
+  
   ObjectCreator & creator;
   World & world;
 };

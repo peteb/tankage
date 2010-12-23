@@ -66,10 +66,10 @@ Game::Game()
    firstSnail->enemy = secondSnail.lock();
    secondSnail->enemy = firstSnail.lock();
    
-   playerInput1.setRefFrameDelegate(Observing(firstSnail->logic));
-   playerInput1.setActionDelegate(Observing(firstSnail->logic));
-   playerInput2.setRefFrameDelegate(Observing(secondSnail->logic));
-   playerInput2.setActionDelegate(Observing(secondSnail->logic));
+   playerInput2.setRefFrameDelegate(Observing(firstSnail->logic));
+   playerInput2.setActionDelegate(Observing(firstSnail->logic));
+   playerInput1.setRefFrameDelegate(Observing(secondSnail->logic));
+   playerInput1.setActionDelegate(Observing(secondSnail->logic));
 
 
    cactusGenerator = Owning(new CactusGenerator(creator, world));

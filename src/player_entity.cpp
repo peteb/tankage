@@ -25,9 +25,11 @@ PlayerEntity::PlayerEntity(float x, const Ref<Snail>::WeakPtr &shooter, ObjectCr
   , world(world)
   , shooter(shooter)
 {
+  timeSinceDepleted = 0.0f;
   xPos = x;
+  autoShoot = false;
   backupWeapon = Owning(new BulletWeapon(creator, world, shooter));
-  setWeapon(Owning(new MissileLauncher(creator, world, shooter)));
+  setWeapon(backupWeapon);
 }
 
 // FIXME: rename setTarget. target = the snail we're controlling
@@ -41,12 +43,19 @@ void PlayerEntity::setTarget(const Ref<Physics::Body> & newTarget) {
 // TODO: setPosition+getPosition on body to restrict
 
 void PlayerEntity::update(float dt) {
+  timeSinceDepleted += dt;
+
   if (Ref<ProjectileWeapon>::SharedPtr lockedWeapon = weapon.lock()) {
     // Update the current weapon
     lockedWeapon->update(dt);
     
     if (lockedWeapon->isDepleted()) {
       setWeapon(backupWeapon);
+    }
+
+    if (autoShoot && timeSinceDepleted > 0.5f) {
+      weapon->startShooting();
+      autoShoot = false;
     }
   }
   
@@ -92,6 +101,7 @@ void PlayerEntity::trigger(const std::string &action, int state) {
       lockedWeapon->startShooting();
     }
     else if (state == 0) {
+      autoShoot = false;
       lockedWeapon->stopShooting();
     }
   }
@@ -120,6 +130,10 @@ void PlayerEntity::setWeapon(const Ref<ProjectileWeapon> &weapon) {
   if (Ref<ProjectileWeapon>::SharedPtr lockedPrev = this->weapon.lock()) {
     wasShooting = lockedPrev->isShooting();
   }
+
+  if (Cast<MissileLauncher>(weapon.lock())) {
+    missileLauncher = Owning(Cast<MissileLauncher>(weapon.lock()));
+  }
   
   this->weapon = weapon;
 
@@ -139,6 +153,20 @@ void PlayerEntity::setWeapon(const Ref<ProjectileWeapon> &weapon) {
     weapon->invertForward = true;
   
   if (wasShooting) {
-    weapon->startShooting();
+    autoShoot = true;
+    timeSinceDepleted = 0.0f;
+  }
+}
+
+void PlayerEntity::giveItems(const std::string &itemName, int quantity) {
+  if (itemName == "rockets") {
+    if (missileLauncher) {
+      missileLauncher->addAmmo(quantity);
+    }
+    else {
+      missileLauncher = Owning(new MissileLauncher(creator, world, shooter));
+    }
+
+    setWeapon(missileLauncher);
   }
 }

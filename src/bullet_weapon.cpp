@@ -31,7 +31,7 @@ void BulletWeapon::shoot() {
       forward = -forward;
     
     bullet->setTransform(cs);
-    bullet->body->addImpulse(vec2(2200.0f, 0.0f) * forward);
+    bullet->body->addImpulse(vec2(2500.0f, 0.0f) * forward);
     bullet->body->setTransform(cs);
 
     if (Ref<Snail>::SharedPtr lockedSnail = shooter.lock()) {
