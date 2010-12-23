@@ -37,11 +37,14 @@ void Scheduler::update(float dt) {
   std::copy(addedItems.begin(), addedItems.end(), std::back_inserter(scheduledItems));
   addedItems.clear();
 
-  std::vector<Item>::size_type i = 0, e = scheduledItems.size();
+  typedef std::vector<Item>::size_type size_type;
+  
+  size_type i = 0, e = scheduledItems.size();
   for (; i < e; ++i) {
     Item & item = scheduledItems[i];
     if (!item.trigger(dt)) {
-      scheduledItems[i] = scheduledItems[std::max(1U, e) - 1UL];
+      scheduledItems[i] = scheduledItems[std::max(static_cast<size_type>(1U), e) -
+                                         static_cast<size_type>(1U)];
       --e;
     }
   }
