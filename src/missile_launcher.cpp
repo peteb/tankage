@@ -33,16 +33,20 @@ void MissileLauncher::shoot() {
       );
 
     CoordSystem2::data_type cs = lockedOrigin->getTransform();
+    vec2 forward = cs.orientation.getX();
+
+    if (invertForward)
+      forward = -forward;
     
     missile->setTransform(cs);
-    missile->body->addImpulse(vec2(500.0f, 0.0f) * cs.orientation.getX());
+    missile->body->addImpulse(vec2(500.0f, 0.0f) * forward);
     missile->body->setTransform(cs);
 
     if (Ref<Snail>::SharedPtr lockedSnail = shooter.lock()) {
       missile->target = shooter.lock()->enemy;
       missile->shooter = shooter; // FIXME: shooter should not be here, but target can
       
-      shooter.lock()->physBody->addImpulse(vec2(-800.0f, 0.0f) * cs.orientation.getX());
+      shooter.lock()->physBody->addImpulse(vec2(-800.0f, 0.0f) * forward);
     }
     
     world.insert(missile);

@@ -17,19 +17,20 @@
 
 class mat2 {
 public:
-   mat2(const vec2 &x, const vec2 &y);
-   mat2(float e11, float e12, float e21, float e22);
-   
-   vec2 operator * (const vec2 &v) const;
-   mat2 operator * (const mat2 &m) const;
-   
-   vec2 getX() const;
-   vec2 getY() const;
-   
-   static mat2 Identity;
-   static mat2 Zero;
-   
-   float elements[2][2];
+  mat2(const vec2 &x, const vec2 &y);
+  mat2(float e11, float e12, float e21, float e22);
+  
+  vec2 operator * (const vec2 &v) const;
+  mat2 operator * (const mat2 &m) const;
+
+  // FIXME: inverse
+  vec2 getX() const;
+  vec2 getY() const;
+  
+  static mat2 Identity;
+  static mat2 Zero;
+  
+  float elements[2][2];
 };
 
 

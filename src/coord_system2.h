@@ -59,7 +59,7 @@ class CoordSystemLeaf2 : public CoordSystem2 {
 public:
   CoordSystemLeaf2(const data_type::position_type &pos,
                    const data_type::orientation_type &orient);   
-  CoordSystemLeaf2(const data_type &coordSystem);
+  CoordSystemLeaf2(const data_type &coordSystem = data_type::Identity);
   
   void setTransform(const data_type &cs);
   data_type getTransform() const;

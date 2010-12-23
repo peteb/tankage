@@ -27,7 +27,6 @@ PlayerEntity::PlayerEntity(float x, const Ref<Snail>::WeakPtr &shooter, ObjectCr
 {
   xPos = x;
   backupWeapon = Owning(new BulletWeapon(creator, world, shooter));
-
   setWeapon(Owning(new MissileLauncher(creator, world, shooter)));
 }
 
@@ -55,20 +54,20 @@ void PlayerEntity::update(float dt) {
   if (Ref<Physics::Body>::SharedPtr lockedTarget = target.lock()) {
     // Restrain the snail's body to the screen
     vec2 pos = lockedTarget->getTransform().position;
-      pos.x = std::max(pos.x, 32.0f);
-      pos.x = std::min(pos.x, 800.0f - 32.0f);
-      pos.y = std::max(pos.y, 32.0f);
-      pos.y = std::min(pos.y, 600.0f - 32.0f);
-      
-      vec2 delta = vec2(xPos, pos.y) - pos;
-      
-      if (delta.getMagnitude() > 50.0f) {
-        delta.normalize();
-        delta = delta * 50.0f;
-	  }
-      
-	  lockedTarget->addImpulse(-lockedTarget->getVelocity() * 0.005f);
-	  lockedTarget->setTransform(CoordSystemData2(pos + delta * 5.0f * dt, lockedTarget->getTransform().orientation));
+    pos.x = std::max(pos.x, 32.0f);
+    pos.x = std::min(pos.x, 800.0f - 32.0f);
+    pos.y = std::max(pos.y, 32.0f);
+    pos.y = std::min(pos.y, 600.0f - 32.0f);
+    
+    vec2 delta = vec2(xPos, pos.y) - pos;
+    
+    if (delta.getMagnitude() > 50.0f) {
+      delta.normalize();
+      delta = delta * 50.0f;
+    }
+    
+    lockedTarget->addImpulse(-lockedTarget->getVelocity() * 0.005f);
+    lockedTarget->setTransform(CoordSystemData2(pos + delta * 5.0f * dt, lockedTarget->getTransform().orientation));
   }
 }
 
@@ -100,10 +99,10 @@ void PlayerEntity::trigger(const std::string &action, int state) {
 
 
 void PlayerEntity::onHealthChange(float newHealth, float diff) {
-  std::cout << "new health: " << newHealth << std::endl;
   if (Ref<HealthMeter>::SharedPtr lockedMeter = healthMeter.lock()) {
     float speed = 200.0f;
     if (diff > 0.0f) {
+      // A positive change in health will have a slower animation
       speed = 90.0f;
     }
     
@@ -134,6 +133,11 @@ void PlayerEntity::setWeapon(const Ref<ProjectileWeapon> &weapon) {
       )
     );
 
+  if (xPos < 500.0f)
+    weapon->invertForward = false;
+  else
+    weapon->invertForward = true;
+  
   if (wasShooting) {
     weapon->startShooting();
   }

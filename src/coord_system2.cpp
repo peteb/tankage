@@ -34,7 +34,6 @@ CoordSystemData2 CoordSystemData2::inverse() const {
   return CoordSystemData2(-position, orientation);
 }
 
-
 CoordSystemLeaf2::CoordSystemLeaf2(const data_type::position_type &pos,
                                    const data_type::orientation_type &orient)
   : coordSystem(CoordSystemData2(pos, orient))

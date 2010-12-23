@@ -25,15 +25,19 @@ void BulletWeapon::shoot() {
     Ref<Projectile>::SharedPtr bullet = Cast<Projectile>(creator.createObject("bullet", creator));
 
     CoordSystem2::data_type cs = lockedOrigin->getTransform();
+    vec2 forward = cs.orientation.getX();
 
+    if (invertForward)
+      forward = -forward;
+    
     bullet->setTransform(cs);
-    bullet->body->addImpulse(vec2(2200.0f, 0.0f) * cs.orientation.getX());
+    bullet->body->addImpulse(vec2(2200.0f, 0.0f) * forward);
     bullet->body->setTransform(cs);
 
     if (Ref<Snail>::SharedPtr lockedSnail = shooter.lock()) {
       bullet->shooter = shooter; // FIXME: shooter should not be here, but target can
       
-      shooter.lock()->physBody->addImpulse(vec2(-130.0f, 0.0f) * cs.orientation.getX());
+      shooter.lock()->physBody->addImpulse(vec2(-130.0f, 0.0f) * forward);
     }
    
     world.insert(bullet);

@@ -42,3 +42,4 @@ vec2 mat2::operator * (const vec2 &v) const {
 mat2 mat2::operator * (const mat2 &m) const {
    return mat2::Zero;
 }
+

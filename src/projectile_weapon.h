@@ -32,6 +32,8 @@ public:
 
   virtual void shoot();
   virtual bool isDepleted() const;
+
+  bool invertForward;
   
 protected:
   Ref<CoordSystem2> origin;
