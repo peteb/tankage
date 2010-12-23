@@ -20,11 +20,13 @@ public:
                   const Ref<Snail>::WeakPtr &shooter);
   
   void shoot();
-
+  bool isDepleted() const;
+  
 private:
   ObjectCreator &creator;
   World &world;
   Ref<Snail>::WeakPtr shooter;
+  int missiles;
 };
 
 

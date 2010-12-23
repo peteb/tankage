@@ -27,8 +27,9 @@ public:
   
   void startShooting();
   void stopShooting();
+  bool isShooting() const;
   void update(float dt);
-  
+
   virtual void shoot();
   virtual bool isDepleted() const;
   

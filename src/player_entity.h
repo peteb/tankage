@@ -22,33 +22,34 @@ namespace Physics {class Body; }
 
 class PlayerEntity : public CoordSystem2, public Triggerable, public Updatable, public SnailEventHandler {
 public:
-   PlayerEntity(float x, const Ref<Snail>::WeakPtr & shooterId, ObjectCreator & creator, World & world);
-   
-   void setTarget(const Ref<Physics::Body> & newTarget);
-   void setHealthMeter(const Ref<HealthMeter> & newMeter);
-   void update(float dt);
-   
-   // CoordSystem2 --------------------------------------
-   void setTransform(const CoordSystemData2 & cs);
-   CoordSystemData2 getTransform() const;
-   
-   // Updatable --------------------------------------------
-   void trigger(const std::string & action, int state);
-
-   void onHealthChange(float newHealth, float diff);
-
-   vec2 weaponDir, weaponPos;
-   
+  PlayerEntity(float x, const Ref<Snail>::WeakPtr & shooterId, ObjectCreator & creator, World & world);
+  
+  void setTarget(const Ref<Physics::Body> & newTarget);
+  void setHealthMeter(const Ref<HealthMeter> & newMeter);
+  void update(float dt);
+  void setWeapon(const Ref<ProjectileWeapon> &weapon);
+  
+  // CoordSystem2 --------------------------------------
+  void setTransform(const CoordSystemData2 & cs);
+  CoordSystemData2 getTransform() const;
+  
+  // Updatable --------------------------------------------
+  void trigger(const std::string & action, int state);
+  
+  void onHealthChange(float newHealth, float diff);
+  
+  vec2 weaponDir, weaponPos; // FIXME: remove these
+  
 private:
    
-   Ref<Snail>::WeakPtr shooter;
-   
-   float xPos;
-   Ref<HealthMeter> healthMeter;
-   Ref<Physics::Body> target;
-   Ref<ProjectileWeapon> weapon;
-   ObjectCreator & creator;
-   World & world;
+  Ref<Snail>::WeakPtr shooter;
+  
+  float xPos;
+  Ref<HealthMeter> healthMeter;
+  Ref<Physics::Body> target;
+  Ref<ProjectileWeapon> weapon, backupWeapon;
+  ObjectCreator & creator;
+  World & world;
 };
 
 #endif /* end of include guard: PLAYER_ENTITY_H_5TG24XG5 */

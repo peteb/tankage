@@ -13,7 +13,7 @@
 
 BulletWeapon::BulletWeapon(ObjectCreator &creator, World &world,
                            const Ref<Snail>::WeakPtr &shooter)
-  : ProjectileWeapon(0.2f)
+  : ProjectileWeapon(0.5f)
   , creator(creator)
   , world(world)
   , shooter(shooter)
@@ -41,3 +41,6 @@ void BulletWeapon::shoot() {
   
 }
 
+bool BulletWeapon::isDepleted() const {
+  return false; // Infinite amount of ammunition
+}

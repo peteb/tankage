@@ -18,9 +18,14 @@ MissileLauncher::MissileLauncher(ObjectCreator &creator, World &world,
   , world(world)
   , shooter(shooter)
 {
+  missiles = 3;
 }
 
 void MissileLauncher::shoot() {
+  if (missiles <= 0) { // Depleted?
+    return;
+  }
+  
   if (Ref<CoordSystem2>::SharedPtr lockedOrigin = origin.lock()) {
     // Create the new missile
     Ref<Missile>::SharedPtr missile = Cast<Missile>(
@@ -41,7 +46,11 @@ void MissileLauncher::shoot() {
     }
     
     world.insert(missile);
+    --missiles;
   }
   
 }
 
+bool MissileLauncher::isDepleted() const {
+  return (missiles <= 0);
+}

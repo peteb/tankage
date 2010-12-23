@@ -26,17 +26,9 @@ PlayerEntity::PlayerEntity(float x, const Ref<Snail>::WeakPtr &shooter, ObjectCr
   , shooter(shooter)
 {
   xPos = x;
-  weapon = Owning(new BulletWeapon(creator, world, shooter));
-  
-   // Set the origin of the weapon. Ugly, it's using the shooter!
-  weapon->setCoordSystem(
-    Owning(
-      new CoordSystemTransformer<CoordSystem2>(
-        Observing(shooter.lock()),
-        CoordSystem2::data_type(vec2::Zero, mat2::Identity)
-        )
-      )
-    );
+  backupWeapon = Owning(new BulletWeapon(creator, world, shooter));
+
+  setWeapon(Owning(new MissileLauncher(creator, world, shooter)));
 }
 
 // FIXME: rename setTarget. target = the snail we're controlling
@@ -50,73 +42,99 @@ void PlayerEntity::setTarget(const Ref<Physics::Body> & newTarget) {
 // TODO: setPosition+getPosition on body to restrict
 
 void PlayerEntity::update(float dt) {
-   if (Ref<ProjectileWeapon>::SharedPtr lockedWeapon = weapon.lock()) {
-      // Update the current weapon
-      lockedWeapon->update(dt);
-   }
-   
-   
-   if (Ref<Physics::Body>::SharedPtr lockedTarget = target.lock()) {
-      // Restrain the snail's body to the screen
-      vec2 pos = lockedTarget->getTransform().position;
+  if (Ref<ProjectileWeapon>::SharedPtr lockedWeapon = weapon.lock()) {
+    // Update the current weapon
+    lockedWeapon->update(dt);
+    
+    if (lockedWeapon->isDepleted()) {
+      setWeapon(backupWeapon);
+    }
+  }
+  
+  
+  if (Ref<Physics::Body>::SharedPtr lockedTarget = target.lock()) {
+    // Restrain the snail's body to the screen
+    vec2 pos = lockedTarget->getTransform().position;
       pos.x = std::max(pos.x, 32.0f);
       pos.x = std::min(pos.x, 800.0f - 32.0f);
       pos.y = std::max(pos.y, 32.0f);
       pos.y = std::min(pos.y, 600.0f - 32.0f);
-
+      
       vec2 delta = vec2(xPos, pos.y) - pos;
-
+      
       if (delta.getMagnitude() > 50.0f) {
-         delta.normalize();
-         delta = delta * 50.0f;
+        delta.normalize();
+        delta = delta * 50.0f;
 	  }
-
+      
 	  lockedTarget->addImpulse(-lockedTarget->getVelocity() * 0.005f);
 	  lockedTarget->setTransform(CoordSystemData2(pos + delta * 5.0f * dt, lockedTarget->getTransform().orientation));
-   }
+  }
 }
 
 void PlayerEntity::setTransform(const CoordSystemData2 & cs) {
-   if (Ref<Physics::Body>::SharedPtr lockedBody = target.lock())
-      lockedBody->setTransform(cs);
+  if (Ref<Physics::Body>::SharedPtr lockedBody = target.lock())
+    lockedBody->setTransform(cs);
 }
 
 CoordSystemData2 PlayerEntity::getTransform() const {
-   if (Ref<Physics::Body>::SharedPtr lockedTarget = target.lock())
-      return lockedTarget->getTransform();
-
-   return CoordSystemData2::Identity;
+  if (Ref<Physics::Body>::SharedPtr lockedTarget = target.lock())
+    return lockedTarget->getTransform();
+  
+  return CoordSystemData2::Identity;
 }
 
 // 1 = on, 0 = off, -1 = one-shot
 void PlayerEntity::trigger(const std::string &action, int state) {
-   std::cout << "received event: " << action << std::endl;
-
-   if (Ref<ProjectileWeapon>::SharedPtr lockedWeapon = weapon.lock()) {
-      if (state == 1) {
-         lockedWeapon->startShooting();
-      }
-      else if (state == 0) {
-         lockedWeapon->stopShooting();
-      }
-   }
+  std::cout << "received event: " << action << std::endl;
+  
+  if (Ref<ProjectileWeapon>::SharedPtr lockedWeapon = weapon.lock()) {
+    if (state == 1) {
+      lockedWeapon->startShooting();
+    }
+    else if (state == 0) {
+      lockedWeapon->stopShooting();
+    }
+  }
 }
 
 
 void PlayerEntity::onHealthChange(float newHealth, float diff) {
-   std::cout << "new health: " << newHealth << std::endl;
-   if (Ref<HealthMeter>::SharedPtr lockedMeter = healthMeter.lock()) {
-      float speed = 200.0f;
-      if (diff > 0.0f) {
-         speed = 90.0f;
-      }
-      
-      lockedMeter->setValue(newHealth, speed);
-   }
+  std::cout << "new health: " << newHealth << std::endl;
+  if (Ref<HealthMeter>::SharedPtr lockedMeter = healthMeter.lock()) {
+    float speed = 200.0f;
+    if (diff > 0.0f) {
+      speed = 90.0f;
+    }
+    
+    lockedMeter->setValue(newHealth, speed);
+  }
 }
 
 void PlayerEntity::setHealthMeter(const Ref<HealthMeter> &newMeter) {
-   healthMeter = newMeter;
+  healthMeter = newMeter;
 }
 
+void PlayerEntity::setWeapon(const Ref<ProjectileWeapon> &weapon) {
+  bool wasShooting = false;
 
+  if (Ref<ProjectileWeapon>::SharedPtr lockedPrev = this->weapon.lock()) {
+    wasShooting = lockedPrev->isShooting();
+  }
+  
+  this->weapon = weapon;
+
+   // Set the origin of the weapon. Ugly, it's using the shooter!
+  weapon->setCoordSystem(
+    Owning(
+      new CoordSystemTransformer<CoordSystem2>(
+        Observing(shooter.lock()),
+        CoordSystem2::data_type(vec2::Zero, mat2::Identity)
+        )
+      )
+    );
+
+  if (wasShooting) {
+    weapon->startShooting();
+  }
+}

@@ -51,7 +51,7 @@ public:
   Ref<Snail>::WeakPtr enemy;
   
 private:
-   int health;
+  int health;
 };
 
 #endif /* end of include guard: SNAIL_H_7SGQH1KL */

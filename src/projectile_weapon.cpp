@@ -32,6 +32,10 @@ void ProjectileWeapon::stopShooting() {
   }
 }
 
+bool ProjectileWeapon::isShooting() const {
+  return (shooting & SHOT_SHOOTING) && !(shooting & SHOT_ENDING);
+}
+
 void ProjectileWeapon::update(float dt) {
   if (shooting & SHOT_SHOOTING) {
     if (secondsSinceShot >= interval) {
