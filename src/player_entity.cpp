@@ -25,7 +25,7 @@ PlayerEntity::PlayerEntity(float x, const Ref<Snail>::WeakPtr &shooter, ObjectCr
    , shooter(shooter)
 {
    xPos = x;
-   weapon = Owning(new MissileLauncher);
+   weapon = Owning(new MissileLauncher(creator, world, shooter));
 
    // Set the origin of the weapon. Ugly, it's using the shooter!
    weapon->setCoordSystem(
@@ -37,6 +37,9 @@ PlayerEntity::PlayerEntity(float x, const Ref<Snail>::WeakPtr &shooter, ObjectCr
          )
       );
 }
+
+// FIXME: rename setTarget. target = the snail we're controlling
+// FIXME: there's no reason _not_ to work directly on snails...
 
 void PlayerEntity::setTarget(const Ref<Physics::Body> & newTarget) {
    this->target = newTarget;

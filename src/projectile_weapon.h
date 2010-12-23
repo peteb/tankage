@@ -31,9 +31,10 @@ public:
 
    virtual void shoot();
 
-private:
+protected:
    Ref<CoordSystem2> origin;
-   
+
+private:
    float interval;
    float secondsSinceShot;
    unsigned shooting; // state of the gun
