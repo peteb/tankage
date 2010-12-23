@@ -26,6 +26,7 @@ add_executable(snail-wail
   projectile.cpp
   projectile_weapon.cpp
   missile_launcher.cpp
+  bullet_weapon.cpp
   )
 
 

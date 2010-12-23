@@ -15,72 +15,37 @@
 #include "projectile_weapon.h"
 #include "coordsystem_transformer.h"
 #include "missile_launcher.h"
+#include "bullet_weapon.h"
 
 #include <algorithm>
 #include <iostream>
 
 PlayerEntity::PlayerEntity(float x, const Ref<Snail>::WeakPtr &shooter, ObjectCreator & creator, World & world) 
-   : creator(creator)
-   , world(world)
-   , shooter(shooter)
+  : creator(creator)
+  , world(world)
+  , shooter(shooter)
 {
-   xPos = x;
-   weapon = Owning(new MissileLauncher(creator, world, shooter));
-
+  xPos = x;
+  weapon = Owning(new BulletWeapon(creator, world, shooter));
+  
    // Set the origin of the weapon. Ugly, it's using the shooter!
-   weapon->setCoordSystem(
-      Owning(
-         new CoordSystemTransformer<CoordSystem2>(
-            Observing(shooter.lock()),
-            CoordSystem2::data_type(vec2::Zero, mat2::Identity)
-            )
-         )
-      );
+  weapon->setCoordSystem(
+    Owning(
+      new CoordSystemTransformer<CoordSystem2>(
+        Observing(shooter.lock()),
+        CoordSystem2::data_type(vec2::Zero, mat2::Identity)
+        )
+      )
+    );
 }
 
 // FIXME: rename setTarget. target = the snail we're controlling
 // FIXME: there's no reason _not_ to work directly on snails...
+//        ie, this abstraction is useless
 
 void PlayerEntity::setTarget(const Ref<Physics::Body> & newTarget) {
-   this->target = newTarget;
+  this->target = newTarget;
 }
-
-/*void PlayerEntity::shoot() {
-   const vec2 forward = weaponDir;
-
-   // TODO: more generic handling of this. weapon should have a coordsystem
-   if (!target.lock()) {
-      std::cout << "Target failed to be locked, not shooting" << std::endl;
-      return;
-   }
-   
-//    Ref<Projectile>::SharedPtr bullet = Cast<Projectile>(creator.createObject("bullet", creator));
-//    bullet->setTransform(CoordSystemData2(getTransform().position + weaponPos, getTransform().orientation));
-//    bullet->body->addImpulse(vec2(2200.0f, 0.0f) * forward);
-//    bullet->body->setTransform(
-//       CoordSystemData2(bullet->body->getTransform().position, mat2(weaponDir, vec2(0.0f, 1.0f)))
-//    );
-
-
-
-//    Ref<Missile>::SharedPtr bullet = Cast<Missile>(creator.createObject("missile", creator));
-//    bullet->setTransform(CoordSystemData2(getTransform().position + weaponPos, getTransform().orientation));
-//    bullet->body->addImpulse(vec2(500.0f, 0.0f) * forward);
-//    bullet->body->setTransform(
-//       CoordSystemData2(bullet->body->getTransform().position, mat2(weaponDir, vec2(0.0f, 1.0f)))
-//    );
-//    bullet->target = shooter.lock()->enemy;
-//    bullet->shooter = shooter;
-   
-//    if (Ref<Physics::Body>::SharedPtr lockedTarget = target.lock())
-// 	  lockedTarget->addImpulse(vec2(-800.0f, 0.0f) * forward);
-
-//    bullet->shooter = shooter;
-//    world.insert(bullet);
-
-
-   //world.add(bullet);
-   }*/
 
 // TODO: setPosition+getPosition on body to restrict
 

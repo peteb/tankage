@@ -52,3 +52,6 @@ void ProjectileWeapon::shoot() {
 
 }
 
+bool ProjectileWeapon::isDepleted() const {
+  return true;
+}

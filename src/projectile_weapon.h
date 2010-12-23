@@ -14,30 +14,31 @@ class CoordSystem2;
 // TODO: move target into Projectile
 
 enum {
-   SHOT_SHOOTING = 0x0001,
-   SHOT_FIRST = 0x0002,
-   SHOT_ENDING = 0x0004,
+  SHOT_SHOOTING = 0x0001,
+  SHOT_FIRST = 0x0002,
+  SHOT_ENDING = 0x0004,
 };
    
 class ProjectileWeapon {
 public:
-   ProjectileWeapon(float interval);
-
-   void setCoordSystem(const Ref<CoordSystem2> &newCs);
-   
-   void startShooting();
-   void stopShooting();
-   void update(float dt);
-
-   virtual void shoot();
-
+  ProjectileWeapon(float interval);
+  
+  void setCoordSystem(const Ref<CoordSystem2> &newCs);
+  
+  void startShooting();
+  void stopShooting();
+  void update(float dt);
+  
+  virtual void shoot();
+  virtual bool isDepleted() const;
+  
 protected:
-   Ref<CoordSystem2> origin;
-
+  Ref<CoordSystem2> origin;
+  
 private:
-   float interval;
-   float secondsSinceShot;
-   unsigned shooting; // state of the gun
+  float interval;
+  float secondsSinceShot;
+  unsigned shooting; // state of the gun
 };
 
 #endif // !PROJECTILE_WEAPON_H

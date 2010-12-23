@@ -24,31 +24,32 @@ class HealthMeter;
 
 class SnailEventHandler {
 public:
-   virtual ~SnailEventHandler() {}
+  virtual ~SnailEventHandler() {}
    
-   virtual void onHealthChange(float newValue, float diff) =0;
+  virtual void onHealthChange(float newValue, float diff) =0;
 };
+
 
 class Snail : public Object, public CoordSystem2, public Physics::GeomEventHandler {
 public:
-   Snail();
-
-   void setTransform(const CoordSystemData2 & cs);
-   CoordSystemData2 getTransform() const;
+  Snail();
+  
+  void setTransform(const CoordSystemData2 & cs);
+  CoordSystemData2 getTransform() const;
    
-   void collided(const Ref<Physics::Geom>::SharedPtr & with);
-   
-   void setEventHandler(const Ref<SnailEventHandler> & newHandler);
-   void increaseHealth(int add);
-
-   Ref<SnailEventHandler> eventHandler;
-   Ref<Graphics::Sprite> sprite;
-   Ref<Helmet> helmet;
-   Ref<PlayerEntity> logic;
-   Ref<Physics::Geom> physGeom;
-   Ref<Physics::Body> physBody;
-   Ref<Snail>::WeakPtr enemy;
-   
+  void collided(const Ref<Physics::Geom>::SharedPtr & with);
+  
+  void setEventHandler(const Ref<SnailEventHandler> & newHandler);
+  void increaseHealth(int add);
+  
+  Ref<SnailEventHandler> eventHandler;
+  Ref<Graphics::Sprite> sprite;
+  Ref<Helmet> helmet;
+  Ref<PlayerEntity> logic;
+  Ref<Physics::Geom> physGeom;
+  Ref<Physics::Body> physBody;
+  Ref<Snail>::WeakPtr enemy;
+  
 private:
    int health;
 };
