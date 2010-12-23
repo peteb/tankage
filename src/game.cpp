@@ -42,7 +42,16 @@ Game::Game()
    {
       Ref<Snail> snail = Owning(Cast<Snail>(creator.createObject("snail2", creator)));
       world.insert(snail.lock());
-      snail->setTransform(CoordSystemData2(vec2(700.0f, 400.0f), mat2::Identity));
+      snail->setTransform(CoordSystemData2(
+                                  vec2(700.0f, 400.0f),
+                                  mat2(
+                                          vec2(-1.0f, 0.0f),
+                                          vec2(0.0f, 1.0f))
+                                  )
+              );
+      
+      // FIXME: add snail origin for weapons
+      
       secondSnail = Observing(snail);
       snailHealth2 = Owning(new HealthMeter);
       snailHealth2->setValue(100.0f);
@@ -57,10 +66,10 @@ Game::Game()
    firstSnail->enemy = secondSnail.lock();
    secondSnail->enemy = firstSnail.lock();
    
-   playerInput1.setRefFrameDelegate(Observing(firstSnail->logic));
-   playerInput1.setActionDelegate(Observing(firstSnail->logic));
-   playerInput2.setRefFrameDelegate(Observing(secondSnail->logic));
-   playerInput2.setActionDelegate(Observing(secondSnail->logic));
+   playerInput2.setRefFrameDelegate(Observing(firstSnail->logic));
+   playerInput2.setActionDelegate(Observing(firstSnail->logic));
+   playerInput1.setRefFrameDelegate(Observing(secondSnail->logic));
+   playerInput1.setActionDelegate(Observing(secondSnail->logic));
 
 
    cactusGenerator = Owning(new CactusGenerator(creator, world));

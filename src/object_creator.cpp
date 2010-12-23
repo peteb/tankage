@@ -22,6 +22,7 @@
 #include "helmet.h"
 #include "coordsystem_transformer.h"
 #include "powerup.h"
+#include "rocket_ammo.h"
 
 ObjectCreator::ObjectCreator(World & world)
    : world(world)
@@ -203,6 +204,22 @@ Ref<Object>::SharedPtr ObjectCreator::createObject(const std::string & type, Obj
    else if (type == "healthbox") {
       Ref<PowerUp>::SharedPtr newPowerup(new PowerUp);
       newPowerup->sprite = Owning(world.graphics.createSprite("../data/health_powerup.png"));
+      newPowerup->sprite->setEventHandler(newPowerup);
+      
+      newPowerup->body = Owning(world.physics.createBody());
+      newPowerup->body->setDelegate(newPowerup->sprite);
+      newPowerup->body->setOwner(newPowerup); // I guess this is for cascade kill
+
+      newPowerup->geom = Owning(world.physics.createRectGeom(newPowerup->sprite->getSize()));
+      newPowerup->geom->setBody(newPowerup->body);
+      newPowerup->geom->setCollisionId(4);
+      newPowerup->geom->setEventHandler(Observing(newPowerup));
+      
+      return newPowerup;
+   }
+   else if (type == "rockets") {
+      Ref<RocketAmmo>::SharedPtr newPowerup(new RocketAmmo);
+      newPowerup->sprite = Owning(world.graphics.createSprite("../data/rocket_ammo.png"));
       newPowerup->sprite->setEventHandler(newPowerup);
       
       newPowerup->body = Owning(world.physics.createBody());

@@ -30,16 +30,16 @@
 *** DONE Better-fitting collision areas
 *** DONE More collision areas (body, helmet)
 ** TODO Blood splatter (particle system)
-** TODO Extend arsenal with rocket launcher
+** DONE Extend arsenal with rocket launcher
 *** DONE Create rocket projectile
 **** DONE Graphics (the rocket + smoketrail [particle system])
 **** DONE Physics
 **** DONE Logic	(homing)
-*** TODO A new weapon: rocket launcher
-**** TODO Graphics for the weapon
-**** TODO When out of rockets, switch to first weapon	 
-** TODO Power-ups
-*** TODO Rocket launcher (or additional rockets)
+*** DONE A new weapon: rocket launcher
+**** WONT Graphics for the weapon
+**** DONE When out of rockets, switch to first weapon	 
+** DONE Power-ups
+*** DONE Rocket launcher (or additional rockets)
 **** DONE Graphics    
 *** DONE Replenish some of the health
 **** DONE Power-up graphics    
