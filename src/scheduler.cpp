@@ -41,7 +41,7 @@ void Scheduler::update(float dt) {
   for (; i < e; ++i) {
     Item & item = scheduledItems[i];
     if (!item.trigger(dt)) {
-      scheduledItems[i] = scheduledItems[std::max(1UL, e) - 1UL];
+      scheduledItems[i] = scheduledItems[std::max(1U, e) - 1UL];
       --e;
     }
   }
