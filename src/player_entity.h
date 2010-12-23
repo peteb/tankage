@@ -20,6 +20,8 @@ class ProjectileWeapon;
 
 namespace Physics {class Body; }
 
+// This class is the main logic for snails, it could just as well been
+// in the Snail class directly
 class PlayerEntity : public CoordSystem2, public Triggerable, public Updatable, public SnailEventHandler {
 public:
   PlayerEntity(float x, const Ref<Snail>::WeakPtr & shooterId, ObjectCreator & creator, World & world);

@@ -35,9 +35,9 @@
 **** DONE Graphics (the rocket + smoketrail [particle system])
 **** DONE Physics
 **** DONE Logic	(homing)
-*** TODO A new weapon: rocket launcher
-**** TODO Graphics for the weapon
-**** TODO When out of rockets, switch to first weapon	 
+*** DONE A new weapon: rocket launcher
+**** WONT Graphics for the weapon
+**** DONE When out of rockets, switch to first weapon	 
 ** TODO Power-ups
 *** TODO Rocket launcher (or additional rockets)
 **** DONE Graphics    
