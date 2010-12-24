@@ -52,7 +52,7 @@ public:
          return delegateFrame.transform(frame.inverse());
       }
       
-      return CoordSysT::data_type::Identity;
+      return CoordSysT::data_type::Identity();
    }
 
 

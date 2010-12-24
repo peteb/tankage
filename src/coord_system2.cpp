@@ -12,8 +12,11 @@
 
 #include "coord_system2.h"
 
-CoordSystemData2 CoordSystemData2::Identity(position_type::Identity,
-                                            orientation_type::Identity);
+CoordSystemData2 CoordSystemData2::Identity() {
+  static CoordSystemData2 cs(CoordSystemData2::position_type::Identity(),
+                             CoordSystemData2::orientation_type::Identity());
+  return cs;
+}
 
 CoordSystemData2::CoordSystemData2(const position_type &pos,
                                    const orientation_type &orient)
@@ -26,7 +29,7 @@ CoordSystemData2::CoordSystemData2(const position_type &pos,
 CoordSystemData2 CoordSystemData2::transform(const CoordSystemData2 &other) const {
   CoordSystemData2 ret = *this;
   ret.position += other.position;
-  // FIXME: orientation. do it now.
+  ret.orientation *= other.orientation;
   return ret;
 }
 

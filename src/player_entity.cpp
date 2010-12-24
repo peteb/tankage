@@ -89,7 +89,7 @@ CoordSystemData2 PlayerEntity::getTransform() const {
   if (Ref<Physics::Body>::SharedPtr lockedTarget = target.lock())
     return lockedTarget->getTransform();
   
-  return CoordSystemData2::Identity;
+  return CoordSystemData2::Identity();
 }
 
 // 1 = on, 0 = off, -1 = one-shot
@@ -142,7 +142,7 @@ void PlayerEntity::setWeapon(const Ref<ProjectileWeapon> &weapon) {
     Owning(
       new CoordSystemTransformer<CoordSystem2>(
         Observing(shooter.lock()),
-        CoordSystem2::data_type(vec2::Zero, mat2::Identity)
+        CoordSystem2::data_type(vec2::Zero(), mat2::Identity())
         )
       )
     );

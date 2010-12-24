@@ -110,7 +110,7 @@ Ref<Snail>::SharedPtr ObjectCreator::createSnail(int team, ObjectCreator & creat
    newSnail->sprite->setDelegate(Owning(
       new CoordSystemTransformer<CoordSystem2>(
          newSnail->helmet,
-         CoordSystem2::data_type(helmetOffset, mat2::Identity)
+         CoordSystem2::data_type(helmetOffset, mat2::Identity())
          )
    ));
    world.insert(newHelmet.lock());
@@ -169,7 +169,7 @@ Ref<Object>::SharedPtr ObjectCreator::createObject(const std::string & type, Obj
             Owning(new CoordSystemTransformer<CoordSystem2>(
                       Observing(newMissile),
                       CoordSystem2::data_type(vec2(0.0f, 0.0f),
-                                              mat2::Identity)
+                                              mat2::Identity())
                       )
                )
             );

@@ -78,7 +78,8 @@
 ** Rounds (3 rounds per game)
 ** Sprite animations
 *** Idle animation
-** Improve graphics    
+** Improve graphics
+** Use bundle on Mac OS X
 * Engine
 ** DONE Platform-independent rendering in components (not in the gfx subsystem)
 ** DONE Build: verify that TR1 can be used for smart pointers using a code test

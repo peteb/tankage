@@ -15,11 +15,11 @@
 #include "texture_fx.h"
 
 Graphics::Subsystem::Subsystem() 
-   : viewport(vec2::Zero)
+  : viewport(vec2::Zero())
 {
-   renderDevice = Owning(new OpenGL::Device);
-   renderContext = Owning(renderDevice->createContext());
-   textureCache.setDevice(renderDevice.lock());
+  renderDevice = Owning(new OpenGL::Device);
+  renderContext = Owning(renderDevice->createContext());
+  textureCache.setDevice(renderDevice.lock());
 }
 
 

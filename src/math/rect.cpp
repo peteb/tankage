@@ -19,8 +19,8 @@ rect::rect(const vec2 & origin, float width, float height) {
 }
 
 rect::rect(float width, float height) 
-   : origin(vec2::Zero)
-   , halfSize(width / 2.0f, height / 2.0f)
+  : origin(vec2::Zero())
+  , halfSize(width / 2.0f, height / 2.0f)
 {   
 }
 

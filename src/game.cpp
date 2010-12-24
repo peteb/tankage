@@ -29,7 +29,7 @@ Game::Game()
    {
  	  Ref<Snail> snail = Owning(Cast<Snail>(creator.createObject("snail1", creator)));
  	  world.insert(snail.lock());
-	  snail->setTransform(CoordSystemData2(vec2(100.0f, 400.0f), mat2::Identity));
+	  snail->setTransform(CoordSystemData2(vec2(100.0f, 400.0f), mat2::Identity()));
       firstSnail = Observing(snail);
       snailHealth1 = Owning(new HealthMeter);
 	  snailHealth1->setValue(100.0f);
@@ -61,8 +61,8 @@ Game::Game()
       secondSnail->logic->setHealthMeter(Observing(snailHealth2));
    }
 
-   firstSnail->setTransform(CoordSystemData2(vec2(100.0f, 300.0f), mat2::Identity));
-   secondSnail->setTransform(CoordSystemData2(vec2(700.0f, 300.0f), mat2::Identity));
+   firstSnail->setTransform(CoordSystemData2(vec2(100.0f, 300.0f), mat2::Identity()));
+   secondSnail->setTransform(CoordSystemData2(vec2(700.0f, 300.0f), mat2::Identity()));
    firstSnail->enemy = secondSnail.lock();
    secondSnail->enemy = firstSnail.lock();
    
@@ -114,7 +114,7 @@ void Game::tick(float dt) {
 
 void Game::windowChangedSize(int width, int height) {
    std::cout << "Window changed size: " << width << ", " << height << std::endl;
-   world.graphics.resizeViewport(rect(vec2::Zero, static_cast<float>(width), static_cast<float>(height)));
+   world.graphics.resizeViewport(rect(vec2::Zero(), static_cast<float>(width), static_cast<float>(height)));
    world.physics.resizeArea(width, height);
 }
 

@@ -38,13 +38,13 @@ void HealthMeter::enqueueRender(const Ref<Graphics::RenderList>::SharedPtr & ren
    float valuesLeft = ceil(valueShown);
    
    for (int i = 0; i < 10; ++i) {
-	  vec2 texPos = vec2::Zero;
-	  vec2 texCellSize = vec2(1.0f/2.0f, 1.0f/2.0f);
-	  bool ghostHeart = false;
+     vec2 texPos = vec2::Zero();
+     vec2 texCellSize = vec2(1.0f/2.0f, 1.0f/2.0f);
+     bool ghostHeart = false;
 
       // calculate texture coordinates
 	  if (valuesLeft >= 10.0f) {
-		 texPos = vec2::Zero;
+        texPos = vec2::Zero();
       }
 	  else if (valuesLeft >= 5.0f) {
 		 if (dir >= 0.0f)
