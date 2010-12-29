@@ -125,4 +125,5 @@
 ** TODO Invert dependency of renderable <-> renderlist. list.insert(object) (?)
    Do some research on this. Push or pull?
 ** TODO Optimize performance of enqueueRender, Mesh, etc. No copies!
-** TODO CMake should create and use 'bin' and 'build' directories 
+** DONE CMake should create and use 'bin' and 'build' directories
+** TODO Message boxes in Windows for displaying errors   
