@@ -39,7 +39,7 @@
 #include <boost/shared_ptr.hpp>
 #include <boost/weak_ptr.hpp>
 #define WEAK_PTR boost::weak_ptr
-#Define SHARED_PTR boost::shared_ptr
+#define SHARED_PTR boost::shared_ptr
 #define DYNAMIC_PTR_CAST boost::dynamic_pointer_cast
 
 #else
@@ -97,6 +97,7 @@ public:
     this->sp = other.sp;
     this->wp = other.wp;
     owner = other.owner;
+	return *this;
   }
 
   operator bool() const {

@@ -16,7 +16,11 @@ void Graphics::ParticleSystem::setRenderer(const Ref<Graphics::Renderer>::Shared
 }
 
 void Graphics::ParticleSystem::addParticle(const vec2 &pos, const vec2 &velocity) {
-  particles.push_back((Graphics::Particle){pos, velocity, 1.0f});
+  Graphics::Particle particle;
+  particle.pos = pos;
+  particle.vel = velocity;
+  particle.ttd = 1.0f;
+  particles.push_back(particle);
 }
 
 void Graphics::ParticleSystem::enqueueVertices(const Ref<RenderList>::SharedPtr &renderList, float dt) {
