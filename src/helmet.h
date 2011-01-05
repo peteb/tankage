@@ -13,8 +13,8 @@
 #include "coord_system2.h"
 
 class Geom;
+class Body;
 
-namespace Physics {class Body; }
 namespace Graphics {class Sprite; }
 
 class Helmet : public Object, public CoordSystem2, public GeomEventHandler {
@@ -29,8 +29,8 @@ public:
    
    Ref<Graphics::Sprite> sprite;
    Ref<Geom> geom;
-   Ref<Physics::Body> body;
-   Ref<Physics::Body> snailBody;
+   Ref<Body> body;
+   Ref<Body> snailBody;
    
 private:
    int health;

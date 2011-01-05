@@ -15,14 +15,12 @@
 #include "ref.h"
 
 class Geom;
+class Body;
 
 namespace Graphics {
-class RenderList;
+  class RenderList;
 }
 
-namespace Physics {
-class Body;
-}
 
 class PhysSubsystem {
 public:
@@ -30,10 +28,10 @@ public:
   
   void update(float dt);
   void resizeArea(int width, int height);
-  void addBody(const Ref<Physics::Body>::WeakPtr & body);
+  void addBody(const Ref<Body>::WeakPtr & body);
   void enqueueGeoms(const Ref<Graphics::RenderList>::SharedPtr & renderList);
   
-  Ref<Physics::Body>::SharedPtr createBody();
+  Ref<Body>::SharedPtr createBody();
   Ref<Geom>::SharedPtr createRectGeom(const rect & size);
   
 private:
@@ -41,7 +39,7 @@ private:
   
   // vec2 maxArea;
   // rect leftArea, rightArea;
-  std::vector<Ref<Physics::Body>::WeakPtr> bodies;
+  std::vector<Ref<Body>::WeakPtr> bodies;
   std::vector<Ref<Geom>::WeakPtr> geoms;
 };
    

@@ -12,8 +12,7 @@
 #include "graphics/sprite.h"
 #include "physics/geom.h"
 
-namespace Physics {class Body; }
-
+class Body;
 
 class RocketAmmo : public Object, public Graphics::SpriteEventHandler, public GeomEventHandler {
 public:
@@ -22,7 +21,7 @@ public:
    void collided(const Ref<Geom>::SharedPtr & with);
    
    Ref<Graphics::Sprite> sprite;
-   Ref<Physics::Body> body;
+   Ref<Body> body;
    Ref<Geom> geom;
 };
 

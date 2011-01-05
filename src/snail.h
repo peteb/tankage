@@ -47,7 +47,7 @@ public:
   Ref<Helmet> helmet;
   Ref<PlayerEntity> logic;
   Ref<Geom> physGeom;
-  Ref<Physics::Body> physBody;
+  Ref<Body> physBody;
   Ref<Snail>::WeakPtr enemy;
   
 private:

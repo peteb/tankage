@@ -18,13 +18,13 @@ void Helmet::collided(const Ref<Geom>::SharedPtr & with) {
       if (Ref<Missile>::SharedPtr lockedMissile = Cast<Missile>(with->getOwner().lock())) {
          health -= 20;
 
-         if (Ref<Physics::Body>::SharedPtr lockedBody = snailBody.lock()) {
+         if (Ref<Body>::SharedPtr lockedBody = snailBody.lock()) {
             //   lockedBody->addImpulse(with->getTransform().orientation * vec2(300.0f, 50.0f));
             const vec2 delta = getTransform().position - lockedBody->getTransform().position;
 			lockedBody->addImpulse(delta * -5.0f);
          }
          
-         if (Ref<Physics::Body>::SharedPtr lockedBody = with->linkedBody.lock()) {
+         if (Ref<Body>::SharedPtr lockedBody = with->linkedBody.lock()) {
             lockedBody->addImpulse(lockedBody->getVelocity() * vec2(-0.3f, -1.4f));
 
             vec2 vel = lockedBody->getVelocity();
@@ -38,7 +38,7 @@ void Helmet::collided(const Ref<Geom>::SharedPtr & with) {
          lockedOwner->kill();
          health -= 20;
          
-         if (Ref<Physics::Body>::SharedPtr lockedBody = snailBody.lock())
+         if (Ref<Body>::SharedPtr lockedBody = snailBody.lock())
             lockedBody->addImpulse(with->getTransform().orientation * vec2(100.0f, 50.0f));
          
       }

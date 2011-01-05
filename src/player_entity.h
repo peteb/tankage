@@ -18,8 +18,7 @@ class World;
 class HealthMeter;
 class ProjectileWeapon;
 class MissileLauncher;
-
-namespace Physics {class Body; }
+class Body;
 
 // This class is the main logic for snails, it could just as well been
 // in the Snail class directly
@@ -27,7 +26,7 @@ class PlayerEntity : public CoordSystem2, public Triggerable, public Updatable, 
 public:
   PlayerEntity(float x, const Ref<Snail>::WeakPtr & shooterId, ObjectCreator & creator, World & world);
   
-  void setTarget(const Ref<Physics::Body> & newTarget);
+  void setTarget(const Ref<Body> & newTarget);
   void setHealthMeter(const Ref<HealthMeter> & newMeter);
   void update(float dt);
   void setWeapon(const Ref<ProjectileWeapon> &weapon);
@@ -51,7 +50,7 @@ private:
   float xPos;
   bool autoShoot;
   Ref<HealthMeter> healthMeter;
-  Ref<Physics::Body> target;
+  Ref<Body> target;
   Ref<ProjectileWeapon> weapon, backupWeapon;
   Ref<MissileLauncher> missileLauncher;
   // FIXME: more generic solution for handling of different weapons

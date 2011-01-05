@@ -16,14 +16,11 @@
 class Object;
 class PhysSubsystem;
 class Geom;
+class Body;
 	
 namespace Graphics {
 class RenderList;
 class Renderer;
-}
-
-namespace Physics {
-class Body;
 }
 
 class GeomEventHandler {
@@ -34,11 +31,11 @@ public:
 
 class Geom : public CoordSystem2 {      
 public:
-  friend class ::PhysSubsystem; // TODO: get rid of this
+  friend class PhysSubsystem; // TODO: get rid of this
   
   Geom(const rect & size);
   
-  void setBody(const Ref<Physics::Body> & body);
+  void setBody(const Ref<Body> & body);
   void setRefFrame(const Ref<CoordSystem2> & refFrame);
   void setEventHandler(const Ref<GeomEventHandler> & eventHandler);
   void setOffset(const vec2 & offset);
@@ -58,7 +55,7 @@ public:
   void setTransform(const CoordSystemData2 & cs);
   CoordSystemData2 getTransform() const;
   
-  Ref<Physics::Body> linkedBody;   
+  Ref<Body> linkedBody;   
 private:
   
   Ref<CoordSystem2> refFrame;

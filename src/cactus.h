@@ -14,10 +14,8 @@
 #include "ref.h"
 #include "physics/geom.h"
 
-//namespace Graphics {class Sprite; }
-namespace Physics {class Body; }
-
 class Geom;
+class Body;
 class World;
 
 class Cactus : public Object, public CoordSystem2, public Graphics::SpriteEventHandler, public GeomEventHandler {
@@ -32,7 +30,7 @@ public:
    void leftView();
 
    Ref<Graphics::Sprite> sprite;
-   Ref<Physics::Body> body;
+   Ref<Body> body;
    Ref<Geom> geom;
 
 private:

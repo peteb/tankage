@@ -6,51 +6,51 @@
 
 #include "body.h"
 
-Physics::Body::Body(PhysSubsystem &subsystem)
-   : subsystem(subsystem)
-   , position(vec2::Zero())
-   , velocity(vec2::Zero())
-   , orientation(mat2::Identity())
+Body::Body(PhysSubsystem &subsystem)
+  : subsystem(subsystem)
+  , position(vec2::Zero())
+  , velocity(vec2::Zero())
+  , orientation(mat2::Identity())
 {
    
 }
 
-void Physics::Body::setDelegate(const Ref<CoordSystem2> & newTarget) {
-   delegate = newTarget;
+void Body::setDelegate(const Ref<CoordSystem2> & newTarget) {
+  delegate = newTarget;
 }
 
-void Physics::Body::setOwner(const Ref<Object>::WeakPtr & owner) {
-   this->owner = owner;
+void Body::setOwner(const Ref<Object>::WeakPtr & owner) {
+  this->owner = owner;
 }
 
-Ref<Object>::WeakPtr Physics::Body::getOwner() const {
-   return owner;
+Ref<Object>::WeakPtr Body::getOwner() const {
+  return owner;
 }
 
-void Physics::Body::update(float dt) {
-   if (Ref<CoordSystem2>::SharedPtr target = delegate.lock()) {
-      position += velocity * dt;
-      target->setTransform(CoordSystemData2(position, orientation));  
-   }
+void Body::update(float dt) {
+  if (Ref<CoordSystem2>::SharedPtr target = delegate.lock()) {
+    position += velocity * dt;
+    target->setTransform(CoordSystemData2(position, orientation));  
+  }
 }
 
-void Physics::Body::setTransform(const CoordSystemData2 & cs) {
-   orientation = cs.orientation;
-   position = cs.position;
+void Body::setTransform(const CoordSystemData2 & cs) {
+  orientation = cs.orientation;
+  position = cs.position;
 }
 
-CoordSystemData2 Physics::Body::getTransform() const {
-   return CoordSystemData2(position, orientation);
+CoordSystemData2 Body::getTransform() const {
+  return CoordSystemData2(position, orientation);
 }
 
 
-// void Physics::Body::setVelocity(const vec2 & vel) {
+// void Body::setVelocity(const vec2 & vel) {
 //    velocity = vel;
 // }
-void Physics::Body::addImpulse(const vec2 & vel) {
-	velocity += vel;
+void Body::addImpulse(const vec2 & vel) {
+  velocity += vel;
 }
 
-vec2 Physics::Body::getVelocity() const {
-	return velocity;
+vec2 Body::getVelocity() const {
+  return velocity;
 }
