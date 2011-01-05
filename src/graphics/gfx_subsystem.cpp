@@ -14,7 +14,7 @@
 #include "color.h"
 #include "texture_fx.h"
 
-Graphics::Subsystem::Subsystem() 
+GfxSubsystem::GfxSubsystem() 
   : viewport(vec2::Zero())
 {
   renderDevice = Owning(new OpenGL::Device);
@@ -23,52 +23,52 @@ Graphics::Subsystem::Subsystem()
 }
 
 
-void Graphics::Subsystem::enqueueVisibleSprites(const Ref<Graphics::RenderList>::SharedPtr & renderList)
+void GfxSubsystem::enqueueVisibleSprites(const Ref<Graphics::RenderList>::SharedPtr & renderList)
 {
    screen.enqueueVisibleSprites(renderList, viewport);
 }
 
 
-void Graphics::Subsystem::resizeViewport(const rect & size)
+void GfxSubsystem::resizeViewport(const rect & size)
 {
    viewport = size;
 }
 
 
-void Graphics::Subsystem::beginFrame()
+void GfxSubsystem::beginFrame()
 {
    renderDevice->setOrtho(viewport);
    renderDevice->clearColor(Graphics::Color(0.957f, 0.917f, 0.682f, 1.0f));
 }
 
 
-void Graphics::Subsystem::render(const Ref<Graphics::RenderList>::SharedPtr & renderList)
+void GfxSubsystem::render(const Ref<Graphics::RenderList>::SharedPtr & renderList)
 {
    renderList->render(*(*renderDevice).get());
 }
 
 
-Ref<Graphics::Sprite>::SharedPtr Graphics::Subsystem::createSprite(const std::string & fragments)
+Ref<Graphics::Sprite>::SharedPtr GfxSubsystem::createSprite(const std::string & fragments)
 {
    Ref<Graphics::Texture>::SharedPtr spriteTexture = textureCache.loadTexture(fragments);
-   Ref<Graphics::TextureFx>::SharedPtr renderer(new TextureFx);
+   Ref<Graphics::TextureFx>::SharedPtr renderer(new Graphics::TextureFx);
    renderer->setTexture(Owning(spriteTexture));
    renderer->setRenderContext(renderContext);
    
-   Ref<Graphics::Sprite>::SharedPtr newSprite(new Sprite(renderer, renderer->getNativeSize()));
+   Ref<Graphics::Sprite>::SharedPtr newSprite(new Graphics::Sprite(renderer, renderer->getNativeSize()));
    screen.insert(newSprite);
    
    return newSprite;   
 }
 
 
-Ref<Graphics::Texture>::SharedPtr Graphics::Subsystem::getTexture(const std::string & filename)
+Ref<Graphics::Texture>::SharedPtr GfxSubsystem::getTexture(const std::string & filename)
 {
    return textureCache.loadTexture(filename);
 }
 
 
-Ref<Graphics::Renderer>::SharedPtr Graphics::Subsystem::getRenderer(const std::string & name)
+Ref<Graphics::Renderer>::SharedPtr GfxSubsystem::getRenderer(const std::string & name)
 {
    Ref<Graphics::TextureFx>::SharedPtr newRenderer(new Graphics::TextureFx);
    newRenderer->setTexture(Owning(getTexture(name)));
@@ -77,7 +77,7 @@ Ref<Graphics::Renderer>::SharedPtr Graphics::Subsystem::getRenderer(const std::s
    return newRenderer;
 }
 
-Ref<Graphics::RenderContext>::SharedPtr Graphics::Subsystem::getRenderContext() const
+Ref<Graphics::RenderContext>::SharedPtr GfxSubsystem::getRenderContext() const
 {
    return renderContext.lock();
 }
