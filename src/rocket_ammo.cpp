@@ -13,7 +13,7 @@ void RocketAmmo::leftView() {
    this->kill();
 }
 
-void RocketAmmo::collided(const Ref<Physics::Geom>::SharedPtr & with) {
+void RocketAmmo::collided(const Ref<Geom>::SharedPtr & with) {
   if (Ref<Object>::SharedPtr lockedOwner = with->getOwner().lock()) {
     if (Ref<Projectile>::SharedPtr lockedProjectile = Cast<Projectile>(lockedOwner)) {
       lockedProjectile->kill();

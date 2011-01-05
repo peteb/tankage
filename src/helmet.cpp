@@ -13,7 +13,7 @@ Helmet::Helmet() {
    health = 100;
 }
 
-void Helmet::collided(const Ref<Physics::Geom>::SharedPtr & with) {
+void Helmet::collided(const Ref<Geom>::SharedPtr & with) {
    if (Ref<Object>::SharedPtr lockedOwner = with->getOwner().lock()) {
       if (Ref<Missile>::SharedPtr lockedMissile = Cast<Missile>(with->getOwner().lock())) {
          health -= 20;

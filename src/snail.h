@@ -14,8 +14,8 @@
 #include "coord_system2.h"
 
 namespace Graphics {class Sprite; class Subsystem; }
-namespace Physics {class Geom; }
 
+class Geom;
 class PlayerEntity;
 class World;
 class vec2;
@@ -30,14 +30,14 @@ public:
 };
 
 
-class Snail : public Object, public CoordSystem2, public Physics::GeomEventHandler {
+class Snail : public Object, public CoordSystem2, public GeomEventHandler {
 public:
   Snail();
   
   void setTransform(const CoordSystemData2 & cs);
   CoordSystemData2 getTransform() const;
    
-  void collided(const Ref<Physics::Geom>::SharedPtr & with);
+  void collided(const Ref<Geom>::SharedPtr & with);
   
   void setEventHandler(const Ref<SnailEventHandler> & newHandler);
   void increaseHealth(int add);
@@ -46,7 +46,7 @@ public:
   Ref<Graphics::Sprite> sprite;
   Ref<Helmet> helmet;
   Ref<PlayerEntity> logic;
-  Ref<Physics::Geom> physGeom;
+  Ref<Geom> physGeom;
   Ref<Physics::Body> physBody;
   Ref<Snail>::WeakPtr enemy;
   

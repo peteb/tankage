@@ -15,15 +15,15 @@
 namespace Physics {class Body; }
 
 
-class RocketAmmo : public Object, public Graphics::SpriteEventHandler, public Physics::GeomEventHandler {
+class RocketAmmo : public Object, public Graphics::SpriteEventHandler, public GeomEventHandler {
 public:
   
    void leftView();
-   void collided(const Ref<Physics::Geom>::SharedPtr & with);
+   void collided(const Ref<Geom>::SharedPtr & with);
    
    Ref<Graphics::Sprite> sprite;
    Ref<Physics::Body> body;
-   Ref<Physics::Geom> geom;
+   Ref<Geom> geom;
 };
 
 #endif // !ROCKET_AMMO_H

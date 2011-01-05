@@ -28,7 +28,7 @@ void Cactus::leftView() {
    kill();
 }
 
-void Cactus::collided(const Ref<Physics::Geom>::SharedPtr & with) {
+void Cactus::collided(const Ref<Geom>::SharedPtr & with) {
    if (Ref<Object>::SharedPtr lockedOwner = with->getOwner().lock()) {
 	  if (Ref<Projectile>::SharedPtr bulletOwner = Cast<Projectile>(lockedOwner)) {
 		 bulletOwner->kill();
@@ -47,7 +47,7 @@ void Cactus::increaseHealth(float by) {
 
    if (health <= 0.0f) {
       sprite->setCell(3, 0);
-      geom = Ref<Physics::Geom>::Null();
+      geom = Ref<Geom>::Null();
    }
    else if (health <= 50.0f) {
       sprite->setCell(2, 0);

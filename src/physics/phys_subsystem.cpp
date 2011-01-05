@@ -14,7 +14,6 @@
 #include "physics/geom.h"
 
 using Physics::Body;
-using Physics::Geom;
 
 PhysSubsystem::PhysSubsystem() 
    // : maxArea(vec2::Zero)
@@ -77,7 +76,7 @@ void PhysSubsystem::checkCollisions() {
    }
 
    // a set to remember which pairs have collided already
-   std::set<std::pair<Physics::Geom *, Physics::Geom *> > collided;
+   std::set<std::pair<Geom *, Geom *> > collided;
    
    // second pass, check collisions
    for (GeomVector::iterator it1 = resGeoms.begin(); it1 != resGeoms.end(); ++it1) {      
@@ -119,7 +118,7 @@ void PhysSubsystem::checkCollisions() {
 
 void PhysSubsystem::enqueueGeoms(const Ref<Graphics::RenderList>::SharedPtr & renderList) {
    for (size_t i = 0; i < geoms.size(); ++i) {
-	  if (Ref<Physics::Geom>::SharedPtr lockedGeom = geoms[i].lock())
+	  if (Ref<Geom>::SharedPtr lockedGeom = geoms[i].lock())
 		 lockedGeom->enqueueRender(renderList);
    }
 

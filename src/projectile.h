@@ -13,8 +13,9 @@
 #include "ref.h"
 
 //namespace Graphics {class Sprite; }
-namespace Physics {class Body; class Geom; }
+namespace Physics {class Body; }
 
+class Geom;
 class World;
 class Snail;
 
@@ -30,7 +31,7 @@ public:
    Ref<Snail>::WeakPtr shooter;
    Ref<Graphics::Sprite> sprite;
    Ref<Physics::Body> body;
-   Ref<Physics::Geom> geom;
+   Ref<Geom> geom;
 };
 
 

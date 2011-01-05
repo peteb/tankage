@@ -14,13 +14,14 @@
 #include "math/rect.h"
 #include "ref.h"
 
+class Geom;
+
 namespace Graphics {
 class RenderList;
 }
 
 namespace Physics {
 class Body;
-class Geom;
 }
 
 class PhysSubsystem {
@@ -33,7 +34,7 @@ public:
   void enqueueGeoms(const Ref<Graphics::RenderList>::SharedPtr & renderList);
   
   Ref<Physics::Body>::SharedPtr createBody();
-  Ref<Physics::Geom>::SharedPtr createRectGeom(const rect & size);
+  Ref<Geom>::SharedPtr createRectGeom(const rect & size);
   
 private:
   void checkCollisions();
@@ -41,7 +42,7 @@ private:
   // vec2 maxArea;
   // rect leftArea, rightArea;
   std::vector<Ref<Physics::Body>::WeakPtr> bodies;
-  std::vector<Ref<Physics::Geom>::WeakPtr> geoms;
+  std::vector<Ref<Geom>::WeakPtr> geoms;
 };
    
    
