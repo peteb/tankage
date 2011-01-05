@@ -14,13 +14,13 @@
 
 class Body;
 
-class RocketAmmo : public Object, public Graphics::SpriteEventHandler, public GeomEventHandler {
+class RocketAmmo : public Object, public SpriteEventHandler, public GeomEventHandler {
 public:
   
    void leftView();
    void collided(const Ref<Geom>::SharedPtr & with);
    
-   Ref<Graphics::Sprite> sprite;
+   Ref<Sprite> sprite;
    Ref<Body> body;
    Ref<Geom> geom;
 };

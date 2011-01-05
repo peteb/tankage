@@ -12,24 +12,24 @@
 #include <vector>
 
 class rect;
+class Sprite;
 
 namespace Graphics {
-   class Sprite;
    class RenderList;
    
    class SpriteCuller {
    public:
-	  void insert(const Ref<Graphics::Sprite>::WeakPtr sprite);
+	  void insert(const Ref<Sprite>::WeakPtr sprite);
 	  void enqueueVisibleSprites(const Ref<Graphics::RenderList>::SharedPtr & renderList, const rect & viewport);
 
    private:
 	  class SpriteMetadata {
 	  public:
-		 SpriteMetadata(const Ref<Graphics::Sprite>::WeakPtr & sprite);
+		 SpriteMetadata(const Ref<Sprite>::WeakPtr & sprite);
 
 		 bool visibleLastFrame;
 		 bool firstFrame;
-		 Ref<Graphics::Sprite>::WeakPtr sprite;
+		 Ref<Sprite>::WeakPtr sprite;
 	  };
 	  
 	  std::vector<SpriteMetadata> sprites;

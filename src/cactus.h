@@ -18,7 +18,7 @@ class Geom;
 class Body;
 class World;
 
-class Cactus : public Object, public CoordSystem2, public Graphics::SpriteEventHandler, public GeomEventHandler {
+class Cactus : public Object, public CoordSystem2, public SpriteEventHandler, public GeomEventHandler {
 public:
    Cactus();
    
@@ -29,7 +29,7 @@ public:
    void collided(const Ref<Geom>::SharedPtr & with);
    void leftView();
 
-   Ref<Graphics::Sprite> sprite;
+   Ref<Sprite> sprite;
    Ref<Body> body;
    Ref<Geom> geom;
 

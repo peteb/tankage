@@ -16,13 +16,13 @@ class Body;
 
 // TODO: mixins for leftView? Ie, DestroyOnLeftView
 
-class PowerUp : public Object, public Graphics::SpriteEventHandler, public GeomEventHandler {
+class PowerUp : public Object, public SpriteEventHandler, public GeomEventHandler {
 public:
   
    void leftView();
    void collided(const Ref<Geom>::SharedPtr & with);
    
-   Ref<Graphics::Sprite> sprite;
+   Ref<Sprite> sprite;
    Ref<Body> body;
    Ref<Geom> geom;
 };

@@ -13,8 +13,9 @@
 #include "physics/body.h"
 #include "coord_system2.h"
 
-namespace Graphics {class Sprite; class Subsystem; }
+namespace Graphics {class Subsystem; }
 
+class Sprite;
 class Geom;
 class PlayerEntity;
 class World;
@@ -43,7 +44,7 @@ public:
   void increaseHealth(int add);
   
   Ref<SnailEventHandler> eventHandler;
-  Ref<Graphics::Sprite> sprite;
+  Ref<Sprite> sprite;
   Ref<Helmet> helmet;
   Ref<PlayerEntity> logic;
   Ref<Geom> physGeom;

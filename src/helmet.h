@@ -14,8 +14,7 @@
 
 class Geom;
 class Body;
-
-namespace Graphics {class Sprite; }
+class Sprite;
 
 class Helmet : public Object, public CoordSystem2, public GeomEventHandler {
 public:
@@ -27,7 +26,7 @@ public:
    void setTransform(const CoordSystemData2 & cs);
    CoordSystemData2 getTransform() const;
    
-   Ref<Graphics::Sprite> sprite;
+   Ref<Sprite> sprite;
    Ref<Geom> geom;
    Ref<Body> body;
    Ref<Body> snailBody;

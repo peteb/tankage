@@ -15,8 +15,9 @@
 #include "vertex.h"
 #include "sprite_culler.h"
 
-namespace Graphics {
 class Sprite;
+
+namespace Graphics {
 class Texture;
 class RenderList;
 class RenderContext;
@@ -28,7 +29,7 @@ public:
   GfxSubsystem();
   
   void resizeViewport(const rect & size);
-  Ref<Graphics::Sprite>::SharedPtr createSprite(const std::string & fragments);
+  Ref<Sprite>::SharedPtr createSprite(const std::string & fragments);
   Ref<Graphics::Renderer>::SharedPtr getRenderer(const std::string & name);
 	  
   void enqueueVisibleSprites(const Ref<Graphics::RenderList>::SharedPtr & renderList);

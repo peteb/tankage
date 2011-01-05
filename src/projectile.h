@@ -17,7 +17,7 @@ class Body;
 class World;
 class Snail;
 
-class Projectile : public Object, public CoordSystem2, public Graphics::SpriteEventHandler {
+class Projectile : public Object, public CoordSystem2, public SpriteEventHandler {
 public:
    virtual ~Projectile() {}
    
@@ -27,7 +27,7 @@ public:
    void leftView();
 
    Ref<Snail>::WeakPtr shooter;
-   Ref<Graphics::Sprite> sprite;
+   Ref<Sprite> sprite;
    Ref<Body> body;
    Ref<Geom> geom;
 };
