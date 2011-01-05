@@ -13,9 +13,10 @@
 #include "physics/body.h"
 #include "physics/geom.h"
 
-using namespace Physics;
+using Physics::Body;
+using Physics::Geom;
 
-Subsystem::Subsystem() 
+PhysSubsystem::PhysSubsystem() 
    // : maxArea(vec2::Zero)
    // , leftArea(vec2::Zero, vec2::Zero)
    // , rightArea(vec2::Zero, vec2::Zero)
@@ -23,7 +24,7 @@ Subsystem::Subsystem()
    
 }
 
-void Subsystem::update(float dt) {
+void PhysSubsystem::update(float dt) {
    std::vector<Ref<Body>::WeakPtr>::iterator iter = bodies.begin();
          
    //std::cout << "bodies: " << bodies.size() << std::endl;
@@ -41,7 +42,7 @@ void Subsystem::update(float dt) {
    checkCollisions();
 }
 
-void Subsystem::resizeArea(int width, int height) {
+void PhysSubsystem::resizeArea(int width, int height) {
    // maxArea = vec2(width, height);
    // leftArea.origin = vec2(0.0f, 0.0f);
    // leftArea.size = vec2(width / 2.0f, height);
@@ -50,7 +51,7 @@ void Subsystem::resizeArea(int width, int height) {
    // rightArea.size = vec2(width / 2.0f, height);
 }
 
-void Subsystem::checkCollisions() {
+void PhysSubsystem::checkCollisions() {
    // first pass, generate <Rect, Geom> tupple, calculate bounding boxes
    // some kind of sorting might be possible here
    typedef std::vector<std::pair<rect, Ref<Geom>::SharedPtr > > GeomVector;
@@ -116,7 +117,7 @@ void Subsystem::checkCollisions() {
    
 }
 
-void Physics::Subsystem::enqueueGeoms(const Ref<Graphics::RenderList>::SharedPtr & renderList) {
+void PhysSubsystem::enqueueGeoms(const Ref<Graphics::RenderList>::SharedPtr & renderList) {
    for (size_t i = 0; i < geoms.size(); ++i) {
 	  if (Ref<Physics::Geom>::SharedPtr lockedGeom = geoms[i].lock())
 		 lockedGeom->enqueueRender(renderList);
@@ -124,20 +125,20 @@ void Physics::Subsystem::enqueueGeoms(const Ref<Graphics::RenderList>::SharedPtr
 
 }
 
-Ref<Body>::SharedPtr Subsystem::createBody() {
+Ref<Body>::SharedPtr PhysSubsystem::createBody() {
    Ref<Body>::SharedPtr body(new Body(*this));
    bodies.push_back(body);
    
    return body;
 }
 
-Ref<Geom>::SharedPtr Subsystem::createRectGeom(const rect & size) {
+Ref<Geom>::SharedPtr PhysSubsystem::createRectGeom(const rect & size) {
    Ref<Geom>::SharedPtr geom(new Geom(size));
    geoms.push_back(geom);
    return geom;
 }
 
-// void Subsystem::addBody(const boost::weak_ptr<Body> & body) {
+// void PhysSubsystem::addBody(const boost::weak_ptr<Body> & body) {
 //    bodies.push_back(body);   
 // }
 // 

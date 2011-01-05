@@ -30,7 +30,7 @@ public:
    }
    
    Graphics::Subsystem graphics;
-   Physics::Subsystem physics;
+   PhysSubsystem physics;
    ObjectList liveObjects;
    Scheduler scheduler;
 };

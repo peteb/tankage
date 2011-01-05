@@ -12,19 +12,19 @@
 
 class Object;
 
+class PhysSubsystem;
+
 namespace Physics {
-   class Subsystem;
-   
    /*
     * A physical body that can be acted upon through forces
     */
    class Body : public CoordSystem2 {
    private:
-      Body(Physics::Subsystem & subsystem); 
+      Body(PhysSubsystem &subsystem); 
       
    public:
       
-      friend class Physics::Subsystem;
+      friend class ::PhysSubsystem;
 
       void update(float dt);
       void setDelegate(const Ref<CoordSystem2> & newTarget);
@@ -41,7 +41,7 @@ namespace Physics {
       CoordSystemData2 getTransform() const;
       
    private:
-      Physics::Subsystem & subsystem;
+      PhysSubsystem & subsystem;
       Ref<CoordSystem2> delegate;
 	  Ref<Object>::WeakPtr owner;
       vec2 position, velocity;

@@ -6,7 +6,7 @@
 
 #include "body.h"
 
-Physics::Body::Body(Physics::Subsystem & subsystem)
+Physics::Body::Body(PhysSubsystem &subsystem)
    : subsystem(subsystem)
    , position(vec2::Zero())
    , velocity(vec2::Zero())

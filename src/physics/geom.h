@@ -14,6 +14,7 @@
 #include <bitset>
 
 class Object;
+class PhysSubsystem;
 
 namespace Graphics {class RenderList; class Renderer; }
 
@@ -29,7 +30,7 @@ namespace Physics {
 
    class Geom : public CoordSystem2 {      
    public:
-	  friend class Subsystem; // TODO: get rid of this
+     friend class ::PhysSubsystem; // TODO: get rid of this
 	  
       Geom(const rect & size);
 
