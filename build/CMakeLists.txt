@@ -64,3 +64,7 @@ add_custom_target(clean-gen
 	rm -rf CMakeFiles CMakeCache.txt Makefile cmake_install.cmake ../bin
 )
 
+# Unit test package is optional. If not found, a warning is printed out
+# and most likely unit test targets are not compilable. 
+find_package(GTest)
+
