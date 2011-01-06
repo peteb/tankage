@@ -99,7 +99,6 @@
 ** TODO SDL support
 ** TODO ImageIO support
 ** TODO SDL_image support
-** TODO Make CMake output more pretty (smart ptr detection, etc)
 ** TODO Fix design of physical geoms. it's borken
 ** DONE AtlasSprite, setup a grid and select cell. put it in sprite
 ** DONE Geoms should have a priority
@@ -114,21 +113,21 @@
 *** Store vertices internally? Add vertices to a generic interface class?   
 ** DONE setPosition/setOrientation -> setReferenceFrame
 ** TODO Improve engine in general (file headers, function documentation)
-** TODO Investigate whether an object should aggregate a coordsys instead of inherit
+** DONE Investigate whether an object should aggregate a coordsys instead of inherit
 ** TODO Redo collision response using collision categories/types
 ** DONE Projectile class (bullet and missile are projectiles)
-** TODO ProjectileWeapon class    
+** DONE ProjectileWeapon class    
 ** TODO Sprite should not know about cells, but offsets and widths. maybe sprites
    can get a transformation from a CoordSystem for the offsets
 ** TODO Rename mat2 -> Matrix2, vec2 -> Vector2, etc. so it conforms to style
 ** TODO Invert dependency of renderable <-> renderlist. list.insert(object) (?)
    Do some research on this. Push or pull?
 ** TODO Optimize performance of enqueueRender, Mesh, etc. No copies!
-** TODO Sprite should not know about cells, but offsets and widths
 ** TODO Message boxes in Windows for displaying errors   
 ** Improve build based on CMake
 *** DONE CMake should create and use 'bin' and 'build' directories 
 *** TODO Investigate how-to report CMake error and get rid of gen files
 *** TODO Investigate how-to create debian packages and which tool to use
 *** DONE Add CMake find module for Google C++ Testing Framework 
-
+*** TODO Make CMake output more pretty for the smart ptr detection
+    
