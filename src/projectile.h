@@ -12,13 +12,12 @@
 #include "graphics/sprite.h"
 #include "ref.h"
 
-//namespace Graphics {class Sprite; }
-namespace Physics {class Body; class Geom; }
-
+class Geom;
+class Body;
 class World;
 class Snail;
 
-class Projectile : public Object, public CoordSystem2, public Graphics::SpriteEventHandler {
+class Projectile : public Object, public CoordSystem2, public SpriteEventHandler {
 public:
    virtual ~Projectile() {}
    
@@ -28,9 +27,9 @@ public:
    void leftView();
 
    Ref<Snail>::WeakPtr shooter;
-   Ref<Graphics::Sprite> sprite;
-   Ref<Physics::Body> body;
-   Ref<Physics::Geom> geom;
+   Ref<Sprite> sprite;
+   Ref<Body> body;
+   Ref<Geom> geom;
 };
 
 

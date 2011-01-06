@@ -32,7 +32,7 @@ CoordSystemData2 Snail::getTransform() const {
 // TODO: en klass; Item. Skjuta på den ska anropa en medlem i snigeln
 // antar att det blir downcast i alla fall.
 
-void Snail::collided(const Ref<Physics::Geom>::SharedPtr & with) {
+void Snail::collided(const Ref<Geom>::SharedPtr & with) {
   // TODO: this is ugly
   if (Ref<Object>::SharedPtr lockedOwner = with->getOwner().lock()) {
     if (Ref<Missile>::SharedPtr lockedMissile = Cast<Missile>(lockedOwner)) {

@@ -14,12 +14,11 @@
 #include "ref.h"
 #include "physics/geom.h"
 
-//namespace Graphics {class Sprite; }
-namespace Physics {class Body; class Geom; }
-
+class Geom;
+class Body;
 class World;
 
-class Cactus : public Object, public CoordSystem2, public Graphics::SpriteEventHandler, public Physics::GeomEventHandler {
+class Cactus : public Object, public CoordSystem2, public SpriteEventHandler, public GeomEventHandler {
 public:
    Cactus();
    
@@ -27,12 +26,12 @@ public:
    void setTransform(const CoordSystemData2 & cs);
    CoordSystemData2 getTransform() const;
    
-   void collided(const Ref<Physics::Geom>::SharedPtr & with);
+   void collided(const Ref<Geom>::SharedPtr & with);
    void leftView();
 
-   Ref<Graphics::Sprite> sprite;
-   Ref<Physics::Body> body;
-   Ref<Physics::Geom> geom;
+   Ref<Sprite> sprite;
+   Ref<Body> body;
+   Ref<Geom> geom;
 
 private:
    void increaseHealth(float by);

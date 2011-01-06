@@ -29,8 +29,8 @@ public:
       liveObjects.eraseEnqueuedRemovals();
    }
    
-   Graphics::Subsystem graphics;
-   Physics::Subsystem physics;
+   GfxSubsystem graphics;
+   PhysSubsystem physics;
    ObjectList liveObjects;
    Scheduler scheduler;
 };
