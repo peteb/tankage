@@ -16,13 +16,13 @@ using Graphics::Renderer;
 using Graphics::SpriteEventHandler;
 
 Sprite::Sprite(const Ref<Renderer>::SharedPtr & renderer, const rect & size) 
-   : orientation(mat2::Identity)
-   , renderer(renderer)
-   , size(size)
-   , originalSize(size)
+  : orientation(mat2::Identity())
+  , renderer(renderer)
+  , size(size)
+  , originalSize(size)
 {
-   columns = rows = 1;
-   cellX = cellY = 0;
+  columns = rows = 1;
+  cellX = cellY = 0;
 }
 
 std::vector<Vertex2T2> Sprite::constructVertices() const {

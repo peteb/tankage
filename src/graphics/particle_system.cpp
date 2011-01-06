@@ -16,7 +16,11 @@ void Graphics::ParticleSystem::setRenderer(const Ref<Graphics::Renderer>::Shared
 }
 
 void Graphics::ParticleSystem::addParticle(const vec2 &pos, const vec2 &velocity) {
-  particles.push_back((Graphics::Particle){pos, velocity, 1.2f});
+  Graphics::Particle particle;
+  particle.pos = pos;
+  particle.vel = velocity;
+  particle.ttd = 1.0f;
+  particles.push_back(particle);
 }
 
 void Graphics::ParticleSystem::enqueueVertices(const Ref<RenderList>::SharedPtr &renderList, float dt) {
@@ -29,7 +33,8 @@ void Graphics::ParticleSystem::enqueueVertices(const Ref<RenderList>::SharedPtr 
     Graphics::Particle &particle = particles[i];
 
     if (particle.ttd <= 0.0f) {
-      particles[i] = particles[std::max(1U, e) - 1UL];
+      particles[i] = particles[std::max(static_cast<size_t>(1U), e) -
+                               static_cast<size_t>(1UL)];
       --e;
       continue;
     }
@@ -37,7 +42,7 @@ void Graphics::ParticleSystem::enqueueVertices(const Ref<RenderList>::SharedPtr 
     const vec2 &pos = particle.pos;
     Graphics::Color color = Graphics::Color::White;
     color.a = (particle.ttd - 0.4f) / 1.0f;
-    float scale = 1.0f + (1.2f - particle.ttd) * 1.5f;
+    float scale = 0.8f + (1.2f - particle.ttd) * 1.5f;
     
     vertices.push_back(Vertex2T2(pos + halfSize * vec2(-1.0f, -1.0f) * scale, vec2(0.0f, 0.0f), color));
     vertices.push_back(Vertex2T2(pos + halfSize * vec2( 1.0f, -1.0f) * scale, vec2(1.0f, 0.0f), color));
@@ -51,8 +56,6 @@ void Graphics::ParticleSystem::enqueueVertices(const Ref<RenderList>::SharedPtr 
 
   particles.erase(particles.begin() + e, particles.end());
   
-  // FIXME: fix the emitter!
-   
   Ref<Graphics::Mesh>::SharedPtr mesh(new Graphics::Mesh);
   mesh->vertices = vertices;
   renderList->insert(renderer, mesh);

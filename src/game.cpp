@@ -13,6 +13,7 @@
 #include "graphics/render_list.h"
 #include "graphics/texture_fx.h"
 #include "graphics/color.h"
+#include "graphics/particle_system.h"
 
 #include <iostream>
 #include <cstdlib>
@@ -28,7 +29,7 @@ Game::Game()
    {
  	  Ref<Snail> snail = Owning(Cast<Snail>(creator.createObject("snail1", creator)));
  	  world.insert(snail.lock());
-	  snail->setTransform(CoordSystemData2(vec2(100.0f, 400.0f), mat2::Identity));
+	  snail->setTransform(CoordSystemData2(vec2(100.0f, 400.0f), mat2::Identity()));
       firstSnail = Observing(snail);
       snailHealth1 = Owning(new HealthMeter);
 	  snailHealth1->setValue(100.0f);
@@ -41,7 +42,16 @@ Game::Game()
    {
       Ref<Snail> snail = Owning(Cast<Snail>(creator.createObject("snail2", creator)));
       world.insert(snail.lock());
-      snail->setTransform(CoordSystemData2(vec2(700.0f, 400.0f), mat2::Identity));
+      snail->setTransform(CoordSystemData2(
+                                  vec2(700.0f, 400.0f),
+                                  mat2(
+                                          vec2(-1.0f, 0.0f),
+                                          vec2(0.0f, 1.0f))
+                                  )
+              );
+      
+      // FIXME: add snail origin for weapons
+      
       secondSnail = Observing(snail);
       snailHealth2 = Owning(new HealthMeter);
       snailHealth2->setValue(100.0f);
@@ -51,15 +61,15 @@ Game::Game()
       secondSnail->logic->setHealthMeter(Observing(snailHealth2));
    }
 
-   firstSnail->setTransform(CoordSystemData2(vec2(100.0f, 300.0f), mat2::Identity));
-   secondSnail->setTransform(CoordSystemData2(vec2(700.0f, 300.0f), mat2::Identity));
+   firstSnail->setTransform(CoordSystemData2(vec2(100.0f, 300.0f), mat2::Identity()));
+   secondSnail->setTransform(CoordSystemData2(vec2(700.0f, 300.0f), mat2::Identity()));
    firstSnail->enemy = secondSnail.lock();
    secondSnail->enemy = firstSnail.lock();
    
-   playerInput1.setRefFrameDelegate(Observing(firstSnail->logic));
-   playerInput1.setActionDelegate(Observing(firstSnail->logic));
-   playerInput2.setRefFrameDelegate(Observing(secondSnail->logic));
-   playerInput2.setActionDelegate(Observing(secondSnail->logic));
+   playerInput2.setRefFrameDelegate(Observing(firstSnail->logic));
+   playerInput2.setActionDelegate(Observing(firstSnail->logic));
+   playerInput1.setRefFrameDelegate(Observing(secondSnail->logic));
+   playerInput1.setActionDelegate(Observing(secondSnail->logic));
 
 
    cactusGenerator = Owning(new CactusGenerator(creator, world));
@@ -68,13 +78,6 @@ Game::Game()
 
    defaultRenderer = Owning(world.graphics.getRenderer("../data/geom.png"));
    Cast<Graphics::TextureFx>(defaultRenderer.lock())->setColor(Graphics::Color(1.0f, 1.0f, 1.0f, 0.5));
-
-   particles = Owning(new Graphics::ParticleSystem);
-   particles->setRenderer(world.graphics.getRenderer("../data/smoke.png"));
-
-   emitter = Owning(new Graphics::ParticleEmitter);
-   emitter->setParticleSystem(particles.lock());
-   emitter->setCoordSystem(Owning(new CoordSystemLeaf2(vec2(100.0f, 100.0f), mat2::Identity)));
    
    drawGeoms = (getenv("DRAW_GEOMS") != 0);
 }
@@ -102,18 +105,16 @@ void Game::tick(float dt) {
    world.graphics.enqueueVisibleSprites(renderList);
    snailHealth1->enqueueRender(renderList, dt);
    snailHealth2->enqueueRender(renderList, dt);
-   particles->enqueueVertices(renderList, dt);
-   
+
+   creator.smokeParticles->enqueueVertices(renderList, dt);
    world.graphics.beginFrame();
    world.graphics.render(renderList);
-
-   emitter->update(dt);
 
 }
 
 void Game::windowChangedSize(int width, int height) {
    std::cout << "Window changed size: " << width << ", " << height << std::endl;
-   world.graphics.resizeViewport(rect(vec2::Zero, static_cast<float>(width), static_cast<float>(height)));
+   world.graphics.resizeViewport(rect(vec2::Zero(), static_cast<float>(width), static_cast<float>(height)));
    world.physics.resizeArea(width, height);
 }
 

@@ -9,7 +9,7 @@
 #include "coord_system2.h"
 
 Graphics::ParticleEmitter::ParticleEmitter()
-  : emitInterval(0.1f)
+  : emitInterval(0.05f)
   , secondsSinceEmit(emitInterval)
 {
 }
@@ -37,7 +37,7 @@ void Graphics::ParticleEmitter::emit() {
   if (Ref<ParticleSystem>::SharedPtr lockedParticles = particleSystem.lock()) {
     if (Ref<CoordSystem2>::SharedPtr lockedOrigin = origin.lock()) {
       const CoordSystem2::data_type &originTransform = origin->getTransform();
-      lockedParticles->addParticle(originTransform.position, originTransform.orientation.getX() * 100.0f);
+      lockedParticles->addParticle(originTransform.position, originTransform.orientation.getX() * 10.0f);
     }
   }
 }

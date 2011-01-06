@@ -10,6 +10,8 @@
 #include "cactus.h"
 #include "missile.h"
 
+#include "graphics/particle_system.h"
+#include "graphics/particle_emitter.h"
 #include "graphics/gfx_subsystem.h"
 #include "graphics/sprite.h"
 #include "player_entity.h"
@@ -20,10 +22,13 @@
 #include "helmet.h"
 #include "coordsystem_transformer.h"
 #include "powerup.h"
+#include "rocket_ammo.h"
 
 ObjectCreator::ObjectCreator(World & world)
    : world(world)
 {
+   smokeParticles = Owning(new Graphics::ParticleSystem);
+   smokeParticles->setRenderer(world.graphics.getRenderer("../data/smoke.png"));
 }
 
 Ref<Projectile>::SharedPtr ObjectCreator::createProjectile() {
@@ -105,7 +110,7 @@ Ref<Snail>::SharedPtr ObjectCreator::createSnail(int team, ObjectCreator & creat
    newSnail->sprite->setDelegate(Owning(
       new CoordSystemTransformer<CoordSystem2>(
          newSnail->helmet,
-         CoordSystem2::data_type(helmetOffset, mat2::Identity)
+         CoordSystem2::data_type(helmetOffset, mat2::Identity())
          )
    ));
    world.insert(newHelmet.lock());
@@ -153,6 +158,23 @@ Ref<Object>::SharedPtr ObjectCreator::createObject(const std::string & type, Obj
       newMissile->geom->setCollisionId(3);
       newMissile->geom->setCollisionMask(0x0u);
 
+      if (Ref<Graphics::ParticleSystem>::SharedPtr lockedParticles =
+          smokeParticles.lock()) {
+         newMissile->smokeEmitter = Owning(new Graphics::ParticleEmitter);
+         newMissile->smokeEmitter->setParticleSystem(lockedParticles);
+    
+         // Set the coordinate system as a transformation of the missile's
+         // coordinate system so the particles start a bit behind the missile
+         newMissile->smokeEmitter->setCoordSystem(
+            Owning(new CoordSystemTransformer<CoordSystem2>(
+                      Observing(newMissile),
+                      CoordSystem2::data_type(vec2(0.0f, 0.0f),
+                                              mat2::Identity())
+                      )
+               )
+            );
+      }
+      
       world.scheduler.subscribe(0.1f, Observing(newMissile));
       
       return newMissile;
@@ -182,6 +204,22 @@ Ref<Object>::SharedPtr ObjectCreator::createObject(const std::string & type, Obj
    else if (type == "healthbox") {
       Ref<PowerUp>::SharedPtr newPowerup(new PowerUp);
       newPowerup->sprite = Owning(world.graphics.createSprite("../data/health_powerup.png"));
+      newPowerup->sprite->setEventHandler(newPowerup);
+      
+      newPowerup->body = Owning(world.physics.createBody());
+      newPowerup->body->setDelegate(newPowerup->sprite);
+      newPowerup->body->setOwner(newPowerup); // I guess this is for cascade kill
+
+      newPowerup->geom = Owning(world.physics.createRectGeom(newPowerup->sprite->getSize()));
+      newPowerup->geom->setBody(newPowerup->body);
+      newPowerup->geom->setCollisionId(4);
+      newPowerup->geom->setEventHandler(Observing(newPowerup));
+      
+      return newPowerup;
+   }
+   else if (type == "rockets") {
+      Ref<RocketAmmo>::SharedPtr newPowerup(new RocketAmmo);
+      newPowerup->sprite = Owning(world.graphics.createSprite("../data/rocket_ammo.png"));
       newPowerup->sprite->setEventHandler(newPowerup);
       
       newPowerup->body = Owning(world.physics.createBody());

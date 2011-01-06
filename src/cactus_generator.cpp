@@ -10,6 +10,7 @@
 #include "world.h"
 #include "physics/body.h"
 #include "powerup.h"
+#include "rocket_ammo.h"
 
 #include <iostream>
 #include <cstdlib>
@@ -42,16 +43,23 @@ void CactusGenerator::update(float dt) {
 void CactusGenerator::spawnCactus() {
    vec2 startPos = origin;
    startPos.x += static_cast<float>(rand() % 50) * 1.5f;
-   int type = rand() % 10;
+   int type = rand() % 13;
 
-   
-   if (type < 9) {
+
+   // FIXME: improve this
+   if (type < 10) {
       Ref<Cactus>::SharedPtr cactus = Cast<Cactus>(creator.createObject("cactus", creator));
       cactus->setTransform(CoordSystemData2(startPos, cactus->getTransform().orientation));
       cactus->body->addImpulse(vec2(0.0f, -140.0f));
       world.insert(cactus);
    }
-   else {
+   else if (type == 10) {
+      Ref<RocketAmmo>::SharedPtr powerup = Cast<RocketAmmo>(creator.createObject("rockets", creator));
+      powerup->body->setTransform(CoordSystemData2(startPos, powerup->body->getTransform().orientation));
+      powerup->body->addImpulse(vec2(0.0f, -140.0f));
+      world.insert(powerup);
+   }
+   else if (type > 10) {
       Ref<PowerUp>::SharedPtr powerup = Cast<PowerUp>(creator.createObject("healthbox", creator));
       powerup->body->setTransform(CoordSystemData2(startPos, powerup->body->getTransform().orientation));
       powerup->body->addImpulse(vec2(0.0f, -140.0f));

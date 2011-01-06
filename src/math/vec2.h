@@ -11,28 +11,28 @@
 
 class vec2 {
 public:
-   vec2();
-   vec2(float x, float y);
-   
-   vec2 operator + (const vec2 & rh) const;
-   vec2 operator - (const vec2 & rh) const;
-   vec2 operator - () const;
-   vec2 operator * (float scalar) const;
-   vec2 operator * (const vec2 & rh) const;
-   vec2 & operator += (const vec2 & rh);
-   vec2 & operator -= (const vec2 & rh);
-   
-   operator std::string() const;
-   
-   float getMagnitude() const;
-   vec2 & normalize();
-
-   static float DotProduct(const vec2 & v1, const vec2 & v2);
-   
-   static const vec2 Zero;
-   static const vec2 Identity;
-   
-   float x, y;
+  vec2();
+  vec2(float x, float y);
+  
+  vec2 operator + (const vec2 & rh) const;
+  vec2 operator - (const vec2 & rh) const;
+  vec2 operator - () const;
+  vec2 operator * (float scalar) const;
+  vec2 operator * (const vec2 & rh) const;
+  vec2 & operator += (const vec2 & rh);
+  vec2 & operator -= (const vec2 & rh);
+  
+  operator std::string() const;
+  
+  float getMagnitude() const;
+  vec2 & normalize();
+  
+  static float DotProduct(const vec2 & v1, const vec2 & v2);
+  
+  static vec2 Zero();
+  static vec2 Identity();
+  
+  float x, y;
 };
 
 

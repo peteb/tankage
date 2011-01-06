@@ -48,7 +48,7 @@ void Physics::Geom::setTransform(const CoordSystemData2 & cs) {
 }
 
 CoordSystemData2 Physics::Geom::getTransform() const {
-   return CoordSystemData2(position, mat2::Identity);
+  return CoordSystemData2(position, mat2::Identity());
 }
 
 void Physics::Geom::setCollisionId(unsigned int collisionId) {

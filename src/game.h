@@ -15,8 +15,6 @@
 #include "world.h"
 #include "ref.h"
 #include "health_meter.h"
-#include "graphics/particle_system.h"
-#include "graphics/particle_emitter.h"
 
 class CactusGenerator;
 class Snail;
@@ -37,9 +35,6 @@ private:
   Ref<Graphics::Renderer> defaultRenderer;
   HiController playerInput1, playerInput2;
   Ref<HealthMeter> snailHealth1, snailHealth2;
-
-  Ref<Graphics::ParticleSystem> particles;
-  Ref<Graphics::ParticleEmitter> emitter;
   
   bool drawGeoms;
   World world;

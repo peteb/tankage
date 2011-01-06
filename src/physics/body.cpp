@@ -8,9 +8,9 @@
 
 Physics::Body::Body(Physics::Subsystem & subsystem)
    : subsystem(subsystem)
-   , position(vec2::Zero)
-   , velocity(vec2::Zero)
-   , orientation(mat2::Identity)
+   , position(vec2::Zero())
+   , velocity(vec2::Zero())
+   , orientation(mat2::Identity())
 {
    
 }

@@ -19,14 +19,18 @@ INCLUDE(${CMAKE_ROOT}/Modules/FindPackageHandleStandardArgs.cmake)
 FIND_PATH(IL_INCLUDE_DIR il.h 
   PATH_SUFFIXES include IL
   DOC "The path the the directory that contains il.h"
+  PATHS
+  ${PROJECT_ROOT_DIR}/3pp/include/ # added by ptr
 )
 
 #MESSAGE("IL_INCLUDE_DIR is ${IL_INCLUDE_DIR}")
 
 FIND_LIBRARY(IL_LIBRARY
-  NAMES IL
+  NAMES IL DevIL
   PATH_SUFFIXES lib64 lib lib32
   DOC "The file that corresponds to the base il library."
+  PATHS
+  ${PROJECT_ROOT_DIR}/3pp/lib/ # added by ptr
 )
 
 #MESSAGE("IL_LIBRARY is ${IL_LIBRARY}")

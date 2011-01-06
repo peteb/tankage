@@ -242,3 +242,9 @@
     [25] particle system work, added color to vertices
     [25] further improvements on smoke particle system
     
+2010-12-22
+    [25] fixing the particle emitter
+    [25] merged the particle system stuff into master and worked on getting a
+         particle emitter for the missiles
+    [25] some smoke refining, added weapon logic to the projectile weapon
+    

@@ -36,6 +36,9 @@ FIND_PATH(GLFW_INCLUDE_DIR glfw.h DOC "Path to GLFW include directory."
   # By default headers are under GL subfolder
   /usr/include/GL
   /usr/local/include/GL	
+  ${PROJECT_ROOT_DIR}/3pp/include/ # added by ptr
+  ${PROJECT_ROOT_DIR}/3pp/include/GL/ # added by ptr
+
 )
 DBG_MSG("GLFW_INCLUDE_DIR = ${GLFW_INCLUDE_DIR}")
 
@@ -47,6 +50,7 @@ FIND_LIBRARY(GLFW_LIBRARY DOC "Absolute path to GLFW library."
   PATHS
   /usr/local/lib
   /usr/lib
+  ${PROJECT_ROOT_DIR}/3pp/lib/ # added by ptr
 )
 DBG_MSG("GLFW_LIBRARY = ${GLFW_LIBRARY}")
 
