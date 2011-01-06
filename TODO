@@ -130,6 +130,5 @@
 *** DONE CMake should create and use 'bin' and 'build' directories 
 *** TODO Investigate how-to report CMake error and get rid of gen files
 *** TODO Investigate how-to create debian packages and which tool to use
-*** TODO Add CMake find module for Google C++ Testing Framework 
-
+*** DONE Add CMake find module for Google C++ Testing Framework 
 
