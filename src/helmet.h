@@ -12,23 +12,24 @@
 #include "ref.h"
 #include "coord_system2.h"
 
-namespace Physics {class Geom; class Body; }
-namespace Graphics {class Sprite; }
+class Geom;
+class Body;
+class Sprite;
 
-class Helmet : public Object, public CoordSystem2, public Physics::GeomEventHandler {
+class Helmet : public Object, public CoordSystem2, public GeomEventHandler {
 public:
    Helmet();
    
-   void collided(const Ref<Physics::Geom>::SharedPtr & with);
+   void collided(const Ref<Geom>::SharedPtr & with);
 
    // CoordSystem2
    void setTransform(const CoordSystemData2 & cs);
    CoordSystemData2 getTransform() const;
    
-   Ref<Graphics::Sprite> sprite;
-   Ref<Physics::Geom> geom;
-   Ref<Physics::Body> body;
-   Ref<Physics::Body> snailBody;
+   Ref<Sprite> sprite;
+   Ref<Geom> geom;
+   Ref<Body> body;
+   Ref<Body> snailBody;
    
 private:
    int health;

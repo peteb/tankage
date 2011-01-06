@@ -12,19 +12,19 @@
 #include "graphics/sprite.h"
 #include "physics/geom.h"
 
-namespace Physics {class Body; }
+class Body;
 
 // TODO: mixins for leftView? Ie, DestroyOnLeftView
 
-class PowerUp : public Object, public Graphics::SpriteEventHandler, public Physics::GeomEventHandler {
+class PowerUp : public Object, public SpriteEventHandler, public GeomEventHandler {
 public:
   
    void leftView();
-   void collided(const Ref<Physics::Geom>::SharedPtr & with);
+   void collided(const Ref<Geom>::SharedPtr & with);
    
-   Ref<Graphics::Sprite> sprite;
-   Ref<Physics::Body> body;
-   Ref<Physics::Geom> geom;
+   Ref<Sprite> sprite;
+   Ref<Body> body;
+   Ref<Geom> geom;
 };
 
 #endif // !POWERUP_H

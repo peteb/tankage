@@ -36,7 +36,7 @@ PlayerEntity::PlayerEntity(float x, const Ref<Snail>::WeakPtr &shooter, ObjectCr
 // FIXME: there's no reason _not_ to work directly on snails...
 //        ie, this abstraction is useless
 
-void PlayerEntity::setTarget(const Ref<Physics::Body> & newTarget) {
+void PlayerEntity::setTarget(const Ref<Body> & newTarget) {
   this->target = newTarget;
 }
 
@@ -60,7 +60,7 @@ void PlayerEntity::update(float dt) {
   }
   
   
-  if (Ref<Physics::Body>::SharedPtr lockedTarget = target.lock()) {
+  if (Ref<Body>::SharedPtr lockedTarget = target.lock()) {
     // Restrain the snail's body to the screen
     vec2 pos = lockedTarget->getTransform().position;
     pos.x = std::max(pos.x, 32.0f);
@@ -81,12 +81,12 @@ void PlayerEntity::update(float dt) {
 }
 
 void PlayerEntity::setTransform(const CoordSystemData2 & cs) {
-  if (Ref<Physics::Body>::SharedPtr lockedBody = target.lock())
+  if (Ref<Body>::SharedPtr lockedBody = target.lock())
     lockedBody->setTransform(cs);
 }
 
 CoordSystemData2 PlayerEntity::getTransform() const {
-  if (Ref<Physics::Body>::SharedPtr lockedTarget = target.lock())
+  if (Ref<Body>::SharedPtr lockedTarget = target.lock())
     return lockedTarget->getTransform();
   
   return CoordSystemData2::Identity();

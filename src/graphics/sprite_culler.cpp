@@ -7,14 +7,14 @@
 #include "sprite_culler.h"
 #include "sprite.h"
 
-Graphics::SpriteCuller::SpriteMetadata::SpriteMetadata(const Ref<Graphics::Sprite>::WeakPtr & sprite)
+Graphics::SpriteCuller::SpriteMetadata::SpriteMetadata(const Ref<Sprite>::WeakPtr & sprite)
    : sprite(sprite)
 {
    visibleLastFrame = false;
    firstFrame = true;
 }
 
-void Graphics::SpriteCuller::insert(const Ref<Graphics::Sprite>::WeakPtr sprite) {
+void Graphics::SpriteCuller::insert(const Ref<Sprite>::WeakPtr sprite) {
    Graphics::SpriteCuller::SpriteMetadata spriteMd(sprite);
    sprites.push_back(spriteMd);
 }
@@ -25,7 +25,7 @@ void Graphics::SpriteCuller::enqueueVisibleSprites(const Ref<Graphics::RenderLis
    while (iter != sprites.end()) {
       SpriteMetadata & metadata = *iter;
       
-      if (Ref<Graphics::Sprite>::SharedPtr sprite = metadata.sprite.lock()) {
+      if (Ref<Sprite>::SharedPtr sprite = metadata.sprite.lock()) {
 		 // If the sprite still exists
 		 
          if (rect::intersect(sprite->getBoundingBox(), viewport)) {
@@ -41,7 +41,7 @@ void Graphics::SpriteCuller::enqueueVisibleSprites(const Ref<Graphics::RenderLis
          else {
 			// If it's completely outside the viewport
 			if (metadata.visibleLastFrame && !metadata.firstFrame) {
-               if (Ref<Graphics::Sprite>::SharedPtr sprite = metadata.sprite.lock()) {
+               if (Ref<Sprite>::SharedPtr sprite = metadata.sprite.lock()) {
                   sprite->leftView();
                }
             }

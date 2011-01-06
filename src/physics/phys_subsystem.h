@@ -14,35 +14,37 @@
 #include "math/rect.h"
 #include "ref.h"
 
-namespace Graphics {class RenderList; }
+class Geom;
+class Body;
 
-namespace Physics {
-   class Body;
-   class Geom;
-   
-   class Subsystem {
-   public:
-      Subsystem();
-      
-      void update(float dt);
-      void resizeArea(int width, int height);
-      void addBody(const Ref<Body>::WeakPtr & body);
-	   void enqueueGeoms(const Ref<Graphics::RenderList>::SharedPtr & renderList);
-	  
-      Ref<Body>::SharedPtr createBody();
-      Ref<Geom>::SharedPtr createRectGeom(const rect & size);
-      
-   private:
-      void checkCollisions();
-      
-      // vec2 maxArea;
-      // rect leftArea, rightArea;
-      std::vector<Ref<Body>::WeakPtr> bodies;
-      std::vector<Ref<Geom>::WeakPtr> geoms;
-   };
-   
-   
+namespace Graphics {
+  class RenderList;
 }
+
+
+class PhysSubsystem {
+public:
+  PhysSubsystem();
+  
+  void update(float dt);
+  void resizeArea(int width, int height);
+  void addBody(const Ref<Body>::WeakPtr & body);
+  void enqueueGeoms(const Ref<Graphics::RenderList>::SharedPtr & renderList);
+  
+  Ref<Body>::SharedPtr createBody();
+  Ref<Geom>::SharedPtr createRectGeom(const rect & size);
+  
+private:
+  void checkCollisions();
+  
+  // vec2 maxArea;
+  // rect leftArea, rightArea;
+  std::vector<Ref<Body>::WeakPtr> bodies;
+  std::vector<Ref<Geom>::WeakPtr> geoms;
+};
+   
+   
+
 
 // might be able to remove HiController
 // HiController -> PlayerLogic -> PhysicsThingie ->        Sprite
