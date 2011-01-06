@@ -3,12 +3,11 @@
 
 # Unit tests are considered optional and in negative case user will be warned 
 # but allowed to continue (user will be able to do make anyway).
-# It is hard-coded to use static GTest libraries.
 
 # Module defines
 # GTEST_INCLUDE_DIR found by gtest/gtest.h
-# GTEST_LIBRARY found by libgtest.a
-# GTEST_MAIN_LIBRARY found by libgtest_main.a
+# GTEST_LIBRARY found by gtest
+# GTEST_MAIN_LIBRARY found by gtest_main
 
 # Module uses
 # GTEST_ROOT environment variable as one of the hints
@@ -28,7 +27,7 @@ ELSE(GTEST_INCLUDE_DIR)
 ENDIF(GTEST_INCLUDE_DIR)
 
 UNSET(GTEST_LIBRARY CACHE)
-FIND_LIBRARY(GTEST_LIBRARY libgtest.a
+FIND_LIBRARY(GTEST_LIBRARY gtest
 	HINTS /usr/lib /usr/local/lib $ENV{GTEST_ROOT}/lib
 )
 IF(GTEST_LIBRARY)
@@ -38,7 +37,7 @@ ELSE(GTEST_LIBRARY)
 ENDIF(GTEST_LIBRARY)
 
 UNSET(GTEST_MAIN_LIBRARY CACHE)
-FIND_LIBRARY(GTEST_MAIN_LIBRARY libgtest_main.a
+FIND_LIBRARY(GTEST_MAIN_LIBRARY gtest_main
 	HINTS /usr/lib /usr/local/lib $ENV{GTEST_ROOT}/lib
 )
 IF(GTEST_MAIN_LIBRARY)

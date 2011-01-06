@@ -4,7 +4,7 @@ include_directories(
 	${GTEST_INCLUDE_DIR}
 )
 
-add_executable(math_unittest
+add_executable(math_unittest EXCLUDE_FROM_ALL
 	math_unittest.cpp
 )
 target_link_libraries(math_unittest
