@@ -5,6 +5,7 @@
 # GTEST_INCLUDE_DIR found by gtest/gtest.h
 # GTEST_LIBRARY found by gtest
 # GTEST_MAIN_LIBRARY found by gtest_main
+# GTEST_FLAG if everything was found
 
 # Module uses
 # GTEST_ROOT environment variable as one of the hints
