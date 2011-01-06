@@ -125,5 +125,11 @@
    Do some research on this. Push or pull?
 ** TODO Optimize performance of enqueueRender, Mesh, etc. No copies!
 ** TODO Sprite should not know about cells, but offsets and widths
-** DONE CMake should create and use 'bin' and 'build' directories 
 ** TODO Message boxes in Windows for displaying errors   
+** Improve build based on CMake
+*** DONE CMake should create and use 'bin' and 'build' directories 
+*** TODO Investigate how-to report CMake error and get rid of gen files
+*** TODO Investigate how-to create debian packages and which tool to use
+*** TODO Add CMake find module for Google C++ Testing Framework 
+
+
