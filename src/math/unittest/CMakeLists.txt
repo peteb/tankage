@@ -1,4 +1,8 @@
 
+if (NOT GTEST_FLAG) 
+	return()
+endif (NOT GTEST_FLAG)
+
 include_directories(
 	${MATH_ROOT_DIR} 
 	${GTEST_INCLUDE_DIR}

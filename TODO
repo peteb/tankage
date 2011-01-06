@@ -130,4 +130,5 @@
 *** TODO Investigate how-to create debian packages and which tool to use
 *** DONE Add CMake find module for Google C++ Testing Framework 
 *** TODO Make CMake output more pretty for the smart ptr detection
-    
+*** DONE Make GTest targets optional 
+
