@@ -58,8 +58,6 @@ set(CMAKE_MODULE_PATH "${PROJECT_ROOT_DIR}/cmake/Modules/")
 
 include_directories ("${PROJECT_ROOT_DIR}/inc/" "${PROJECT_ROOT_DIR}/src/")
 
-# Unit test package is optional. If not found, a warning is printed out
-# and most likely unit test targets are not compilable. 
 find_package(GTest)
 
 add_subdirectory (${PROJECT_ROOT_DIR}/src CMakeFiles/Src)

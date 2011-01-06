@@ -1,9 +1,6 @@
 
 # Module to find GTest include directory and libraries.
 
-# Unit tests are considered optional and in negative case user will be warned 
-# but allowed to continue (user will be able to do make anyway).
-
 # Module defines
 # GTEST_INCLUDE_DIR found by gtest/gtest.h
 # GTEST_LIBRARY found by gtest
@@ -33,7 +30,7 @@ FIND_LIBRARY(GTEST_LIBRARY gtest
 IF(GTEST_LIBRARY)
 	DBG_MSG(${CMAKE_CURRENT_LIST_LINE} "GTEST_LIBRARY ${GTEST_LIBRARY}")
 ELSE(GTEST_LIBRARY)
-	DBG_MSG(${CMAKE_CURRENT_LIST_LINE} "Failed to find libgtest.a")
+	DBG_MSG(${CMAKE_CURRENT_LIST_LINE} "Failed to find lib gtest")
 ENDIF(GTEST_LIBRARY)
 
 UNSET(GTEST_MAIN_LIBRARY CACHE)
@@ -43,7 +40,7 @@ FIND_LIBRARY(GTEST_MAIN_LIBRARY gtest_main
 IF(GTEST_MAIN_LIBRARY)
 	DBG_MSG(${CMAKE_CURRENT_LIST_LINE} "GTEST_MAIN_LIBRARY ${GTEST_MAIN_LIBRARY}")
 ELSE(GTEST_MAIN_LIBRARY)
-	DBG_MSG(${CMAKE_CURRENT_LIST_LINE} "Failed to find libgtest_main.a")
+	DBG_MSG(${CMAKE_CURRENT_LIST_LINE} "Failed to find lib gtest_main")
 ENDIF(GTEST_MAIN_LIBRARY)
 
 UNSET(GTEST_FLAG CACHE)

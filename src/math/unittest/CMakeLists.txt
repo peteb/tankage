@@ -1,4 +1,5 @@
 
+# Check GTest status and skip the file if negative
 if (NOT GTEST_FLAG) 
 	return()
 endif (NOT GTEST_FLAG)
