@@ -13,7 +13,7 @@
 #ifndef MAT2_H_LF0Q48ED
 #define MAT2_H_LF0Q48ED
 
-#include "vec2.h"
+#include <utils/vec.h>
 
 class mat2 {
 public:

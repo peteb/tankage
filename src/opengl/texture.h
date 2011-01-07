@@ -8,7 +8,7 @@
 #define OPENGL_TEXTURE_H
 
 #include "graphics/texture.h"
-#include "math/rect.h"
+#include <utils/rect.h>
 #include "opengl.h"
 
 

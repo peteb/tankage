@@ -7,7 +7,7 @@
 #ifndef VERTEX_H_L5CPFJ2H
 #define VERTEX_H_L5CPFJ2H
 
-#include "math/vec2.h"
+#include <utils/vec.h>
 #include "graphics/color.h"
 
 struct Vertex2T2 {

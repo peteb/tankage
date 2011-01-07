@@ -2,7 +2,7 @@
 
 add_subdirectory(graphics)
 add_subdirectory(physics)
-add_subdirectory(math)
+add_subdirectory(utils)
 add_subdirectory(opengl)
 
 add_executable(snail-wail
@@ -60,7 +60,7 @@ target_link_libraries(snail-wail
   graphics 
   opengl
   physics 
-  math
+  utils
   ${GLFW_LIBRARY} 
   ${Cocoa_LIBRARIES}
   )

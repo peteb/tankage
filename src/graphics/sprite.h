@@ -15,10 +15,10 @@
 #define SPRITE_H
 
 #include <vector>
-#include "math/vec2.h"
+#include <utils/vec.h>
 #include "coord_system2.h"
 #include "graphics/vertex.h"
-#include "math/rect.h"
+#include <utils/rect.h>
 #include "ref.h"
 
 namespace Graphics {

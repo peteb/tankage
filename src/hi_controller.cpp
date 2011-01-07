@@ -8,7 +8,7 @@
 
 #include <iostream>
 
-#include "math/vec2.h"
+#include <utils/vec.h>
 #include "graphics/sprite.h"
 #include "triggerable.h"
 

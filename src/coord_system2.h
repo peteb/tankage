@@ -15,8 +15,8 @@
 #ifndef COORDSYSTEM2_H
 #define COORDSYSTEM2_H
 
-#include "math/vec2.h"
-#include "math/mat2.h"
+#include <utils/vec.h>
+#include <utils/mat.h>
 
 // FIXME: this needs testing, preferably sooner than later
 

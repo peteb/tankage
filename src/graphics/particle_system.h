@@ -7,7 +7,7 @@
 #ifndef GRAPHICS_PARTICLE_SYSTEM_H
 #define GRAPHICS_PARTICLE_SYSTEM_H
 
-#include "math/vec2.h"
+#include <utils/vec.h>
 #include "ref.h"
 
 #include <vector>

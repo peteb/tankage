@@ -10,8 +10,8 @@
 #include <string>
 #include <vector>
 
-#include "math/vec2.h"
-#include "math/rect.h"
+#include <utils/vec.h>
+#include <utils/rect.h>
 #include "ref.h"
 
 class Geom;

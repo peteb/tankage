@@ -14,7 +14,7 @@
 #define GRAPHICS_RENDERER_H
 
 #include "ref.h"
-#include "math/rect.h"
+#include <utils/rect.h>
 
 namespace Graphics {
    class Mesh;

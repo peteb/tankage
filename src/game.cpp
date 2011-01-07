@@ -7,7 +7,7 @@
 #include "game.h"
 #include "graphics/sprite.h"
 #include "snail.h"
-#include "math/rect.h"
+#include <utils/rect.h>
 #include "object.h"
 #include "cactus_generator.h"
 #include "graphics/render_list.h"

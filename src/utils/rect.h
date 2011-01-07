@@ -7,7 +7,7 @@
 #ifndef RECT_H_Y6VDFOHK
 #define RECT_H_Y6VDFOHK
 
-#include "vec2.h"
+#include <utils/vec.h>
 
 class rect {
 public:
