@@ -33,7 +33,7 @@ void MissileLauncher::shoot() {
       );
 
     CoordSystem2::data_type cs = lockedOrigin->getTransform();
-    vec2 forward = cs.orientation.getX();
+    vec2 forward = cs.orientation.x();
 
     if (invertForward)
       forward = -forward;

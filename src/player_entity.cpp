@@ -70,7 +70,7 @@ void PlayerEntity::update(float dt) {
     
     vec2 delta = vec2(xPos, pos.y) - pos;
     
-    if (delta.getMagnitude() > 50.0f) {
+    if (delta.magnitude() > 50.0f) {
       delta.normalize();
       delta = delta * 50.0f;
     }
