@@ -16,5 +16,6 @@ target_link_libraries(math_unittest
 	${GTEST_MAIN_LIBRARY}
 	${GTEST_LIBRARY}
 	pthread
+	math
 )
 
