@@ -5,6 +5,7 @@ add_library(engine
    glfw/wm.cpp
    glfw/input.cpp
    glfw/starter.cpp
+   opengl/graphics.cpp
 )
 
 if (APPLE)
@@ -12,10 +13,6 @@ if (APPLE)
   include_directories(
     ${Cocoa_INCLUDE_DIR}
     )
-  
-#  target_link_libraries(snail-wail 
-#    ${Cocoa_LIBRARIES}
-#    )
 endif (APPLE)
 
 

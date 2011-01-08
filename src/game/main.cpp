@@ -2,6 +2,7 @@
 #include <engine/portal.h>
 #include <engine/window_manager.h>
 #include <engine/input.h>
+#include <game/background.h>
 
 int app_main(Portal &interfaces) {
   WindowManager *wm = interfaces.requestInterface<WindowManager>();
@@ -13,12 +14,14 @@ int app_main(Portal &interfaces) {
   bool running = true;
   double lastTick = wm->timeSeconds();
 
+  Background bkg(interfaces);
+  
   while (running) {      
     double thisTick = wm->timeSeconds();
-    float dt = std::max(this_tick - last_tick, 0.00001);
+    float dt = std::max(thisTick - lastTick, 0.00001);
     
     //  game.tick(dt);
-
+    bkg.render();
     wm->swapBuffers();
     lastTick = thisTick;
     running = !input->keyPressed(escape) &&
