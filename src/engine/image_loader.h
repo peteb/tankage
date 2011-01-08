@@ -1,6 +1,7 @@
 #ifndef ENGINE_IMAGE_LOADER_H
 #define ENGINE_IMAGE_LOADER_H
 
+#include <engine/interface.h>
 #include <engine/image_loader.h>
 
 class ImageLoader : public Interface {

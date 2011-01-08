@@ -13,6 +13,7 @@
 #include <engine/glfw/input.h>
 #include <engine/portal.h>
 #include <engine/opengl/graphics.h>
+#include <engine/devil/image_loader.h>
 
 // The GLFW module is a "starter" module, meaning, it implements 'main' and runs
 // app_main
@@ -27,10 +28,11 @@ int main(int argc, char **argv) {
     return EXIT_FAILURE;
   }
 
-  std::cout << "glfw: registering glfw interfaces..." << std::endl;
+  std::cout << "glfw: registering interfaces..." << std::endl;
   interfaces.registerInterface<Glfw::WindowManager>();
   interfaces.registerInterface<Glfw::Input>();
   interfaces.registerInterface<OpenGl::Graphics>();
+  interfaces.registerInterface<DevIl::ImageLoader>();
   std::cout << "glfw: initialized" << std::endl;
 
   app_main(interfaces);
