@@ -1,9 +1,10 @@
 # -*- cmake -*-
 
-add_executable(engine
-   interface.cpp
+add_library(engine
    portal.cpp
-   modules/glfw.cpp
+   glfw/wm.cpp
+   glfw/input.cpp
+   glfw/starter.cpp
 )
 
 if (APPLE)
