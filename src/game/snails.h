@@ -9,19 +9,24 @@ class Snail {
 public:
   enum SnailState {
     STATE_MOVE_UP,
-    STATE_MOVE_DOWN
+    STATE_MOVE_DOWN,
+    STATE_MAX
   };
 
   Snail(const vec2 &initialPos);
   
   void startState(SnailState state);
-  void render(class Graphics *graphics);
+  void stopState(SnailState state);
   void setTexture(class Texture *texture);
+
+  void render(class Graphics *graphics);
+  void update();
   
 private:
   class Texture *texture;
   vec2 position;
-  
+
+  bool _state[STATE_MAX];
 };
 
 class Snails : public System {

@@ -5,6 +5,7 @@
 #include <engine/portal.h>
 #include <engine/image.h>
 #include <utils/rect.h>
+#include <algorithm>
 
 Snails::Snails(const class Portal &interfaces, SystemContext *ctx)
   : System(ctx)
@@ -36,6 +37,7 @@ Snails::Snails(const class Portal &interfaces, SystemContext *ctx)
 void Snails::render() {
   SnailVector::iterator i = snails.begin(), e = snails.end();
   for (; i != e; ++i) {
+    (*i)->update();
     (*i)->render(graphics);
   }
 }
@@ -44,13 +46,19 @@ Snail *Snails::snail(int id) const {
   return snails.at(id);
 }
 
+
 Snail::Snail(const vec2 &initialPos)
   : position(initialPos)
 {
+  std::fill(&_state[0], &_state[STATE_MAX], 0);
 }
 
 void Snail::startState(SnailState state) {
-  
+  _state[state] = true;
+}
+
+void Snail::stopState(SnailState state) {
+  _state[state] = false;
 }
 
 void Snail::setTexture(Texture *texture) {
@@ -63,4 +71,11 @@ void Snail::render(Graphics *graphics) {
   texture->bind();
 
   graphics->drawQuad(rect(position, 64, 64));
+}
+
+void Snail::update() {
+  if (_state[STATE_MOVE_UP])
+    position += vec2(0.0f, -1.0f);
+  if (_state[STATE_MOVE_DOWN])
+    position += vec2(0.0f, 1.0f);
 }
