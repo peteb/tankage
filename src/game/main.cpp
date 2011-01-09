@@ -5,6 +5,8 @@
 #include <game/background.h>
 #include <engine/graphics.h>
 
+#include <cstdlib>
+
 int app_main(Portal &interfaces) {
   WindowManager *wm = interfaces.requestInterface<WindowManager>();
   Input *input = interfaces.requestInterface<Input>();

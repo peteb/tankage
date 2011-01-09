@@ -2,6 +2,7 @@
 #define ENGINE_PORTAL_H
 
 #include <map>
+#include <string>
 
 class Portal {
 public:

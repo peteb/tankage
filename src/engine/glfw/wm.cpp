@@ -2,6 +2,8 @@
 #include <iostream>
 #include "GL/glfw.h"
 
+#include <cstdlib>
+
 /// GLFW callbacks
 namespace {
 void GLFWCALL WindowResize(int w, int h) {
