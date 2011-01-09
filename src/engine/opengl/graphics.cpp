@@ -136,6 +136,20 @@ void OpenGl::Graphics::setViewport(const class rect &size) {
     );
 }
 
+void OpenGl::Graphics::setBlend(BlendMode mode) {
+  switch (mode) {
+  case Graphics::BLEND_NONE:
+    glDisable(GL_BLEND);
+    return;
+
+  case Graphics::BLEND_ALPHA:
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    break;
+  }
+
+  glEnable(GL_BLEND);
+}
+
 void OpenGl::Graphics::enableTextures() {
   glEnable(GL_TEXTURE_2D);
 }

@@ -8,6 +8,11 @@ public:
   static std::string id() {
     return "graphics";
   }
+
+  enum BlendMode {
+    BLEND_NONE = 0,
+    BLEND_ALPHA
+  };
   
   virtual void clear(const class color4 &clearColor) =0;
   virtual class Texture *createTexture(class Image *image) =0;
@@ -16,7 +21,7 @@ public:
   virtual void setViewport(const class rect &size) =0;
   virtual void enableTextures() =0;
   virtual void disableTextures() =0;
-
+  virtual void setBlend(BlendMode mode) =0;
 };
 
 #endif // !ENGINE_GRAPHICS_H

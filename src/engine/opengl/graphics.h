@@ -14,7 +14,8 @@ public:
 
   void setOrtho(const class rect &size);
   void setViewport(const class rect &size);
-
+  void setBlend(BlendMode mode);
+  
   void enableTextures();
   void disableTextures();
 };

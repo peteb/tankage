@@ -16,10 +16,13 @@ Background::Background(class Portal &interfaces) {
 }
   
 void Background::render() {
-  graphics->clear(color4::White());
+  const color4 desertColor(0.957f, 0.917f, 0.682f, 1.0f);
+  graphics->clear(desertColor);
 
+  graphics->setBlend(Graphics::BLEND_ALPHA);
   graphics->enableTextures();
   tex->bind();
+
   graphics->drawQuad(rect(vec2(400.0f, 300.0f), 128, 128));
 }
 
