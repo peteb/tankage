@@ -23,7 +23,7 @@ public:
   vec2 & operator += (const vec2 & rh) {x += rh.x; y += rh.y; return *this; }
   vec2 & operator -= (const vec2 & rh) {x -= rh.x; y -= rh.y; return *this; }
   vec2 operator + (const vec2 & rh) const {return vec2(*this) += rh; }
-  vec2 operator - (const vec2 & rh) const {return vec2(*this) += rh; }
+  vec2 operator - (const vec2 & rh) const {return vec2(*this) -= rh; }
   
   float magnitude() const {return sqrt(x * x + y * y); }
 

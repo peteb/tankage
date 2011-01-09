@@ -3,10 +3,12 @@
 #include <engine/window_manager.h>
 #include <engine/input.h>
 #include <game/background.h>
+#include <engine/graphics.h>
 
 int app_main(Portal &interfaces) {
   WindowManager *wm = interfaces.requestInterface<WindowManager>();
   Input *input = interfaces.requestInterface<Input>();
+  Graphics *gfx = interfaces.requestInterface<Graphics>();
   
   wm->createWindow(800, 600);
 
@@ -19,9 +21,14 @@ int app_main(Portal &interfaces) {
   while (running) {      
     double thisTick = wm->timeSeconds();
     float dt = std::max(thisTick - lastTick, 0.00001);
+
+    const rect wndSize = wm->size();
     
-    //  game.tick(dt);
+    gfx->setViewport(wndSize);
+    gfx->setOrtho(wndSize);
+    
     bkg.render();
+
     wm->swapBuffers();
     lastTick = thisTick;
     running = !input->keyPressed(escape) &&

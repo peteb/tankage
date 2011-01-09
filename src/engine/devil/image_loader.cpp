@@ -23,11 +23,12 @@ public:
     ilBindImage(_id);
     ILuint type = ilGetInteger(IL_IMAGE_TYPE);
     Image::ComponentType ret;
-    
+
     switch (type) {
     case IL_UNSIGNED_BYTE:
       ret = Image::IMAGE_UNSIGNED_BYTE;
-
+      break;
+      
     default:
       throw std::runtime_error("devil: using unsupported data type");
     }
@@ -76,6 +77,15 @@ private:
 };
 
 }
+
+DevIl::ImageLoader::ImageLoader() {
+  ilInit();
+}
+
+DevIl::ImageLoader::~ImageLoader() {
+
+}
+
 
 class Image *DevIl::ImageLoader::loadImage(const std::string &filename) {
   ILuint imageId;

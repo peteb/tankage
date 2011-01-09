@@ -16,6 +16,13 @@ public:
   rect(float width, float height);
   
   void getCoords(vec2 & upperLeft, vec2 & lowerRight) const;
+  float width() const {
+    return halfSize.x * 2.0f;
+  }
+
+  float height() const {
+    return halfSize.y * 2.0f;
+  }
   
   static bool intersect(const rect & r1, const rect & r2);
   

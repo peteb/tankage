@@ -7,8 +7,16 @@
 namespace OpenGl {
 class Graphics : public ::Graphics, public Singleton<Graphics> {
 public:
-  void clear(const color4 &clearColor);
-  
+  class Texture *createTexture(class Image *image);
+
+  void clear(const class color4 &clearColor);
+  void drawQuad(const class rect &quad);
+
+  void setOrtho(const class rect &size);
+  void setViewport(const class rect &size);
+
+  void enableTextures();
+  void disableTextures();
 };
 
 }

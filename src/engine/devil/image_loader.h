@@ -8,6 +8,9 @@ namespace DevIl {
 
 class ImageLoader : public ::ImageLoader, public Singleton<ImageLoader> {
 public:
+  ImageLoader();
+  ~ImageLoader();
+  
   class Image *loadImage(const std::string &filename);
   
 };

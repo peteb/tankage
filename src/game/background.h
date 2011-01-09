@@ -9,6 +9,7 @@ public:
 
 private:
   class Graphics *graphics;
+  class Texture *tex;
 };
 
 #endif // !GAME_BACKGROUND_H

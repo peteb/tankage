@@ -15,7 +15,7 @@ rect::rect(const vec2 & origin, const vec2 & halfSize)
 
 rect::rect(const vec2 & origin, float width, float height) {
    halfSize = vec2(width / 2.0f, height / 2.0f);
-   this->origin = origin + halfSize;
+   this->origin = origin;
 }
 
 rect::rect(float width, float height) 
