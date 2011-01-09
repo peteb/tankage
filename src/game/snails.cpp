@@ -12,11 +12,25 @@ Snails::Snails(const class Portal &interfaces, SystemContext *ctx)
   graphics = interfaces.requestInterface<Graphics>();
   ImageLoader *imgLoader = interfaces.requestInterface<ImageLoader>();
 
-  std::auto_ptr<Image> img(imgLoader->loadImage("../data/snail_l.png"));
-  Snail *snail = new Snail(vec2(50.0f, 300.0f));
-  snail->setTexture(graphics->createTexture(img.get()));
+  // First snail
+  {
+    std::auto_ptr<Image> img(imgLoader->loadImage("../data/snail_l.png"));
+    Snail *snail = new Snail(vec2(50.0f, 300.0f));
+    snail->setTexture(graphics->createTexture(img.get()));
+  
+    snails.push_back(snail);
+  }
 
-  snails.push_back(snail);
+  // Second snail
+  {
+    std::auto_ptr<Image> img(imgLoader->loadImage("../data/snail_r.png"));
+    Snail *snail = new Snail(vec2(800-50.0f, 300.0f));
+    snail->setTexture(graphics->createTexture(img.get()));
+  
+    snails.push_back(snail);
+  }
+  
+  
 }
 
 void Snails::render() {
