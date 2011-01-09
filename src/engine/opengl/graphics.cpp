@@ -145,6 +145,10 @@ void OpenGl::Graphics::setBlend(BlendMode mode) {
   case Graphics::BLEND_ALPHA:
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     break;
+
+  case Graphics::BLEND_ADDITIVE:
+    glBlendFunc(GL_ONE, GL_ONE);
+    break;
   }
 
   glEnable(GL_BLEND);

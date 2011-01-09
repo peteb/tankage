@@ -1,9 +1,11 @@
 #ifndef GAME_BACKGROUND_H
 #define GAME_BACKGROUND_H
 
-class Background {
+#include <game/system.h>
+
+class Background : public System {
 public:
-  Background(class Portal &interfaces);
+  Background(class Portal &interfaces, SystemContext *ctx);
   
   void render();
 

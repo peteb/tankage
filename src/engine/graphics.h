@@ -11,7 +11,8 @@ public:
 
   enum BlendMode {
     BLEND_NONE = 0,
-    BLEND_ALPHA
+    BLEND_ALPHA,
+    BLEND_ADDITIVE
   };
   
   virtual void clear(const class color4 &clearColor) =0;
