@@ -8,6 +8,7 @@
 #include <game/snails.h>
 #include <game/control.h>
 #include <game/system.h>
+#include <game/items.h>
 
 int app_main(Portal &interfaces) {
   WindowManager *wm = interfaces.requestInterface<WindowManager>();
@@ -25,10 +26,12 @@ int app_main(Portal &interfaces) {
   Background bkg(interfaces, &systems);
   Snails snails(interfaces, &systems);
   Control control(interfaces, &systems);
-
+  Items items(interfaces, &systems);
+  
   systems.set(&snails);
   systems.set(&bkg);
   systems.set(&control);
+  systems.set(&items);
   systems.init();
   
   while (running) {      
@@ -43,7 +46,9 @@ int app_main(Portal &interfaces) {
     control.update();
     bkg.render();
     snails.render();
-
+    items.update();
+    items.render();
+    
     wm->swapBuffers();
     lastTick = thisTick;
     running = !input->keyPressed(escape) &&

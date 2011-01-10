@@ -85,7 +85,7 @@ void Snail::render(Graphics *graphics) {
 
 void Snail::update(double dt) {
   if (_state[STATE_MOVE_UP])
-    position += vec2(0.0f, -100.0f) * dt;
+    position += vec2(0.0f, -300.0f) * dt;
   if (_state[STATE_MOVE_DOWN])
-    position += vec2(0.0f, 100.0f) * dt;
+    position += vec2(0.0f, 300.0f) * dt;
 }

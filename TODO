@@ -127,3 +127,11 @@
 ** TODO Optimize performance of enqueueRender, Mesh, etc. No copies!
 ** DONE CMake should create and use 'bin' and 'build' directories
 ** TODO Message boxes in Windows for displaying errors   
+** TODO New Engine
+*** TODO Cactii
+*** TODO Shooting
+*** TODO Items
+*** TODO Collisions
+*** TODO Health + healthbar
+    
+

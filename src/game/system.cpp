@@ -19,6 +19,10 @@ void SystemContext::set(class Control *control) {
   _control = control;
 }
 
+void SystemContext::set(class Items *items) {
+  _items = items;
+}
+
 class Snails *SystemContext::snails() const {
   if (!ready)
     throw std::runtime_error("snails system not initialized yet");
@@ -38,6 +42,13 @@ class Control *SystemContext::control() const {
     throw std::runtime_error("control system not initialized yet");
 
   return _control;
+}
+
+class Items *SystemContext::items() const {
+  if (!ready)
+    throw std::runtime_error("items system not initialized yet");
+
+  return _items;
 }
 
 void SystemContext::init() {

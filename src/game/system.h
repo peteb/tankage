@@ -8,10 +8,12 @@ public:
   void set(class Snails *snails);
   void set(class Background *background);
   void set(class Control *control);
+  void set(class Items *items);
   
   class Snails *snails() const;
   class Background *background() const;
   class Control *control() const;
+  class Items *items() const;
   
   void init();
   
@@ -19,6 +21,7 @@ private:
   class Snails *_snails;
   class Background *_background;
   class Control *_control;
+  class Items *_items;
   
   bool ready;
 };

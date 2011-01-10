@@ -6,6 +6,7 @@ add_executable(game
   snails.cpp
   control.cpp
   system.cpp
+  items.cpp
   )
   
 target_link_libraries(game
