@@ -13,34 +13,21 @@ Control::Control(const class Portal &interfaces, SystemContext *ctx)
 }
 
 void Control::update() {
-  // FIXME: trigger state start, end.
-  // FIXME: in input, add state support.
-  /*
-    keyPressed -> keyIsPressed
-    
-    if (input->keyWasPressed(bla)) { // read state + mark as handled
-    enterState();
-    }
-    if (input->keyWasReleased()) { // read state + mark as handled
-    leaveState();
-    }
+  Snail *target = context->snails()->snail(Snails::SNAIL_LEFT);
 
-    ...
-
-    use KeyState {wasPressed, wasReleased}    ... keyState(bla)
-
-   */
-  if (input->keyPressed(keyUp)) {
-    Snail *target = context->snails()->snail(Snails::SNAIL_LEFT);
+  if (input->keyWasPressed(keyUp)) {
     target->startState(Snail::STATE_MOVE_UP);
   }
-
-  if (input->keyPressed(keyDown)) {
-    
+  if (input->keyWasReleased(keyUp)) {
+    target->stopState(Snail::STATE_MOVE_UP);
   }
 
-  if (input->keyPressed(keyShoot)) {
-
+  if (input->keyWasPressed(keyDown)) {
+    target->startState(Snail::STATE_MOVE_DOWN);
   }
+  if (input->keyWasReleased(keyDown)) {
+    target->stopState(Snail::STATE_MOVE_DOWN);
+  }
+
 }
 
