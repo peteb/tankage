@@ -2,6 +2,10 @@
 #include <iostream>
 #include "GL/glfw.h"
 
+namespace Glfw {
+void KeyStateChange(int key, int state);
+}
+
 /// GLFW callbacks
 namespace {
 void GLFWCALL WindowResize(int w, int h) {
@@ -9,6 +13,7 @@ void GLFWCALL WindowResize(int w, int h) {
 }
 
 void GLFWCALL KeyStateChange(int key, int state) {
+  Glfw::KeyStateChange(key, state);
 }
 }
 
@@ -31,7 +36,9 @@ void Glfw::WindowManager::createWindow(int width, int height) {
   
   glfwSetWindowSizeCallback(WindowResize);
   glfwSetKeyCallback(KeyStateChange);
+
   glfwSetWindowTitle("Snail Wail");
+  
   std::cout << "glfw: window opened" << std::endl;
 }
 

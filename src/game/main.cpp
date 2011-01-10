@@ -43,7 +43,7 @@ int app_main(Portal &interfaces) {
     control.update();
     bkg.render();
     snails.render();
-    
+
     wm->swapBuffers();
     lastTick = thisTick;
     running = !input->keyPressed(escape) &&
