@@ -5,6 +5,7 @@
 #include <engine/window_manager.h>
 #include <engine/portal.h>
 #include <engine/image.h>
+#include <game/projectiles.h>
 #include <utils/rect.h>
 #include <algorithm>
 
@@ -18,7 +19,7 @@ Snails::Snails(const class Portal &interfaces, SystemContext *ctx)
   // First snail
   {
     std::auto_ptr<Image> img(imgLoader->loadImage("../data/snail_l.png"));
-    Snail *snail = new Snail(vec2(50.0f, 300.0f));
+    Snail *snail = new Snail(vec2(50.0f, 300.0f), Snails::SNAIL_LEFT, ctx);
     snail->setTexture(graphics->createTexture(img.get()));
   
     snails.push_back(snail);
@@ -27,7 +28,7 @@ Snails::Snails(const class Portal &interfaces, SystemContext *ctx)
   // Second snail
   {
     std::auto_ptr<Image> img(imgLoader->loadImage("../data/snail_r.png"));
-    Snail *snail = new Snail(vec2(800-50.0f, 300.0f));
+    Snail *snail = new Snail(vec2(800-50.0f, 300.0f), Snails::SNAIL_RIGHT, ctx);
     snail->setTexture(graphics->createTexture(img.get()));
   
     snails.push_back(snail);
@@ -53,8 +54,10 @@ Snail *Snails::snail(int id) const {
 }
 
 
-Snail::Snail(const vec2 &initialPos)
+Snail::Snail(const vec2 &initialPos, int id, SystemContext *ctx)
   : position(initialPos)
+  , id(id)
+  , context(ctx)
 {
   std::fill(&_state[0], &_state[STATE_MAX], 0);
 }
@@ -88,4 +91,10 @@ void Snail::update(double dt) {
     position += vec2(0.0f, -300.0f) * dt;
   if (_state[STATE_MOVE_DOWN])
     position += vec2(0.0f, 300.0f) * dt;
+
+  if (_state[STATE_SHOOT]) {// FIXME: rename SHOOT to SHOOTING
+    vec2 dir = (id == Snails::SNAIL_LEFT ? vec2(1.0f, 0.0f) : vec2(-1.0f, 0.0f));
+    context->projectiles()->spawnBullet(position, dir, id);
+
+  }
 }

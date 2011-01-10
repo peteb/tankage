@@ -10,10 +10,11 @@ public:
   enum SnailState {
     STATE_MOVE_UP,
     STATE_MOVE_DOWN,
+    STATE_SHOOT,
     STATE_MAX
   };
 
-  Snail(const vec2 &initialPos);
+  Snail(const vec2 &initialPos, int id, SystemContext *ctx);
   
   void startState(SnailState state);
   void stopState(SnailState state);
@@ -26,7 +27,9 @@ private:
   class Texture *texture;
   vec2 position;
 
+  int id;
   bool _state[STATE_MAX];
+  SystemContext *context;
 };
 
 class Snails : public System {

@@ -1,6 +1,9 @@
 #include <game/system.h>
 #include <game/snails.h>
 #include <game/background.h>
+#include <game/control.h>
+#include <game/items.h>
+#include <game/projectiles.h>
 #include <stdexcept>
 
 SystemContext::SystemContext() {
@@ -21,6 +24,10 @@ void SystemContext::set(class Control *control) {
 
 void SystemContext::set(class Items *items) {
   _items = items;
+}
+
+void SystemContext::set(class Projectiles *projectiles) {
+  _projectiles = projectiles;
 }
 
 class Snails *SystemContext::snails() const {
@@ -51,12 +58,23 @@ class Items *SystemContext::items() const {
   return _items;
 }
 
+class Projectiles *SystemContext::projectiles() const {
+  if (!ready)
+    throw std::runtime_error("projectiles system not initialized yet");
+
+  return _projectiles;
+}
+
 void SystemContext::init() {
   if (ready)
     throw std::runtime_error("sysctx already initialized");
 
   _snails->init();
   _background->init();
+  _control->init();
+  _items->init();
+  _projectiles->init();
+  
   ready = true;
 }
 

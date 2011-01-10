@@ -22,6 +22,13 @@ void Control::update() {
     target->stopState(Snail::STATE_MOVE_UP);
   }
 
+  if (input->keyWasPressed(keyShoot)) {
+    target->startState(Snail::STATE_SHOOT);
+  }
+  if (input->keyWasReleased(keyShoot)) {
+    target->stopState(Snail::STATE_SHOOT);
+  }
+  
   if (input->keyWasPressed(keyDown)) {
     target->startState(Snail::STATE_MOVE_DOWN);
   }
