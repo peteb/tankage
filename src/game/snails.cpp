@@ -2,6 +2,7 @@
 #include <engine/graphics.h>
 #include <engine/texture.h>
 #include <engine/image_loader.h>
+#include <engine/window_manager.h>
 #include <engine/portal.h>
 #include <engine/image.h>
 #include <utils/rect.h>
@@ -11,6 +12,7 @@ Snails::Snails(const class Portal &interfaces, SystemContext *ctx)
   : System(ctx)
 {
   graphics = interfaces.requestInterface<Graphics>();
+  wm = interfaces.requestInterface<WindowManager>();
   ImageLoader *imgLoader = interfaces.requestInterface<ImageLoader>();
 
   // First snail
@@ -31,13 +33,17 @@ Snails::Snails(const class Portal &interfaces, SystemContext *ctx)
     snails.push_back(snail);
   }
   
-  
+  lastUpdate = wm->timeSeconds();
 }
 
 void Snails::render() {
+  double thisUpdate = wm->timeSeconds();
+  double dt = thisUpdate - lastUpdate;
+  lastUpdate = thisUpdate;
+  
   SnailVector::iterator i = snails.begin(), e = snails.end();
   for (; i != e; ++i) {
-    (*i)->update();
+    (*i)->update(dt);
     (*i)->render(graphics);
   }
 }
@@ -70,12 +76,16 @@ void Snail::render(Graphics *graphics) {
   graphics->enableTextures();
   texture->bind();
 
-  graphics->drawQuad(rect(position, 64, 64));
+  vec2 roundedPos;
+  roundedPos.x = round(position.x);
+  roundedPos.y = round(position.y);
+
+  graphics->drawQuad(rect(roundedPos, 64, 64));
 }
 
-void Snail::update() {
+void Snail::update(double dt) {
   if (_state[STATE_MOVE_UP])
-    position += vec2(0.0f, -1.0f);
+    position += vec2(0.0f, -100.0f) * dt;
   if (_state[STATE_MOVE_DOWN])
-    position += vec2(0.0f, 1.0f);
+    position += vec2(0.0f, 100.0f) * dt;
 }

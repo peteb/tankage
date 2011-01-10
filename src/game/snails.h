@@ -20,7 +20,7 @@ public:
   void setTexture(class Texture *texture);
 
   void render(class Graphics *graphics);
-  void update();
+  void update(double dt);
   
 private:
   class Texture *texture;
@@ -43,9 +43,11 @@ public:
 
 private:
   class Graphics *graphics;
-
+  class WindowManager *wm;
+  
   typedef std::vector<Snail *> SnailVector;
   SnailVector snails;
+  double lastUpdate;
 };
 
 #endif // !GAME_SNAILS_H

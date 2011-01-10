@@ -88,7 +88,7 @@ class Texture *OpenGl::Graphics::createTexture(Image *image) {
 void OpenGl::Graphics::drawQuad(const rect &quad) {
   vec2 min, max;
   quad.getCoords(min, max);
-  
+
   glEnable(GL_COLOR_MATERIAL);
   glBegin(GL_QUADS);
   glTexCoord2f(0.0f, 0.0f);
@@ -114,6 +114,7 @@ void OpenGl::Graphics::setOrtho(const rect &size) {
   
   glTranslatef(-1.0f, 1.0f, 0.0f);
   glScalef(scaleX, scaleY, 1.0f);
+  glTranslatef(0.5f, 0.5f, 0.0f);
   
   glMatrixMode(GL_TEXTURE);
   glLoadIdentity();
