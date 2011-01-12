@@ -6,6 +6,8 @@
 #include <engine/image.h>
 #include <engine/texture.h>
 #include <memory>
+#include <functional>
+#include <algorithm>
 #include <iostream>
 
 Items::Items(const class Portal &interfaces, SystemContext *ctx)
@@ -34,16 +36,11 @@ void Items::update() {
   double dt = thisUpdate - lastUpdate;
   lastUpdate = thisUpdate;
   
-  CactusVector::iterator i = cactii.begin();
-  for (; i != cactii.end(); ) {
-    if (!(*i)->update(dt)) {
-      delete *i;
-      i = cactii.erase(i);
-    }
-    else {
-      ++i;
-    }
-  }
+  cactii.erase(std::remove_if(cactii.begin(),
+                              cactii.end(),
+                              std::not1(std::bind2nd(std::mem_fun(&Cactus::update), dt))),
+               cactii.end());
+  
 
   double secSinceGen = thisUpdate - lastGentime;
   
@@ -54,12 +51,10 @@ void Items::update() {
     cactii.push_back(new Cactus(cactusPos, cactusTexture));
   }
 
-  {
-    projectiles.erase(std::remove_if(projectiles.begin(),
-                                     projectiles.end(),
-                                     std::not1(std::bind2nd(std::mem_fun(&Projectile::update), dt))),
-                      projectiles.end());
-  }
+  projectiles.erase(std::remove_if(projectiles.begin(),
+                                   projectiles.end(),
+                                   std::not1(std::bind2nd(std::mem_fun(&Projectile::update), dt))),
+                    projectiles.end());
 
 }
 
