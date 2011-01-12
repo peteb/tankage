@@ -82,7 +82,11 @@ void Cactus::render(Graphics *gfx) {
   gfx->enableTextures();
   tex->bind();
 
-  gfx->drawQuad(rect(pos, 64, 64));
+  vec2 roundedPos;
+  roundedPos.x = round(pos.x);
+  roundedPos.y = round(pos.y);
+
+  gfx->drawQuad(rect(roundedPos, 64, 64));
 }
 
 bool Cactus::update(double dt) {
