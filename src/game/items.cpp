@@ -26,6 +26,10 @@ Items::Items(const class Portal &interfaces, SystemContext *ctx)
     std::auto_ptr<Image> img(imgLoader->loadImage("../data/bullet.png"));
     bulletTexture = gfx->createTexture(img.get());
   }
+  {  
+    std::auto_ptr<Image> img(imgLoader->loadImage("../data/health_powerup.png"));
+    healthPowerup = gfx->createTexture(img.get());
+  }
 
     
   lastUpdate = wm->timeSeconds();
@@ -38,10 +42,10 @@ void Items::update() {
   lastUpdate = thisUpdate;
 
   // if update returns false, remove
-  cactii.erase(std::remove_if(cactii.begin(),
-                              cactii.end(),
-                              std::not1(std::bind2nd(std::mem_fun(&Cactus::update), dt))),
-               cactii.end());
+  items.erase(std::remove_if(items.begin(),
+                             items.end(),
+                             std::not1(std::bind2nd(std::mem_fun(&Item::update), dt))),
+              items.end());
   
 
   double secSinceGen = thisUpdate - lastGentime;
@@ -50,7 +54,13 @@ void Items::update() {
     lastGentime = thisUpdate;
     float ran = float(rand()) / RAND_MAX;
     vec2 cactusPos = vec2(400.0f + (ran - 0.5f) * 100.0f, 632.0f);
-    cactii.push_back(new Cactus(cactusPos, cactusTexture));
+
+    if (rand() % 20 > 16) {
+      items.push_back(new Powerup(cactusPos, healthPowerup, "health", 20));
+    }
+    else {
+      items.push_back(new Cactus(cactusPos, cactusTexture));
+    }
   }
 
   projectiles.erase(std::remove_if(projectiles.begin(),
@@ -68,12 +78,12 @@ void Items::spawnProjectile(ProjectileType type, const vec2 &pos,
 }
 
 void Items::render() {
-  std::for_each(cactii.begin(), cactii.end(), std::bind2nd(std::mem_fun(&Cactus::render), gfx));
+  std::for_each(items.begin(), items.end(), std::bind2nd(std::mem_fun(&Item::render), gfx));
   std::for_each(projectiles.begin(), projectiles.end(), std::bind2nd(std::mem_fun(&Projectile::render), gfx));
 }
 
-Cactus *Items::intersectingCactii(const vec2 &start, const vec2 &end, float radius, vec2 &hitpos) {
-  CactusVector::iterator i = cactii.begin(), e = cactii.end();
+Item *Items::intersectingItem(const vec2 &start, const vec2 &end, float radius, vec2 &hitpos) {
+  ItemVector::iterator i = items.begin(), e = items.end();
   for (; i != e; ++i) {
     if ((*i)->intersects(start, end, radius, hitpos)) {
       return *i;
@@ -83,8 +93,66 @@ Cactus *Items::intersectingCactii(const vec2 &start, const vec2 &end, float radi
   return 0;
 }
 
-Cactus::Cactus(const vec2 &pos, class Texture *tex)
+Item::Item(const vec2 &pos, float radius)
   : pos(pos)
+  , radius(radius)
+{
+
+}
+
+bool Item::intersects(const vec2 &start, const vec2 &end, float radius, vec2 &hitpos) {
+  vec2 closest = closest_point(start, end, pos);
+  if ((pos - closest).magnitude() <= radius + this->radius) {
+    hitpos = closest;
+    return true;
+  }
+  
+  return false;
+}
+
+
+Powerup::Powerup(const vec2 &pos, class Texture *tex, const std::string &type, int amount)
+  : Item(pos, 16.0f)
+  , tex(tex)
+  , type(type)
+  , amount(amount)
+  , taken(0)
+{
+}
+
+void Powerup::render(Graphics *gfx) {
+  gfx->setBlend(Graphics::BLEND_ALPHA);
+  gfx->enableTextures();
+  tex->bind();
+
+  vec2 roundedPos;
+  roundedPos.x = round(pos.x);
+  roundedPos.y = round(pos.y);
+
+  gfx->drawQuad(rect(roundedPos, 16, 16));
+}
+
+bool Powerup::update(double dt) {
+  if (taken == 0)
+    pos += vec2(0.0f, -200.0f) * dt;
+  else
+    pos += vec2(700.0f, 0.0f) * dt * static_cast<float>(taken);
+  
+  return (pos.y + 16.0f >= 0.0f) || (pos.x < -16.0f) || (pos.x > 816.0f);
+}
+
+bool Powerup::takeDamage(const vec2 &pos, float damage) {
+  if (pos.x < this->pos.x)
+    taken = -1;
+  else
+    taken = 1;
+  
+  return true;
+}
+
+
+Cactus::Cactus(const vec2 &pos, class Texture *tex)
+  : Item(pos, 20.0f)
   , tex(tex)
   , health(20.0f)
 {
@@ -109,17 +177,6 @@ bool Cactus::update(double dt) {
   pos += vec2(0.0f, -200.0f) * dt;
 
   return (pos.y + 64.0f >= 0.0f);
-}
-
-bool Cactus::intersects(const vec2 &start, const vec2 &end, float radius, vec2 &hitpos) {
-  vec2 closest = closest_point(start, end, pos);
-  if ((pos - closest).magnitude() <= radius + 20.0f) {
-    hitpos = closest;
-    return true;
-  }
-  
-  return false;
-  
 }
 
 bool Cactus::takeDamage(const vec2 &pos, float damage) {
@@ -152,9 +209,9 @@ bool Projectile::update(double dt) {
     return false;
   }
 
-  Cactus *hitCactus = ctx->items()->intersectingCactii(prevPos, pos, 1.0f, hitPos);
-  if (hitCactus) {
-    if (hitCactus->takeDamage(hitPos, 10.0f)) {
+  Item *hitItem = ctx->items()->intersectingItem(prevPos, pos, 1.0f, hitPos);
+  if (hitItem) {
+    if (hitItem->takeDamage(hitPos, 10.0f)) {
       return false;
     }
   }

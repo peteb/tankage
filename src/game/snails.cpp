@@ -142,9 +142,9 @@ void Snail::update(double dt) {
   position.x = clamp(position.x, 32.0f, 800.0f - 32.0f);
   
   if (_state[STATE_SHOOT]) {// FIXME: rename SHOOT to SHOOTING
-    if (secondsSinceFire >= 0.5) {
+    if (secondsSinceFire >= 0.2) {
       vec2 dir = (id == Snails::SNAIL_LEFT ? vec2(1.0f, 0.0f) : vec2(-1.0f, 0.0f));
-      context->items()->spawnProjectile(Items::PROJECTILE_BULLET, position, dir, this);
+      context->items()->spawnProjectile(Items::PROJECTILE_BULLET, position + dir * 64.0f, dir, this);
       secondsSinceFire = 0.0;
     }
     
