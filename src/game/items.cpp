@@ -72,10 +72,21 @@ void Items::render() {
   std::for_each(projectiles.begin(), projectiles.end(), std::bind2nd(std::mem_fun(&Projectile::render), gfx));
 }
 
+Cactus *Items::intersectingCactii(const vec2 &start, const vec2 &end, float radius, vec2 &hitpos) {
+  CactusVector::iterator i = cactii.begin(), e = cactii.end();
+  for (; i != e; ++i) {
+    if ((*i)->intersects(start, end, radius, hitpos)) {
+      return *i;
+    }
+  }
+
+  return 0;
+}
 
 Cactus::Cactus(const vec2 &pos, class Texture *tex)
   : pos(pos)
   , tex(tex)
+  , health(20.0f)
 {
 }
 
@@ -92,11 +103,32 @@ void Cactus::render(Graphics *gfx) {
 }
 
 bool Cactus::update(double dt) {
+  if (health <= 0.0f)
+    return false;
+  
   pos += vec2(0.0f, -200.0f) * dt;
 
   return (pos.y + 64.0f >= 0.0f);
 }
 
+bool Cactus::intersects(const vec2 &start, const vec2 &end, float radius, vec2 &hitpos) {
+  vec2 closest = closest_point(start, end, pos);
+  if ((pos - closest).magnitude() <= radius + 20.0f) {
+    hitpos = closest;
+    return true;
+  }
+  
+  return false;
+  
+}
+
+bool Cactus::takeDamage(const vec2 &pos, float damage) {
+  if (health <= 0.0f)
+    return false;
+  
+  health -= damage;
+  return true;
+}
 
 
 
@@ -118,6 +150,13 @@ bool Projectile::update(double dt) {
   if (hit) {
     hit->takeDamage(hitPos, 10.0f);
     return false;
+  }
+
+  Cactus *hitCactus = ctx->items()->intersectingCactii(prevPos, pos, 1.0f, hitPos);
+  if (hitCactus) {
+    if (hitCactus->takeDamage(hitPos, 10.0f)) {
+      return false;
+    }
   }
   
   return pos.x - 64.0f <= 800.0f;

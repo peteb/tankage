@@ -11,10 +11,13 @@ public:
   
   void render(class Graphics *gfx);
   bool update(double dt);
+  bool intersects(const vec2 &start, const vec2 &end, float radius, vec2 &hitpos);
+  bool takeDamage(const vec2 &pos, float damage);
   
 private:
   class Texture *tex;
   vec2 pos;
+  float health;
 };
 
 
@@ -49,6 +52,7 @@ public:
                        const vec2 &pos,
                        const vec2 &dir,
                        class Snail *shooter);
+  Cactus *intersectingCactii(const vec2 &start, const vec2 &end, float radius, vec2 &hitpos);
   
 private:
   class WindowManager *wm;
