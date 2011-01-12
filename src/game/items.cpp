@@ -60,7 +60,7 @@ void Items::update() {
 
 void Items::spawnProjectile(ProjectileType type, const vec2 &pos,
                             const vec2 &dir, int shooterId) {
-  std::auto_ptr<Projectile> proj(new Projectile(pos, dir * 4000.0f,
+  std::auto_ptr<Projectile> proj(new Projectile(pos, dir * 8000.0f,
                                                 shooterId, bulletTexture));
   projectiles.push_back(proj.release());
 }

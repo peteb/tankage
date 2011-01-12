@@ -60,6 +60,7 @@ Snail::Snail(const vec2 &initialPos, int id, SystemContext *ctx)
   , context(ctx)
 {
   std::fill(&_state[0], &_state[STATE_MAX], 0);
+  secondsSinceFire = 0.0;
 }
 
 void Snail::startState(SnailState state) {
@@ -87,14 +88,19 @@ void Snail::render(Graphics *graphics) {
 }
 
 void Snail::update(double dt) {
+  secondsSinceFire += dt;
+  
   if (_state[STATE_MOVE_UP])
     position += vec2(0.0f, -300.0f) * dt;
   if (_state[STATE_MOVE_DOWN])
     position += vec2(0.0f, 300.0f) * dt;
 
   if (_state[STATE_SHOOT]) {// FIXME: rename SHOOT to SHOOTING
-    vec2 dir = (id == Snails::SNAIL_LEFT ? vec2(1.0f, 0.0f) : vec2(-1.0f, 0.0f));
-    context->items()->spawnProjectile(Items::PROJECTILE_BULLET, position, dir, id);
-
+    if (secondsSinceFire >= 0.5) {
+      vec2 dir = (id == Snails::SNAIL_LEFT ? vec2(1.0f, 0.0f) : vec2(-1.0f, 0.0f));
+      context->items()->spawnProjectile(Items::PROJECTILE_BULLET, position, dir, id);
+      secondsSinceFire = 0.0;
+    }
+    
   }
 }

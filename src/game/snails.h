@@ -30,6 +30,7 @@ private:
   int id;
   bool _state[STATE_MAX];
   SystemContext *context;
+  double secondsSinceFire;
 };
 
 class Snails : public System {
