@@ -128,10 +128,12 @@
 ** DONE CMake should create and use 'bin' and 'build' directories
 ** TODO Message boxes in Windows for displaying errors   
 ** TODO New Engine
-*** TODO Cactii
-*** TODO Shooting
+*** DONE Cactii
+*** DONE Shooting
 *** TODO Items
-*** TODO Collisions
+*** TODO Collision detection
+*** TODO Collision response    
 *** TODO Health + healthbar
-    
+*** TODO The rockets    
+*** TODO Particle system    
 

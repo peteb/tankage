@@ -1,6 +1,9 @@
 #ifndef GAME_SYSTEM_H
 #define GAME_SYSTEM_H
 
+
+// FIXME: this class is a bottleneck when creating new systems. it's boring to
+// update the class for the system.
 class SystemContext {
 public:
   SystemContext();
@@ -9,13 +12,11 @@ public:
   void set(class Background *background);
   void set(class Control *control);
   void set(class Items *items);
-  void set(class Projectiles *projectiles);
   
   class Snails *snails() const;
   class Background *background() const;
   class Control *control() const;
   class Items *items() const;
-  class Projectiles *projectiles() const;
   
   void init();
   
@@ -24,7 +25,6 @@ private:
   class Background *_background;
   class Control *_control;
   class Items *_items;
-  class Projectiles *_projectiles;
   
   bool ready;
 };

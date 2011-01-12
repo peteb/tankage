@@ -5,7 +5,7 @@
 #include <engine/window_manager.h>
 #include <engine/portal.h>
 #include <engine/image.h>
-#include <game/projectiles.h>
+#include <game/items.h>
 #include <utils/rect.h>
 #include <algorithm>
 
@@ -94,7 +94,7 @@ void Snail::update(double dt) {
 
   if (_state[STATE_SHOOT]) {// FIXME: rename SHOOT to SHOOTING
     vec2 dir = (id == Snails::SNAIL_LEFT ? vec2(1.0f, 0.0f) : vec2(-1.0f, 0.0f));
-    context->projectiles()->spawnBullet(position, dir, id);
+    context->items()->spawnProjectile(Items::PROJECTILE_BULLET, position, dir, id);
 
   }
 }

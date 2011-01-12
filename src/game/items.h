@@ -17,23 +17,52 @@ private:
   vec2 pos;
 };
 
+
+class Projectile {
+public:
+  Projectile(const vec2 &pos, const vec2 &vel, int shooterId, class Texture *tex);
+
+  bool update(double dt);
+  void render(class Graphics *gfx);
+
+private:
+  class Texture *tex;
+  vec2 pos;
+  vec2 vel;
+  int shooterId;
+};
+
+
 class Items : public System {
 public:
+  enum ProjectileType {
+    PROJECTILE_BULLET
+  };
+  
+  
   Items(const class Portal &interfaces, SystemContext *ctx);
 
   void update();
   void render();
+  void spawnProjectile(ProjectileType type,
+                       const vec2 &pos,
+                       const vec2 &dir,
+                       int shooterId);
   
 private:
   class WindowManager *wm;
   class Graphics *gfx;
   class Texture *cactusTexture;
+  class Texture *bulletTexture;
   
   double lastGentime;
   double lastUpdate;
   
   typedef std::vector<Cactus *> CactusVector;
-  CactusVector cactii; 
+  typedef std::vector<Projectile *> ProjectileVector;
+  
+  CactusVector cactii;
+  ProjectileVector projectiles;
 };
 
 #endif // !GAME_ITEMS_H

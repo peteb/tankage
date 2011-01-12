@@ -7,7 +7,6 @@ add_executable(game
   control.cpp
   system.cpp
   items.cpp
-  projectiles.cpp
   )
   
 target_link_libraries(game
