@@ -7,6 +7,8 @@
 #include <engine/image.h>
 #include <game/items.h>
 #include <utils/rect.h>
+#include <utils/value.h>
+
 #include <algorithm>
 
 Snails::Snails(const class Portal &interfaces, SystemContext *ctx)
@@ -91,10 +93,12 @@ void Snail::update(double dt) {
   secondsSinceFire += dt;
   
   if (_state[STATE_MOVE_UP])
-    position += vec2(0.0f, -300.0f) * dt;
+    position += vec2(0.0f, -500.0f) * dt;
   if (_state[STATE_MOVE_DOWN])
-    position += vec2(0.0f, 300.0f) * dt;
+    position += vec2(0.0f, 500.0f) * dt;
 
+  position.y = clamp(position.y, 32.0f, 600.0f - 32.0f);
+  
   if (_state[STATE_SHOOT]) {// FIXME: rename SHOOT to SHOOTING
     if (secondsSinceFire >= 0.5) {
       vec2 dir = (id == Snails::SNAIL_LEFT ? vec2(1.0f, 0.0f) : vec2(-1.0f, 0.0f));
