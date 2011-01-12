@@ -55,11 +55,30 @@ Snail *Snails::snail(int id) const {
   return snails.at(id);
 }
 
+Snail *Snails::intersectingSnails(const vec2 &start, const vec2 &end,
+                                  float radius, Snail *ignore, vec2 &hitpos) {
+
+  for (SnailVector::iterator i = snails.begin(); i != snails.end(); ++i) {
+    Snail *snail = *i;
+    if (snail != ignore) {
+      if (snail->intersects(start, end, radius, hitpos)) {
+        return snail;
+      }
+    }
+  }
+  
+  return 0;
+}
+
 
 Snail::Snail(const vec2 &initialPos, int id, SystemContext *ctx)
   : position(initialPos)
+  , originalPos(initialPos)
   , id(id)
   , context(ctx)
+  , radius(29.0f)
+  , vel(0.0f, 0.0f)
+  , takingControl(false)
 {
   std::fill(&_state[0], &_state[STATE_MAX], 0);
   secondsSinceFire = 0.0;
@@ -87,6 +106,8 @@ void Snail::render(Graphics *graphics) {
   roundedPos.y = round(position.y);
 
   graphics->drawQuad(rect(roundedPos, 64, 64));
+//   graphics->disableTextures();
+//   graphics->drawCircle(roundedPos, radius, 18);
 }
 
 void Snail::update(double dt) {
@@ -97,14 +118,50 @@ void Snail::update(double dt) {
   if (_state[STATE_MOVE_DOWN])
     position += vec2(0.0f, 500.0f) * dt;
 
+  position += vel * dt;
+  vel = vel * 0.99f;
+
+  if (vel.magnitude() <= 20.0f) {
+    takingControl = true;
+  }
+
+  if (takingControl) {
+    const vec2 wantedPos(originalPos.x, position.y);
+
+    vec2 diff = wantedPos - position;
+    if (diff.magnitude() < 1.0f) {
+      takingControl = false;
+      vel = vec2::Zero();
+    }
+    else {
+      vel += diff.normalize() * 2000.0f * dt;
+    }
+  }
+  
   position.y = clamp(position.y, 32.0f, 600.0f - 32.0f);
+  position.x = clamp(position.x, 32.0f, 800.0f - 32.0f);
   
   if (_state[STATE_SHOOT]) {// FIXME: rename SHOOT to SHOOTING
     if (secondsSinceFire >= 0.5) {
       vec2 dir = (id == Snails::SNAIL_LEFT ? vec2(1.0f, 0.0f) : vec2(-1.0f, 0.0f));
-      context->items()->spawnProjectile(Items::PROJECTILE_BULLET, position, dir, id);
+      context->items()->spawnProjectile(Items::PROJECTILE_BULLET, position, dir, this);
       secondsSinceFire = 0.0;
     }
     
   }
+}
+
+void Snail::takeDamage(const vec2 &pos, float damage) {
+  vel += (position - pos) * damage;
+  takingControl = false;
+}
+
+bool Snail::intersects(const vec2 &start, const vec2 &end, float radius, vec2 &hitpos) {
+  vec2 closest = closest_point(start, end, position);
+  if ((position - closest).magnitude() <= radius + this->radius) {
+    hitpos = closest;
+    return true;
+  }
+  
+  return false;
 }

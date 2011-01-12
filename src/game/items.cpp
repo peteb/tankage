@@ -5,6 +5,7 @@
 #include <engine/portal.h>
 #include <engine/image.h>
 #include <engine/texture.h>
+#include <game/snails.h>
 #include <memory>
 #include <functional>
 #include <algorithm>
@@ -35,7 +36,8 @@ void Items::update() {
   double thisUpdate = wm->timeSeconds();
   double dt = thisUpdate - lastUpdate;
   lastUpdate = thisUpdate;
-  
+
+  // if update returns false, remove
   cactii.erase(std::remove_if(cactii.begin(),
                               cactii.end(),
                               std::not1(std::bind2nd(std::mem_fun(&Cactus::update), dt))),
@@ -59,9 +61,9 @@ void Items::update() {
 }
 
 void Items::spawnProjectile(ProjectileType type, const vec2 &pos,
-                            const vec2 &dir, int shooterId) {
+                            const vec2 &dir, class Snail *shooter) {
   std::auto_ptr<Projectile> proj(new Projectile(pos, dir * 8000.0f,
-                                                shooterId, bulletTexture));
+                                                shooter, bulletTexture, context));
   projectiles.push_back(proj.release());
 }
 
@@ -98,16 +100,26 @@ bool Cactus::update(double dt) {
 
 
 
-Projectile::Projectile(const vec2 &pos, const vec2 &vel, int shooterId, class Texture *tex)
+Projectile::Projectile(const vec2 &pos, const vec2 &vel, class Snail *shooter, class Texture *tex, const SystemContext *ctx)
   : tex(tex)
   , pos(pos)
   , vel(vel)
-  , shooterId(shooterId)
+  , shooter(shooter)
+  , ctx(ctx)
 {
 }
 
 bool Projectile::update(double dt) {
+  const vec2 prevPos = pos;
   pos += vel * dt;
+  
+  vec2 hitPos;
+  Snail *hit = ctx->snails()->intersectingSnails(prevPos, pos, 1.0f, shooter, hitPos);
+  if (hit) {
+    hit->takeDamage(hitPos, 10.0f);
+    return false;
+  }
+  
   return pos.x - 64.0f <= 800.0f;
 }
 

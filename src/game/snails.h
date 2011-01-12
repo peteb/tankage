@@ -22,16 +22,23 @@ public:
 
   void render(class Graphics *graphics);
   void update(double dt);
+  void takeDamage(const vec2 &pos, float damage);
+  
+  bool intersects(const vec2 &start, const vec2 &end, float radius, vec2 &hitpos);
   
 private:
   class Texture *texture;
-  vec2 position;
-
+  vec2 position, originalPos;
+  vec2 vel;
+  
   int id;
   bool _state[STATE_MAX];
   SystemContext *context;
   double secondsSinceFire;
+  float radius;
+  bool takingControl;
 };
+
 
 class Snails : public System {
 public:
@@ -44,7 +51,8 @@ public:
   
   void render();
   Snail *snail(int id) const;
-
+  Snail *intersectingSnails(const vec2 &start, const vec2 &end, float radius, Snail *ignore, vec2 &hitpos);
+  
 private:
   class Graphics *graphics;
   class WindowManager *wm;
