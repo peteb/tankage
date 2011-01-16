@@ -131,4 +131,12 @@
 *** DONE Add CMake find module for Google C++ Testing Framework 
 *** TODO Make CMake output more pretty for the smart ptr detection
 *** DONE Make GTest targets optional 
-
+** TODO New Engine
+*** DONE Cactii
+*** DONE Shooting
+*** TODO Items
+*** TODO Collision detection
+*** TODO Collision response    
+*** TODO Health + healthbar
+*** TODO The rockets    
+*** TODO Particle system    

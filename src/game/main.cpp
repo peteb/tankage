@@ -2,8 +2,13 @@
 #include <engine/portal.h>
 #include <engine/window_manager.h>
 #include <engine/input.h>
-#include <game/background.h>
 #include <engine/graphics.h>
+
+#include <game/background.h>
+#include <game/snails.h>
+#include <game/control.h>
+#include <game/system.h>
+#include <game/items.h>
 
 #include <cstdlib>
 
@@ -18,7 +23,18 @@ int app_main(Portal &interfaces) {
   bool running = true;
   double lastTick = wm->timeSeconds();
 
-  Background bkg(interfaces);
+  SystemContext systems;
+
+  Background bkg(interfaces, &systems);
+  Snails snails(interfaces, &systems);
+  Control control(interfaces, &systems);
+  Items items(interfaces, &systems);
+  
+  systems.set(&snails);
+  systems.set(&bkg);
+  systems.set(&control);
+  systems.set(&items);
+  systems.init();
   
   while (running) {      
     double thisTick = wm->timeSeconds();
@@ -28,9 +44,13 @@ int app_main(Portal &interfaces) {
     
     gfx->setViewport(wndSize);
     gfx->setOrtho(wndSize);
-    
-    bkg.render();
 
+    control.update();
+    bkg.render();
+    snails.render();
+    items.update();
+    items.render();
+    
     wm->swapBuffers();
     lastTick = thisTick;
     running = !input->keyPressed(escape) &&

@@ -9,6 +9,7 @@
 
 #include <string>
 #include <cmath>
+#include <utils/value.h>
 
 /// A two-dimensional vector.
 class vec2 {
@@ -51,5 +52,14 @@ inline float dot(const vec2 &v1, const vec2 &v2) {
   return v1.x * v2.x + v1.y * v2.y;
 }
 
+inline vec2 closest_point(const vec2 &start, const vec2 &end, const vec2 &pos) {
+  vec2 ap = pos - start;
+  vec2 ab = end - start;
+  float ab2 = dot(ab, ab);
+  float apab = dot(ap, ab);
+  float t = apab / ab2;
+
+  return ab * clamp(t, 0.0f, 1.0f) + start;
+}
 
 #endif /* end of include guard: VEC2_H_8BJJJ5TN */

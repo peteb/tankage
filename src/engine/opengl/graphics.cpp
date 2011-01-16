@@ -88,7 +88,7 @@ class Texture *OpenGl::Graphics::createTexture(Image *image) {
 void OpenGl::Graphics::drawQuad(const rect &quad) {
   vec2 min, max;
   quad.getCoords(min, max);
-  
+
   glEnable(GL_COLOR_MATERIAL);
   glBegin(GL_QUADS);
   glTexCoord2f(0.0f, 0.0f);
@@ -105,6 +105,24 @@ void OpenGl::Graphics::drawQuad(const rect &quad) {
   glEnd();
 }
 
+void OpenGl::Graphics::drawCircle(const vec2 &pos,
+                                  float radius, float tess) {
+
+  const float pi2 = 3.1415926f * 2.0f;
+  
+  glBegin(GL_TRIANGLE_FAN);
+  float part = pi2 / tess;
+  glVertex2f(pos.x, pos.y);
+  
+  for (float ang = 0.0f; ang < pi2; ang += part) {
+    vec2 offset(cos(ang) * radius, sin(ang) * radius);
+    offset += pos;
+    glVertex2f(offset.x, offset.y);
+  }
+
+  glEnd();
+}
+
 void OpenGl::Graphics::setOrtho(const rect &size) {
   glMatrixMode(GL_PROJECTION);
   glLoadIdentity();
@@ -114,6 +132,7 @@ void OpenGl::Graphics::setOrtho(const rect &size) {
   
   glTranslatef(-1.0f, 1.0f, 0.0f);
   glScalef(scaleX, scaleY, 1.0f);
+  glTranslatef(0.5f, 0.5f, 0.0f);
   
   glMatrixMode(GL_TEXTURE);
   glLoadIdentity();
@@ -134,6 +153,24 @@ void OpenGl::Graphics::setViewport(const class rect &size) {
              static_cast<int>(max.x - min.x),
              static_cast<int>(max.y - min.y)
     );
+}
+
+void OpenGl::Graphics::setBlend(BlendMode mode) {
+  switch (mode) {
+  case Graphics::BLEND_NONE:
+    glDisable(GL_BLEND);
+    return;
+
+  case Graphics::BLEND_ALPHA:
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    break;
+
+  case Graphics::BLEND_ADDITIVE:
+    glBlendFunc(GL_ONE, GL_ONE);
+    break;
+  }
+
+  glEnable(GL_BLEND);
 }
 
 void OpenGl::Graphics::enableTextures() {

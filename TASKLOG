@@ -252,4 +252,12 @@
     [2h] new structure for engine
 
 2010-01-08
-    []
+    [4.5h] new engine structure, mostly finished
+
+2010-01-09
+    [1.5h] more engine stuff, adding back the snails
+
+2010-01-10
+    [1h] improved input handling
+    [0.5h] better movement for snail + an offset to map texels 1:1 to pixels
+    [1h] the cactii are back! and the snail can shoot

@@ -13,7 +13,7 @@ public:
   }
 
   template<typename InterfaceT>
-  InterfaceT *requestInterface() {
+  InterfaceT *requestInterface() const {
     return dynamic_cast<InterfaceT *>(getInterface(InterfaceT::id()));
   }
 
