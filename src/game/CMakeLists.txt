@@ -12,3 +12,6 @@ add_executable(game
 target_link_libraries(game
   engine
   )
+
+INSTALL(TARGETS game DESTINATION bin)
+

@@ -127,10 +127,16 @@
 ** Improve build based on CMake
 *** DONE CMake should create and use 'bin' and 'build' directories 
 *** TODO Investigate how-to report CMake error and get rid of gen files
-*** TODO Investigate how-to create debian packages and which tool to use
+*** DONE Investigate how-to create debian packages and which tool to use
 *** DONE Add CMake find module for Google C++ Testing Framework 
 *** TODO Make CMake output more pretty for the smart ptr detection
 *** DONE Make GTest targets optional 
+*** TODO Figure out how to create folders with debian package. Sort of weird
+         generator because make install succeeds but not in the package
+*** TODO Find out a way to change install prefix for debian package. Default
+         variable CMAKE_INSTALL_PREFIX doesn't work for some reason. Again,
+         default make install works but in the package it's lost
+*** TODO List and configure Ubuntu dependencies for debian package
 ** TODO New Engine
 *** DONE Cactii
 *** DONE Shooting
