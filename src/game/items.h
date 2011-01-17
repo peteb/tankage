@@ -36,20 +36,6 @@ private:
   int taken;
 };
 
-class Projectile {
-public:
-  Projectile(const vec2 &pos, const vec2 &vel, class Snail *shooter, class Texture *tex, const SystemContext *ctx);
-
-  bool update(double dt);
-  void render(class Graphics *gfx);
-
-private:
-  class Texture *tex;
-  const SystemContext *ctx;
-  vec2 pos;
-  vec2 vel;
-  class Snail *shooter;
-};
 
 
 class Items : public System {
@@ -80,7 +66,7 @@ private:
   double lastUpdate;
   
   typedef std::vector<Item *> ItemVector;
-  typedef std::vector<Projectile *> ProjectileVector;
+  typedef std::vector<class Projectile *> ProjectileVector;
   
   ItemVector items;
   ProjectileVector projectiles;

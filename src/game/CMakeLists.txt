@@ -8,6 +8,7 @@ add_executable(game
   system.cpp
   items.cpp
   cactus.cpp
+  projectile.cpp
   )
   
 target_link_libraries(game
