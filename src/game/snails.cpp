@@ -1,15 +1,18 @@
 #include <game/snails.h>
+#include <game/items.h>
+
 #include <engine/graphics.h>
 #include <engine/texture.h>
 #include <engine/image_loader.h>
 #include <engine/window_manager.h>
 #include <engine/portal.h>
 #include <engine/image.h>
-#include <game/items.h>
+
 #include <utils/rect.h>
 #include <utils/value.h>
 
 #include <algorithm>
+#include <iostream>
 
 Snails::Snails(const class Portal &interfaces, SystemContext *ctx)
   : System(ctx)
@@ -156,7 +159,15 @@ void Snail::takeDamage(const vec2 &pos, float damage) {
   takingControl = false;
 }
 
-bool Snail::intersects(const vec2 &start, const vec2 &end, float radius, vec2 &hitpos) {
+bool Snail::takeItem(const std::string &type, int amount) {
+  std::cout << "snail: received " << amount
+            << " amount of " << type << std::endl;
+  
+  return true; // we took it
+}
+
+bool Snail::intersects(const vec2 &start, const vec2 &end,
+                       float radius, vec2 &hitpos) {
   vec2 closest = closest_point(start, end, _position);
   if ((_position - closest).magnitude() <= radius + this->radius) {
     hitpos = closest;

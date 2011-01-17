@@ -23,6 +23,7 @@ public:
   void render(class Graphics *graphics);
   void update(double dt);
   void takeDamage(const vec2 &pos, float damage);
+  bool takeItem(const std::string &type, int amount);
   
   bool intersects(const vec2 &start, const vec2 &end, float radius, vec2 &hitpos);
 

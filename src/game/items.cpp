@@ -60,7 +60,7 @@ void Items::update() {
     vec2 cactusPos = vec2(400.0f + (ran - 0.5f) * 100.0f, 632.0f);
 
     if (rand() % 20 > 16) {
-      items.push_back(new Powerup(cactusPos, healthPowerup, "health", 20));
+      items.push_back(new Powerup(cactusPos, healthPowerup, "health", 20, context));
     }
     else {
       items.push_back(new Cactus(cactusPos, cactusTexture));
