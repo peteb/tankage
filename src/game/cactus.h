@@ -9,7 +9,7 @@ public:
   
   void render(class Graphics *gfx);
   bool update(double dt);
-  bool takeDamage(const class vec2 &pos, float damage);
+  bool takeDamage(const class vec2 &pos, float damage, class Snail *shooter);
   
 private:
   class Texture *tex;

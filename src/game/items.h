@@ -14,14 +14,12 @@ public:
   virtual void render(class Graphics *gfx) =0;
   virtual bool update(double dt) {}
   bool intersects(const vec2 &start, const vec2 &end, float radius, vec2 &hitpos);
-  virtual bool takeDamage(const vec2 &pos, float damage) =0;
+  virtual bool takeDamage(const vec2 &pos, float damage, class Snail *shooter) =0;
   
 protected:
   vec2 pos;
   float radius;
 };
-
-
 
 
 class Items : public System {

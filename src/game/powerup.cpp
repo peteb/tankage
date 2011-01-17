@@ -1,4 +1,5 @@
 #include <game/powerup.h>
+#include <game/snails.h>
 #include <engine/graphics.h>
 #include <engine/texture.h>
 #include <utils/rect.h>
@@ -8,7 +9,7 @@ Powerup::Powerup(const vec2 &pos, class Texture *tex, const std::string &type, i
   , tex(tex)
   , type(type)
   , amount(amount)
-  , taken(0)
+  , vel(vec2(0.0f, -200.0f))
 {
 }
 
@@ -25,19 +26,23 @@ void Powerup::render(Graphics *gfx) {
 }
 
 bool Powerup::update(double dt) {
-  if (taken == 0)
-    pos += vec2(0.0f, -200.0f) * dt;
-  else
-    pos += vec2(700.0f, 0.0f) * dt * static_cast<float>(taken);
+  pos += vel * dt;
   
+  // return false if we're outside the screen
   return (pos.y + 16.0f >= 0.0f) || (pos.x < -16.0f) || (pos.x > 816.0f);
 }
 
-bool Powerup::takeDamage(const vec2 &pos, float damage) {
-  if (pos.x < this->pos.x)
-    taken = -1;
-  else
-    taken = 1;
+bool Powerup::takeDamage(const vec2 &pos, float damage, Snail *shooter) {
+  // See in which direction we should start flying, then change the velocity
+  // accordingly
+  vec2 velfactor = vec2::Identity();
   
+  if (shooter->position().x < this->pos.x)
+    velfactor = vec2(-1.0f, 0.0f);
+  else
+    velfactor = vec2(1.0f, 0.0f);
+
+  vel = vec2(400.0f, 0.0f) * velfactor;
+
   return true;
 }

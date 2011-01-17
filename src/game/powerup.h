@@ -3,6 +3,7 @@
 
 #include <game/items.h>
 #include <string>
+#include <utils/vec.h>
 
 class Powerup : public Item {
 public:
@@ -10,13 +11,13 @@ public:
 
   void render(class Graphics *gfx);
   bool update(double dt);
-  bool takeDamage(const vec2 &pos, float damage);
+  bool takeDamage(const vec2 &pos, float damage, class Snail *shooter);
 
 private:
   class Texture *tex;
   std::string type;
   int amount;
-  int taken;
+  vec2 vel;
 };
 
 #endif // !GAME_POWERUP_H

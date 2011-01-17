@@ -31,7 +31,7 @@ bool Projectile::update(double dt) {
 
   Item *hitItem = ctx->items()->intersectingItem(prevPos, pos, 1.0f, hitPos);
   if (hitItem) {
-    if (hitItem->takeDamage(hitPos, 10.0f)) {
+    if (hitItem->takeDamage(hitPos, 10.0f, shooter)) {
       return false;
     }
   }

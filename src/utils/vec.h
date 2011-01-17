@@ -19,12 +19,18 @@ public:
   vec2(float x, float y) : x(x), y(y) {}
   
   vec2 operator - () const {return vec2(-x, -y); }
-  vec2 operator * (float scalar) const {return vec2(x * scalar, y * scalar); }
-  vec2 operator * (const vec2 & rh) const {return vec2(x * rh.x, y * rh.y); }
-  vec2 & operator += (const vec2 & rh) {x += rh.x; y += rh.y; return *this; }
-  vec2 & operator -= (const vec2 & rh) {x -= rh.x; y -= rh.y; return *this; }
-  vec2 operator + (const vec2 & rh) const {return vec2(*this) += rh; }
-  vec2 operator - (const vec2 & rh) const {return vec2(*this) -= rh; }
+
+
+  vec2 &operator *= (const vec2 &rhs) {x *= rhs.x; y *= rhs.y; return *this; }
+  vec2 &operator *= (float scalar) {x *= scalar; y *= scalar; return *this; }
+
+  template<typename OtherT>
+  vec2 operator * (const OtherT &rhs) const {return vec2(*this) *= rhs; }
+
+  vec2 &operator += (const vec2 &rh) {x += rh.x; y += rh.y; return *this; }
+  vec2 &operator -= (const vec2 &rh) {x -= rh.x; y -= rh.y; return *this; }
+  vec2 operator + (const vec2 &rh) const {return vec2(*this) += rh; }
+  vec2 operator - (const vec2 &rh) const {return vec2(*this) -= rh; }
   
   float magnitude() const {return sqrt(x * x + y * y); }
 

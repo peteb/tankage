@@ -72,7 +72,7 @@ Snail *Snails::intersectingSnails(const vec2 &start, const vec2 &end,
 
 
 Snail::Snail(const vec2 &initialPos, int id, SystemContext *ctx)
-  : position(initialPos)
+  : _position(initialPos)
   , originalPos(initialPos)
   , id(id)
   , context(ctx)
@@ -102,8 +102,8 @@ void Snail::render(Graphics *graphics) {
   texture->bind();
 
   vec2 roundedPos;
-  roundedPos.x = round(position.x);
-  roundedPos.y = round(position.y);
+  roundedPos.x = round(_position.x);
+  roundedPos.y = round(_position.y);
 
   graphics->drawQuad(rect(roundedPos, 64, 64));
 //   graphics->disableTextures();
@@ -114,11 +114,11 @@ void Snail::update(double dt) {
   secondsSinceFire += dt;
   
   if (_state[STATE_MOVE_UP])
-    position += vec2(0.0f, -500.0f) * dt;
+    _position += vec2(0.0f, -500.0f) * dt;
   if (_state[STATE_MOVE_DOWN])
-    position += vec2(0.0f, 500.0f) * dt;
+    _position += vec2(0.0f, 500.0f) * dt;
 
-  position += vel * dt;
+  _position += vel * dt;
   vel = vel * 0.99f;
 
   if (vel.magnitude() <= 20.0f) {
@@ -126,9 +126,9 @@ void Snail::update(double dt) {
   }
 
   if (takingControl) {
-    const vec2 wantedPos(originalPos.x, position.y);
+    const vec2 wantedPos(originalPos.x, _position.y);
 
-    vec2 diff = wantedPos - position;
+    vec2 diff = wantedPos - _position;
     if (diff.magnitude() < 1.0f) {
       takingControl = false;
       vel = vec2::Zero();
@@ -138,13 +138,13 @@ void Snail::update(double dt) {
     }
   }
   
-  position.y = clamp(position.y, 32.0f, 600.0f - 32.0f);
-  position.x = clamp(position.x, 32.0f, 800.0f - 32.0f);
+  _position.y = clamp(_position.y, 32.0f, 600.0f - 32.0f);
+  _position.x = clamp(_position.x, 32.0f, 800.0f - 32.0f);
   
   if (_state[STATE_SHOOT]) {// FIXME: rename SHOOT to SHOOTING
     if (secondsSinceFire >= 0.2) {
       vec2 dir = (id == Snails::SNAIL_LEFT ? vec2(1.0f, 0.0f) : vec2(-1.0f, 0.0f));
-      context->items()->spawnProjectile(Items::PROJECTILE_BULLET, position + dir * 64.0f, dir, this);
+      context->items()->spawnProjectile(Items::PROJECTILE_BULLET, _position + dir * 64.0f, dir, this);
       secondsSinceFire = 0.0;
     }
     
@@ -152,16 +152,20 @@ void Snail::update(double dt) {
 }
 
 void Snail::takeDamage(const vec2 &pos, float damage) {
-  vel += (position - pos) * damage;
+  vel += (_position - pos) * damage;
   takingControl = false;
 }
 
 bool Snail::intersects(const vec2 &start, const vec2 &end, float radius, vec2 &hitpos) {
-  vec2 closest = closest_point(start, end, position);
-  if ((position - closest).magnitude() <= radius + this->radius) {
+  vec2 closest = closest_point(start, end, _position);
+  if ((_position - closest).magnitude() <= radius + this->radius) {
     hitpos = closest;
     return true;
   }
   
   return false;
+}
+
+const vec2 &Snail::position() const {
+  return _position;
 }
