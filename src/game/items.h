@@ -21,20 +21,6 @@ protected:
   float radius;
 };
 
-class Powerup : public Item {
-public:
-  Powerup(const vec2 &pos, class Texture *tex, const std::string &type, int amount);
-
-  void render(class Graphics *gfx);
-  bool update(double dt);
-  bool takeDamage(const vec2 &pos, float damage);
-
-private:
-  class Texture *tex;
-  std::string type;
-  int amount;
-  int taken;
-};
 
 
 

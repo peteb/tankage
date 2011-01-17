@@ -9,6 +9,7 @@ add_executable(game
   items.cpp
   cactus.cpp
   projectile.cpp
+  powerup.cpp
   )
   
 target_link_libraries(game
