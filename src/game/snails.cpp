@@ -49,8 +49,10 @@ void Snails::render() {
   
   SnailVector::iterator i = snails.begin(), e = snails.end();
   for (; i != e; ++i) {
-    (*i)->update(dt);
-    (*i)->render(graphics);
+    if ((*i)->update(dt)) {
+      // It's alive!
+      (*i)->render(graphics);
+    }
   }
 }
 
@@ -85,6 +87,7 @@ Snail::Snail(const vec2 &initialPos, int id, SystemContext *ctx)
 {
   std::fill(&_state[0], &_state[STATE_MAX], 0);
   secondsSinceFire = 0.0;
+  health = 100;
 }
 
 void Snail::startState(SnailState state) {
@@ -113,7 +116,12 @@ void Snail::render(Graphics *graphics) {
 //   graphics->drawCircle(roundedPos, radius, 18);
 }
 
-void Snail::update(double dt) {
+bool Snail::update(double dt) {
+  if (health <= 0) {
+    std::cout << "snail: I'm dead :( returning false" << std::endl;
+    return false;
+  }
+  
   secondsSinceFire += dt;
   
   if (_state[STATE_MOVE_UP])
@@ -152,15 +160,20 @@ void Snail::update(double dt) {
     }
     
   }
+
+  return true;
 }
 
 void Snail::takeDamage(const vec2 &pos, float damage) {
   vel += (_position - pos) * damage;
   takingControl = false;
+  health -= static_cast<int>(damage);
+  std::cout << "snail: I received " << damage
+            << " amount of hurt >:-/" << std::endl;
 }
 
 bool Snail::takeItem(const std::string &type, int amount) {
-  std::cout << "snail: received " << amount
+  std::cout << "snail: I received " << amount
             << " amount of " << type << std::endl;
   
   return true; // we took it

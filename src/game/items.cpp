@@ -10,6 +10,9 @@
 #include <engine/image.h>
 #include <engine/texture.h>
 #include <game/snails.h>
+
+#include <utils/algorithm.h>
+
 #include <memory>
 #include <functional>
 #include <algorithm>
@@ -39,16 +42,15 @@ Items::Items(const class Portal &interfaces, SystemContext *ctx)
   lastUpdate = wm->timeSeconds();
   lastGentime = lastUpdate;
 }
-
+                                        
 void Items::update() {
   double thisUpdate = wm->timeSeconds();
   double dt = thisUpdate - lastUpdate;
   lastUpdate = thisUpdate;
 
   // if update returns false, remove
-  items.erase(std::remove_if(items.begin(),
-                             items.end(),
-                             std::not1(std::bind2nd(std::mem_fun(&Item::update), dt))),
+  // FIXME: a memory leak!
+  items.erase(remove_nif(items.begin(), items.end(), &Item::update, dt),
               items.end());
   
 
@@ -67,9 +69,10 @@ void Items::update() {
     }
   }
 
-  projectiles.erase(std::remove_if(projectiles.begin(),
-                                   projectiles.end(),
-                                   std::not1(std::bind2nd(std::mem_fun(&Projectile::update), dt))),
+  // FIXME: this is a memory leak! smart pointers...
+  projectiles.erase(remove_nif(projectiles.begin(), projectiles.end(),
+                               &Projectile::update, dt)
+                    ,
                     projectiles.end());
 
 }

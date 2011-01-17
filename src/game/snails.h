@@ -21,7 +21,7 @@ public:
   void setTexture(class Texture *texture);
 
   void render(class Graphics *graphics);
-  void update(double dt);
+  bool update(double dt);
   void takeDamage(const vec2 &pos, float damage);
   bool takeItem(const std::string &type, int amount);
   
@@ -40,6 +40,7 @@ private:
   double secondsSinceFire;
   float radius;
   bool takingControl;
+  int health;
 };
 
 
