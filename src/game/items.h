@@ -36,21 +36,6 @@ private:
   int taken;
 };
 
-
-class Cactus : public Item {
-public:
-  Cactus(const vec2 &pos, class Texture *tex);
-  
-  void render(class Graphics *gfx);
-  bool update(double dt);
-  bool takeDamage(const vec2 &pos, float damage);
-  
-private:
-  class Texture *tex;
-  float health;
-};
-
-
 class Projectile {
 public:
   Projectile(const vec2 &pos, const vec2 &vel, class Snail *shooter, class Texture *tex, const SystemContext *ctx);

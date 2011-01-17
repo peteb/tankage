@@ -7,6 +7,7 @@ add_executable(game
   control.cpp
   system.cpp
   items.cpp
+  cactus.cpp
   )
   
 target_link_libraries(game
