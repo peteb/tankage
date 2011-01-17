@@ -111,7 +111,7 @@ void Snail::render(Graphics *graphics) {
   roundedPos.x = round(_position.x);
   roundedPos.y = round(_position.y);
 
-  graphics->drawQuad(rect(roundedPos, 64, 64));
+  graphics->drawQuad(rect(roundedPos, 32, 32));
 //   graphics->disableTextures();
 //   graphics->drawCircle(roundedPos, radius, 18);
 }

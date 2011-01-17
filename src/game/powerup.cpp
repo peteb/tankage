@@ -25,7 +25,7 @@ void Powerup::render(Graphics *gfx) {
   roundedPos.x = round(pos.x);
   roundedPos.y = round(pos.y);
 
-  gfx->drawQuad(rect(roundedPos, 16, 16));
+  gfx->drawQuad(rect(roundedPos, 8, 8));
 }
 
 bool Powerup::update(double dt) {

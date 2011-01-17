@@ -26,7 +26,7 @@ Items::Items(const class Portal &interfaces, SystemContext *ctx)
   ImageLoader *imgLoader = interfaces.requestInterface<ImageLoader>();
 
   {  
-    std::auto_ptr<Image> img(imgLoader->loadImage("../data/cactus1.png"));
+    std::auto_ptr<Image> img(imgLoader->loadImage("../data/cactii.png"));
     cactusTexture = gfx->createTexture(img.get());
   }
   {  

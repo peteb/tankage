@@ -20,7 +20,15 @@ void Cactus::render(Graphics *gfx) {
   roundedPos.x = round(pos.x);
   roundedPos.y = round(pos.y);
 
-  gfx->drawQuad(rect(roundedPos, 64, 64));
+  rect texSrc;
+  texSrc.origin = vec2(.25f / 2.0f, .25f);
+
+  if (health <= 10.0f)
+    texSrc.origin.x += .5f;
+
+  texSrc.halfSize = vec2(.25f, .5f) * .5f;
+  
+  gfx->drawQuad(rect(roundedPos, 16, 32), texSrc);
 }
 
 bool Cactus::update(double dt) {

@@ -11,6 +11,8 @@ public:
 
   void clear(const class color4 &clearColor);
   void drawQuad(const class rect &quad);
+  void drawQuad(const class rect &quad, const class rect &source);
+
   void drawCircle(const class vec2 &pos, float radius, float tess);
   
   void setOrtho(const class rect &size);

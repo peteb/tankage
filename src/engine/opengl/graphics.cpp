@@ -86,21 +86,28 @@ class Texture *OpenGl::Graphics::createTexture(Image *image) {
 }
 
 void OpenGl::Graphics::drawQuad(const rect &quad) {
-  vec2 min, max;
-  quad.getCoords(min, max);
+  drawQuad(quad, rect(vec2(0.5f, 0.5f), 0.5f, 0.5f));
+}
 
+void OpenGl::Graphics::drawQuad(const class rect &quad, const class rect &source) {
+  vec2 min, max;
+  vec2 tex_min, tex_max;
+  
+  quad.getCoords(min, max);
+  source.getCoords(tex_min, tex_max);
+  
   glEnable(GL_COLOR_MATERIAL);
   glBegin(GL_QUADS);
-  glTexCoord2f(0.0f, 0.0f);
+  glTexCoord2f(tex_min.x, tex_min.y);
   glVertex2f(min.x, min.y);
 
-  glTexCoord2f(1.0f, 0.0f);
+  glTexCoord2f(tex_max.x, tex_min.y);
   glVertex2f(max.x, min.y);
 
-  glTexCoord2f(1.0f, 1.0f);
+  glTexCoord2f(tex_max.x, tex_max.y);
   glVertex2f(max.x, max.y);
 
-  glTexCoord2f(0.0f, 1.0f);
+  glTexCoord2f(tex_min.x, tex_max.y);
   glVertex2f(min.x, max.y);
   glEnd();
 }

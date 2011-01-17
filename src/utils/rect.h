@@ -12,7 +12,7 @@
 class rect {
 public:
   rect(const vec2 & origin = vec2::Zero(), const vec2 & halfSize = vec2::Zero());
-  rect(const vec2 & origin, float width, float height);
+  rect(const vec2 & origin, float h_width, float h_height);
   rect(float width, float height);
   
   void getCoords(vec2 & upperLeft, vec2 & lowerRight) const;
