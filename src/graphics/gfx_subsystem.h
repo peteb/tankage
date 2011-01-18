@@ -8,8 +8,8 @@
 #define GFX_SUBSYSTEM_H_EAH7WN3F
 
 #include <vector>
-#include "math/vec2.h"
-#include "math/rect.h"
+#include <utils/vec.h>
+#include <utils/rect.h>
 #include "texture_loader.h"
 #include "ref.h"
 #include "vertex.h"

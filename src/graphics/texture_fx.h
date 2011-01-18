@@ -10,7 +10,7 @@
 #include "graphics/renderer.h"
 #include "graphics/color.h"
 #include "ref.h"
-#include "math/rect.h"
+#include <utils/rect.h>
 
 namespace Graphics
 {

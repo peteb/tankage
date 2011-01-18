@@ -25,7 +25,7 @@ void BulletWeapon::shoot() {
     Ref<Projectile>::SharedPtr bullet = Cast<Projectile>(creator.createObject("bullet", creator));
 
     CoordSystem2::data_type cs = lockedOrigin->getTransform();
-    vec2 forward = cs.orientation.getX();
+    vec2 forward = cs.orientation.x();
 
     if (invertForward)
       forward = -forward;

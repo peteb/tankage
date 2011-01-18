@@ -8,7 +8,7 @@
 #define GEOM_H_R5WJNYU0
 
 #include "coord_system2.h"
-#include "math/rect.h"
+#include <utils/rect.h>
 #include "ref.h"
 
 #include <bitset>

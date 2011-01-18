@@ -5,17 +5,18 @@ if (NOT GTEST_FLAG)
 endif (NOT GTEST_FLAG)
 
 include_directories(
-	${MATH_ROOT_DIR} 
+	${UTILS_ROOT_DIR} 
 	${GTEST_INCLUDE_DIR}
 )
 
-add_executable(math_unittest EXCLUDE_FROM_ALL
-	math_unittest.cpp
+add_executable(utils_unittest EXCLUDE_FROM_ALL
+	utils_unittest.cpp
 )
-target_link_libraries(math_unittest
+
+target_link_libraries(utils_unittest
 	${GTEST_MAIN_LIBRARY}
 	${GTEST_LIBRARY}
 	pthread
-	math
+	utils
 )
 

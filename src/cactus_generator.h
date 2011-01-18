@@ -8,7 +8,7 @@
 #define CACTUS_GENERATOR_H
 
 #include "updatable.h"
-#include "math/vec2.h"
+#include <utils/vec.h>
 
 class ObjectCreator;
 class World;

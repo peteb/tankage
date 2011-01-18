@@ -7,7 +7,7 @@
 #ifndef TEXTURE_H_61TB0IDZ
 #define TEXTURE_H_61TB0IDZ
 
-#include "math/rect.h"
+#include <utils/rect.h>
 
 namespace Graphics {
    class Texture {

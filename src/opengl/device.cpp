@@ -6,7 +6,7 @@
 
 #include "device.h"
 #include "texture.h"
-#include "math/rect.h"
+#include <utils/rect.h>
 #include "opengl.h"
 #include "render_context.h"
 #include "graphics/vertex.h"
