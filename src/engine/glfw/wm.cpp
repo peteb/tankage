@@ -2,6 +2,8 @@
 #include <iostream>
 #include "GL/glfw.h"
 
+#include <cstdlib>
+
 namespace Glfw {
 void KeyStateChange(int key, int state);
 }

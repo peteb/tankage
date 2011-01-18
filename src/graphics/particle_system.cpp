@@ -35,7 +35,6 @@ void Graphics::ParticleSystem::enqueueVertices(const Ref<RenderList>::SharedPtr 
     if (particle.ttd <= 0.0f) {
       particles[i] = particles[std::max(static_cast<size_t>(1U), e) -
                                static_cast<size_t>(1UL)];
-      
       --e;
       continue;
     }

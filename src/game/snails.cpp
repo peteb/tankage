@@ -13,6 +13,7 @@
 
 #include <algorithm>
 #include <iostream>
+#include <memory>
 
 Snails::Snails(const class Portal &interfaces, SystemContext *ctx)
   : System(ctx)

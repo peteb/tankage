@@ -58,9 +58,15 @@ set(CMAKE_MODULE_PATH "${PROJECT_ROOT_DIR}/cmake/Modules/")
 
 include_directories ("${PROJECT_ROOT_DIR}/inc/" "${PROJECT_ROOT_DIR}/src/")
 
+find_package(GTest)
+
 add_subdirectory (${PROJECT_ROOT_DIR}/src CMakeFiles/Src)
+add_subdirectory (${PROJECT_ROOT_DIR}/data CMakeFiles/Data)
 
 add_custom_target(clean-gen
-	rm -rf CMakeFiles CMakeCache.txt Makefile cmake_install.cmake ../bin
+	rm -rf CMakeFiles CMakeCache.txt Makefile cmake_install.cmake ../bin 
+	install_manifest.txt _CPack_Packages *.deb CPack*	
 )
 
+# Invoke CPack for Debian
+include(UseDebian)
