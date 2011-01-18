@@ -261,3 +261,7 @@
     [1h] improved input handling
     [0.5h] better movement for snail + an offset to map texels 1:1 to pixels
     [1h] the cactii are back! and the snail can shoot
+
+2010-01-17
+    [1.5h] still restoring old game with new engine, cactii can take damage,
+           powerups can be picked-up, snails can even die now
