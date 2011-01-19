@@ -40,3 +40,22 @@ TEST(utils_unittest, test_vec)
     EXPECT_EQ(std::string(vec2::Identity()), "0, 0");
 } // test_vec
 
+TEST(utils_unittest, test_mat)
+{
+	vec2 v1(1.1f, 2.2f), v2(3.0f, 4.0f);
+	mat2 m1(v1, v2), m2(2.1, 2.2, 2.3, 2.4);
+
+	EXPECT_FLOAT_EQ(1.1f, m1.elements[0][0]);
+	EXPECT_FLOAT_EQ(2.2f, m1.elements[0][1]);
+	EXPECT_FLOAT_EQ(3.0f, m1.elements[1][0]);
+	EXPECT_FLOAT_EQ(4.0f, m1.elements[1][1]);
+
+	EXPECT_FLOAT_EQ(2.1f, m2.elements[0][0]);	
+	EXPECT_FLOAT_EQ(2.2f, m2.elements[0][1]);	
+	EXPECT_FLOAT_EQ(2.3f, m2.elements[1][0]);	
+	EXPECT_FLOAT_EQ(2.4f, m2.elements[1][1]);	
+
+	v1 = m1 * v2;	
+	//EXPECT_FLOAT_EQ();
+
+} // test_mat
