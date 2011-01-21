@@ -7,3 +7,4 @@ config.h
 *.swp
 CPackConfig.cmake
 CPackSourceConfig.cmake
+*.orig
