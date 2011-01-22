@@ -49,11 +49,13 @@ void Items::update() {
   lastUpdate = thisUpdate;
 
   // if update returns false, remove
-  // FIXME: a memory leak!
-  items.erase(remove_nif(items.begin(), items.end(), &Item::update, dt),
-              items.end());
+  {
+    ItemVector::iterator beg =
+      remove_nif(items.begin(), items.end(), &Item::update, dt);
+    std::for_each(beg, items.end(), delete_op());    
+    items.erase(beg, items.end());
+  }
   
-
   double secSinceGen = thisUpdate - lastGentime;
   
   if (secSinceGen > 0.5) {
@@ -69,17 +71,19 @@ void Items::update() {
     }
   }
 
-  // FIXME: this is a memory leak! smart pointers...
-  projectiles.erase(remove_nif(projectiles.begin(), projectiles.end(),
-                               &Projectile::update, dt)
-                    ,
-                    projectiles.end());
-
+  {
+    ProjectileVector::iterator beg =
+      remove_nif(projectiles.begin(), projectiles.end(),
+                 &Projectile::update, dt);
+    
+    std::for_each(beg, projectiles.end(), delete_op());
+    projectiles.erase(beg, projectiles.end());
+  }
 }
 
 void Items::spawnProjectile(ProjectileType type, const vec2 &pos,
                             const vec2 &dir, class Snail *shooter) {
-  std::auto_ptr<Projectile> proj(new Projectile(pos, dir * 8000.0f,
+  std::auto_ptr<Projectile> proj(new Projectile(pos, dir * 6300.0f,
                                                 shooter, bulletTexture, context));
   projectiles.push_back(proj.release());
 }

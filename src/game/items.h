@@ -40,6 +40,9 @@ public:
   Item *intersectingItem(const vec2 &start, const vec2 &end, float radius, vec2 &hitpos);
   
 private:
+  Items(const Items &) : System(NULL) {} // private copy ctor
+  Items &operator =(const Items &) {return *this; } // private assignment
+  
   class WindowManager *wm;
   class Graphics *gfx;
   class Texture *cactusTexture;
