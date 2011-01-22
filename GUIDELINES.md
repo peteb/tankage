@@ -1,33 +1,14 @@
-
-
 Design Guidelines
 =================
 This document describes the metrics and guidelines followed mostly in the Engine,
 but not necessarily in the game itself.
 It's a pretty vague document, but it's a work in progress.
 
-Data
-----
-Data should flow, not be pushed/pulled! Chain consumers using delegates. Remember
-that this is what the Ref class is meant for; to plug in adapters and converters
-between two objects.
-
-### Example
-    sprite->setDelegate(Owning(new Animator(otherSprite)))
-       
-### Cons
-
-* Indirections and pointer locking when a property changes,
-  ref.lock() -> Adapter.setPosition -> ref.lock() -> delegate.setPosition.
-  Suggestions; a functor that takes a RefFrame, has some state (coord, orient)
-  and returns a new reframe.
-  A way of cutting down ref.locks and indirections would be to change setPosition/
-  setOrientation into setReferenceFrame. setRefFrame/getRefFrame.
-* Object bloat, the converter probably has some state (coord, orient) and a ref
-  delegate. The delegating object has a ref delegate. Each ref is at least a shared_ptr
-  and a weak_ptr, and maybe even a T*.
-
-
+File structure
+----------
+/utils/ -- for utility classes, like vectors, matrices, interpolation functions, ...
+/engine/ -- contains the different modules and classes that make up the engine. a libengine is compiled for the current platform, which contains the required modules
+/game/ -- uses the libengine and contains the game itself (entry point is app_main).
    
 Commenting
 ----------
@@ -47,7 +28,6 @@ A class is broken if it fullfills any of the points below:
   based on its name.
 * It's got more than one major responsibility, more than one reason to change.
 * It's got many public member functions--It exposes too much.
-* It's got many private member functions--It probably does too much.
 * It's dependant on many other classes to work; using it outside the project would
 be hard.
 

@@ -140,9 +140,9 @@
 ** TODO New Engine
 *** DONE Cactii
 *** DONE Shooting
-*** TODO Items
-*** TODO Collision detection
-*** TODO Collision response    
+*** DONE Items
+*** DONE Collision detection
+*** DONE Collision response    
 *** TODO Health + healthbar
 *** TODO The rockets    
 *** TODO Particle system    
