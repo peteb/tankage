@@ -6,8 +6,7 @@
 
 class Control : public System {
 public:
-  Control(const class Portal &interfaces, SystemContext *ctx);
-
+  void init(const class Portal &interfaces);
   void update();
   
 private:

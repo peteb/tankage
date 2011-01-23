@@ -3,9 +3,7 @@
 #include <engine/portal.h>
 #include <game/snails.h>
 
-Control::Control(const class Portal &interfaces, SystemContext *ctx)
-  : System(ctx)
-{
+void Control::init(const class Portal &interfaces) {
   input = interfaces.requestInterface<Input>();
   keyUp = input->keycode("up");
   keyDown = input->keycode("down");

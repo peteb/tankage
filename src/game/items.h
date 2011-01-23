@@ -28,8 +28,8 @@ public:
     PROJECTILE_BULLET
   };
   
-  
-  Items(const class Portal &interfaces, SystemContext *ctx);
+  Items() {}
+  void init(const class Portal &interfaces);
 
   void update();
   void render();
@@ -40,7 +40,7 @@ public:
   Item *intersectingItem(const vec2 &start, const vec2 &end, float radius, vec2 &hitpos);
   
 private:
-  Items(const Items &) : System(NULL) {} // private copy ctor
+  Items(const Items &) {} // private copy ctor
   Items &operator =(const Items &) {return *this; } // private assignment
   
   class WindowManager *wm;

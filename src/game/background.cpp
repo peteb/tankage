@@ -8,9 +8,7 @@
 #include <utils/vec.h>
 #include <utils/rect.h>
 
-Background::Background(class Portal &interfaces, SystemContext *ctx)
-  : System(ctx)
-{
+void Background::init(const class Portal &interfaces) {
   graphics = interfaces.requestInterface<Graphics>();
   ImageLoader *imgLoader = interfaces.requestInterface<ImageLoader>();
 //  Image *img = imgLoader->loadImage("../data/smoke.png");

@@ -14,7 +14,7 @@ public:
     STATE_MAX
   };
 
-  Snail(const vec2 &initialPos, int id, SystemContext *ctx);
+  Snail(const vec2 &initialPos, int id, const SystemContext *ctx);
   
   void startState(SnailState state);
   void stopState(SnailState state);
@@ -36,7 +36,7 @@ private:
   
   int id;
   bool _state[STATE_MAX];
-  SystemContext *context;
+  const SystemContext *context;
   double secondsSinceFire;
   float radius;
   bool takingControl;
@@ -46,13 +46,13 @@ private:
 
 class Snails : public System {
 public:
-  Snails(const class Portal &interfaces, SystemContext *ctx);
 
   enum DuelingSnail {
     SNAIL_LEFT = 0,
     SNAIL_RIGHT
   };
   
+  void init(const class Portal &interfaces);
   void render();
   Snail *snail(int id) const;
   Snail *intersectingSnails(const vec2 &start, const vec2 &end, float radius, Snail *ignore, vec2 &hitpos);

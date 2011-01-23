@@ -14,7 +14,7 @@ public:
 
   template<typename InterfaceT>
   InterfaceT *requestInterface() const {
-    return dynamic_cast<InterfaceT *>(getInterface(InterfaceT::id()));
+    return reinterpret_cast<InterfaceT *>(getInterface(InterfaceT::id()));
   }
 
 private:

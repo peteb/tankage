@@ -5,8 +5,7 @@
 
 class Background : public System {
 public:
-  Background(class Portal &interfaces, SystemContext *ctx);
-  
+  void init(const class Portal &interfaces);
   void render();
 
 private:

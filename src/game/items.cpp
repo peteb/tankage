@@ -18,9 +18,7 @@
 #include <algorithm>
 #include <iostream>
 
-Items::Items(const class Portal &interfaces, SystemContext *ctx)
-  : System(ctx)
-{
+void Items::init(const class Portal &interfaces) {
   wm = interfaces.requestInterface<WindowManager>();
   gfx = interfaces.requestInterface<Graphics>();
   ImageLoader *imgLoader = interfaces.requestInterface<ImageLoader>();
@@ -83,9 +81,8 @@ void Items::update() {
 
 void Items::spawnProjectile(ProjectileType type, const vec2 &pos,
                             const vec2 &dir, class Snail *shooter) {
-  std::auto_ptr<Projectile> proj(new Projectile(pos, dir * 6300.0f,
-                                                shooter, bulletTexture, context));
-  projectiles.push_back(proj.release());
+  projectiles.push_back(new Projectile(pos, dir * 6300.0f,
+                                       shooter, bulletTexture, context));
 }
 
 void Items::render() {

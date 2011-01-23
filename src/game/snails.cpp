@@ -15,9 +15,7 @@
 #include <iostream>
 #include <memory>
 
-Snails::Snails(const class Portal &interfaces, SystemContext *ctx)
-  : System(ctx)
-{
+void Snails::init(const class Portal &interfaces) {
   graphics = interfaces.requestInterface<Graphics>();
   wm = interfaces.requestInterface<WindowManager>();
   ImageLoader *imgLoader = interfaces.requestInterface<ImageLoader>();
@@ -25,7 +23,7 @@ Snails::Snails(const class Portal &interfaces, SystemContext *ctx)
   // First snail
   {
     std::auto_ptr<Image> img(imgLoader->loadImage("../data/snail_l.png"));
-    Snail *snail = new Snail(vec2(50.0f, 300.0f), Snails::SNAIL_LEFT, ctx);
+    Snail *snail = new Snail(vec2(50.0f, 300.0f), Snails::SNAIL_LEFT, context);
     snail->setTexture(graphics->createTexture(img.get()));
   
     snails.push_back(snail);
@@ -34,7 +32,7 @@ Snails::Snails(const class Portal &interfaces, SystemContext *ctx)
   // Second snail
   {
     std::auto_ptr<Image> img(imgLoader->loadImage("../data/snail_r.png"));
-    Snail *snail = new Snail(vec2(800-50.0f, 300.0f), Snails::SNAIL_RIGHT, ctx);
+    Snail *snail = new Snail(vec2(800-50.0f, 300.0f), Snails::SNAIL_RIGHT, context);
     snail->setTexture(graphics->createTexture(img.get()));
   
     snails.push_back(snail);
@@ -77,7 +75,7 @@ Snail *Snails::intersectingSnails(const vec2 &start, const vec2 &end,
 }
 
 
-Snail::Snail(const vec2 &initialPos, int id, SystemContext *ctx)
+Snail::Snail(const vec2 &initialPos, int id, const SystemContext *ctx)
   : _position(initialPos)
   , originalPos(initialPos)
   , id(id)

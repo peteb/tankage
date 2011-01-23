@@ -7,35 +7,47 @@
 class SystemContext {
 public:
   SystemContext();
+
+  enum {
+    SYSTEM_SNAILS,
+    SYSTEM_BACKGROUND,
+    SYSTEM_CONTROL,
+    SYSTEM_ITEMS,
+    SYSTEM_MAX
+  };
   
-  void set(class Snails *snails);
-  void set(class Background *background);
-  void set(class Control *control);
-  void set(class Items *items);
+  void set(unsigned id, class System *system);
+
+  template<typename T>
+  T *system(unsigned id) const {
+    return reinterpret_cast<T *>(resolveSystem(id));
+  }
   
-  class Snails *snails() const;
-  class Background *background() const;
-  class Control *control() const;
-  class Items *items() const;
-  
-  void init();
+  void init(class Portal &modules);
+
+  class Items *items() const {
+    return system<Items>(SystemContext::SYSTEM_ITEMS);
+  }
+
+  class Snails *snails() const {
+    return system<Snails>(SystemContext::SYSTEM_SNAILS);
+  }
   
 private:
-  class Snails *_snails;
-  class Background *_background;
-  class Control *_control;
-  class Items *_items;
+  class System *resolveSystem(unsigned id) const;
+  
+  class System *systems[SYSTEM_MAX];
   
   bool ready;
 };
 
 class System {
 public:
-  System(SystemContext *ctx) : context(ctx) {}
   virtual ~System() {}
 
-  virtual void init() {}
+  virtual void init(const class Portal &modules) =0;
   
+  friend class SystemContext;
 protected:
   const SystemContext *context;
 };

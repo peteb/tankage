@@ -31,12 +31,18 @@ bool Projectile::update(double dt) {
 
   Item *hitItem = ctx->items()->intersectingItem(prevPos, pos, 1.0f, hitPos);
   if (hitItem) {
-    if (hitItem->takeDamage(hitPos, 10.0f, shooter)) {
+    if (hitItem->takeDamage(hitPos, 10.0f, shooter)) {  // FIXME: takeDamage -> DISINTEGRATE, IGNORE, REFLECT
       return false;
     }
+
+    // If reflect: emitter.addMidpoint()
   }
+
+
+  // update effect
+//  emitter.setPosition(pos);
   
-  return pos.x - 64.0f <= 800.0f;
+  return pos.x - 64.0f <= 800.0f; // FIXME: screenRect vs pos + radius (circle)
 }
 
 void Projectile::render(Graphics *gfx) {

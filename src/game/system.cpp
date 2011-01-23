@@ -7,61 +7,36 @@
 
 SystemContext::SystemContext() {
   ready = false;
+  std::fill(systems, systems + SYSTEM_MAX, (System *)0);
 }
 
-void SystemContext::set(class Snails *snails) {
-  _snails = snails;
+void SystemContext::set(unsigned id, System *system) {
+  if (systems[id])
+    throw std::runtime_error("system already set");
+
+  systems[id] = system;
 }
 
-void SystemContext::set(class Background *background) {
-  _background = background;
-}
-
-void SystemContext::set(class Control *control) {
-  _control = control;
-}
-
-void SystemContext::set(class Items *items) {
-  _items = items;
-}
-
-class Snails *SystemContext::snails() const {
-  if (!ready)
-    throw std::runtime_error("snails system not initialized yet");
-
-  return _snails;
-}
-
-class Background *SystemContext::background() const {
-  if (!ready)
-    throw std::runtime_error("background system not initialized yet");
-
-  return _background;
-}
-
-class Control *SystemContext::control() const {
-  if (!ready)
-    throw std::runtime_error("control system not initialized yet");
-
-  return _control;
-}
-
-class Items *SystemContext::items() const {
-  if (!ready)
-    throw std::runtime_error("items system not initialized yet");
-
-  return _items;
-}
-
-void SystemContext::init() {
+void SystemContext::init(class Portal &modules) {
   if (ready)
     throw std::runtime_error("sysctx already initialized");
 
-  _snails->init();
-  _background->init();
-  _control->init();
-  _items->init();
+  for (unsigned i = 0; i < SYSTEM_MAX; ++i) {
+    if (systems[i]) {
+      systems[i]->context = this;
+      systems[i]->init(modules);
+    }    
+  }
   
   ready = true;
 }
 
+class System *SystemContext::resolveSystem(unsigned id) const {
+  if (!systems[id])
+    throw std::runtime_error("system not set");
+  
+  if (!ready)
+    throw std::runtime_error("system context not ready");
+  
+  return systems[id];  
+}
