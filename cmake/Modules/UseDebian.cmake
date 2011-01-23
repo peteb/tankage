@@ -18,5 +18,8 @@ set(CPACK_DEBIAN_PACKAGE_CONTROL_EXTRA
 	"${PROJECT_ROOT_DIR}/cmake/Scripts/preinst;${PROJECT_ROOT_DIR}/cmake/Scripts/postrm;"
 )
 
+# FIXME kaspars: Resolve dependencies!
+# SET(CPACK_DEBIAN_PACKAGE_DEPENDS "pacman (>= 10-17)")
+
 INCLUDE(CPack)
 
