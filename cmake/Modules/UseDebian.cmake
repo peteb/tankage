@@ -7,12 +7,16 @@ SET(CPACK_PACKAGE_NAME "snail-wail")
 
 SET(CPACK_PACKAGE_VERSION_MAJOR "0")
 SET(CPACK_PACKAGE_VERSION_MINOR "1")
-SET(CPACK_PACKAGE_VERSION_PATCH "1")
 
-
-# FIXME kaspars: Make debian package name to follow common naming convention
+# From the maintainers guide package should have following naming convention
 # <foo>_<VersionNumber>-<DebianRevisionNumber>_<DebianArchitecture>.deb
-SET(CPACK_PACKAGE_FILE_NAME "${CPACK_PACKAGE_NAME}-${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERSION_MINOR}.${CPACK_PACKAGE_VERSION_PATCH}")
+SET(CPACK_PACKAGE_FILE_NAME 
+	"${CPACK_PACKAGE_NAME}_${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERSION_MINOR}-1_i383"
+)
+
+set(CPACK_DEBIAN_PACKAGE_CONTROL_EXTRA 
+	"${PROJECT_ROOT_DIR}/cmake/Scripts/preinst;${PROJECT_ROOT_DIR}/cmake/Scripts/postrm;"
+)
 
 INCLUDE(CPack)
 
