@@ -1,6 +1,6 @@
 # -*- cmake -*-
 
-add_executable(game
+add_executable(snail-wail
   main.cpp
   background.cpp
   snails.cpp
@@ -12,9 +12,9 @@ add_executable(game
   powerup.cpp
   )
   
-target_link_libraries(game
+target_link_libraries(snail-wail
   engine
   )
 
-INSTALL(TARGETS game DESTINATION games)
+INSTALL(TARGETS snail-wail DESTINATION games)
 
