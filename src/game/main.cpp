@@ -30,12 +30,13 @@ int app_main(Portal &interfaces) {
   Snails snails;
   Control control;
   Items items;
-  //Particles particles(interfaces, &systems);
+  Particles particles;
   
   systems.set(SystemContext::SYSTEM_SNAILS, &snails);
   systems.set(SystemContext::SYSTEM_BACKGROUND, &bkg);
   systems.set(SystemContext::SYSTEM_CONTROL, &control);
   systems.set(SystemContext::SYSTEM_ITEMS, &items);
+  systems.set(SystemContext::SYSTEM_PARTICLES, &particles);
   systems.init(interfaces);
   
   while (running) {      
@@ -49,6 +50,7 @@ int app_main(Portal &interfaces) {
 
     control.update();
     bkg.render();
+    particles.render();
     snails.render();
     items.update();
     items.render();

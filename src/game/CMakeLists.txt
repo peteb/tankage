@@ -10,6 +10,8 @@ add_executable(game
   cactus.cpp
   projectile.cpp
   powerup.cpp
+  particles.cpp
+  texture_loader.cpp
   )
   
 target_link_libraries(game

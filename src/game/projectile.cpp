@@ -16,6 +16,15 @@ Projectile::Projectile(const vec2 &pos, const vec2 &vel, class Snail *shooter, c
   , shooter(shooter)
   , ctx(ctx)
 {
+  /*
+    strip = ctx->particles()->group(particle_texture)->createTrail(pos);
+    strip->addMidpoint(pos)
+    strip->setEndpoint(blah);
+
+    group = ctx->particles()->group(particle_texture);
+    group->addParticle(pos);
+  */
+
 }
 
 bool Projectile::update(double dt) {

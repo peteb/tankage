@@ -146,3 +146,13 @@
 *** TODO Health + healthbar
 *** TODO The rockets    
 *** TODO Particle system    
+** DONE TextureLoader
+** TODO Smoke trails for bullets
+** TODO Slight aiming
+** TODO Android support
+*** TODO Cmake
+*** TODO Window Manager support
+*** TODO OpenGLES
+*** TODO Image Loader    
+*** TODO Input    
+

@@ -2,8 +2,6 @@
 #define GAME_SYSTEM_H
 
 
-// FIXME: this class is a bottleneck when creating new systems. it's boring to
-// update the class for the system.
 class SystemContext {
 public:
   SystemContext();
@@ -13,6 +11,8 @@ public:
     SYSTEM_BACKGROUND,
     SYSTEM_CONTROL,
     SYSTEM_ITEMS,
+    SYSTEM_PARTICLES,
+    SYSTEM_TEXTURE_LOADER,
     SYSTEM_MAX
   };
   
@@ -31,6 +31,10 @@ public:
 
   class Snails *snails() const {
     return system<Snails>(SystemContext::SYSTEM_SNAILS);
+  }
+
+  class TextureLoader *textureLoader() const {
+    return system<TextureLoader>(SystemContext::SYSTEM_TEXTURE_LOADER);
   }
   
 private:
