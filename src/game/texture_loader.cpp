@@ -3,6 +3,7 @@
 #include <engine/image_loader.h>
 #include <engine/image.h>
 #include <engine/portal.h>
+#include <memory>
 
 void TextureLoader::init(const class Portal &interfaces) {
   gfx = interfaces.requestInterface<Graphics>();
