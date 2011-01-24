@@ -1,4 +1,4 @@
 
-# FIXME kaspars: Figure out how to create folders !!!
-INSTALL_FILES("/share/snail-wail/data" "\\.png")
+FILE(GLOB RESOURCE_FILES "*.png")
+INSTALL(FILES ${RESOURCE_FILES} DESTINATION share/snail-wail/data)
 
