@@ -9,4 +9,8 @@ void Particles::init(const Portal &modules) {
 void Particles::render() {
   
 }
-// TODO: fix this, and TextureLoader
+// TODO: fix this
+
+ParticleGroup *Particles::group(class Texture *texture) {
+  return NULL;
+}
