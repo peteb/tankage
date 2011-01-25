@@ -23,10 +23,11 @@ public:
 
   vec2 &operator *= (const vec2 &rhs) {x *= rhs.x; y *= rhs.y; return *this; }
   vec2 &operator *= (float scalar) {x *= scalar; y *= scalar; return *this; }
-
+  vec2 &operator /= (float scalar) {x /= scalar; y /= scalar; return *this; }
+  
   template<typename OtherT>
   vec2 operator * (const OtherT &rhs) const {return vec2(*this) *= rhs; }
-
+  vec2 operator / (float scalar) {return vec2(*this) /= scalar; }
   vec2 &operator += (const vec2 &rh) {x += rh.x; y += rh.y; return *this; }
   vec2 &operator -= (const vec2 &rh) {x -= rh.x; y -= rh.y; return *this; }
   vec2 operator + (const vec2 &rh) const {return vec2(*this) += rh; }

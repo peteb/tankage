@@ -49,6 +49,7 @@ double Glfw::WindowManager::timeSeconds() {
 }
 
 void Glfw::WindowManager::swapBuffers() {
+//  usleep(1000000/20);
   glfwSwapBuffers();
 }
 

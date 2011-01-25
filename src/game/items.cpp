@@ -81,7 +81,7 @@ void Items::update() {
 
 void Items::spawnProjectile(ProjectileType type, const vec2 &pos,
                             const vec2 &dir, class Snail *shooter) {
-  projectiles.push_back(new Projectile(pos, dir * 6300.0f,
+  projectiles.push_back(new Projectile(pos, dir * 2000.0f,
                                        shooter, bulletTexture, context));
 }
 

@@ -32,7 +32,7 @@ void Snails::init(const class Portal &interfaces) {
   // Second snail
   {
     std::auto_ptr<Image> img(imgLoader->loadImage("../data/snail_r.png"));
-    Snail *snail = new Snail(vec2(800-50.0f, 300.0f), Snails::SNAIL_RIGHT, context);
+    Snail *snail = new Snail(vec2(800-150.0f, 300.0f), Snails::SNAIL_RIGHT, context);
     snail->setTexture(graphics->createTexture(img.get()));
   
     snails.push_back(snail);
@@ -129,27 +129,30 @@ bool Snail::update(double dt) {
     _position += vec2(0.0f, 500.0f) * dt;
 
   _position += vel * dt;
-  vel = vel * 0.99f;
+  vel -= vec2(vel.x * 0.5, vel.y) * dt * 4.5;
 
-  if (vel.magnitude() <= 20.0f) {
+  if (vel.magnitude() < 90.0) {
     takingControl = true;
   }
 
   if (takingControl) {
     const vec2 wantedPos(originalPos.x, _position.y);
 
-    vec2 diff = wantedPos - _position;
-    if (diff.magnitude() < 1.0f) {
+    vec2 diff = _position - wantedPos;
+    if (diff.x < 1.0f) {
       takingControl = false;
-      vel = vec2::Zero();
+
     }
     else {
-      vel += diff.normalize() * 2000.0f * dt;
+      vel -= diff.normalize() * dt * 400.0;
     }
   }
+
+  // TODO: add proper euler integration
   
   _position.y = clamp(_position.y, 32.0f, 600.0f - 32.0f);
   _position.x = clamp(_position.x, 32.0f, 800.0f - 32.0f);
+  _position.x = std::max(_position.x, originalPos.x);
   
   if (_state[STATE_SHOOT]) {// FIXME: rename SHOOT to SHOOTING
     if (secondsSinceFire >= 0.2) {
@@ -164,7 +167,9 @@ bool Snail::update(double dt) {
 }
 
 void Snail::takeDamage(const vec2 &pos, float damage) {
-  vel += (_position - pos) * damage;
+  vel += (_position - pos).normalize()  * damage * 10.0f;
+  std::cout << std::string((_position - pos).normalize()) << std::endl;
+  
   takingControl = false;
   health -= static_cast<int>(damage);
   std::cout << "snail: I received " << damage

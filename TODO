@@ -149,7 +149,7 @@
 *** TODO The rockets    
 *** TODO Particle system    
 ** DONE TextureLoader
-** TODO Smoke trails for bullets
+** TODO Smoke trails for bullets   
 ** TODO Slight aiming
 ** TODO Android support
 *** TODO Cmake
@@ -157,4 +157,4 @@
 *** TODO OpenGLES
 *** TODO Image Loader    
 *** TODO Input    
-
+** TODO System profile
