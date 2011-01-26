@@ -2,6 +2,8 @@
 #include <game/cactus.h>
 #include <game/projectile.h>
 #include <game/powerup.h>
+#include <game/snails.h>
+#include <game/particles.h>
 
 #include <engine/window_manager.h>
 #include <engine/graphics.h>
@@ -9,7 +11,6 @@
 #include <engine/portal.h>
 #include <engine/image.h>
 #include <engine/texture.h>
-#include <game/snails.h>
 
 #include <utils/algorithm.h>
 
@@ -81,8 +82,12 @@ void Items::update() {
 
 void Items::spawnProjectile(ProjectileType type, const vec2 &pos,
                             const vec2 &dir, class Snail *shooter) {
-  projectiles.push_back(new Projectile(pos, dir * 2000.0f,
-                                       shooter, bulletTexture, context));
+  class ParticleGroup *particles = context->particles()->group(NULL);
+  std::auto_ptr<Projectile> newProjectile(
+    new Projectile(particles, shooter, bulletTexture, context, pos));
+
+  newProjectile->setVel(dir * 2000.0f);
+  projectiles.push_back(newProjectile.release());
 }
 
 void Items::render() {

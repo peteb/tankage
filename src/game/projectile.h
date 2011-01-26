@@ -5,18 +5,21 @@
 
 class Projectile {
 public:
-  Projectile(const vec2 &pos, const vec2 &vel, class Snail *shooter,
-             class Texture *tex, const class SystemContext *ctx);
+  Projectile(class ParticleGroup *partGroup, class Snail *shooter,
+             class Texture *tex, const class SystemContext *ctx, const vec2 &pos);
 
   bool update(double dt);
   void render(class Graphics *gfx);
-
+  void setVel(const vec2 &vel);
+  
 private:
+  class ParticleGroup *partGroup;
+  class Snail *shooter;
   class Texture *tex;
   const class SystemContext *ctx;
+  
   vec2 pos;
   vec2 vel;
-  class Snail *shooter;
 };
 
 

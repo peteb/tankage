@@ -2,6 +2,7 @@
 #include <game/system.h>
 #include <game/snails.h>
 #include <game/items.h>
+#include <game/particles.h>
 
 #include <engine/graphics.h>
 #include <engine/texture.h>
@@ -9,18 +10,16 @@
 #include <utils/vec.h>
 #include <utils/rect.h>
 
-Projectile::Projectile(const vec2 &pos, const vec2 &vel, class Snail *shooter, class Texture *tex, const SystemContext *ctx)
-  : tex(tex)
-  , pos(pos)
-  , vel(vel)
+Projectile::Projectile(class ParticleGroup *partGroup,
+                       class Snail *shooter, class Texture *tex,
+                       const SystemContext *ctx, const vec2 &pos)
+  : partGroup(partGroup)
+  , tex(tex)
   , shooter(shooter)
   , ctx(ctx)
+  , pos(pos)
 {
   /*
-    strip = ctx->particles()->group(particle_texture)->createTrail(pos);
-    strip->addMidpoint(pos)
-    strip->setEndpoint(blah);
-
     group = ctx->particles()->group(particle_texture);
     group->addParticle(pos);
   */
@@ -47,8 +46,8 @@ bool Projectile::update(double dt) {
     // If reflect: emitter.addMidpoint()
   }
 
-
   // update effect
+  // partGroup->emitParticle(Particle(blabla));
 //  emitter.setPosition(pos);
   
   return pos.x - 64.0f <= 800.0f; // FIXME: screenRect vs pos + radius (circle)
@@ -61,5 +60,9 @@ void Projectile::render(Graphics *gfx) {
 
   gfx->drawQuad(rect(pos, 32, 32)); // FIXME: get rid of hardcoded sizes
 
+}
+
+void Projectile::setVel(const vec2 &vel) {
+  this->vel = vel;
 }
 

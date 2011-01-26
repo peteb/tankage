@@ -2,6 +2,8 @@
 #define ENGINE_GRAPHICS_H
 
 #include <engine/interface.h>
+#include <utils/vec.h>
+#include <vector>
 
 class Graphics : public Interface {
 public:
@@ -19,6 +21,8 @@ public:
   virtual class Texture *createTexture(class Image *image) =0;
   virtual void drawQuad(const class rect &quad) =0;
   virtual void drawQuad(const class rect &quad, const class rect &source) =0;
+  virtual void drawLinestrip(const std::vector<vec2> &lines) =0;
+  
   virtual void drawCircle(const class vec2 &pos, float radius, float tess) =0;
   virtual void setOrtho(const class rect &size) =0;
   virtual void setViewport(const class rect &size) =0;

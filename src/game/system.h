@@ -33,6 +33,10 @@ public:
     return system<Snails>(SystemContext::SYSTEM_SNAILS);
   }
 
+  class Particles *particles() const {
+    return system<Particles>(SystemContext::SYSTEM_PARTICLES);
+  }
+
   class TextureLoader *textureLoader() const {
     return system<TextureLoader>(SystemContext::SYSTEM_TEXTURE_LOADER);
   }
