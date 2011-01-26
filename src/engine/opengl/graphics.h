@@ -19,6 +19,7 @@ public:
   void setOrtho(const class rect &size);
   void setViewport(const class rect &size);
   void setBlend(BlendMode mode);
+  void setColor(const color4 &col);
   
   void enableTextures();
   void disableTextures();

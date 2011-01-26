@@ -2,6 +2,7 @@
 #include <engine/portal.h>
 #include <engine/graphics.h>
 #include <engine/window_manager.h>
+#include <engine/texture.h>
 #include <utils/key.h>
 #include <algorithm>
 #include <utility>
@@ -46,6 +47,39 @@ ParticleGroup::ParticleGroup(class Texture *texture)
 }
 
 void ParticleGroup::render(double dt, Graphics *gfx) {
+  if (!texture)
+    return;
 
+  texture->bind();
+  gfx->enableTextures();
+  gfx->setBlend(Graphics::BLEND_ALPHA);
+  
+  ParticleList::iterator iter = particles.begin(), e = particles.end();
+  
+  for (;iter != e;) {
+    if (iter->update(dt)) {
+      gfx->setColor(iter->color);
+      gfx->drawQuad(rect(iter->pos, 16, 4));
+      ++iter;
+    }
+    else {
+      *iter = *(--e);
+    }
+  }
+
+  particles.erase(e, particles.end());
 }
 
+void ParticleGroup::addParticle(const Particle &particle) {
+  particles.push_back(particle);
+}
+
+Particle::Particle() {
+  color = color4::White();
+}
+
+bool Particle::update(double dt) {
+  ttd -= dt;
+  color.a = clamp(ttd, 0.0, 0.4);
+  return ttd > 0.0;
+}

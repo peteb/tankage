@@ -4,12 +4,11 @@
 #include <game/powerup.h>
 #include <game/snails.h>
 #include <game/particles.h>
+#include <game/texture_loader.h>
 
 #include <engine/window_manager.h>
 #include <engine/graphics.h>
-#include <engine/image_loader.h>
 #include <engine/portal.h>
-#include <engine/image.h>
 #include <engine/texture.h>
 
 #include <utils/algorithm.h>
@@ -22,20 +21,12 @@
 void Items::init(const class Portal &interfaces) {
   wm = interfaces.requestInterface<WindowManager>();
   gfx = interfaces.requestInterface<Graphics>();
-  ImageLoader *imgLoader = interfaces.requestInterface<ImageLoader>();
-
-  {  
-    std::auto_ptr<Image> img(imgLoader->loadImage("../data/cactii.png"));
-    cactusTexture = gfx->createTexture(img.get());
-  }
-  {  
-    std::auto_ptr<Image> img(imgLoader->loadImage("../data/bullet.png"));
-    bulletTexture = gfx->createTexture(img.get());
-  }
-  {  
-    std::auto_ptr<Image> img(imgLoader->loadImage("../data/health_powerup.png"));
-    healthPowerup = gfx->createTexture(img.get());
-  }
+  TextureLoader *textures = context->textureLoader();
+  
+  cactusTexture = textures->texture("cactii.png");
+  bulletTexture = textures->texture("bullet.png");
+  healthPowerup = textures->texture("health_powerup.png");
+  smoke = textures->texture("smoke.png");
 
     
   lastUpdate = wm->timeSeconds();
@@ -82,7 +73,7 @@ void Items::update() {
 
 void Items::spawnProjectile(ProjectileType type, const vec2 &pos,
                             const vec2 &dir, class Snail *shooter) {
-  class ParticleGroup *particles = context->particles()->group(NULL);
+  class ParticleGroup *particles = context->particles()->group(smoke);
   std::auto_ptr<Projectile> newProjectile(
     new Projectile(particles, shooter, bulletTexture, context, pos));
 

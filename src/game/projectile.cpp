@@ -19,6 +19,7 @@ Projectile::Projectile(class ParticleGroup *partGroup,
   , ctx(ctx)
   , pos(pos)
 {
+  sinceEmit = 0.0;
   /*
     group = ctx->particles()->group(particle_texture);
     group->addParticle(pos);
@@ -29,6 +30,7 @@ Projectile::Projectile(class ParticleGroup *partGroup,
 bool Projectile::update(double dt) {
   const vec2 prevPos = pos;
   pos += vel * dt;
+  sinceEmit += dt;
   
   vec2 hitPos;
   Snail *hit = ctx->snails()->intersectingSnails(prevPos, pos, 1.0f, shooter, hitPos);
@@ -46,6 +48,14 @@ bool Projectile::update(double dt) {
     // If reflect: emitter.addMidpoint()
   }
 
+  if (sinceEmit > 0.01) {
+    Particle particle;
+    particle.pos = pos;
+    particle.ttd = 0.2;
+    partGroup->addParticle(particle);
+    sinceEmit = 0.0;
+  }
+  
   // update effect
   // partGroup->emitParticle(Particle(blabla));
 //  emitter.setPosition(pos);

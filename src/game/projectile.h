@@ -20,6 +20,7 @@ private:
   
   vec2 pos;
   vec2 vel;
+  double sinceEmit;
 };
 
 

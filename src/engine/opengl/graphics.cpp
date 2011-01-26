@@ -198,3 +198,6 @@ void OpenGl::Graphics::disableTextures() {
   glDisable(GL_TEXTURE_2D);
 }
 
+void OpenGl::Graphics::setColor(const color4 &col) {
+  glColor4f(col.r, col.g, col.b, col.a);
+}

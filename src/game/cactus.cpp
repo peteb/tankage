@@ -3,6 +3,7 @@
 #include <engine/texture.h>
 #include <utils/rect.h>
 #include <utils/vec.h>
+#include <utils/color.h>
 
 Cactus::Cactus(const vec2 &pos, class Texture *tex)
   : Item(pos, 20.0f)
@@ -14,6 +15,7 @@ Cactus::Cactus(const vec2 &pos, class Texture *tex)
 void Cactus::render(Graphics *gfx) {
   gfx->setBlend(Graphics::BLEND_ALPHA);
   gfx->enableTextures();
+  gfx->setColor(color4::White());
   tex->bind();
 
   vec2 roundedPos;

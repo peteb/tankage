@@ -3,6 +3,7 @@
 
 #include <engine/interface.h>
 #include <utils/vec.h>
+#include <utils/color.h>
 #include <vector>
 
 class Graphics : public Interface {
@@ -29,6 +30,7 @@ public:
   virtual void enableTextures() =0;
   virtual void disableTextures() =0;
   virtual void setBlend(BlendMode mode) =0;
+  virtual void setColor(const color4 &col) =0;
 };
 
 #endif // !ENGINE_GRAPHICS_H
