@@ -138,7 +138,7 @@
          variable CMAKE_INSTALL_PREFIX doesn't work for some reason. Again,
          default make install works but in the package it's lost
          (you are not suppose to change path in the ready made package)
-*** TODO List and configure Ubuntu dependencies for debian package
+*** DONE List and configure Ubuntu dependencies for debian package
 ** TODO New Engine
 *** DONE Cactii
 *** DONE Shooting
