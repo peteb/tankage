@@ -5,6 +5,7 @@ add_executable(snail-wail
   background.cpp
   snails.cpp
   control.cpp
+  ai_control.cpp
   system.cpp
   items.cpp
   cactus.cpp
