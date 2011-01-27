@@ -139,6 +139,8 @@
          default make install works but in the package it's lost
          (you are not suppose to change path in the ready made package)
 *** DONE List and configure Ubuntu dependencies for debian package
+*** TODO Add resource path define in config.h.in and build/CMakeLists.txt 
+*** TODO Update code to use resource path
 ** TODO New Engine
 *** DONE Cactii
 *** DONE Shooting
@@ -158,3 +160,4 @@
 *** TODO Image Loader    
 *** TODO Input    
 ** TODO System profile
+** TODO Find out why game takes 60% of 2GHz duo core processor resources
