@@ -12,12 +12,14 @@ public:
   void clear(const class color4 &clearColor);
   void drawQuad(const class rect &quad);
   void drawQuad(const class rect &quad, const class rect &source);
-
+  void drawLinestrip(const std::vector<vec2> &lines);
+  
   void drawCircle(const class vec2 &pos, float radius, float tess);
   
   void setOrtho(const class rect &size);
   void setViewport(const class rect &size);
   void setBlend(BlendMode mode);
+  void setColor(const color4 &col);
   
   void enableTextures();
   void disableTextures();

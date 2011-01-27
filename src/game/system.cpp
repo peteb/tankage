@@ -35,8 +35,8 @@ class System *SystemContext::resolveSystem(unsigned id) const {
   if (!systems[id])
     throw std::runtime_error("system not set");
   
-  if (!ready)
-    throw std::runtime_error("system context not ready");
+//  if (!ready)
+//    throw std::runtime_error("system context not ready");
   
   return systems[id];  
 }

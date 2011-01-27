@@ -10,6 +10,7 @@
 
 #include <utils/rect.h>
 #include <utils/value.h>
+#include <utils/color.h>
 
 #include <algorithm>
 #include <iostream>
@@ -104,6 +105,7 @@ void Snail::setTexture(Texture *texture) {
 void Snail::render(Graphics *graphics) {
   graphics->setBlend(Graphics::BLEND_ALPHA);
   graphics->enableTextures();
+  graphics->setColor(color4::White());
   texture->bind();
 
   vec2 roundedPos;

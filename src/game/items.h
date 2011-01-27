@@ -48,6 +48,7 @@ private:
   class Texture *cactusTexture;
   class Texture *bulletTexture;
   class Texture *healthPowerup;
+  class Texture *smoke;
   
   double lastGentime;
   double lastUpdate;

@@ -112,6 +112,16 @@ void OpenGl::Graphics::drawQuad(const class rect &quad, const class rect &source
   glEnd();
 }
 
+void OpenGl::Graphics::drawLinestrip(const class std::vector<vec2> &lines) {
+  glLineWidth(1.0f);
+  glDisable(GL_BLEND);
+  glBegin(GL_LINE_STRIP);
+  for (size_t i = 0; i < lines.size(); ++i) {
+    glVertex2f(lines[i].x, lines[i].y);
+  }
+  glEnd();
+}
+
 void OpenGl::Graphics::drawCircle(const vec2 &pos,
                                   float radius, float tess) {
 
@@ -188,3 +198,6 @@ void OpenGl::Graphics::disableTextures() {
   glDisable(GL_TEXTURE_2D);
 }
 
+void OpenGl::Graphics::setColor(const color4 &col) {
+  glColor4f(col.r, col.g, col.b, col.a);
+}

@@ -10,9 +10,9 @@ public:
     SYSTEM_SNAILS,
     SYSTEM_BACKGROUND,
     SYSTEM_CONTROL,
-    SYSTEM_ITEMS,
-    SYSTEM_PARTICLES,
     SYSTEM_TEXTURE_LOADER,
+    SYSTEM_ITEMS,            // dependent on texture loader
+    SYSTEM_PARTICLES,
     SYSTEM_MAX
   };
   
@@ -31,6 +31,10 @@ public:
 
   class Snails *snails() const {
     return system<Snails>(SystemContext::SYSTEM_SNAILS);
+  }
+
+  class Particles *particles() const {
+    return system<Particles>(SystemContext::SYSTEM_PARTICLES);
   }
 
   class TextureLoader *textureLoader() const {

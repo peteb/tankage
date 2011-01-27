@@ -9,6 +9,8 @@
 
 class color4 {
 public:
+  color4() {}
+  
   color4(float r, float g, float b, float a)
     : r(r), g(g), b(b), a(a)
   {

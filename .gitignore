@@ -8,3 +8,5 @@ config.h
 CPackConfig.cmake
 CPackSourceConfig.cmake
 *.orig
+tags
+cscope.out
