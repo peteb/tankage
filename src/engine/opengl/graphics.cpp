@@ -112,6 +112,29 @@ void OpenGl::Graphics::drawQuad(const class rect &quad, const class rect &source
   glEnd();
 }
 
+void OpenGl::Graphics::drawQuads(const std::vector<rect> &quads) {
+  glBegin(GL_QUADS);
+  for (size_t i = 0; i < quads.size(); ++i) {
+    vec2 min, max;
+  
+    quads[i].getCoords(min, max);
+
+//    glTexCoord2f(tex_min.x, tex_min.y);
+    glVertex2f(min.x, min.y);
+    
+//    glTexCoord2f(tex_max.x, tex_min.y);
+    glVertex2f(max.x, min.y);
+    
+//    glTexCoord2f(tex_max.x, tex_max.y);
+    glVertex2f(max.x, max.y);
+    
+//    glTexCoord2f(tex_min.x, tex_max.y);
+    glVertex2f(min.x, max.y);
+    
+  }
+  glEnd();
+}
+
 void OpenGl::Graphics::drawLinestrip(const class std::vector<vec2> &lines) {
   glLineWidth(1.0f);
   glDisable(GL_BLEND);

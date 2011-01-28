@@ -3,6 +3,8 @@
 
 #include <engine/graphics.h>
 #include <utils/singleton.h>
+#include <utils/rect.h>
+#include <vector>
 
 namespace OpenGl {
 class Graphics : public ::Graphics, public Singleton<Graphics> {
@@ -12,6 +14,8 @@ public:
   void clear(const class color4 &clearColor);
   void drawQuad(const class rect &quad);
   void drawQuad(const class rect &quad, const class rect &source);
+  void drawQuads(const std::vector<rect> &quads);
+  
   void drawLinestrip(const std::vector<vec2> &lines);
   
   void drawCircle(const class vec2 &pos, float radius, float tess);

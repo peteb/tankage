@@ -44,10 +44,7 @@ int app_main(Portal &interfaces) {
   
   systems.init(interfaces);
   
-  while (running) {      
-    double thisTick = wm->timeSeconds();
-    float dt = std::max(thisTick - lastTick, 0.00001);
-
+  while (running) {          
     const rect wndSize = wm->size();
     
     gfx->setViewport(wndSize);
@@ -61,9 +58,10 @@ int app_main(Portal &interfaces) {
     items.render();
     
     wm->swapBuffers();
-    lastTick = thisTick;
     running = !input->keyPressed(escape) &&
       wm->windowState(WindowManager::OPENED);
+
+    usleep(1000);
   }
 
   return EXIT_SUCCESS;

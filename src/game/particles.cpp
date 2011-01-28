@@ -59,7 +59,8 @@ void ParticleGroup::render(double dt, Graphics *gfx) {
   for (;iter != e;) {
     if (iter->update(dt)) {
       gfx->setColor(iter->color);
-      gfx->drawQuad(rect(iter->pos, 16, 4));
+      gfx->drawQuad(rect(iter->pos, 16, 4)); // FIXME: this is definitely slow,
+                                             // should batch!
       ++iter;
     }
     else {
