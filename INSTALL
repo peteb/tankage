@@ -7,7 +7,7 @@ All tools and libraries required
       libglu1-mesa-dev
 
 Build and install
-    $ cmake -DCMAKE_INSTALL_PREFIX=/opt/snail-wail . && make && make install
+    $ cmake -DCMAKE_INSTALL_PREFIX=/opt/snail-wail . && make && sudo make install
 
 Create Debian package
     $ cmake -DCMAKE_INSTALL_PREFIX=/usr . && make && make package
