@@ -12,6 +12,8 @@
 #include <utils/value.h>
 #include <utils/color.h>
 
+#include <config.h>
+
 #include <algorithm>
 #include <iostream>
 #include <memory>
@@ -23,7 +25,7 @@ void Snails::init(const class Portal &interfaces) {
 
   // First snail
   {
-    std::auto_ptr<Image> img(imgLoader->loadImage("../data/snail_l.png"));
+    std::auto_ptr<Image> img(imgLoader->loadImage(std::string(RESOURCE_PATH) + "/snail_l.png"));
     Snail *snail = new Snail(vec2(50.0f, 300.0f), Snails::SNAIL_LEFT, context);
     snail->setTexture(graphics->createTexture(img.get()));
   
@@ -32,7 +34,7 @@ void Snails::init(const class Portal &interfaces) {
 
   // Second snail
   {
-    std::auto_ptr<Image> img(imgLoader->loadImage("../data/snail_r.png"));
+    std::auto_ptr<Image> img(imgLoader->loadImage(std::string(RESOURCE_PATH) + "/snail_r.png"));
     Snail *snail = new Snail(vec2(800-150.0f, 300.0f), Snails::SNAIL_RIGHT, context);
     snail->setTexture(graphics->createTexture(img.get()));
   

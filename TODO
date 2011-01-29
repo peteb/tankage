@@ -140,7 +140,7 @@
          (you are not suppose to change path in the ready made package)
 *** DONE List and configure Ubuntu dependencies for debian package
 *** DONE Add resource path define in config.h.in and build/CMakeLists.txt 
-*** TODO Update code to use resource path
+*** DONE Update code to use resource path
 ** TODO New Engine
 *** DONE Cactii
 *** DONE Shooting
