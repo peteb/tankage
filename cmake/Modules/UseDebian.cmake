@@ -23,5 +23,8 @@ set(CPACK_DEBIAN_PACKAGE_CONTROL_EXTRA
 # Dependencies needed on Ubuntu 10.10 (probably version can be lowered)
 SET(CPACK_DEBIAN_PACKAGE_DEPENDS "libglfw2 (>= 2.6-2), libdevil1c2 (>= 1.7.8-6)")
 
+# Use the same install prefix for packages
+SET(CPACK_PACKAGING_INSTALL_PREFIX ${CMAKE_INSTALL_PREFIX})
+
 INCLUDE(CPack)
 
