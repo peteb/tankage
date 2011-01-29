@@ -92,7 +92,8 @@
 ** DONE Implement SpriteCuller
 ** DONE Use Mesh and renderer, create a TextureRenderer
 ** TODO Add doxygen comments
-** TODO Unit tests using Gtest
+** Unit tests using Gtest
+*** DONE Unittests for mat, vec, rect in utils
 ** TODO Create renderer factory with cache
 ** DONE Use environment variable to toggle rendering of geoms
 ** DONE Geom offset   
