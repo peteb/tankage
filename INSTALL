@@ -2,7 +2,7 @@
 Ubuntu (10.10) Development Environment
 ======================================
 
-All tools and libraries required 
+Tools and libraries required 
     $ sudo apt-get install cmake g++ libdevil-dev libglfw-dev libgl1-mesa-dev 
       libglu1-mesa-dev
 
@@ -16,7 +16,7 @@ Create Debian package
 Ubuntu (10.10) Debian Package
 =============================
 
-All the runtime dependencies 
+Runtime dependencies 
     $ sudo apt-get install libglfw2 libdevil1c2
 
 Install the package 
