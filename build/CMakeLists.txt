@@ -47,6 +47,13 @@ set(PROJECT_ROOT_DIR ${PROJECT_SOURCE_DIR}/..)
 set(EXECUTABLE_OUTPUT_PATH ${PROJECT_ROOT_DIR}/bin)
 set(LIBRARY_OUTPUT_PATH ${PROJECT_ROOT_DIR}/bin)
 
+IF(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
+	SET(CMAKE_INSTALL_PREFIX "/usr")
+    SET(RESOURCE_PATH "${CMAKE_INSTALL_PREFIX}/share/snail-wail/data")
+ELSEIF(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
+    SET(RESOURCE_PATH "../data")
+ENDIF(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
+
 CONFIGURE_FILE(${PROJECT_ROOT_DIR}/src/config.h.in ${PROJECT_ROOT_DIR}/src/config.h)
 
 if(COMMAND cmake_policy)
@@ -70,3 +77,4 @@ add_custom_target(clean-gen
 
 # Invoke CPack for Debian
 include(UseDebian)
+
