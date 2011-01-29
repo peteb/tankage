@@ -19,5 +19,5 @@ target_link_libraries(snail-wail
   engine
   )
 
-INSTALL(TARGETS snail-wail DESTINATION games)
+INSTALL(TARGETS snail-wail DESTINATION bin)
 

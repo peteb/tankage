@@ -3,6 +3,9 @@
 #include <engine/image_loader.h>
 #include <engine/image.h>
 #include <engine/portal.h>
+
+#include <config.h>
+
 #include <memory>
 
 void TextureLoader::init(const class Portal &interfaces) {
@@ -11,7 +14,7 @@ void TextureLoader::init(const class Portal &interfaces) {
 }
 
 class Texture *TextureLoader::texture(const std::string &filename) {
-  std::auto_ptr<Image> img(imgLoader->loadImage("../data/" + filename));
+  std::auto_ptr<Image> img(imgLoader->loadImage(std::string(RESOURCE_PATH) + "/" + filename));
   return gfx->createTexture(img.release());
 }
 

@@ -92,7 +92,8 @@
 ** DONE Implement SpriteCuller
 ** DONE Use Mesh and renderer, create a TextureRenderer
 ** TODO Add doxygen comments
-** TODO Unit tests using Gtest
+** Unit tests using Gtest
+*** DONE Unittests for mat, vec, rect in utils
 ** TODO Create renderer factory with cache
 ** DONE Use environment variable to toggle rendering of geoms
 ** DONE Geom offset   
@@ -139,6 +140,8 @@
          default make install works but in the package it's lost
          (you are not suppose to change path in the ready made package)
 *** DONE List and configure Ubuntu dependencies for debian package
+*** DONE Add resource path define in config.h.in and build/CMakeLists.txt 
+*** DONE Update code to use resource path
 ** TODO New Engine
 *** DONE Cactii
 *** DONE Shooting
@@ -158,3 +161,4 @@
 *** TODO Image Loader    
 *** TODO Input    
 ** TODO System profile
+** TODO Find out why game takes 60% of 2GHz duo core processor resources

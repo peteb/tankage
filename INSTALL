@@ -1,0 +1,24 @@
+
+Ubuntu (10.10) Development Environment
+======================================
+
+Tools and libraries required 
+    $ sudo apt-get install cmake g++ libdevil-dev libglfw-dev libgl1-mesa-dev 
+      libglu1-mesa-dev
+
+Build and install
+    $ cmake -DCMAKE_INSTALL_PREFIX=/opt/snail-wail . && make && sudo make install
+
+Create Debian package
+    $ cmake -DCMAKE_INSTALL_PREFIX=/usr . && make && make package
+
+
+Ubuntu (10.10) Debian Package
+=============================
+
+Runtime dependencies 
+    $ sudo apt-get install libglfw2 libdevil1c2
+
+Install the package 
+    $ sudo dpkg -i snail-wail_<version>_i383.deb
+
