@@ -142,9 +142,9 @@
 *** DONE List and configure Ubuntu dependencies for debian package
 *** DONE Add resource path define in config.h.in and build/CMakeLists.txt 
 *** DONE Update code to use resource path
-*** TODO Add support for other CPack generators, like Bundle
-**** TODO Investigate if a CPack generator can be picked by default, so we support package generation on all platforms CPack supports
-*** TODO DEV-flag should set -g flag when using gcc (but not when using Visual Studio)     
+*** DONE Add support for other CPack generators, like Bundle
+**** DONE Investigate if a CPack generator can be picked by default, so we support package generation on all platforms CPack supports
+*** TODO DEV-flag should set -g flag when using gcc (but not when using Visual Studio)
 ** TODO New Engine
 *** DONE Cactii
 *** DONE Shooting
@@ -153,9 +153,10 @@
 *** DONE Collision response    
 *** TODO Health + healthbar
 *** TODO The rockets    
-*** TODO Particle system    
+*** TODO Particle system
+*** TODO Add "error dialog box" to window managers, for displaying errors.    
 ** DONE TextureLoader
-** TODO Smoke trails for bullets   
+** DONE Smoke trails for bullets   
 ** TODO Slight aiming
 ** TODO Android support
 *** TODO Cmake

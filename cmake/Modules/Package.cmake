@@ -1,6 +1,6 @@
 # -*- cmake -*-
 
-SET(CPACK_PACKAGE_DESCRIPTION_SUMMARY "A 2D game where tow snails fight to the death.")
+SET(CPACK_PACKAGE_DESCRIPTION_SUMMARY "A 2D game where two snails fight to the death.")
 SET(CPACK_PACKAGE_NAME "snail-wail")
 SET(CPACK_PACKAGE_VERSION_MAJOR "0")
 SET(CPACK_PACKAGE_VERSION_MINOR "1")
