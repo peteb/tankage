@@ -142,6 +142,9 @@
 *** DONE List and configure Ubuntu dependencies for debian package
 *** DONE Add resource path define in config.h.in and build/CMakeLists.txt 
 *** DONE Update code to use resource path
+*** TODO Add support for other CPack generators, like Bundle
+**** TODO Investigate if a CPack generator can be picked by default, so we support package generation on all platforms CPack supports
+     
 ** TODO New Engine
 *** DONE Cactii
 *** DONE Shooting
