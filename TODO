@@ -162,3 +162,33 @@
 *** TODO Input    
 ** TODO System profile
 ** TODO Find out why game takes 60% of 2GHz duo core processor resources
+** Memory leaks and other Valgrind gibberish
+*** TODO Only one remarkable memory leak left
+	==11268== 4,152 (2,072 direct, 2,080 indirect) bytes in 1 blocks are definitely lost in loss record 30 of 30
+	==11268==    at 0x4025BD3: malloc (vg_replace_malloc.c:236)
+	==11268==    by 0x40FD9CD: ??? (in /usr/lib/mesa/libGL.so.1.2)
+	==11268==    by 0x40FDE01: ??? (in /usr/lib/mesa/libGL.so.1.2)
+	==11268==    by 0x40D9285: ??? (in /usr/lib/mesa/libGL.so.1.2)
+	==11268==    by 0x40D5F79: ??? (in /usr/lib/mesa/libGL.so.1.2)
+	==11268==    by 0x40D6B47: glXGetConfig (in /usr/lib/mesa/libGL.so.1.2)
+	==11268==    by 0x404E121: _glfwChooseVisual (in /usr/lib/libglfw.so.2.6)
+	==11268==    by 0x404E609: _glfwPlatformOpenWindow (in /usr/lib/libglfw.so.2.6)
+	==11268==    by 0x404B3BF: glfwOpenWindow (in /usr/lib/libglfw.so.2.6)
+	==11268==    by 0x8067CED: Glfw::WindowManager::createWindow(int, int) (wm.cpp:32)
+	==11268==    by 0x805A99A: app_main(Portal&) (main.cpp:22)
+	==11268==    by 0x8065963: main (starter.cpp:38)
+*** TODO One uninitialized conditional jump (probably nothing serious)
+	==11268== Conditional jump or move depends on uninitialised value(s)
+	==11268==    at 0x43AC611: inflateReset2 (in /lib/libz.so.1.2.3.4)
+	==11268==    by 0x43AC6EC: inflateInit2_ (in /lib/libz.so.1.2.3.4)
+	==11268==    by 0x43AC762: inflateInit_ (in /lib/libz.so.1.2.3.4)
+	==11268==    by 0x4390F13: png_create_read_struct_2 (in /lib/libpng12.so.0.44.0)
+	==11268==    by 0x43910F9: png_create_read_struct (in /lib/libpng12.so.0.44.0)
+	==11268==    by 0x4284B0C: readpng_init (in /usr/lib/libIL.so.1.1.0)
+	==11268==    by 0x4284CD4: iLoadPngInternal (in /usr/lib/libIL.so.1.1.0)
+	==11268==    by 0x4284DA3: ilLoadPngF (in /usr/lib/libIL.so.1.1.0)
+	==11268==    by 0x4284E05: ilLoadPng (in /usr/lib/libIL.so.1.1.0)
+	==11268==    by 0x42A94CD: ilLoadImage (in /usr/lib/libIL.so.1.1.0)
+	==11268==    by 0x80676D4: DevIl::ImageLoader::loadImage(std::string const&) (image_loader.cpp:95)
+	==11268==    by 0x805BC71: Snails::init(Portal const&) (snails.cpp:34)
+
