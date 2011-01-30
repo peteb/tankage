@@ -29,6 +29,7 @@ public:
   };
   
   Items() {}
+  ~Items();
   void init(const class Portal &interfaces);
 
   void update();

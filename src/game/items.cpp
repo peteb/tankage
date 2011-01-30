@@ -18,6 +18,11 @@
 #include <algorithm>
 #include <iostream>
 
+Items::~Items() {
+  // deletes all the items when game terminates
+  std::for_each(items.begin(), items.end(), delete_op());
+}
+
 void Items::init(const class Portal &interfaces) {
   wm = interfaces.requestInterface<WindowManager>();
   gfx = interfaces.requestInterface<Graphics>();
