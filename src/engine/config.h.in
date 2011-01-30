@@ -8,5 +8,6 @@
 #cmakedefine HAVE_BOOST
 #cmakedefine RESOURCE_PATH "${RESOURCE_PATH}" 
 #cmakedefine PLATFORM_COCOA
+#cmakedefine DEV
 
 #endif // !CONFIG_H

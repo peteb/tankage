@@ -44,8 +44,12 @@ void Glfw::WindowManager::createWindow(int width, int height) {
   glfwSetWindowSizeCallback(WindowResize);
   glfwSetKeyCallback(KeyStateChange);
 
+  #ifdef DEV
+  glfwSetWindowTitle("Snail Wail [DEVELOPER VERSION]");
+  #else
   glfwSetWindowTitle("Snail Wail");
-  
+  #endif
+
   std::cout << "glfw: window opened" << std::endl;
 }
 

@@ -14,11 +14,26 @@
 #include <engine/portal.h>
 #include <engine/opengl/graphics.h>
 #include <engine/devil/image_loader.h>
+#include <engine/config.h>
 
 // The GLFW module is a "starter" module, meaning, it implements 'main' and runs
 // app_main
 
 extern int app_main(Portal &portal);
+
+int catch_app_main(Portal &portal) {
+  try {
+    return app_main(portal);
+  }
+  catch (const std::exception &e) {
+    std::string description = std::string("An error has occured:\n") + e.what();
+    // FIXME: if DEV, don't display this; make it easy to bt in gdb
+    portal.requestInterface<Glfw::WindowManager>()->displayError(
+      "Error in application; can't continue", description.c_str());
+  }
+
+  return EXIT_FAILURE;
+}
 
 int main(int argc, char **argv) {
   Portal interfaces;
@@ -35,16 +50,15 @@ int main(int argc, char **argv) {
   interfaces.registerInterface<DevIl::ImageLoader>();
   std::cout << "glfw: initialized" << std::endl;
 
+  int exitCode;
+  #ifndef DEV
   // Catch any exceptions thrown from main, then show it to the user
-  try {
-    app_main(interfaces);
-  }
-  catch (const std::exception &e) {
-    std::string description = std::string("An error has occured:\n") + e.what();
-    // FIXME: if DEV, don't display this; make it easy to bt in gdb
-    interfaces.requestInterface<Glfw::WindowManager>()->displayError(
-      "Error in application; can't continue", description.c_str());
-  }
+  exitCode = catch_app_main(interfaces);
+  #else
+  // Don't catch any exceptions at this level during debug; makes it easier to
+  // see where the error is using gdb/other debugging tool
+  exitCode = app_main(interfaces);
+  #endif
   
   glfwTerminate();
 }
