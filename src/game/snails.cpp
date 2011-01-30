@@ -98,6 +98,10 @@ Snail::Snail(const vec2 &initialPos, int id, const SystemContext *ctx)
   health = 100;
 }
 
+Snail::~Snail() {
+  delete this->texture;
+}
+
 void Snail::startState(SnailState state) {
   _state[state] = true;
 }

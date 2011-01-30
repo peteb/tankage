@@ -21,6 +21,11 @@
 Items::~Items() {
   // deletes all the items when game terminates
   std::for_each(items.begin(), items.end(), delete_op());
+  // delete all the textures
+  delete cactusTexture;
+  delete bulletTexture;
+  delete healthPowerup;
+  delete smoke;
 }
 
 void Items::init(const class Portal &interfaces) {

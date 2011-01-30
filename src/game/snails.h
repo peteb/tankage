@@ -15,6 +15,7 @@ public:
   };
 
   Snail(const vec2 &initialPos, int id, const SystemContext *ctx);
+  ~Snail();
   
   void startState(SnailState state);
   void stopState(SnailState state);
