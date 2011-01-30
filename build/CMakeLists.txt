@@ -40,22 +40,24 @@ if (NOT HAVE_STD_SMARTPTRS)
   endif (NOT HAVE_TR1_SMARTPTRS)
 endif (NOT HAVE_STD_SMARTPTRS)
 
-ADD_DEFINITIONS(-g)
+IF(DEV)
+  ADD_DEFINITIONS(-g)
+ENDIF(DEV)
 
 set(PROJECT_ROOT_DIR ${PROJECT_SOURCE_DIR}/..)
 
 set(EXECUTABLE_OUTPUT_PATH ${PROJECT_ROOT_DIR}/bin)
 set(LIBRARY_OUTPUT_PATH ${PROJECT_ROOT_DIR}/bin)
 
-IF(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
-	IF(DEV)
-		SET(RESOURCE_PATH "../data")
-	ELSE(DEV)	
-    	SET(RESOURCE_PATH "${CMAKE_INSTALL_PREFIX}/share/snail-wail/data")
-	ENDIF(DEV)
-ELSE(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
-    SET(RESOURCE_PATH "../data")
-ENDIF(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
+IF(DEV)
+  SET(RESOURCE_PATH "../data")
+ELSE(DEV)
+  IF(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
+    SET(RESOURCE_PATH "${CMAKE_INSTALL_PREFIX}/share/snail-wail/data")
+  ELSE(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
+    SET(RESOURCE_PATH "share/snail-wail/data")    
+  ENDIF(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
+ENDIF(DEV)
 
 CONFIGURE_FILE(${PROJECT_ROOT_DIR}/src/config.h.in ${PROJECT_ROOT_DIR}/src/config.h)
 
@@ -78,5 +80,5 @@ add_custom_target(clean-gen
 	install_manifest.txt _CPack_Packages *.deb CPack*	
 )
 
-# Invoke CPack for Debian
-include(UseDebian)
+# Add CPack definitions for package generation on the current platform
+include(Package)
