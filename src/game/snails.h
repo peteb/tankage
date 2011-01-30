@@ -46,6 +46,7 @@ private:
 
 class Snails : public System {
 public:
+  ~Snails();
 
   enum DuelingSnail {
     SNAIL_LEFT = 0,

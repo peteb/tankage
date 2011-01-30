@@ -11,12 +11,18 @@
 #include <utils/rect.h>
 #include <utils/value.h>
 #include <utils/color.h>
+#include <utils/algorithm.h>
 
 #include <config.h>
 
 #include <algorithm>
 #include <iostream>
 #include <memory>
+
+Snails::~Snails() {
+  // delete all the snails when game terminates
+  std::for_each(snails.begin(), snails.end(), delete_op());
+}
 
 void Snails::init(const class Portal &interfaces) {
   graphics = interfaces.requestInterface<Graphics>();
