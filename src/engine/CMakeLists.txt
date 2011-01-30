@@ -1,20 +1,34 @@
 # -*- cmake -*-
 
-add_library(engine
-   portal.cpp
-   glfw/wm.cpp
-   glfw/input.cpp
-   glfw/starter.cpp
-   opengl/graphics.cpp
-   devil/image_loader.cpp
-)
+SET(ENGINE_SOURCE
+  portal.cpp
+  glfw/wm.cpp
+  glfw/input.cpp
+  glfw/starter.cpp
+  opengl/graphics.cpp
+  devil/image_loader.cpp)
+
+
 
 if (APPLE)
   find_package(Cocoa REQUIRED)
   include_directories(
     ${Cocoa_INCLUDE_DIR}
     )
+
+  SET(PLATFORM_COCOA 1)
+  
+  SET(ENGINE_SOURCE
+    ${ENGINE_SOURCE}
+    cocoa/dialogs.m
+    )
 endif (APPLE)
+
+
+add_library(engine
+  ${ENGINE_SOURCE}
+)
+
 
 
 find_package(glfw REQUIRED)
@@ -39,3 +53,4 @@ target_link_libraries(engine
   ${JPEG_LIBRARIES}
   )
 
+configure_file(${PROJECT_ROOT_DIR}/src/engine/config.h.in ${PROJECT_ROOT_DIR}/src/engine/config.h)

@@ -59,8 +59,6 @@ ELSE(DEV)
   ENDIF(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
 ENDIF(DEV)
 
-CONFIGURE_FILE(${PROJECT_ROOT_DIR}/src/config.h.in ${PROJECT_ROOT_DIR}/src/config.h)
-
 if(COMMAND cmake_policy)
   cmake_policy(SET CMP0003 NEW)
   cmake_policy(SET CMP0011 NEW)

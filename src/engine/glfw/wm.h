@@ -15,7 +15,8 @@ public:
   double timeSeconds();
   void swapBuffers();
   bool windowState(WindowState state);
-
+  void displayError(const char *title, const char *description);
+  
   rect _size;
 };
 

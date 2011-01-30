@@ -1,8 +1,13 @@
 #include <engine/glfw/wm.h>
+#include <engine/config.h>
 #include <iostream>
+#include <cstdlib>
+
 #include "GL/glfw.h"
 
-#include <cstdlib>
+#ifdef PLATFORM_COCOA
+#include <engine/cocoa/dialogs.h>
+#endif
 
 namespace Glfw {
 void KeyStateChange(int key, int state);
@@ -49,7 +54,6 @@ double Glfw::WindowManager::timeSeconds() {
 }
 
 void Glfw::WindowManager::swapBuffers() {
-//  usleep(1000000/20);
   glfwSwapBuffers();
 }
 
@@ -75,3 +79,11 @@ bool Glfw::WindowManager::windowState(WindowState state) {
   return glfwGetWindowParam(glfwParam);
 }
 
+void Glfw::WindowManager::displayError(
+  const char *title, const char *description) {
+  #ifdef PLATFORM_COCOA
+  cocoa_error_window(title, description);  
+  #else
+  std::cerr << "glfw: ERROR (" << title << ") " << description << std::endl;
+  #endif
+}

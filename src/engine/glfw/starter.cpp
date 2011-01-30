@@ -35,7 +35,16 @@ int main(int argc, char **argv) {
   interfaces.registerInterface<DevIl::ImageLoader>();
   std::cout << "glfw: initialized" << std::endl;
 
-  app_main(interfaces);
+  // Catch any exceptions thrown from main, then show it to the user
+  try {
+    app_main(interfaces);
+  }
+  catch (const std::exception &e) {
+    std::string description = std::string("An error has occured:\n") + e.what();
+    // FIXME: if DEV, don't display this; make it easy to bt in gdb
+    interfaces.requestInterface<Glfw::WindowManager>()->displayError(
+      "Error in application; can't continue", description.c_str());
+  }
   
   glfwTerminate();
 }
