@@ -22,7 +22,7 @@ There are so many possible ideas here. Wouldn’t it be cool if the server could
 
 Progress/blog
 -------------
-The development progress can be followed on the blog, http://blog.iostream.cc
+The development progress can be followed on the blog, [http://blog.iostream.cc](http://blog.iostream.cc)
 
   
 
