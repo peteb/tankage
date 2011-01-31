@@ -58,6 +58,9 @@ int app_main(Portal &interfaces) {
     items.render();
     
     wm->swapBuffers();
+
+	usleep(1000000/60);
+
     running = !input->keyPressed(escape) &&
       wm->windowState(WindowManager::OPENED);
 

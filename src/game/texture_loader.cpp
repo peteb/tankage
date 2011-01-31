@@ -3,8 +3,7 @@
 #include <engine/image_loader.h>
 #include <engine/image.h>
 #include <engine/portal.h>
-
-#include <config.h>
+#include <engine/config.h>
 
 #include <memory>
 

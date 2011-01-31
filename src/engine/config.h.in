@@ -7,5 +7,7 @@
 #cmakedefine HAVE_STD_SMARTPTRS        //< the stdlib contains smartptrs directly (possibly using c++0x)
 #cmakedefine HAVE_BOOST
 #cmakedefine RESOURCE_PATH "${RESOURCE_PATH}" 
+#cmakedefine PLATFORM_COCOA
+#cmakedefine DEV
 
 #endif // !CONFIG_H

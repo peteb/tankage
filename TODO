@@ -144,7 +144,7 @@
 *** DONE Update code to use resource path
 *** DONE Add support for other CPack generators, like Bundle
 **** DONE Investigate if a CPack generator can be picked by default, so we support package generation on all platforms CPack supports
-*** TODO DEV-flag should set -g flag when using gcc (but not when using Visual Studio)
+*** DONE DEV-flag should set -g flag when using gcc (but not when using Visual Studio)
 ** TODO New Engine
 *** DONE Cactii
 *** DONE Shooting
@@ -154,7 +154,7 @@
 *** TODO Health + healthbar
 *** TODO The rockets    
 *** TODO Particle system
-*** TODO Add "error dialog box" to window managers, for displaying errors.    
+*** DONE Add "error dialog box" to window managers, for displaying errors.    
 ** DONE TextureLoader
 ** DONE Smoke trails for bullets   
 ** TODO Slight aiming
@@ -181,18 +181,8 @@
 	==11268==    by 0x8067CED: Glfw::WindowManager::createWindow(int, int) (wm.cpp:32)
 	==11268==    by 0x805A99A: app_main(Portal&) (main.cpp:22)
 	==11268==    by 0x8065963: main (starter.cpp:38)
-*** TODO One uninitialized conditional jump (probably nothing serious)
-	==11268== Conditional jump or move depends on uninitialised value(s)
-	==11268==    at 0x43AC611: inflateReset2 (in /lib/libz.so.1.2.3.4)
-	==11268==    by 0x43AC6EC: inflateInit2_ (in /lib/libz.so.1.2.3.4)
-	==11268==    by 0x43AC762: inflateInit_ (in /lib/libz.so.1.2.3.4)
-	==11268==    by 0x4390F13: png_create_read_struct_2 (in /lib/libpng12.so.0.44.0)
-	==11268==    by 0x43910F9: png_create_read_struct (in /lib/libpng12.so.0.44.0)
-	==11268==    by 0x4284B0C: readpng_init (in /usr/lib/libIL.so.1.1.0)
-	==11268==    by 0x4284CD4: iLoadPngInternal (in /usr/lib/libIL.so.1.1.0)
-	==11268==    by 0x4284DA3: ilLoadPngF (in /usr/lib/libIL.so.1.1.0)
-	==11268==    by 0x4284E05: ilLoadPng (in /usr/lib/libIL.so.1.1.0)
-	==11268==    by 0x42A94CD: ilLoadImage (in /usr/lib/libIL.so.1.1.0)
-	==11268==    by 0x80676D4: DevIl::ImageLoader::loadImage(std::string const&) (image_loader.cpp:95)
-	==11268==    by 0x805BC71: Snails::init(Portal const&) (snails.cpp:34)
+** TODO Fix a proper icon for the OS X bundle   
+** ENet library
+*** TODO Add CMake find module
+** TODO Use drawQuads instead of drawQuad
 

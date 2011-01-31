@@ -7,13 +7,13 @@
 #include <engine/window_manager.h>
 #include <engine/portal.h>
 #include <engine/image.h>
+#include <engine/config.h>
 
 #include <utils/rect.h>
 #include <utils/value.h>
 #include <utils/color.h>
 #include <utils/algorithm.h>
 
-#include <config.h>
 
 #include <algorithm>
 #include <iostream>
