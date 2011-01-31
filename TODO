@@ -183,7 +183,7 @@
 	==11268==    by 0x8065963: main (starter.cpp:38)
 ** TODO Fix a proper icon for the OS X bundle   
 ** ENet library
-*** TODO Add CMake find module
+*** WORKING Add CMake find module
 ** TODO Use drawQuads instead of drawQuad
 ** DONE New game folder structure (common, client, server)
 
