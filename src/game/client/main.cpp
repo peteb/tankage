@@ -4,13 +4,13 @@
 #include <engine/input.h>
 #include <engine/graphics.h>
 
-#include <game/background.h>
-#include <game/snails.h>
-#include <game/control.h>
-#include <game/system.h>
-#include <game/items.h>
-#include <game/particles.h>
-#include <game/texture_loader.h>
+#include <game/client/background.h>
+#include <game/client/particles.h>
+#include <game/common/snails.h>
+#include <game/common/control.h>
+#include <game/common/system.h>
+#include <game/common/items.h>
+#include <game/common/texture_loader.h>
 
 #include <cstdlib>
 

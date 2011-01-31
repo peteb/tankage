@@ -1,7 +1,7 @@
 #ifndef GAME_BACKGROUND_H
 #define GAME_BACKGROUND_H
 
-#include <game/system.h>
+#include <game/common/system.h>
 
 class Background : public System {
 public:

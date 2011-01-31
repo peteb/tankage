@@ -1,7 +1,7 @@
 #ifndef GAME_POWERUP_H
 #define GAME_POWERUP_H
 
-#include <game/items.h>
+#include <game/common/items.h>
 #include <string>
 #include <utils/vec.h>
 

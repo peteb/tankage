@@ -1,4 +1,4 @@
-#include <game/texture_loader.h>
+#include <game/common/texture_loader.h>
 #include <engine/graphics.h>
 #include <engine/image_loader.h>
 #include <engine/image.h>

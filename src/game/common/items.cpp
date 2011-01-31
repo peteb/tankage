@@ -1,10 +1,10 @@
-#include <game/items.h>
-#include <game/cactus.h>
-#include <game/projectile.h>
-#include <game/powerup.h>
-#include <game/snails.h>
-#include <game/particles.h>
-#include <game/texture_loader.h>
+#include <game/common/items.h>
+#include <game/common/cactus.h>
+#include <game/common/projectile.h>
+#include <game/common/powerup.h>
+#include <game/common/snails.h>
+#include <game/common/texture_loader.h>
+#include <game/client/particles.h>
 
 #include <engine/window_manager.h>
 #include <engine/graphics.h>

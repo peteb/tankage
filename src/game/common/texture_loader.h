@@ -1,7 +1,7 @@
 #ifndef GAME_TEXTURE_LOADER_H
 #define GAME_TEXTURE_LOADER_H
 
-#include <game/system.h>
+#include <game/common/system.h>
 #include <string>
 
 class TextureLoader : public System {

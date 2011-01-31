@@ -1,5 +1,5 @@
 
-#include <game/background.h>
+#include <game/client/background.h>
 #include <engine/portal.h>
 #include <engine/graphics.h>
 #include <engine/image_loader.h>

@@ -1,7 +1,7 @@
 #ifndef GAME_SNAILS_H
 #define GAME_SNAILS_H
 
-#include <game/system.h>
+#include <game/common/system.h>
 #include <utils/vec.h>
 #include <vector>
 

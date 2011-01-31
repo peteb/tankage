@@ -1,23 +1,7 @@
-# -*- cmake -*-
 
-add_executable(snail-wail
-  main.cpp
-  background.cpp
-  snails.cpp
-  control.cpp
-  ai_control.cpp
-  system.cpp
-  items.cpp
-  cactus.cpp
-  projectile.cpp
-  powerup.cpp
-  particles.cpp
-  texture_loader.cpp
-  )
-  
-target_link_libraries(snail-wail
-  engine
-  )
+set(GAME_ROOT_DIR ${PROJECT_ROOT_DIR}/src/game)
+add_subdirectory(common)
 
-INSTALL(TARGETS snail-wail DESTINATION bin)
+add_subdirectory(client)
+add_subdirectory(server)
 

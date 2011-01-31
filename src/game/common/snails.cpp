@@ -1,5 +1,5 @@
-#include <game/snails.h>
-#include <game/items.h>
+#include <game/common/snails.h>
+#include <game/common/items.h>
 
 #include <engine/graphics.h>
 #include <engine/texture.h>
