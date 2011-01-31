@@ -8,10 +8,11 @@ your weapons--you probably need a bigger gun to beat that big bully!
 
 
 Will feature:
-* Fast multiplayer tournaments; easy-to-join and spectate
-* Player statistics and snail modifications
-* Persistant user
-* New items to earn
+
+ * Fast multiplayer tournaments; easy-to-join and spectate
+ * Player statistics and snail modifications
+ * Persistant user
+ * New items to earn
   
 
    
