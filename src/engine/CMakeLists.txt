@@ -6,7 +6,8 @@ SET(ENGINE_SOURCE
   glfw/input.cpp
   glfw/starter.cpp
   opengl/graphics.cpp
-  devil/image_loader.cpp)
+  devil/image_loader.cpp
+  )
 
 
 
