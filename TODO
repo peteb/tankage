@@ -185,4 +185,5 @@
 ** ENet library
 *** TODO Add CMake find module
 ** TODO Use drawQuads instead of drawQuad
+** DONE New game folder structure (common, client, server)
 
