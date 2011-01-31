@@ -1,4 +1,4 @@
-#include <iostream>
+
 #include <engine/portal.h>
 #include <engine/window_manager.h>
 #include <engine/input.h>
@@ -13,6 +13,7 @@
 #include <game/common/texture_loader.h>
 
 #include <cstdlib>
+#include <iostream>
 
 int app_main(Portal &interfaces) {
   WindowManager *wm = interfaces.requestInterface<WindowManager>();
