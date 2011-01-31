@@ -7,7 +7,8 @@ ranks and earn cool accessories and items for modifying your snail and improving
 your weapons--you probably need a bigger gun to beat that big bully!
 
 
-Will feature:
+Will feature
+------------
 
  * Fast multiplayer tournaments; easy-to-join and spectate
  * Player statistics and snail modifications
