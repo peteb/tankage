@@ -100,30 +100,18 @@
 ** TODO SDL support
 ** TODO ImageIO support
 ** TODO SDL_image support
-** TODO Fix design of physical geoms. it's borken
 ** DONE AtlasSprite, setup a grid and select cell. put it in sprite
 ** DONE Geoms should have a priority
 ** TODO Finer collision areas for geoms (one big-pass, then a finer-grained pass customized by the geom)
 ** TODO Update the logic at a certain interval
-** TODO Update next state instead of current state in logic, let graphics interpolate (?)
 ** DONE Two sprites, one delegate of the other, shouldn't flicker when moving together
-** TODO Should GraphicsContext really work by binding?   
-** TODO Should event handling really need subclassing???
-** TODO Pick sprite cell from orientation   
-** TODO enqueueRender member functions are not that efficient, improve!
-*** Store vertices internally? Add vertices to a generic interface class?   
 ** DONE setPosition/setOrientation -> setReferenceFrame
-** TODO Improve engine in general (file headers, function documentation)
 ** DONE Investigate whether an object should aggregate a coordsys instead of inherit
-** TODO Redo collision response using collision categories/types
 ** DONE Projectile class (bullet and missile are projectiles)
 ** DONE ProjectileWeapon class    
 ** TODO Sprite should not know about cells, but offsets and widths. maybe sprites
    can get a transformation from a CoordSystem for the offsets
 ** TODO Rename mat2 -> Matrix2, vec2 -> Vector2, etc. so it conforms to style
-** TODO Invert dependency of renderable <-> renderlist. list.insert(object) (?)
-   Do some research on this. Push or pull?
-** TODO Optimize performance of enqueueRender, Mesh, etc. No copies!
 ** TODO Message boxes in Windows for displaying errors   
 ** Improve build based on CMake
 *** DONE CMake should create and use 'bin' and 'build' directories 
@@ -167,3 +155,6 @@
 ** TODO System profile
 ** TODO Find out why game takes 60% of 2GHz duo core processor resources
 ** TODO Fix a proper icon for the OS X bundle   
+** Network
+*** TODO Define and implement a basic server interface using Enet
+    
