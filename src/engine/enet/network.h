@@ -8,19 +8,12 @@
 namespace Enet {
 class Network : public ::Network, public Singleton<Network>  {
 public:
-  Host *startHost(::Address *host);
-  Client *connect(::Address *host);
-  Address *address(const std::string &adr);
+  Network();
+
+  Host *startHost(const std::string &host);
+  Client *connect(const std::string &host);
 };
 
-
-class Address : public ::Address {
-public:
-  Address(const std::string &addr, int port);
-  
-private:
-  ENetAddress address;
-};
 
 }
 

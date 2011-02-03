@@ -6,7 +6,7 @@
 
 int app_main(Portal &interfaces) {
   Network *net = interfaces.requestInterface<Network>();
-  Address *adr = net->address("0.0.0.0:1234");
+  Host *host = net->startHost("0.0.0.0:12345");
   
   return EXIT_SUCCESS;
 }

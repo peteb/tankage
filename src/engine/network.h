@@ -35,23 +35,14 @@ public:
   virtual State state() =0;
 };
 
-/**
- * An abstraction over a reference to a host.
- */
-class Address {
-public:
-  virtual ~Address() {}
-};
-
 class Network : public Interface {
 public:
   static std::string id() {
     return "network";
   }
 
-  virtual Host *startHost(Address *host) =0;
-  virtual Client *connect(Address *host) =0;
-  virtual Address *address(const std::string &adr) =0;
+  virtual Host *startHost(const std::string &host) =0;
+  virtual Client *connect(const std::string &host) =0;
 };
 
 
