@@ -1,4 +1,5 @@
 #include <engine/enet/network.h>
+#include <enet/enet.h>
 
 Host *Enet::Network::startHost(Address *host) {
   return NULL;
