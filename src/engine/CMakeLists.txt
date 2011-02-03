@@ -36,6 +36,7 @@ add_library(engine
 find_package(glfw REQUIRED)
 find_package(OpenGL REQUIRED)
 find_package(DevIL REQUIRED)
+find_package(ENet REQUIRED)
 
 find_package(PNG) # for DevIL, not necessary if the symbols are already linked into DevIL..
 find_package(JPEG)
@@ -43,6 +44,7 @@ find_package(JPEG)
 include_directories(
    ${IL_INCLUDE_DIR}
    ${OPENGL_INCLUDE_DIR}
+   ${ENET_INCLUDE_DIR}
 )
 
 target_link_libraries(engine
@@ -53,6 +55,7 @@ target_link_libraries(engine
   ${IL_LIBRARY} 
   ${PNG_LIBRARIES}
   ${JPEG_LIBRARIES}
+  ${ENET_LIBRARY}
   )
 
 configure_file(${PROJECT_ROOT_DIR}/src/engine/config.h.in ${PROJECT_ROOT_DIR}/src/engine/config.h)
