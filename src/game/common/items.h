@@ -1,7 +1,7 @@
 #ifndef GAME_ITEMS_H
 #define GAME_ITEMS_H
 
-#include <game/system.h>
+#include <game/common/system.h>
 #include <utils/vec.h>
 #include <vector>
 
@@ -29,6 +29,7 @@ public:
   };
   
   Items() {}
+  ~Items();
   void init(const class Portal &interfaces);
 
   void update();

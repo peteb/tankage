@@ -1,18 +1,19 @@
-#include <iostream>
+
 #include <engine/portal.h>
 #include <engine/window_manager.h>
 #include <engine/input.h>
 #include <engine/graphics.h>
 
-#include <game/background.h>
-#include <game/snails.h>
-#include <game/control.h>
-#include <game/system.h>
-#include <game/items.h>
-#include <game/particles.h>
-#include <game/texture_loader.h>
+#include <game/client/background.h>
+#include <game/client/particles.h>
+#include <game/common/snails.h>
+#include <game/common/control.h>
+#include <game/common/system.h>
+#include <game/common/items.h>
+#include <game/common/texture_loader.h>
 
 #include <cstdlib>
+#include <iostream>
 
 int app_main(Portal &interfaces) {
   WindowManager *wm = interfaces.requestInterface<WindowManager>();
@@ -58,6 +59,9 @@ int app_main(Portal &interfaces) {
     items.render();
     
     wm->swapBuffers();
+
+	usleep(1000000/60);
+
     running = !input->keyPressed(escape) &&
       wm->windowState(WindowManager::OPENED);
 

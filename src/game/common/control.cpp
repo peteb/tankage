@@ -1,7 +1,7 @@
-#include <game/control.h>
+#include <game/common/control.h>
+#include <game/common/snails.h>
 #include <engine/input.h>
 #include <engine/portal.h>
-#include <game/snails.h>
 
 void Control::init(const class Portal &interfaces) {
   input = interfaces.requestInterface<Input>();

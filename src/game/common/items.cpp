@@ -1,10 +1,10 @@
-#include <game/items.h>
-#include <game/cactus.h>
-#include <game/projectile.h>
-#include <game/powerup.h>
-#include <game/snails.h>
-#include <game/particles.h>
-#include <game/texture_loader.h>
+#include <game/common/items.h>
+#include <game/common/cactus.h>
+#include <game/common/projectile.h>
+#include <game/common/powerup.h>
+#include <game/common/snails.h>
+#include <game/common/texture_loader.h>
+#include <game/client/particles.h>
 
 #include <engine/window_manager.h>
 #include <engine/graphics.h>
@@ -17,6 +17,16 @@
 #include <functional>
 #include <algorithm>
 #include <iostream>
+
+Items::~Items() {
+  // deletes all the items when game terminates
+  std::for_each(items.begin(), items.end(), delete_op());
+  // delete all the textures
+  delete cactusTexture;
+  delete bulletTexture;
+  delete healthPowerup;
+  delete smoke;
+}
 
 void Items::init(const class Portal &interfaces) {
   wm = interfaces.requestInterface<WindowManager>();

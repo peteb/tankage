@@ -1,5 +1,5 @@
 #include "ai_control.h"
-#include <game/snails.h>
+#include <game/common/snails.h>
 
 AIControl::AIControl()
 {

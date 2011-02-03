@@ -69,6 +69,7 @@ set(CMAKE_MODULE_PATH "${PROJECT_ROOT_DIR}/cmake/Modules/")
 include_directories ("${PROJECT_ROOT_DIR}/inc/" "${PROJECT_ROOT_DIR}/src/")
 
 find_package(GTest)
+find_package(ENet)
 
 add_subdirectory (${PROJECT_ROOT_DIR}/src CMakeFiles/Src)
 add_subdirectory (${PROJECT_ROOT_DIR}/data CMakeFiles/Data)

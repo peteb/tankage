@@ -1,8 +1,8 @@
-#include <game/system.h>
-#include <game/snails.h>
-#include <game/background.h>
-#include <game/control.h>
-#include <game/items.h>
+#include <game/common/system.h>
+#include <game/common/snails.h>
+#include <game/common/control.h>
+#include <game/common/items.h>
+#include <game/client/background.h>
 #include <stdexcept>
 
 SystemContext::SystemContext() {

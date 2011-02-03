@@ -1,7 +1,7 @@
 #ifndef GAME_CACTUS_H
 #define GAME_CACTUS_H
 
-#include <game/items.h>
+#include <game/common/items.h>
 
 class Cactus : public Item {
 public:

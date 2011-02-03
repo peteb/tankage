@@ -1,8 +1,8 @@
-#include <game/projectile.h>
-#include <game/system.h>
-#include <game/snails.h>
-#include <game/items.h>
-#include <game/particles.h>
+#include <game/common/projectile.h>
+#include <game/common/system.h>
+#include <game/common/snails.h>
+#include <game/common/items.h>
+#include <game/client/particles.h>
 
 #include <engine/graphics.h>
 #include <engine/texture.h>

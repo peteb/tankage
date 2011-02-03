@@ -2,7 +2,7 @@
 #define GAME_CONTROL_H
 
 #include <string>
-#include <game/system.h>
+#include <game/common/system.h>
 
 class Control : public System {
 public:

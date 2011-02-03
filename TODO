@@ -154,7 +154,24 @@
 *** TODO Input    
 ** TODO System profile
 ** TODO Find out why game takes 60% of 2GHz duo core processor resources
+** Memory leaks and other Valgrind gibberish
+*** TODO Only one remarkable memory leak left
+	==11268== 4,152 (2,072 direct, 2,080 indirect) bytes in 1 blocks are definitely lost in loss record 30 of 30
+	==11268==    at 0x4025BD3: malloc (vg_replace_malloc.c:236)
+	==11268==    by 0x40FD9CD: ??? (in /usr/lib/mesa/libGL.so.1.2)
+	==11268==    by 0x40FDE01: ??? (in /usr/lib/mesa/libGL.so.1.2)
+	==11268==    by 0x40D9285: ??? (in /usr/lib/mesa/libGL.so.1.2)
+	==11268==    by 0x40D5F79: ??? (in /usr/lib/mesa/libGL.so.1.2)
+	==11268==    by 0x40D6B47: glXGetConfig (in /usr/lib/mesa/libGL.so.1.2)
+	==11268==    by 0x404E121: _glfwChooseVisual (in /usr/lib/libglfw.so.2.6)
+	==11268==    by 0x404E609: _glfwPlatformOpenWindow (in /usr/lib/libglfw.so.2.6)
+	==11268==    by 0x404B3BF: glfwOpenWindow (in /usr/lib/libglfw.so.2.6)
+	==11268==    by 0x8067CED: Glfw::WindowManager::createWindow(int, int) (wm.cpp:32)
+	==11268==    by 0x805A99A: app_main(Portal&) (main.cpp:22)
+	==11268==    by 0x8065963: main (starter.cpp:38)
 ** TODO Fix a proper icon for the OS X bundle   
-** Network
-*** TODO Define and implement a basic server interface using Enet
-    
+** ENet library
+*** WORKING Add CMake find module
+*** Implement network interface using Enet    
+** TODO Use drawQuads instead of drawQuad
+** DONE New game folder structure (common, client, server)

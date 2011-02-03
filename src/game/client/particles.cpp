@@ -1,4 +1,4 @@
-#include <game/particles.h>
+#include <game/client/particles.h>
 #include <engine/portal.h>
 #include <engine/graphics.h>
 #include <engine/window_manager.h>

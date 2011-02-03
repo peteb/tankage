@@ -1,4 +1,4 @@
-#include <game/cactus.h>
+#include <game/common/cactus.h>
 #include <engine/graphics.h>
 #include <engine/texture.h>
 #include <utils/rect.h>

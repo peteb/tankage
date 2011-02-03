@@ -1,7 +1,7 @@
 #ifndef GAME_SNAILS_H
 #define GAME_SNAILS_H
 
-#include <game/system.h>
+#include <game/common/system.h>
 #include <utils/vec.h>
 #include <vector>
 
@@ -15,6 +15,7 @@ public:
   };
 
   Snail(const vec2 &initialPos, int id, const SystemContext *ctx);
+  ~Snail();
   
   void startState(SnailState state);
   void stopState(SnailState state);
@@ -46,6 +47,7 @@ private:
 
 class Snails : public System {
 public:
+  ~Snails();
 
   enum DuelingSnail {
     SNAIL_LEFT = 0,

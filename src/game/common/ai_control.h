@@ -1,7 +1,7 @@
 #ifndef _H_CONTROL_H
 #define _H_CONTROL_H
 
-#include <game/system.h>
+#include <game/common/system.h>
 
 class AIControl : public System {
 public:

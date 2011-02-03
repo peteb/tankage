@@ -1,7 +1,7 @@
 #ifndef GAME_PARTICLES_H
 #define GAME_PARTICLES_H
 
-#include <game/system.h>
+#include <game/common/system.h>
 #include <utils/vec.h>
 #include <utils/color.h>
 #include <vector>

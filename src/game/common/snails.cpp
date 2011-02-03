@@ -1,5 +1,5 @@
-#include <game/snails.h>
-#include <game/items.h>
+#include <game/common/snails.h>
+#include <game/common/items.h>
 
 #include <engine/graphics.h>
 #include <engine/texture.h>
@@ -12,11 +12,17 @@
 #include <utils/rect.h>
 #include <utils/value.h>
 #include <utils/color.h>
+#include <utils/algorithm.h>
 
 
 #include <algorithm>
 #include <iostream>
 #include <memory>
+
+Snails::~Snails() {
+  // delete all the snails when game terminates
+  std::for_each(snails.begin(), snails.end(), delete_op());
+}
 
 void Snails::init(const class Portal &interfaces) {
   graphics = interfaces.requestInterface<Graphics>();
@@ -90,6 +96,10 @@ Snail::Snail(const vec2 &initialPos, int id, const SystemContext *ctx)
   std::fill(&_state[0], &_state[STATE_MAX], 0);
   secondsSinceFire = 0.0;
   health = 100;
+}
+
+Snail::~Snail() {
+  delete this->texture;
 }
 
 void Snail::startState(SnailState state) {
