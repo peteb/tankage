@@ -7,6 +7,7 @@ SET(ENGINE_SOURCE
   glfw/starter.cpp
   opengl/graphics.cpp
   devil/image_loader.cpp
+  enet/network.cpp
   )
 
 
