@@ -47,6 +47,7 @@ public:
   virtual Packet *pendingPacket() =0;
   virtual void send(Packet *) =0;
   virtual bool isConnected() const =0;
+  virtual void disconnect() =0;
 };
 
 class Network : public Interface {

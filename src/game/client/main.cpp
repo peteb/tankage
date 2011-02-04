@@ -26,18 +26,31 @@ int app_main(Portal &interfaces) {
 
   bool connected = false;
   Client *client = net->connect("127.0.0.1:12345");
+
+  const int escape = input->keycode("escape");
+  bool running = true;
   
-  while (1) {
+  while (running) {
     client->receive();
     if (connected != client->isConnected()) {
       connected = client->isConnected();
       std::cout << "client state changed: " << connected << std::endl;
     }
+
+    wm->swapBuffers();
+    running = !input->keyPressed(escape) &&
+      wm->windowState(WindowManager::OPENED);
+  }
+
+  // let the client down gently
+  client->disconnect();
+  while (client->isConnected()) {
+    client->receive();
   }
   
+  delete client;
   
-  const int escape = input->keycode("escape");
-  bool running = true;
+  /*bool running = true;
   double lastTick = wm->timeSeconds();
 
   SystemContext systems;
@@ -74,13 +87,9 @@ int app_main(Portal &interfaces) {
     
     wm->swapBuffers();
 
-	usleep(1000000/60);
-
     running = !input->keyPressed(escape) &&
       wm->windowState(WindowManager::OPENED);
-
-    usleep(1000);
-  }
+      }*/
 
   return EXIT_SUCCESS;
 }

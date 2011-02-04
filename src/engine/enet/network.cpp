@@ -67,6 +67,7 @@ public:
   }
 
   ~Client() {
+    enet_peer_disconnect(_peer, 0);
     enet_peer_reset(_peer);
   }
 
@@ -97,6 +98,10 @@ public:
   bool isConnected() const {
     return _connected;
   }
+
+  void disconnect() {
+    enet_peer_disconnect(_peer, 0);
+  }
   
 private:
   ENetHost *_host;
@@ -104,15 +109,44 @@ private:
   bool _connected;
 };
 
+/**
+ * Enet Packet
+ */
+class Packet : public ::Packet {
+public:
+  Packet(ENetPacket *packet, class Client *sender, int channelId)
+    : _packet(packet)
+    , _sender(sender)
+    , _channelId(channelId)
+  {
+  }
+
+  ~Packet() {
+    enet_packet_destroy(_packet);
+  }
+  
+  size_t size() const {
+    return _packet->dataLength;
+  }
+
+  void resize(size_t newSize) {
+    enet_packet_resize(_packet, newSize);
+  }
+
+  void *data() {
+    return _packet->data;
+  }
+
+private:
+  ENetPacket *_packet;
+  class Client *_sender;
+  int _channelId;
+};
 
 /**
  * Enet Host
  */
 class Host : public ::Host {
-private:
-  typedef std::pair<enet_uint32, enet_uint16> EnetAdr;
-  typedef std::vector<std::pair<EnetAdr, Enet::Client *> > ClientVector;
-  
 public:
   Host(ENetHost *host)
     : _host(host)
@@ -135,12 +169,21 @@ public:
       
       case ENET_EVENT_TYPE_DISCONNECT:
       {
-        const EnetAdr adr(event.peer->address.host,
-                          event.peer->address.port);
-        
         if (event.peer->data) {
           _pendingDisconnect.push_back(static_cast<Client *>(event.peer->data));
           event.peer->data = NULL;
+        }
+        break;
+      }
+
+      case ENET_EVENT_TYPE_RECEIVE:
+      {
+        if (event.peer->data) {
+          Enet::Packet *packet =
+            new Enet::Packet(event.packet,
+                             static_cast<Client *>(event.peer->data),
+                             event.channelID);
+          _pendingPackets.push_back(packet);
         }
         break;
       }
@@ -159,24 +202,32 @@ public:
     
     return ret;
   }
-  
+
   ::Client *disconnectingClient() {
     if (_pendingDisconnect.empty())
       return NULL;
 
     ::Client *ret = _pendingDisconnect.front();
     _pendingDisconnect.erase(_pendingDisconnect.begin());
+    // the ownership of the Client is transfered to the user
+    return ret;
   }
   
   ::Packet *pendingPacket() {
-    return NULL;
+    if (_pendingPackets.empty())
+      return NULL;
+
+    ::Packet *ret = _pendingPackets.front();
+    _pendingPackets.erase(_pendingPackets.begin());
+    // the ownership of the Packet is transfered to the user
+    return ret;
   }
 
 
 private:
-  ClientVector _clients;
   std::vector<Enet::Client *> _pendingConnect;
   std::vector<Enet::Client *> _pendingDisconnect;
+  std::vector<Enet::Packet *> _pendingPackets;
   ENetHost *_host;
 };
 
