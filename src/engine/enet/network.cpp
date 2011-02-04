@@ -126,15 +126,9 @@ public:
       switch (event.type) {
       case ENET_EVENT_TYPE_CONNECT:
       {
-        std::cout << "connecting: " << event.peer->address.host << std::endl;
         Enet::Client *client = new Enet::Client(_host, event.peer);
 
-        // register the client
-        _clients.push_back(std::make_pair(EnetAdr(event.peer->address.host,
-                                                  event.peer->address.port),
-                                          client));
-
-        // add the connection event
+        event.peer->data = client;
         _pendingConnect.push_back(client);
         break;
       }
@@ -144,23 +138,10 @@ public:
         const EnetAdr adr(event.peer->address.host,
                           event.peer->address.port);
         
-        std::cout << "disconnecting: " << event.peer->address.host << std::endl;
-        ClientVector::iterator client = _clients.begin(), e = _clients.end();
-        for (; client != e; ++client) {
-          if (client->first == adr)
-            break;
+        if (event.peer->data) {
+          _pendingDisconnect.push_back(static_cast<Client *>(event.peer->data));
+          event.peer->data = NULL;
         }
-          
-        if (client == _clients.end()) {
-          std::cout << "couldn't find client" << std::endl;
-        }
-        else {
-          // TODO: remove from _clients
-          // and when popped from pendingDisconnect, also delete
-          
-          _pendingDisconnect.push_back(client->second);
-        }
-
         break;
       }
       
