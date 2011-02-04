@@ -4,7 +4,10 @@
 #include <stdexcept>
 #include <cstdlib>
 #include <iostream>
-
+#include <vector>
+#include <utility>
+#include <utils/key.h>
+#include <algorithm>
 
 namespace {
 // Secret helper class for addresses
@@ -51,50 +54,6 @@ private:
 }
 
 namespace Enet {
-
-/**
- * Enet Host
- */
-class Host : public ::Host {
-public:
-  Host(ENetHost *host)
-    : _host(host)
-  {}
-  
-
-  void receive() {
-    ENetEvent event;
-    if (enet_host_service(_host, &event, 0) > 0) {
-      switch (event.type) {
-      case ENET_EVENT_TYPE_CONNECT:
-        std::cout << "connecting: " << event.peer->address.host << std::endl;
-        break;
-
-      case ENET_EVENT_TYPE_DISCONNECT:
-        std::cout << "disconnecting: " << event.peer->address.host << std::endl;
-        break;
-      }
-    }
-
-  }
-  
-  class Client *connectingClient() {
-    return NULL;
-  }
-  
-  class Client *disconnectingClient() {
-    return NULL;
-  }
-  
-  class Packet *pendingPacket() {
-    return NULL;
-  }
-
-
-private:
-  ENetHost *_host;
-};
-
 /**
  * Enet Client
  */
@@ -144,6 +103,102 @@ private:
   ENetPeer *_peer;
   bool _connected;
 };
+
+
+/**
+ * Enet Host
+ */
+class Host : public ::Host {
+private:
+  typedef std::pair<enet_uint32, enet_uint16> EnetAdr;
+  typedef std::vector<std::pair<EnetAdr, Enet::Client *> > ClientVector;
+  
+public:
+  Host(ENetHost *host)
+    : _host(host)
+  {}
+  
+
+  void receive() {
+    ENetEvent event;
+    // Fixme: configurable timeout here
+    if (enet_host_service(_host, &event, 0) > 0) {
+      switch (event.type) {
+      case ENET_EVENT_TYPE_CONNECT:
+      {
+        std::cout << "connecting: " << event.peer->address.host << std::endl;
+        Enet::Client *client = new Enet::Client(_host, event.peer);
+
+        // register the client
+        _clients.push_back(std::make_pair(EnetAdr(event.peer->address.host,
+                                                  event.peer->address.port),
+                                          client));
+
+        // add the connection event
+        _pendingConnect.push_back(client);
+        break;
+      }
+      
+      case ENET_EVENT_TYPE_DISCONNECT:
+      {
+        const EnetAdr adr(event.peer->address.host,
+                          event.peer->address.port);
+        
+        std::cout << "disconnecting: " << event.peer->address.host << std::endl;
+        ClientVector::iterator client = _clients.begin(), e = _clients.end();
+        for (; client != e; ++client) {
+          if (client->first == adr)
+            break;
+        }
+          
+        if (client == _clients.end()) {
+          std::cout << "couldn't find client" << std::endl;
+        }
+        else {
+          // TODO: remove from _clients
+          // and when popped from pendingDisconnect, also delete
+          
+          _pendingDisconnect.push_back(client->second);
+        }
+
+        break;
+      }
+      
+      }
+    }
+
+  }
+  
+  ::Client *connectingClient() {
+    if (_pendingConnect.empty())
+      return NULL;
+
+    ::Client *ret = _pendingConnect.front();
+    _pendingConnect.erase(_pendingConnect.begin());
+    
+    return ret;
+  }
+  
+  ::Client *disconnectingClient() {
+    if (_pendingDisconnect.empty())
+      return NULL;
+
+    ::Client *ret = _pendingDisconnect.front();
+    _pendingDisconnect.erase(_pendingDisconnect.begin());
+  }
+  
+  ::Packet *pendingPacket() {
+    return NULL;
+  }
+
+
+private:
+  ClientVector _clients;
+  std::vector<Enet::Client *> _pendingConnect;
+  std::vector<Enet::Client *> _pendingDisconnect;
+  ENetHost *_host;
+};
+
 
 }
 

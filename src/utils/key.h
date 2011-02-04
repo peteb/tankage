@@ -18,4 +18,11 @@ struct key_cmp {
   }
 };
 
+struct key_eq {
+  template<typename KeyT>
+  bool operator() (const KeyT &lhs, const typename KeyT::first_type &rhs) {
+    return lhs.first == rhs;
+  }
+};
+
 #endif // !UTILS_PAIRCMP_H
