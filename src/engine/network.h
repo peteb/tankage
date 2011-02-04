@@ -17,22 +17,35 @@
   * Create a packet
 */
 
+class Packet {
+public:
+  virtual ~Packet() {}
+
+  virtual size_t size() const =0;
+  virtual void resize(size_t) =0;
+  virtual void *data() =0;
+
+};
+
 class Host {
 public:
   virtual ~Host() {}
+  
+  virtual void receive() =0;
+  virtual class Client *connectingClient() =0;
+  virtual class Client *disconnectingClient() =0;
+  virtual class Packet *pendingPacket() =0;
+//  virtual void broadcast(Packet *) =0;
 };
 
 class Client {
-public:
-  enum State {
-    CONNECTING,
-    CONNECTED,
-    DISCONNECTED
-  };
-  
+public:  
   virtual ~Client() {}
 
-  virtual State state() =0;
+  // No connecting/disconnectingClient, state() instead?
+  virtual void receive() =0;
+  virtual Packet *pendingPacket() =0;
+  virtual void send(Packet *) =0;
 };
 
 class Network : public Interface {

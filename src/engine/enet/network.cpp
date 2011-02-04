@@ -51,6 +51,10 @@ private:
 }
 
 namespace Enet {
+
+/**
+ * Enet Host
+ */
 class Host : public ::Host {
 public:
   Host(ENetHost *host)
@@ -58,14 +62,65 @@ public:
   {}
   
 
+  void receive() {
+
+  }
+  
+  class Client *connectingClient() {
+    return NULL;
+  }
+  
+  class Client *disconnectingClient() {
+    return NULL;
+  }
+  
+  class Packet *pendingPacket() {
+    return NULL;
+  }
+
+
 private:
   ENetHost *_host;
 };
+
+/**
+ * Enet Client
+ */
+class Client : public ::Client {
+public:
+  Client(ENetHost *host, ENetPeer *peer)
+    : _host(host)
+    , _peer(peer)
+  {
+  }
+
+  ~Client() {
+    enet_peer_reset(_peer);
+  }
+
+  void receive() {
+
+  }
+  
+  Packet *pendingPacket() {
+    return NULL;
+  }
+  
+  void send(Packet *) {
+
+  }
+
+
+private:
+  ENetHost *_host;
+  ENetPeer *_peer;
+};
+
 }
 
 Enet::Network::Network() {
   if (enet_initialize() != 0) {
-    throw std::runtime_error("Failed to initialize enet");
+    throw std::runtime_error("enet: failed to initialize enet");
   }
 
   std::cout << "enet: initialized" << std::endl;
@@ -81,13 +136,28 @@ Host *Enet::Network::startHost(const std::string &hostAddr) {
                                     0);
 
   if (!host) {
-    throw std::runtime_error("failed to start host");
+    throw std::runtime_error("enet: failed to start host");
   }
                                     
   return new Enet::Host(host);
 }
 
 Client *Enet::Network::connect(const std::string &host) {
-  return NULL;
+  Address peerAddr(host);
+  ENetPeer *peer;
+  ENetHost *client;
+
+  client = enet_host_create(NULL, 1, 2, 0, 0);
+  if (!client) {
+    throw std::runtime_error("enet: failed to create host");
+  }
+
+  peer = enet_host_connect(client, peerAddr.enetAddress(), 2, 0);
+  if (!peer) {
+    enet_host_destroy(client);
+    throw std::runtime_error("enet: failed to create peer");
+  }
+  
+  return new Enet::Client(client, peer);
 }
 
