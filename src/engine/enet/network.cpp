@@ -102,6 +102,17 @@ public:
   void disconnect() {
     enet_peer_disconnect(_peer, 0);
   }
+
+  std::string address() const {
+    char hostName[64];
+    enet_address_get_host_ip(&_peer->address, hostName, 64);
+    // Note: enet_address_get_host (without _ip) can be used for reverse dns lookup
+    
+    std::stringstream ss;
+    ss << hostName;
+    ss << ":" << _peer->address.port;
+    return ss.str();
+  }
   
 private:
   ENetHost *_host;

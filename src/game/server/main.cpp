@@ -14,7 +14,7 @@ int app_main(Portal &interfaces) {
     // Fixme: connectingClient -> clientConnecting?
     
     while (Client *client = host->connectingClient()) {
-      std::cout << "new client! :DD" << std::endl;
+      std::cout << "new client: " << client->address() << "! :DD" << std::endl;
     }
     
     while (Client *client = host->disconnectingClient()) {

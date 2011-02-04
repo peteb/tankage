@@ -12,7 +12,7 @@ public:
   Item(const vec2 &pos, float radius);
   
   virtual void render(class Graphics *gfx) =0;
-  virtual bool update(double dt) {}
+  virtual bool update(double dt) {return true; }
   bool intersects(const vec2 &start, const vec2 &end, float radius, vec2 &hitpos);
   virtual bool takeDamage(const vec2 &pos, float damage, class Snail *shooter) =0;
   
