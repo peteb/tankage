@@ -63,6 +63,18 @@ public:
   
 
   void receive() {
+    ENetEvent event;
+    if (enet_host_service(_host, &event, 0) > 0) {
+      switch (event.type) {
+      case ENET_EVENT_TYPE_CONNECT:
+        std::cout << "connecting: " << event.peer->address.host << std::endl;
+        break;
+
+      case ENET_EVENT_TYPE_DISCONNECT:
+        std::cout << "disconnecting: " << event.peer->address.host << std::endl;
+        break;
+      }
+    }
 
   }
   
@@ -92,6 +104,7 @@ public:
     : _host(host)
     , _peer(peer)
   {
+    _connected = false;
   }
 
   ~Client() {
@@ -99,7 +112,19 @@ public:
   }
 
   void receive() {
+    ENetEvent event;
+    if (enet_host_service(_host, &event, 0) > 0) {
+      switch (event.type) {
+      case ENET_EVENT_TYPE_CONNECT:
+        _connected = true;        
+        break;
 
+      case ENET_EVENT_TYPE_DISCONNECT:
+        _connected = false;
+        break;
+
+      }
+    }
   }
   
   Packet *pendingPacket() {
@@ -110,10 +135,14 @@ public:
 
   }
 
-
+  bool isConnected() const {
+    return _connected;
+  }
+  
 private:
   ENetHost *_host;
   ENetPeer *_peer;
+  bool _connected;
 };
 
 }
@@ -129,6 +158,7 @@ Enet::Network::Network() {
 
 Host *Enet::Network::startHost(const std::string &hostAddr) {
   Address addr(hostAddr);
+  // Fixme: the values below should be configurable
   ENetHost *host = enet_host_create(addr.enetAddress(),
                                     32,
                                     2,

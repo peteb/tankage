@@ -3,6 +3,7 @@
 #include <engine/network.h>
 #include <cstdlib>
 #include <memory>
+#include <iostream>
 
 int app_main(Portal &interfaces) {
   Network *net = interfaces.requestInterface<Network>();
@@ -11,7 +12,7 @@ int app_main(Portal &interfaces) {
   while (1) {
     host->receive();
     while (Client *newClient = host->connectingClient()) {
-
+      std::cout << "new client!" << std::endl;
     }
     
     while (Client *oldClient = host->disconnectingClient()) {

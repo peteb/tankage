@@ -3,6 +3,7 @@
 #include <engine/window_manager.h>
 #include <engine/input.h>
 #include <engine/graphics.h>
+#include <engine/network.h>
 
 #include <game/client/background.h>
 #include <game/client/particles.h>
@@ -19,9 +20,22 @@ int app_main(Portal &interfaces) {
   WindowManager *wm = interfaces.requestInterface<WindowManager>();
   Input *input = interfaces.requestInterface<Input>();
   Graphics *gfx = interfaces.requestInterface<Graphics>();
+  Network *net = interfaces.requestInterface<Network>();
   
   wm->createWindow(800, 600);
 
+  bool connected = false;
+  Client *client = net->connect("127.0.0.1:12345");
+  
+  while (1) {
+    client->receive();
+    if (connected != client->isConnected()) {
+      connected = client->isConnected();
+      std::cout << "client state changed: " << connected << std::endl;
+    }
+  }
+  
+  
   const int escape = input->keycode("escape");
   bool running = true;
   double lastTick = wm->timeSeconds();
