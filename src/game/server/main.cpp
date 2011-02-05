@@ -13,16 +13,18 @@ int app_main(Portal &interfaces) {
     host->receive();
     // Fixme: connectingClient -> clientConnecting?
     
-    while (Client *newClient = host->connectingClient()) {
-      std::cout << "new client! :DD" << std::endl;
+    while (Client *client = host->connectingClient()) {
+      std::cout << "new client: " << client->address() << "! :DD" << std::endl;
     }
     
-    while (Client *oldClient = host->disconnectingClient()) {
+    while (Client *client = host->disconnectingClient()) {
       std::cout << "client disconnected :(" << std::endl;
+      delete client;
     }
     
-    while (Packet *newPacket = host->pendingPacket()) {
-      delete newPacket;
+    while (Packet *packet = host->pendingPacket()) {
+      std::cout << "received a packet!" << std::endl;
+      delete packet;
     }
 
     // Packet: data() size() resize()
