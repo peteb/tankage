@@ -55,72 +55,6 @@ private:
 
 namespace Enet {
 /**
- * Enet Client
- */
-class Client : public ::Client {
-public:
-  Client(ENetHost *host, ENetPeer *peer)
-    : _host(host)
-    , _peer(peer)
-  {
-    _connected = false;
-  }
-
-  ~Client() {
-    enet_peer_disconnect(_peer, 0);
-    enet_peer_reset(_peer);
-  }
-
-  void receive() {
-    ENetEvent event;
-    if (enet_host_service(_host, &event, 0) > 0) {
-      switch (event.type) {
-      case ENET_EVENT_TYPE_CONNECT:
-        _connected = true;        
-        break;
-
-      case ENET_EVENT_TYPE_DISCONNECT:
-        _connected = false;
-        break;
-
-      }
-    }
-  }
-  
-  Packet *pendingPacket() {
-    return NULL;
-  }
-  
-  void send(Packet *) {
-
-  }
-
-  bool isConnected() const {
-    return _connected;
-  }
-
-  void disconnect() {
-    enet_peer_disconnect(_peer, 0);
-  }
-
-  std::string address() const {
-    char hostName[64];
-    enet_address_get_host_ip(&_peer->address, hostName, 64);
-    // Note: enet_address_get_host (without _ip) can be used for reverse dns lookup
-    
-    std::stringstream ss;
-    ss << hostName;
-    ss << ":" << _peer->address.port;
-    return ss.str();
-  }
-  
-private:
-  ENetHost *_host;
-  ENetPeer *_peer;
-  bool _connected;
-};
-
-/**
  * Enet Packet
  */
 class Packet : public ::Packet {
@@ -153,6 +87,85 @@ private:
   class Client *_sender;
   int _channelId;
 };
+
+/**
+ * Enet Client
+ */
+class Client : public ::Client {
+public:
+  Client(ENetHost *host, ENetPeer *peer)
+    : _host(host)
+    , _peer(peer)
+  {
+    _connected = false;
+  }
+
+  ~Client() {
+    enet_peer_disconnect(_peer, 0);
+    enet_peer_reset(_peer);
+  }
+
+  void receive() {
+    ENetEvent event;
+    if (enet_host_service(_host, &event, 0) > 0) {
+      switch (event.type) {
+      case ENET_EVENT_TYPE_CONNECT:
+        _connected = true;        
+        break;
+
+      case ENET_EVENT_TYPE_DISCONNECT:
+        _connected = false;
+        break;
+
+      case ENET_EVENT_TYPE_RECEIVE:
+      {
+        
+        Enet::Packet *packet =
+          new Enet::Packet(event.packet,
+                           this,
+                           event.channelID);
+        _pendingPackets.push_back(packet);
+        break;
+      }       
+
+      }
+    }
+  }
+  
+  Packet *pendingPacket() {
+    return NULL;
+  }
+  
+  void send(::Packet *) {
+
+  }
+
+  bool isConnected() const {
+    return _connected;
+  }
+
+  void disconnect() {
+    enet_peer_disconnect(_peer, 0);
+  }
+
+  std::string address() const {
+    char hostName[64];
+    enet_address_get_host_ip(&_peer->address, hostName, 64);
+    // Note: enet_address_get_host (without _ip) can be used for reverse dns lookup
+    
+    std::stringstream ss;
+    ss << hostName;
+    ss << ":" << _peer->address.port;
+    return ss.str();
+  }
+  
+private:
+  std::vector<Enet::Packet *> _pendingPackets;
+  ENetHost *_host;
+  ENetPeer *_peer;
+  bool _connected;
+};
+
 
 /**
  * Enet Host

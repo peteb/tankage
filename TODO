@@ -2,118 +2,34 @@
                                       TODO
 ===--------------------------------------------------------------------------===
 
-* First Working Prototype, Novemeber 4th
-** DONE Two snails (human vs. human)
-*** DONE Keyboard map
-** DONE One unlimited weapon
-** DONE Take damage and die
-*** DONE Snails have health which can be decreased
-*** DONE Trigger event on death
-** DONE Display health
-*** DONE A meter that displays the hearts
-*** DONE Create heart graphics
-*** DONE Update health meter using snail's health level
-** DONE Cactus generator
-*** DONE Add cactus type
-*** DONE Create the generator
-** DONE Snail agnostic weapons
-*** DONE Weapons have direction and position
-** DONE Restrict window size
-
-* First Alpha, December 16th
-** DONE Orient bullet sprites correctly
-** DONE Improve existing graphics
-*** DONE Cactus graphics
-*** DONE Second snail
-** DONE Health bar animations (when low on health)
-** DONE Improve collision detection
-*** DONE Better-fitting collision areas
-*** DONE More collision areas (body, helmet)
-** TODO Blood splatter (particle system)
-** DONE Extend arsenal with rocket launcher
-*** DONE Create rocket projectile
-**** DONE Graphics (the rocket + smoketrail [particle system])
-**** DONE Physics
-**** DONE Logic	(homing)
-*** DONE A new weapon: rocket launcher
-**** WONT Graphics for the weapon
-**** DONE When out of rockets, switch to first weapon	 
-** DONE Power-ups
-*** DONE Rocket launcher (or additional rockets)
-**** DONE Graphics    
-*** DONE Replenish some of the health
-**** DONE Power-up graphics    
-**** DONE A cool animation on the health bar?     
-** DONE Helmets
-*** DONE Helmets kill bullets and protect the snail   
-*** DONE Add a small impulse to the player when its helmet is hit
-*** DONE Helmets take x amount of damage until they expire	
-** TODO Run on Windows
-** DONE Destructible cactii
-*** DONE New graphics
-**** DONE Somewhat damaged, broken in half, stub
-*** DONE Detect bullet collisions
-*** DONE Remove phys geom when dead    
-** DONE Shouldn't be possible to shoot when dead
-** DONE Point of contact in geom collisions
-** DONE Restore snail collision response
-** TODO Get hurt by cactii
-** TODO Minimum amount of time between taking damage
-*** A way to messure time is needed. how should it be done? preferably not centralized   
-*** Timers?
-* Major Beta, January 20th
-** TODO Sprite animations
-*** TODO Shooting
-*** TODO Getting hit
-** Helmets can detach from snail and then be picked-up again
-** Collect feedback from first alpha
-** Proper player input configuration
-*** Draw graphics for menu
-*** Create menu    
-** AI
-** New power-ups
-*** An "IQ booster" that improves the AI for a certain amount of time. Nothing happens to the player, though
-*** The walker    
-** Menu system   
-** Rounds (3 rounds per game)
-** Sprite animations
-*** Idle animation
-** Improve graphics
-** Use bundle on Mac OS X
-* Engine
-** DONE Platform-independent rendering in components (not in the gfx subsystem)
-** DONE Build: verify that TR1 can be used for smart pointers using a code test
-** DONE Build: detect whether there are smart pointer implementations in std::
-** DONE Implement new design regarding rendering context, renderers, meshes, etc.
-** DONE Remove friend for Sprite, add sprite event handler.
-** TODO Add correct event handling (multitargets)
-** DONE Verify that smartptrs are implemented by boost   
-** DONE Remove the old way of doing rendering
-** DONE Implement SpriteCuller
-** DONE Use Mesh and renderer, create a TextureRenderer
-** TODO Add doxygen comments
-** Unit tests using Gtest
-*** DONE Unittests for mat, vec, rect in utils
-** TODO Create renderer factory with cache
-** DONE Use environment variable to toggle rendering of geoms
-** DONE Geom offset   
-** TODO SDL support
-** TODO ImageIO support
-** TODO SDL_image support
-** DONE AtlasSprite, setup a grid and select cell. put it in sprite
-** DONE Geoms should have a priority
-** TODO Finer collision areas for geoms (one big-pass, then a finer-grained pass customized by the geom)
-** TODO Update the logic at a certain interval
-** DONE Two sprites, one delegate of the other, shouldn't flicker when moving together
-** DONE setPosition/setOrientation -> setReferenceFrame
-** DONE Investigate whether an object should aggregate a coordsys instead of inherit
-** DONE Projectile class (bullet and missile are projectiles)
-** DONE ProjectileWeapon class    
-** TODO Sprite should not know about cells, but offsets and widths. maybe sprites
+* TODO Add doxygen comments for engine interfaces
+* TODO SDL support
+* TODO ImageIO support
+* TODO SDL_image support
+* TODO Finer collision areas for geoms (one big-pass, then a finer-grained pass customized by the geom)
+* TODO Sprite should not know about cells, but offsets and widths. maybe sprites
    can get a transformation from a CoordSystem for the offsets
-** TODO Rename mat2 -> Matrix2, vec2 -> Vector2, etc. so it conforms to style
-** TODO Message boxes in Windows for displaying errors   
-** Improve build based on CMake
+* DONE Smoke trails for bullets   
+* TODO Slight aiming
+* TODO System profile
+* DONE New game folder structure (common, client, server)
+* DONE Add "error dialog box" to window managers, for displaying errors.
+* Recover old behavior
+*** DONE Cactii
+*** DONE Shooting
+*** DONE Items
+*** DONE Collision detection
+*** DONE Collision response    
+*** TODO Health + healthbar
+*** TODO The rockets    
+*** TODO Particle system
+*** DONE TextureLoader
+* Performance
+** TODO Use drawQuads instead of drawQuad
+** TODO Find out why game takes 60% of 2GHz duo core processor resources
+* Unit tests using Gtest
+*** DONE Unittests for mat, vec, rect in utils
+* CMake support
 *** DONE CMake should create and use 'bin' and 'build' directories 
 *** TODO Investigate how-to report CMake error and get rid of gen files
 *** DONE Investigate how-to create debian packages and which tool to use
@@ -133,28 +49,16 @@
 *** DONE Add support for other CPack generators, like Bundle
 **** DONE Investigate if a CPack generator can be picked by default, so we support package generation on all platforms CPack supports
 *** DONE DEV-flag should set -g flag when using gcc (but not when using Visual Studio)
-** TODO New Engine
-*** DONE Cactii
-*** DONE Shooting
-*** DONE Items
-*** DONE Collision detection
-*** DONE Collision response    
-*** TODO Health + healthbar
-*** TODO The rockets    
-*** TODO Particle system
-*** DONE Add "error dialog box" to window managers, for displaying errors.    
-** DONE TextureLoader
-** DONE Smoke trails for bullets   
-** TODO Slight aiming
-** TODO Android support
+*** TODO Move engine CMake rules specific for the platform to different files;
+    Windows.cmake, MacOSX.cmake, Android.cmake, etc. Only for the engine and
+    should specify which files to compile with (and which external libraries)
+* Android support
 *** TODO Cmake
 *** TODO Window Manager support
 *** TODO OpenGLES
 *** TODO Image Loader    
 *** TODO Input    
-** TODO System profile
-** TODO Find out why game takes 60% of 2GHz duo core processor resources
-** Memory leaks and other Valgrind gibberish
+* Memory leaks and other Valgrind gibberish
 *** TODO Only one remarkable memory leak left
 	==11268== 4,152 (2,072 direct, 2,080 indirect) bytes in 1 blocks are definitely lost in loss record 30 of 30
 	==11268==    at 0x4025BD3: malloc (vg_replace_malloc.c:236)
@@ -169,9 +73,12 @@
 	==11268==    by 0x8067CED: Glfw::WindowManager::createWindow(int, int) (wm.cpp:32)
 	==11268==    by 0x805A99A: app_main(Portal&) (main.cpp:22)
 	==11268==    by 0x8065963: main (starter.cpp:38)
-** TODO Fix a proper icon for the OS X bundle   
-** ENet library
+* ENet library
 *** WORKING Add CMake find module
 *** Implement network interface using Enet    
-** TODO Use drawQuads instead of drawQuad
-** DONE New game folder structure (common, client, server)
+* Windows support
+** TODO Message boxes in Windows for displaying errors   
+* Mac OS X support
+** TODO Fix a proper icon for the OS X bundle   
+
+  
