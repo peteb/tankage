@@ -24,7 +24,7 @@ public:
   virtual size_t size() const =0;
   virtual void resize(size_t) =0;
   virtual void *data() =0;
-
+  virtual class Client *sender() const =0;
 };
 
 class Host {
@@ -56,6 +56,10 @@ public:
     PACKET_UNSEQUENCED =  0x0002
   };
 
+  enum Statistic {
+    STAT_RTT
+  };
+  
   /**
    * Updates the internal state of the Client by pulling in any new packets and
    * connection/disconnection events.
@@ -67,6 +71,9 @@ public:
   virtual bool isConnected() const =0;
   virtual void disconnect() =0;
   virtual std::string address() const =0;
+  virtual void flush() =0;
+  virtual unsigned stats(Statistic field) =0;
+  
 };
 
 class Network : public Interface {
@@ -77,7 +84,7 @@ public:
 
   virtual Host *startHost(const std::string &host,
                           size_t maxClients, size_t channels) =0;
-  virtual Client *connect(const std::string &host) =0;
+  virtual Client *connect(const std::string &host, size_t channels) =0;
 };
 
 

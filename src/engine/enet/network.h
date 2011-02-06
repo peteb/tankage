@@ -11,7 +11,7 @@ public:
   Network();
 
   Host *startHost(const std::string &host, size_t maxClients, size_t channels);
-  Client *connect(const std::string &host);
+  Client *connect(const std::string &host, size_t channels);
   Packet *packet(const void *data, size_t dataSize, unsigned flags);
 };
 

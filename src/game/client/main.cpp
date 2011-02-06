@@ -25,7 +25,7 @@ int app_main(Portal &interfaces) {
   wm->createWindow(800, 600);
 
   bool connected = false;
-  Client *client = net->connect("127.0.0.1:12345");
+  Client *client = net->connect("127.0.0.1:12345", 2);
 
   const int escape = input->keycode("escape");
   bool running = true;
@@ -41,6 +41,8 @@ int app_main(Portal &interfaces) {
       }
     }
 
+    std::cout << "ping: " << client->stats(Client::STAT_RTT) << std::endl;
+    
     wm->swapBuffers();
     running = !input->keyPressed(escape) &&
       wm->windowState(WindowManager::OPENED);

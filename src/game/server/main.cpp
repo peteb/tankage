@@ -24,6 +24,8 @@ int app_main(Portal &interfaces) {
     
     while (Packet *packet = host->pendingPacket()) {
       std::cout << "received a packet!" << std::endl;
+      std::cout << (const char *)packet->data() << std::endl;
+      std::cout << packet->sender()->stats(Client::STAT_RTT) << std::endl;
       delete packet;
     }
 
