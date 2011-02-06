@@ -42,9 +42,14 @@ class Client {
 public:  
   virtual ~Client() {}
 
+  enum PacketFlags {
+    PACKET_RELIABLE =     0x0001,
+    PACKET_UNSEQUENCED =  0x0002
+  };
+
   virtual void receive() =0; // Fixme: timeout
+  virtual void send(const void *data, size_t size, unsigned flags, int channel) =0;
   virtual Packet *pendingPacket() =0;
-  virtual void send(Packet *) =0;
   virtual bool isConnected() const =0;
   virtual void disconnect() =0;
   virtual std::string address() const =0;

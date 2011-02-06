@@ -12,6 +12,7 @@ public:
 
   Host *startHost(const std::string &host);
   Client *connect(const std::string &host);
+  Packet *packet(const void *data, size_t dataSize, unsigned flags);
 };
 
 

@@ -35,6 +35,10 @@ int app_main(Portal &interfaces) {
     if (connected != client->isConnected()) {
       connected = client->isConnected();
       std::cout << "client state changed: " << connected << std::endl;
+
+      if (connected) {
+        client->send("hej!", 5, Client::PACKET_RELIABLE, 0);
+      }
     }
 
     wm->swapBuffers();

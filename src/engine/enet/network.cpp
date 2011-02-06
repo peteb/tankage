@@ -83,6 +83,9 @@ public:
   }
 
 private:
+  Packet(const Packet &packet) {}
+  Packet &operator =(const Packet &) {return *this; }
+  
   ENetPacket *_packet;
   class Client *_sender;
   int _channelId;
@@ -133,13 +136,30 @@ public:
   }
   
   Packet *pendingPacket() {
-    return NULL;
+    if (_pendingPackets.empty())
+      return NULL;
+
+    Enet::Packet *ret = _pendingPackets.front();
+    _pendingPackets.erase(_pendingPackets.begin());
+    // the ownership of the Packet is transfered to the user
+    return ret;
   }
   
-  void send(::Packet *) {
+  void send(const void *data, size_t size, unsigned flags, int channel) {
+    enet_uint32 convFlags = 0;
+    if (flags & ::Client::PACKET_RELIABLE)
+      convFlags |= ENET_PACKET_FLAG_RELIABLE;
+    if (flags & ::Client::PACKET_UNSEQUENCED)
+      convFlags |= ENET_PACKET_FLAG_UNSEQUENCED;
 
+    ENetPacket *packet = enet_packet_create(data, size, convFlags);
+    if (!packet) {
+      throw std::runtime_error("enet: failed to create packet for data");
+    }
+
+    enet_peer_send(_peer, channel, packet);
   }
-
+  
   bool isConnected() const {
     return _connected;
   }
