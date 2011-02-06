@@ -50,6 +50,8 @@ void GameClient::disconnectGently() {
   if (!_client) {
     return;
   }
+
+  _state = STATE_DISCONNECTED;
   
   // let the client down gently
   _client->disconnect();
@@ -68,7 +70,7 @@ void GameClient::onConnect() {
   NetIdentifyMsg msg;
   msg.type = NET_IDENTIFY;
   msg.client_version = htons(100);
-  msg.net_version = htons(netVersion);
+  msg.net_version = htons(NET_VERSION);
 
   _client->send(&msg, sizeof(msg), Client::PACKET_RELIABLE, NET_CHANNEL_STATE);
 }
@@ -97,5 +99,5 @@ void GameClient::onReceive(Packet *packet) {
 
 void GameClient::onError(const NetErrorMsg *error, Packet *packet) {
   std::cout << "Received error from server: " << error->desc << std::endl;
-  
+  disconnectGently();
 }

@@ -7,13 +7,16 @@
  * A packet is made up like this:
  * [8 bit identifier (HeaderTypeT)]
  * [Header-specific data (depending on the identifier)]
+ *
+ * Changes in this file should result in an incrementation of the network
+ * version.
  */
 
 
 typedef uint8_t NetPacketType;
 typedef uint16_t NetVersion;
 
-const NetVersion netVersion = 1;
+const NetVersion NET_VERSION = 1;
 const int MAX_ERRDESC = 64;
 
 /**

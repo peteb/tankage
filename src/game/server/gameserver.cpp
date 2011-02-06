@@ -83,10 +83,6 @@ void GameServer::onReceive(Packet *packet) {
 
   }
   
-//   std::cout << "received a packet!" << std::endl;
-//   std::cout << (const char *)packet->data() << std::endl;
-//   std::cout << packet->sender()->stats(Client::STAT_RTT) << std::endl;
-//   packet->sender()->send("HEJSAN!!", 9, Client::PACKET_RELIABLE, 0);
 }
 
 void GameServer::onIdent(const NetIdentifyMsg *data, Packet *packet) {
@@ -97,7 +93,7 @@ void GameServer::onIdent(const NetIdentifyMsg *data, Packet *packet) {
   
   std::cout << "net: received ident for net " << ident.net_version << std::endl;
 
-  if (ident.net_version != netVersion) {
+  if (ident.net_version != NET_VERSION) {
     SendError(packet->sender(), NET_IDENT_WRONG_VERSION,
               "wrong network version");
     return;
