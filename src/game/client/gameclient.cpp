@@ -3,6 +3,7 @@
 #include <engine/portal.h>
 #include <engine/network.h>
 #include <iostream>
+#include <cassert>
 #include <arpa/inet.h> // Fixme: this might not be possible on windows. utils
                        // for endian conversion?
 
@@ -78,4 +79,23 @@ void GameClient::onDisconnect() {
 
 void GameClient::onReceive(Packet *packet) {
   std::cout << "receive" << std::endl;
+
+  // Fixme: this code looks suspiciously similar to gameserver::onReceive..
+  
+  size_t size = packet->size();
+  const void *data = packet->data();
+  assert(size >= sizeof(NetPacketType) && "received a too small packet");
+
+  const NetPacketType *type = static_cast<const NetPacketType *>(data);
+  switch (*type) {
+  case NET_ERROR:
+    assert(size >= sizeof(NetErrorMsg) && "packet too small for error");
+    onError(static_cast<const NetErrorMsg *>(data), packet);
+    break;
+  }
+}
+
+void GameClient::onError(const NetErrorMsg *error, Packet *packet) {
+  std::cout << "Received error from server: " << error->desc << std::endl;
+  
 }

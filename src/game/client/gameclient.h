@@ -21,6 +21,9 @@ private:
   void onConnect();
   void onDisconnect();
   void onReceive(class Packet *packet);
+
+  // net protocol
+  void onError(const struct NetErrorMsg *error, class Packet *packet);
   
   class Network *_net;
   class Client *_client;
