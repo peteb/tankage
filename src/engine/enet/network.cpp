@@ -287,12 +287,13 @@ Enet::Network::Network() {
   atexit(enet_deinitialize);
 }
 
-Host *Enet::Network::startHost(const std::string &hostAddr) {
+Host *Enet::Network::startHost(const std::string &hostAddr,
+                               size_t maxClients, size_t channels) {
   Address addr(hostAddr);
   // Fixme: the values below should be configurable
   ENetHost *host = enet_host_create(addr.enetAddress(),
-                                    32,
-                                    2,
+                                    maxClients,
+                                    channels,
                                     0,
                                     0);
 

@@ -7,7 +7,7 @@
 
 int app_main(Portal &interfaces) {
   Network *net = interfaces.requestInterface<Network>();
-  std::auto_ptr<Host> host(net->startHost("0.0.0.0:12345"));
+  std::auto_ptr<Host> host(net->startHost("0.0.0.0:12345", 32, 2));
 
   while (1) {
     host->update();

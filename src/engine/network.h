@@ -75,7 +75,8 @@ public:
     return "network";
   }
 
-  virtual Host *startHost(const std::string &host) =0;
+  virtual Host *startHost(const std::string &host,
+                          size_t maxClients, size_t channels) =0;
   virtual Client *connect(const std::string &host) =0;
 };
 
