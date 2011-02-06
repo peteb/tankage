@@ -6,6 +6,7 @@
 
 #include <game/client/background.h>
 #include <game/client/particles.h>
+#include <game/client/gameclient.h>
 #include <game/common/snails.h>
 #include <game/common/control.h>
 #include <game/common/system.h>
@@ -19,46 +20,35 @@ int app_main(Portal &interfaces) {
   WindowManager *wm = interfaces.requestInterface<WindowManager>();
   Input *input = interfaces.requestInterface<Input>();
   Graphics *gfx = interfaces.requestInterface<Graphics>();
-  Network *net = interfaces.requestInterface<Network>();
+  
   
   wm->createWindow(800, 600);
 
-  bool connected = false;
-  Client *client = net->connect("127.0.0.1:12345", 2);
 
-  const int escape = input->keycode("escape");
-  bool running = true;
+  SystemContext systems;
+
+  // Register the subsystems
+  GameClient gameclient;
   
-  while (running) {
-    client->update();
-    if (connected != client->isConnected()) {
-      connected = client->isConnected();
-      std::cout << "client state changed: " << connected << std::endl;
+  systems.set(SystemContext::SYSTEM_GAMECLIENT, &gameclient);
+  
+  systems.init(interfaces);
 
-      if (connected) {
-        client->send("hej!", 5, Client::PACKET_RELIABLE, 0);
-      }
-    }
-
-    if (Packet *packet = client->pendingPacket()) {
-      std::cout << "received packet: " << (const char *)packet->data() << std::endl;
-      delete packet;
-    }
-    
-    std::cout << "ping: " << client->stats(Client::STAT_RTT) << std::endl;
+  bool running = true;
+  const int escape = input->keycode("escape");
+  
+  while (running) {          
+    gameclient.update();
     
     wm->swapBuffers();
+
     running = !input->keyPressed(escape) &&
       wm->windowState(WindowManager::OPENED);
   }
 
-  // let the client down gently
-  client->disconnect();
-  while (client->isConnected()) {
-    client->update();
-  }
-  
-  delete client;
+
+  gameclient.disconnectGently();
+
   
   /*bool running = true;
   double lastTick = wm->timeSeconds();

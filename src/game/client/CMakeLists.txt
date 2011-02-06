@@ -17,6 +17,7 @@ add_executable(snail-wail
   particles.cpp
   background.cpp
   main.cpp
+  gameclient.cpp
   )
   
 target_link_libraries(snail-wail

@@ -53,9 +53,9 @@ void GameServer::onDisconnect(Client *client) {
 }
 
 void GameServer::onReceive(Packet *packet) {
-  std::cout << "received a packet!" << std::endl;
-  std::cout << (const char *)packet->data() << std::endl;
-  std::cout << packet->sender()->stats(Client::STAT_RTT) << std::endl;
-  packet->sender()->send("HEJSAN!!", 9, Client::PACKET_RELIABLE, 0);
+//   std::cout << "received a packet!" << std::endl;
+//   std::cout << (const char *)packet->data() << std::endl;
+//   std::cout << packet->sender()->stats(Client::STAT_RTT) << std::endl;
+//   packet->sender()->send("HEJSAN!!", 9, Client::PACKET_RELIABLE, 0);
 }
 

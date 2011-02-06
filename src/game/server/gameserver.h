@@ -9,11 +9,12 @@ public:
   
   void init(const class Portal &interfaces);
   void update();
+  
+private:
   void onConnect(class Client *client);
   void onDisconnect(class Client *client);
   void onReceive(class Packet *packet);
-  
-private:
+
   class Host *_host;
 };
 
