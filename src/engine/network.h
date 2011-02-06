@@ -36,7 +36,7 @@ public:
    * connection/disconnection events.
    * Will also send any unsent packets.
    */
-  virtual void receive() =0;
+  virtual void update() =0;
   virtual class Client *connectingClient() =0;
   virtual class Client *disconnectingClient() =0;
   virtual class Packet *pendingPacket() =0;
@@ -61,7 +61,7 @@ public:
    * connection/disconnection events.
    * Will also send any unsent packets.
    */
-  virtual void receive() =0; // Fixme: timeout
+  virtual void update() =0; // Fixme: timeout
   virtual void send(const void *data, size_t size, unsigned flags, int channel) =0;
   virtual Packet *pendingPacket() =0;
   virtual bool isConnected() const =0;

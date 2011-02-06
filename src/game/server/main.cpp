@@ -10,7 +10,7 @@ int app_main(Portal &interfaces) {
   std::auto_ptr<Host> host(net->startHost("0.0.0.0:12345"));
 
   while (1) {
-    host->receive();
+    host->update();
     // Fixme: connectingClient -> clientConnecting?
     
     while (Client *client = host->connectingClient()) {

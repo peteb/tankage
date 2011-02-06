@@ -31,7 +31,7 @@ int app_main(Portal &interfaces) {
   bool running = true;
   
   while (running) {
-    client->receive();
+    client->update();
     if (connected != client->isConnected()) {
       connected = client->isConnected();
       std::cout << "client state changed: " << connected << std::endl;
@@ -49,7 +49,7 @@ int app_main(Portal &interfaces) {
   // let the client down gently
   client->disconnect();
   while (client->isConnected()) {
-    client->receive();
+    client->update();
   }
   
   delete client;

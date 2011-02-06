@@ -108,7 +108,7 @@ public:
     enet_peer_reset(_peer);
   }
 
-  void receive() {
+  void update() {
     ENetEvent event;
     if (enet_host_service(_host, &event, 0) > 0) {
       switch (event.type) {
@@ -197,7 +197,7 @@ public:
   {}
   
 
-  void receive() {
+  void update() {
     ENetEvent event;
     // Fixme: configurable timeout here
     if (enet_host_service(_host, &event, 0) > 0) {
