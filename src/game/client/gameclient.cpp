@@ -3,6 +3,8 @@
 #include <engine/portal.h>
 #include <engine/network.h>
 #include <iostream>
+#include <arpa/inet.h> // Fixme: this might not be possible on windows. utils
+                       // for endian conversion?
 
 GameClient::~GameClient() {
   if (_client) {
@@ -64,8 +66,8 @@ void GameClient::onConnect() {
   // send the identification packet
   NetIdentifyMsg msg;
   msg.type = NET_IDENTIFY;
-  msg.client_version = 100;
-  msg.net_version = netVersion;
+  msg.client_version = htons(100);
+  msg.net_version = htons(netVersion);
 
   _client->send(&msg, sizeof(msg), Client::PACKET_RELIABLE, NET_CHANNEL_STATE);
 }

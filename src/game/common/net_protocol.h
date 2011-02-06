@@ -37,8 +37,6 @@ struct NetIdentifyMsg {
   NetVersion net_version;    //< the netcode id; different versions
                              //  will break compatibility
   
-  
-  
 };
 
 #endif // !GAME_COMMON_NET_PROTOCOL_H

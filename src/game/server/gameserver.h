@@ -15,6 +15,9 @@ private:
   void onDisconnect(class Client *client);
   void onReceive(class Packet *packet);
 
+  // net protocol
+  void onIdent(const struct NetIdentifyMsg *ident, class Packet *packet);
+  
   class Host *_host;
 };
 

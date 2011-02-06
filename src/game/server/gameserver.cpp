@@ -1,7 +1,11 @@
 #include <game/server/gameserver.h>
+#include <game/common/net_protocol.h>
+
 #include <engine/network.h>
 #include <engine/portal.h>
 #include <iostream>
+#include <cassert>
+#include <arpa/inet.h>
 
 GameServer::~GameServer() {
   delete _host;
@@ -53,9 +57,36 @@ void GameServer::onDisconnect(Client *client) {
 }
 
 void GameServer::onReceive(Packet *packet) {
+  size_t size = packet->size();
+  const void *data = packet->data();
+  assert(size >= sizeof(NetPacketType) && "received a too small packet");
+
+  const NetPacketType *type = static_cast<const NetPacketType *>(data);
+  switch (*type) {
+  case NET_IDENTIFY:
+    assert(size >= sizeof(NetIdentifyMsg) && "packet too small for ident");
+    onIdent(static_cast<const NetIdentifyMsg *>(data), packet);
+    break;
+
+  }
+  
 //   std::cout << "received a packet!" << std::endl;
 //   std::cout << (const char *)packet->data() << std::endl;
 //   std::cout << packet->sender()->stats(Client::STAT_RTT) << std::endl;
 //   packet->sender()->send("HEJSAN!!", 9, Client::PACKET_RELIABLE, 0);
 }
 
+void GameServer::onIdent(const NetIdentifyMsg *data, Packet *packet) {
+  NetIdentifyMsg ident;
+  ident.type = data->type;
+  ident.client_version = ntohs(data->client_version);
+  ident.net_version = ntohs(data->net_version);
+  
+  std::cout << "net: received ident for net " << ident.net_version << std::endl;
+
+  if (ident.net_version != netVersion) {
+    
+  }
+
+  
+}
