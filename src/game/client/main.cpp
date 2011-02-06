@@ -1,4 +1,3 @@
-
 #include <engine/portal.h>
 #include <engine/window_manager.h>
 #include <engine/input.h>
@@ -41,6 +40,11 @@ int app_main(Portal &interfaces) {
       }
     }
 
+    if (Packet *packet = client->pendingPacket()) {
+      std::cout << "received packet: " << (const char *)packet->data() << std::endl;
+      delete packet;
+    }
+    
     std::cout << "ping: " << client->stats(Client::STAT_RTT) << std::endl;
     
     wm->swapBuffers();

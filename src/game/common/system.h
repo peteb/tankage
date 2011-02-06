@@ -13,6 +13,7 @@ public:
     SYSTEM_TEXTURE_LOADER,
     SYSTEM_ITEMS,            // dependent on texture loader
     SYSTEM_PARTICLES,
+    SYSTEM_GAMESERVER,
     SYSTEM_MAX
   };
   
