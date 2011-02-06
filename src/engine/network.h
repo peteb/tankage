@@ -30,14 +30,23 @@ public:
 class Host {
 public:
   virtual ~Host() {}
-  
+
+  /**
+   * Updates the internal state of the Host by pulling in any new packets and
+   * connection/disconnection events.
+   * Will also send any unsent packets.
+   */
   virtual void receive() =0;
   virtual class Client *connectingClient() =0;
   virtual class Client *disconnectingClient() =0;
   virtual class Packet *pendingPacket() =0;
-//  virtual void broadcast(Packet *) =0;
 };
 
+/**
+ * A client is a connection to a server, or a connection on the server to a
+ * client. Ie, the server contains a number of connected Client instances, and
+ * each connecting user also has a Client instance.
+ */
 class Client {
 public:  
   virtual ~Client() {}
@@ -47,6 +56,11 @@ public:
     PACKET_UNSEQUENCED =  0x0002
   };
 
+  /**
+   * Updates the internal state of the Client by pulling in any new packets and
+   * connection/disconnection events.
+   * Will also send any unsent packets.
+   */
   virtual void receive() =0; // Fixme: timeout
   virtual void send(const void *data, size_t size, unsigned flags, int channel) =0;
   virtual Packet *pendingPacket() =0;
