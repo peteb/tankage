@@ -5,6 +5,12 @@
 
 class GameClient : public System {
 public:
+  enum ClientState {
+    STATE_DISCONNECTED = 0,
+    STATE_CONNECTED,
+    STATE_IDENTIFIED
+  };
+  
   ~GameClient();
 
   void init(const class Portal &interfaces);
@@ -18,7 +24,7 @@ private:
   
   class Network *_net;
   class Client *_client;
-  bool _connected;
+  ClientState _state;
 };
 
 

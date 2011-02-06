@@ -1,4 +1,5 @@
 #include <game/client/gameclient.h>
+#include <game/common/net_protocol.h>
 #include <engine/portal.h>
 #include <engine/network.h>
 #include <iostream>
@@ -12,7 +13,7 @@ GameClient::~GameClient() {
 }
 
 void GameClient::init(const Portal &interfaces) {
-  _connected = false;
+  _state = GameClient::STATE_DISCONNECTED;
   
   _net = interfaces.requestInterface<Network>();
   _client = _net->connect("127.0.0.1:12345", 2);
@@ -27,15 +28,13 @@ void GameClient::update() {
   _client->update();
 
   const bool connectedNow = _client->isConnected();
-  if (_connected != connectedNow) {
-    _connected = connectedNow;
-
-    if (connectedNow) {
-      onConnect();
-    }
-    else {
-      onDisconnect();
-    }
+  if (_state == STATE_DISCONNECTED && connectedNow) {
+    _state = STATE_CONNECTED;
+    onConnect();
+  }
+  else if (_state >= STATE_CONNECTED && !connectedNow) {
+    _state = STATE_DISCONNECTED;
+    onDisconnect();
   }
 
   if (Packet *packet = _client->pendingPacket()) {
@@ -61,6 +60,14 @@ void GameClient::disconnectGently() {
 
 void GameClient::onConnect() {
   std::cout << "connected" << std::endl;
+
+  // send the identification packet
+  NetIdentifyMsg msg;
+  msg.type = NET_IDENTIFY;
+  msg.client_version = 100;
+  msg.net_version = netVersion;
+
+  _client->send(&msg, sizeof(msg), Client::PACKET_RELIABLE, NET_CHANNEL_STATE);
 }
 
 void GameClient::onDisconnect() {
