@@ -4,12 +4,11 @@
 #include <engine/interface.h>
 #include <string>
 
-
 /** 
  * @code
- * // a log example
+ * // logging example
  * Logging *log = interfaces.requestInterface<Logging>();
- * log->write(WARNING, "Something bad happened (%s)", argument);
+ * log->write(Logging::WARNING, "Something is wrong (%s)!", "argument");
  * @endcode
  */
 class Logging : public Interface {
@@ -24,7 +23,7 @@ public:
     DEBUG = 2
   };
 
-  virtual void write(LogType, const char* format, ...) =0;
+  virtual void write(LogType, const char *format, ...) =0;
 }; 
 
 #endif // !ENGINE_LOGGING_H 
