@@ -35,19 +35,28 @@ private:
 
 class PacketReader {
 public:
-  PacketReader(const PacketData &in)
-    : _in(in)
+  PacketReader(const void *data, size_t size)
+    : _data(data)
+    , _size(size)
   {
     _rpos = 0;
   }
 
   uint8_t readU8() {
-    assert(_rpos < _in.size() && "trying to read outside data");
-    return _in[_rpos++];
+    assert(_rpos < _size && "trying to read outside data");
+    return static_cast<const char *>(_data)[_rpos++];
+  }
+
+  uint32_t readU32() {
+    assert(_rpos < _size && "trying to read outside data");
+    uint32_t ret = *((uint32_t *)((const char *)_data + _rpos));
+    _rpos += sizeof(uint32_t);
+    return ret;
   }
   
 private:
-  const PacketData &_in;
+  const void *_data;
+  size_t _size;
   size_t _rpos;
 };
 

@@ -31,8 +31,8 @@ int app_main(Portal &interfaces) {
   GameClient gameclient;
   Snails snails;
   
-  systems.set(SystemContext::SYSTEM_GAMECLIENT, &gameclient);
   systems.set(SystemContext::SYSTEM_SNAILS, &snails);
+  systems.set(SystemContext::SYSTEM_GAMECLIENT, &gameclient);
   
   systems.init(interfaces);
 

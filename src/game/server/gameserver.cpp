@@ -113,21 +113,23 @@ void GameServer::onIdent(const NetIdentifyMsg *data, Packet *packet) {
 
   PacketData fullState;
   fullState.resize(sizeof(NetSystemMsg));
-  NetSystemMsg *header = reinterpret_cast<NetSystemMsg *>(&fullState[0]);
-  header->type = NET_SYSTEM;
-  header->systems = 0;
   
   PacketWriter writer(fullState);
+  uint32_t systems = 0;
   
   for (size_t i = 0; i < NET_SYSTEM_MAX && _systems[i]; ++i) {
     size_t sizeBefore = fullState.size();
     _systems[i]->writeFull(writer);
-
+    
     if (fullState.size() != sizeBefore) {
       // data has been written to the packet, mark the system as updated
-      header->systems |= (1 << i);
+      systems |= (1 << i);
     }
   }
+
+  NetSystemMsg *header = reinterpret_cast<NetSystemMsg *>(&fullState[0]);
+  header->type = NET_SYSTEM;
+  header->systems = systems;
   
   std::cout << "full state size: " << fullState.size()
             << " systems: " << header->systems << std::endl;
