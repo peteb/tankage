@@ -55,72 +55,6 @@ private:
 
 namespace Enet {
 /**
- * Enet Client
- */
-class Client : public ::Client {
-public:
-  Client(ENetHost *host, ENetPeer *peer)
-    : _host(host)
-    , _peer(peer)
-  {
-    _connected = false;
-  }
-
-  ~Client() {
-    enet_peer_disconnect(_peer, 0);
-    enet_peer_reset(_peer);
-  }
-
-  void receive() {
-    ENetEvent event;
-    if (enet_host_service(_host, &event, 0) > 0) {
-      switch (event.type) {
-      case ENET_EVENT_TYPE_CONNECT:
-        _connected = true;        
-        break;
-
-      case ENET_EVENT_TYPE_DISCONNECT:
-        _connected = false;
-        break;
-
-      }
-    }
-  }
-  
-  Packet *pendingPacket() {
-    return NULL;
-  }
-  
-  void send(Packet *) {
-
-  }
-
-  bool isConnected() const {
-    return _connected;
-  }
-
-  void disconnect() {
-    enet_peer_disconnect(_peer, 0);
-  }
-
-  std::string address() const {
-    char hostName[64];
-    enet_address_get_host_ip(&_peer->address, hostName, 64);
-    // Note: enet_address_get_host (without _ip) can be used for reverse dns lookup
-    
-    std::stringstream ss;
-    ss << hostName;
-    ss << ":" << _peer->address.port;
-    return ss.str();
-  }
-  
-private:
-  ENetHost *_host;
-  ENetPeer *_peer;
-  bool _connected;
-};
-
-/**
  * Enet Packet
  */
 class Packet : public ::Packet {
@@ -148,11 +82,139 @@ public:
     return _packet->data;
   }
 
+  class Client *sender() const {
+    return _sender;
+  }
+  
 private:
+  Packet(const Packet &packet) {}
+  Packet &operator =(const Packet &) {return *this; }
+  
   ENetPacket *_packet;
   class Client *_sender;
   int _channelId;
 };
+
+/**
+ * Enet Client
+ */
+class Client : public ::Client {
+public:
+  Client(ENetHost *host, ENetPeer *peer)
+    : _host(host)
+    , _peer(peer)
+  {
+    _connected = false;
+  }
+
+  ~Client() {
+    enet_peer_disconnect(_peer, 0);
+    enet_peer_reset(_peer);
+  }
+
+  void update() {
+    ENetEvent event;
+    if (enet_host_service(_host, &event, 0) > 0) {
+      switch (event.type) {
+      case ENET_EVENT_TYPE_CONNECT:
+        _connected = true;        
+        break;
+
+      case ENET_EVENT_TYPE_DISCONNECT:
+        _connected = false;
+        break;
+
+      case ENET_EVENT_TYPE_RECEIVE:
+      {
+        
+        Enet::Packet *packet =
+          new Enet::Packet(event.packet,
+                           this,
+                           event.channelID);
+        _pendingPackets.push_back(packet);
+        break;
+      }       
+
+      }
+    }
+  }
+  
+  Packet *pendingPacket() {
+    if (_pendingPackets.empty())
+      return NULL;
+
+    Enet::Packet *ret = _pendingPackets.front();
+    _pendingPackets.erase(_pendingPackets.begin());
+    // the ownership of the Packet is transfered to the user
+    return ret;
+  }
+  
+  void send(const void *data, size_t size, unsigned flags, int channel) {
+    enet_uint32 convFlags = 0;
+    if (flags & ::Client::PACKET_RELIABLE)
+      convFlags |= ENET_PACKET_FLAG_RELIABLE;
+    if (flags & ::Client::PACKET_UNSEQUENCED)
+      convFlags |= ENET_PACKET_FLAG_UNSEQUENCED;
+
+    ENetPacket *packet = enet_packet_create(data, size, convFlags);
+    if (!packet) {
+      throw std::runtime_error("enet: failed to create packet for data");
+    }
+
+    enet_peer_send(_peer, channel, packet);
+  }
+  
+  bool isConnected() const {
+    return _connected;
+  }
+
+  void disconnect() {
+    enet_peer_disconnect(_peer, 0);
+  }
+
+  std::string address() const {
+    char hostName[64];
+    enet_address_get_host_ip(&_peer->address, hostName, 64);
+    // Note: enet_address_get_host (without _ip) can be used for reverse dns lookup
+    
+    std::stringstream ss;
+    ss << hostName;
+    ss << ":" << _peer->address.port;
+    return ss.str();
+  }
+
+  void flush() {
+    enet_host_flush(_host);
+  }
+
+  unsigned stats(Client::Statistic field) {
+    if (!_peer) {
+      throw std::runtime_error("enet: no peer associated with client");
+    }
+    
+    unsigned ret = 0;
+    
+    switch (field) {
+      // Fixme: add more fields here! Enet supports a lot:
+      // http://enet.bespin.org/struct__ENetPeer.html
+    case STAT_RTT:
+      ret = _peer->roundTripTime;
+      break;
+      
+    default:
+      throw std::runtime_error("enet: invalid client statistic fied");
+    }
+
+    return ret;
+  }
+  
+private:
+  std::vector<Enet::Packet *> _pendingPackets;
+  ENetHost *_host;
+  ENetPeer *_peer;
+  bool _connected;
+};
+
 
 /**
  * Enet Host
@@ -164,7 +226,7 @@ public:
   {}
   
 
-  void receive() {
+  void update() {
     ENetEvent event;
     // Fixme: configurable timeout here
     if (enet_host_service(_host, &event, 0) > 0) {
@@ -254,12 +316,13 @@ Enet::Network::Network() {
   atexit(enet_deinitialize);
 }
 
-Host *Enet::Network::startHost(const std::string &hostAddr) {
+Host *Enet::Network::startHost(const std::string &hostAddr,
+                               size_t maxClients, size_t channels) {
   Address addr(hostAddr);
   // Fixme: the values below should be configurable
   ENetHost *host = enet_host_create(addr.enetAddress(),
-                                    32,
-                                    2,
+                                    maxClients,
+                                    channels,
                                     0,
                                     0);
 
@@ -270,17 +333,17 @@ Host *Enet::Network::startHost(const std::string &hostAddr) {
   return new Enet::Host(host);
 }
 
-Client *Enet::Network::connect(const std::string &host) {
+Client *Enet::Network::connect(const std::string &host, size_t channels) {
   Address peerAddr(host);
   ENetPeer *peer;
   ENetHost *client;
 
-  client = enet_host_create(NULL, 1, 2, 0, 0);
+  client = enet_host_create(NULL, 1, channels, 0, 0);
   if (!client) {
     throw std::runtime_error("enet: failed to create host");
   }
 
-  peer = enet_host_connect(client, peerAddr.enetAddress(), 2, 0);
+  peer = enet_host_connect(client, peerAddr.enetAddress(), channels, 0);
   if (!peer) {
     enet_host_destroy(client);
     throw std::runtime_error("enet: failed to create peer");

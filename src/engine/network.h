@@ -22,32 +22,58 @@ public:
   virtual ~Packet() {}
 
   virtual size_t size() const =0;
-  virtual void resize(size_t) =0;
-  virtual void *data() =0;
-
+  virtual void resize(size_t) =0; // Fixme: remove?
+  virtual void *data() =0; // Fixme: void *   -> const void *?
+  virtual class Client *sender() const =0;
 };
 
 class Host {
 public:
   virtual ~Host() {}
-  
-  virtual void receive() =0;
+
+  /**
+   * Updates the internal state of the Host by pulling in any new packets and
+   * connection/disconnection events.
+   * Will also send any unsent packets.
+   */
+  virtual void update() =0;
   virtual class Client *connectingClient() =0;
   virtual class Client *disconnectingClient() =0;
   virtual class Packet *pendingPacket() =0;
-//  virtual void broadcast(Packet *) =0;
 };
 
+/**
+ * A client is a connection to a server, or a connection on the server to a
+ * client. Ie, the server contains a number of connected Client instances, and
+ * each connecting user also has a Client instance.
+ */
 class Client {
 public:  
   virtual ~Client() {}
 
-  virtual void receive() =0; // Fixme: timeout
+  enum PacketFlags {
+    PACKET_RELIABLE =     0x0001,
+    PACKET_UNSEQUENCED =  0x0002
+  };
+
+  enum Statistic {
+    STAT_RTT
+  };
+  
+  /**
+   * Updates the internal state of the Client by pulling in any new packets and
+   * connection/disconnection events.
+   * Will also send any unsent packets.
+   */
+  virtual void update() =0; // Fixme: timeout
+  virtual void send(const void *data, size_t size, unsigned flags, int channel) =0;
   virtual Packet *pendingPacket() =0;
-  virtual void send(Packet *) =0;
   virtual bool isConnected() const =0;
   virtual void disconnect() =0;
   virtual std::string address() const =0;
+  virtual void flush() =0;
+  virtual unsigned stats(Statistic field) =0;
+  
 };
 
 class Network : public Interface {
@@ -56,8 +82,9 @@ public:
     return "network";
   }
 
-  virtual Host *startHost(const std::string &host) =0;
-  virtual Client *connect(const std::string &host) =0;
+  virtual Host *startHost(const std::string &host,
+                          size_t maxClients, size_t channels) =0;
+  virtual Client *connect(const std::string &host, size_t channels) =0;
 };
 
 
