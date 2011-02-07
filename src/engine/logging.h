@@ -5,6 +5,7 @@
 #include <string>
 
 /** 
+ * QUESTION kaspars: How about logging level?
  * @code
  * // logging example
  * Logging *log = interfaces.requestInterface<Logging>();
