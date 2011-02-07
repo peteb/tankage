@@ -83,6 +83,16 @@ Snail *Snails::intersectingSnails(const vec2 &start, const vec2 &end,
   return 0;
 }
 
+void Snails::writeFull(class PacketWriter &packet) {
+  
+}
+
+void Snails::readFull(class PacketReader &reader) {
+
+}
+
+
+
 
 Snail::Snail(const vec2 &initialPos, int id, const SystemContext *ctx)
   : _position(initialPos)

@@ -7,7 +7,7 @@ public:
   SystemContext();
 
   enum {
-    SYSTEM_SNAILS,
+    SYSTEM_SNAILS = 0,
     SYSTEM_BACKGROUND,
     SYSTEM_CONTROL,
     SYSTEM_TEXTURE_LOADER,

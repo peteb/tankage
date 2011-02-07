@@ -24,6 +24,7 @@ private:
 
   // net protocol
   void onError(const struct NetErrorMsg *error, class Packet *packet);
+  void onSystemUpdate(const struct NetSystemMsg *msg, class Packet *packet);
   
   class Network *_net;
   class Client *_client;

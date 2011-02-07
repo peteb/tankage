@@ -2,6 +2,8 @@
 #define GAME_SNAILS_H
 
 #include <game/common/system.h>
+#include <game/common/replicated_system.h>
+
 #include <utils/vec.h>
 #include <vector>
 
@@ -45,7 +47,7 @@ private:
 };
 
 
-class Snails : public System {
+class Snails : public System, public ReplicatedSystem {
 public:
   ~Snails();
 
@@ -58,6 +60,9 @@ public:
   void render();
   Snail *snail(int id) const;
   Snail *intersectingSnails(const vec2 &start, const vec2 &end, float radius, Snail *ignore, vec2 &hitpos);
+
+  void writeFull(class PacketWriter &packet);
+  void readFull(class PacketReader &reader);
   
 private:
   class Graphics *graphics;

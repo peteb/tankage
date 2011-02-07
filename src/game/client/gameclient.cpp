@@ -95,8 +95,9 @@ void GameClient::onReceive(Packet *packet) {
     onError(static_cast<const NetErrorMsg *>(data), packet);
     break;
 
-  case NET_SYSTEM_MAP:
-    std::cout << "SYSTEM MAP" << std::endl;
+  case NET_SYSTEM:
+    assert(size >= sizeof(NetSystemMsg) && "packet too small for error");
+    onSystemUpdate(static_cast<const NetSystemMsg *>(data), packet);
     break;
   }
 }
@@ -104,4 +105,9 @@ void GameClient::onReceive(Packet *packet) {
 void GameClient::onError(const NetErrorMsg *error, Packet *packet) {
   std::cout << "Received error from server: " << error->desc << std::endl;
   disconnectGently();
+}
+
+void GameClient::onSystemUpdate(const NetSystemMsg *msg, Packet *packet) {
+  std::cout << "received system update" << std::endl;
+  
 }

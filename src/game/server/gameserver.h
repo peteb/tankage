@@ -2,9 +2,11 @@
 #define GAME_GAMESERVER_H
 
 #include <game/common/system.h>
+#include <game/common/net_protocol.h>
 
 class GameServer : public System {
 public:
+  GameServer();
   ~GameServer();
   
   void init(const class Portal &interfaces);
@@ -19,6 +21,7 @@ private:
   void onIdent(const struct NetIdentifyMsg *ident, class Packet *packet);
   
   class Host *_host;
+  class ReplicatedSystem *_systems[NET_SYSTEM_MAX];
 };
 
 
