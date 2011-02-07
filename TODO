@@ -15,6 +15,7 @@
 * DONE New game folder structure (common, client, server)
 * DONE Add "error dialog box" to window managers, for displaying errors.
 * DONE A logging interface in the engine (+ very basic stdout/stderr implementation)  
+* TODO Update std::cout to use log interface
 * Recover old behavior
 *** DONE Cactii
 *** DONE Shooting
