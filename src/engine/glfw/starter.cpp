@@ -15,6 +15,7 @@
 #include <engine/opengl/graphics.h>
 #include <engine/devil/image_loader.h>
 #include <engine/enet/network.h>
+#include <engine/logging/logging.h>
 #include <engine/config.h>
 
 // The GLFW module is a "starter" module, meaning, it implements 'main' and runs
@@ -50,7 +51,11 @@ int main(int argc, char **argv) {
   interfaces.registerInterface<OpenGl::Graphics>();
   interfaces.registerInterface<DevIl::ImageLoader>();
   interfaces.registerInterface<Enet::Network>();
-  std::cout << "glfw: initialized" << std::endl;
+  interfaces.registerInterface<Log::Logging>();
+
+  Logging *log = interfaces.requestInterface<Logging>();
+  log->write(Logging::DEBUG, "glfw: initialized");
+  //std::cout << "glfw: initialized" << std::endl;
 
   int exitCode;
   #ifndef DEV
