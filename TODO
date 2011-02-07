@@ -54,13 +54,13 @@
     Windows.cmake, MacOSX.cmake, Android.cmake, etc. Only for the engine and
     should specify which files to compile with (and which external libraries)
 * Android support
-*** TODO Cmake
+*** TODO CMake
 *** TODO Window Manager support
 *** TODO OpenGLES
 *** TODO Image Loader    
 *** TODO Input    
 * Memory leaks and other Valgrind gibberish
-*** TODO Only one remarkable memory leak left
+** TODO Only one remarkable memory leak left
 	==11268== 4,152 (2,072 direct, 2,080 indirect) bytes in 1 blocks are definitely lost in loss record 30 of 30
 	==11268==    at 0x4025BD3: malloc (vg_replace_malloc.c:236)
 	==11268==    by 0x40FD9CD: ??? (in /usr/lib/mesa/libGL.so.1.2)
@@ -83,5 +83,6 @@
 ** TODO Message boxes in Windows for displaying errors   
 * Mac OS X support
 ** TODO Fix a proper icon for the OS X bundle   
-
+* Linux support
+** TODO Add the icon for Linux as well
   
