@@ -60,17 +60,6 @@ void GameServer::update() {
     onReceive(packet);
     delete packet;
   }
-  
-  // Packet: data() size() resize()
-  // PacketBuilder(packet).write(123)
-  // PacketReader
-  // PacketWriter, PacketReader
-  
-  // Is it OK to have a bitfield in the beginning of each packet,
-  // saying which subsystems have added stuff in it?
-  // The packet is the transport of data between instances of the same
-  // subsystem.
-  
 }
 
 void GameServer::onConnect(Client *client) {
@@ -96,6 +85,7 @@ void GameServer::onReceive(Packet *packet) {
   }
   
 }
+
 
 void GameServer::onIdent(const NetIdentifyMsg *data, Packet *packet) {
   NetIdentifyMsg ident;
