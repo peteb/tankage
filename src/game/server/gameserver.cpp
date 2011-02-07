@@ -1,8 +1,10 @@
 #include <game/server/gameserver.h>
 #include <game/common/net_protocol.h>
 
+#include <engine/packet.h>
 #include <engine/network.h>
 #include <engine/portal.h>
+
 #include <iostream>
 #include <cassert>
 #include <arpa/inet.h>
@@ -99,5 +101,24 @@ void GameServer::onIdent(const NetIdentifyMsg *data, Packet *packet) {
     return;
   }
 
+  PacketData systemMapping;
+  systemMapping.reserve(sizeof(NetPacketType));
+  systemMapping.resize(sizeof(NetPacketType));
+
+  NetPacketType *type =
+    static_cast<NetPacketType *>(&systemMapping[0]);
+  *type = NET_SYSTEM_MAP;
+
+  // send the system map
+  Client *client = packet->sender();
+  assert(client && "no sender");
   
+  PacketWriter writer(systemMapping);
+  writer.writeU8(123);
+
+  std::cout << "sending " << systemMapping.size() << std::endl;
+  
+  client->send(&systemMapping[0], systemMapping.size(),
+               Client::PACKET_RELIABLE, NET_CHANNEL_STATE);
+
 }

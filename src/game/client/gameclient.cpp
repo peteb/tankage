@@ -94,6 +94,10 @@ void GameClient::onReceive(Packet *packet) {
     assert(size >= sizeof(NetErrorMsg) && "packet too small for error");
     onError(static_cast<const NetErrorMsg *>(data), packet);
     break;
+
+  case NET_SYSTEM_MAP:
+    std::cout << "SYSTEM MAP" << std::endl;
+    break;
   }
 }
 

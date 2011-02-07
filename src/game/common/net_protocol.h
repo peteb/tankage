@@ -23,8 +23,9 @@ const int MAX_ERRDESC = 64;
  * Enumeration over the different packet types
  */
 enum {
-  NET_IDENTIFY = 1,  //< NetIdentifyMsg
-  NET_ERROR = 2      //< NetErrorMsg
+  NET_IDENTIFY = 1,      //< NetIdentifyMsg
+  NET_ERROR = 2,         //< NetErrorMsg
+  NET_SYSTEM_MAP = 50 
 };
 
 enum NetChannels {
