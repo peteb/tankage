@@ -14,9 +14,11 @@
 * TODO System profile
 * DONE New game folder structure (common, client, server)
 * DONE Add "error dialog box" to window managers, for displaying errors.
-* DONE A logging interface in the engine (+ very basic stdout/stderr implementation)  
-* TODO Implement logging level (probably some environment variable)
-* TODO Update std::cout to use log interface
+* Logging
+** DONE A logging interface in the engine (+ very basic stdout/stderr implementation)  
+** TODO Implement logging level (probably some environment variable)
+** TODO Update std::cout to use log interface
+** TODO Implement AUDIT or TWITTER LogType
 * Recover old behavior
 *** DONE Cactii
 *** DONE Shooting
@@ -55,6 +57,7 @@
 *** TODO Move engine CMake rules specific for the platform to different files;
     Windows.cmake, MacOSX.cmake, Android.cmake, etc. Only for the engine and
     should specify which files to compile with (and which external libraries)
+*** TODO Add CMake module to find cURL library
 * Android support
 *** TODO CMake
 *** TODO Window Manager support
@@ -86,5 +89,5 @@
 * Mac OS X support
 ** TODO Fix a proper icon for the OS X bundle   
 * Linux support
-** TODO Add the icon for Linux as well
-  
+** TODO Add the icon for Linux as well 
+* DONE Add twitcurl library in 3pp and make it compilable 
