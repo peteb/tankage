@@ -89,6 +89,9 @@ Snail *Snails::intersectingSnails(const vec2 &start, const vec2 &end,
  * - Send full state on new connection
  * - Send events when snails die, shoot, etc.
  * - Frequent updates of positions, etc.
+ *
+ * Fixme: ReplicatedSystem::onIdent(Client *), then send own packet
+ *        ReplicatedSystem::onTick(Client *)
  */  
 void Snails::writeFull(PacketWriter &packet) {
   packet.writeU32(0xAAC0FFEE);
