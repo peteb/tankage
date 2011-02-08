@@ -8,6 +8,7 @@
 #include <engine/portal.h>
 #include <engine/image.h>
 #include <engine/config.h>
+#include <engine/packet.h>
 
 #include <utils/rect.h>
 #include <utils/value.h>
@@ -82,6 +83,17 @@ Snail *Snails::intersectingSnails(const vec2 &start, const vec2 &end,
   
   return 0;
 }
+
+void Snails::writeFull(class PacketWriter &packet) {
+  packet.writeU32(0xAAC0FFEE);
+}
+
+void Snails::readFull(class PacketReader &reader) {
+  uint32_t secret = reader.readU32();
+  std::cout << "Secret: " << secret << std::endl;
+}
+
+
 
 
 Snail::Snail(const vec2 &initialPos, int id, const SystemContext *ctx)

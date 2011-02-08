@@ -1,11 +1,22 @@
 #include <game/client/gameclient.h>
 #include <game/common/net_protocol.h>
+#include <game/common/replicated_system.h>
+#include <game/common/snails.h>
+
 #include <engine/portal.h>
 #include <engine/network.h>
+#include <engine/packet.h>
+
 #include <iostream>
 #include <cassert>
+#include <algorithm>
 #include <arpa/inet.h> // Fixme: this might not be possible on windows. utils
                        // for endian conversion?
+
+GameClient::GameClient() {
+  std::fill(_systems, _systems + NET_SYSTEM_MAX,
+            static_cast<ReplicatedSystem *>(0));
+}
 
 GameClient::~GameClient() {
   if (_client) {
@@ -20,7 +31,7 @@ void GameClient::init(const Portal &interfaces) {
   
   _net = interfaces.requestInterface<Network>();
   _client = _net->connect("127.0.0.1:12345", 2);
-  
+  _systems[NET_SYSTEM_SNAILS] = context->snails();
 }
 
 void GameClient::update() {
@@ -94,10 +105,30 @@ void GameClient::onReceive(Packet *packet) {
     assert(size >= sizeof(NetErrorMsg) && "packet too small for error");
     onError(static_cast<const NetErrorMsg *>(data), packet);
     break;
+
+  case NET_SYSTEM:
+    assert(size >= sizeof(NetSystemMsg) && "packet too small for error");
+    onSystemUpdate(static_cast<const NetSystemMsg *>(data), packet);
+    break;
   }
 }
 
 void GameClient::onError(const NetErrorMsg *error, Packet *packet) {
   std::cout << "Received error from server: " << error->desc << std::endl;
   disconnectGently();
+}
+
+void GameClient::onSystemUpdate(const NetSystemMsg *msg, Packet *packet) {
+  std::cout << "received system update " << msg->systems << std::endl;
+  if (msg->systems != 0) {
+    PacketReader reader((const char *)packet->data() + sizeof(NetSystemMsg),
+                        packet->size() - sizeof(NetSystemMsg));
+    
+    for (size_t i = 0; i < NET_SYSTEM_MAX; ++i) {
+      if (msg->systems & (1 << i) && _systems[i]) {
+        std::cout << "System updated" << std::endl;
+        _systems[i]->readFull(reader);
+      }
+    }
+  }
 }

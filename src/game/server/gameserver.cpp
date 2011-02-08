@@ -1,12 +1,17 @@
 #include <game/server/gameserver.h>
 #include <game/common/net_protocol.h>
+#include <game/common/replicated_system.h>
+#include <game/common/snails.h>
 
+#include <engine/packet.h>
 #include <engine/network.h>
 #include <engine/portal.h>
+
 #include <iostream>
 #include <cassert>
 #include <arpa/inet.h>
 #include <cstring>
+#include <algorithm>
 
 namespace {
 void SendError(Client *client, uint8_t code, const std::string &desc) {
@@ -20,6 +25,11 @@ void SendError(Client *client, uint8_t code, const std::string &desc) {
 }
 }
 
+GameServer::GameServer() {
+  std::fill(_systems, _systems + NET_SYSTEM_MAX,
+            static_cast<ReplicatedSystem *>(0));
+}
+
 GameServer::~GameServer() {
   delete _host;
 }
@@ -28,6 +38,8 @@ void GameServer::init(const class Portal &interfaces) {
   Network *net = interfaces.requestInterface<Network>();
 
   _host = net->startHost("0.0.0.0:12345", 32, 2);
+  _systems[NET_SYSTEM_SNAILS] = context->snails();
+  
 }
 
 void GameServer::update() {
@@ -99,5 +111,29 @@ void GameServer::onIdent(const NetIdentifyMsg *data, Packet *packet) {
     return;
   }
 
+  PacketData fullState;
+  fullState.resize(sizeof(NetSystemMsg));
   
+  PacketWriter writer(fullState);
+  uint32_t systems = 0;
+  
+  for (size_t i = 0; i < NET_SYSTEM_MAX && _systems[i]; ++i) {
+    size_t sizeBefore = fullState.size();
+    _systems[i]->writeFull(writer);
+    
+    if (fullState.size() != sizeBefore) {
+      // data has been written to the packet, mark the system as updated
+      systems |= (1 << i);
+    }
+  }
+
+  NetSystemMsg *header = reinterpret_cast<NetSystemMsg *>(&fullState[0]);
+  header->type = NET_SYSTEM;
+  header->systems = systems;
+  
+  std::cout << "full state size: " << fullState.size()
+            << " systems: " << header->systems << std::endl;
+
+  packet->sender()->send(&fullState[0], fullState.size(),
+                         Client::PACKET_RELIABLE, NET_CHANNEL_STATE);
 }

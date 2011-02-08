@@ -23,8 +23,9 @@ const int MAX_ERRDESC = 64;
  * Enumeration over the different packet types
  */
 enum {
-  NET_IDENTIFY = 1,  //< NetIdentifyMsg
-  NET_ERROR = 2      //< NetErrorMsg
+  NET_IDENTIFY = 1,      //< NetIdentifyMsg
+  NET_ERROR = 2,         //< NetErrorMsg
+  NET_SYSTEM = 3
 };
 
 enum NetChannels {
@@ -35,6 +36,11 @@ enum NetChannels {
 
 enum NetError {
   NET_IDENT_WRONG_VERSION = 1   //< the net version doesn't match the server
+};
+
+enum NetSystems {
+  NET_SYSTEM_SNAILS = 0,
+  NET_SYSTEM_MAX
 };
 
 /**
@@ -54,6 +60,11 @@ struct NetErrorMsg {
   NetPacketType type;
   uint8_t error_code;
   char desc[MAX_ERRDESC];   //< c-string describing the problem
+};
+
+struct NetSystemMsg {
+  NetPacketType type;
+  uint32_t systems;
 };
 
 #endif // !GAME_COMMON_NET_PROTOCOL_H
