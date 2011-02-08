@@ -84,11 +84,20 @@ Snail *Snails::intersectingSnails(const vec2 &start, const vec2 &end,
   return 0;
 }
 
-void Snails::writeFull(class PacketWriter &packet) {
+/*
+ * Snails subsystem network use cases:
+ * - Send full state on new connection
+ * - Send events when snails die, shoot, etc.
+ * - Frequent updates of positions, etc.
+ *
+ * Fixme: ReplicatedSystem::onIdent(Client *), then send own packet
+ *        ReplicatedSystem::onTick(Client *)
+ */  
+void Snails::writeFull(PacketWriter &packet) {
   packet.writeU32(0xAAC0FFEE);
 }
 
-void Snails::readFull(class PacketReader &reader) {
+void Snails::readFull(PacketReader &reader) {
   uint32_t secret = reader.readU32();
   std::cout << "Secret: " << secret << std::endl;
 }
@@ -105,7 +114,7 @@ Snail::Snail(const vec2 &initialPos, int id, const SystemContext *ctx)
   , vel(0.0f, 0.0f)
   , takingControl(false)
 {
-  std::fill(&_state[0], &_state[STATE_MAX], 0);
+  std::fill(_state, _state + STATE_MAX, 0);
   secondsSinceFire = 0.0;
   health = 100;
 }
