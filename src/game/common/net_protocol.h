@@ -31,16 +31,12 @@ enum {
 enum NetChannels {
   NET_CHANNEL_STATE = 0,      //< for relative data; ie, login, events, file
                               //  downloads, etc. usually reliable.
-  NET_CHANNEL_ABS = 1         //< absolute data, snapshots.
+  NET_CHANNEL_ABS = 1,        //< absolute data, snapshots.
+  NET_CHANNEL_MAX
 };
 
 enum NetError {
   NET_IDENT_WRONG_VERSION = 1   //< the net version doesn't match the server
-};
-
-enum NetSystems {
-  NET_SYSTEM_SNAILS = 0,
-  NET_SYSTEM_MAX
 };
 
 /**

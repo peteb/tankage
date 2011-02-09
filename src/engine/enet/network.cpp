@@ -85,6 +85,10 @@ public:
   class Client *sender() const {
     return _sender;
   }
+
+  size_t channel() const {
+    return _channelId;
+  }
   
 private:
   Packet(const Packet &packet) {}

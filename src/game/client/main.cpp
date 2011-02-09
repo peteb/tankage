@@ -30,6 +30,8 @@ int app_main(Portal &interfaces) {
   // Register the subsystems
   GameClient gameclient;
   Snails snails;
+
+  gameclient.registerSystem(&snails);
   
   systems.set(SystemContext::SYSTEM_SNAILS, &snails);
   systems.set(SystemContext::SYSTEM_GAMECLIENT, &gameclient);

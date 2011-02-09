@@ -21,6 +21,8 @@ int app_main(Portal &interfaces) {
   // Register the subsystems
   GameServer server;
   Snails snails;
+
+  server.registerSystem(&snails);
   
   systems.set(SystemContext::SYSTEM_SNAILS, &snails);
   systems.set(SystemContext::SYSTEM_GAMESERVER, &server);

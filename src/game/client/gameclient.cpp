@@ -14,8 +14,6 @@
                        // for endian conversion?
 
 GameClient::GameClient() {
-  std::fill(_systems, _systems + NET_SYSTEM_MAX,
-            static_cast<ReplicatedSystem *>(0));
 }
 
 GameClient::~GameClient() {
@@ -31,7 +29,6 @@ void GameClient::init(const Portal &interfaces) {
   
   _net = interfaces.requestInterface<Network>();
   _client = _net->connect("127.0.0.1:12345", 2);
-  _systems[NET_SYSTEM_SNAILS] = context->snails();
 }
 
 void GameClient::update() {
@@ -74,6 +71,10 @@ void GameClient::disconnectGently() {
   _client = NULL;
 }
 
+void GameClient::registerSystem(class ReplicatedSystem *system) {
+  _systems.push_back(system);
+}
+
 void GameClient::onConnect() {
   std::cout << "connected" << std::endl;
 
@@ -106,10 +107,11 @@ void GameClient::onReceive(Packet *packet) {
     onError(static_cast<const NetErrorMsg *>(data), packet);
     break;
 
-  case NET_SYSTEM:
-    assert(size >= sizeof(NetSystemMsg) && "packet too small for error");
-    onSystemUpdate(static_cast<const NetSystemMsg *>(data), packet);
-    break;
+
+  }
+
+  for (size_t i = 0; i < _systems.size(); ++i) {
+    _systems[i]->onReceive(*type, data, size);
   }
 }
 
@@ -118,17 +120,3 @@ void GameClient::onError(const NetErrorMsg *error, Packet *packet) {
   disconnectGently();
 }
 
-void GameClient::onSystemUpdate(const NetSystemMsg *msg, Packet *packet) {
-  std::cout << "received system update " << msg->systems << std::endl;
-  if (msg->systems != 0) {
-    PacketReader reader((const char *)packet->data() + sizeof(NetSystemMsg),
-                        packet->size() - sizeof(NetSystemMsg));
-    
-    for (size_t i = 0; i < NET_SYSTEM_MAX; ++i) {
-      if (msg->systems & (1 << i) && _systems[i]) {
-        std::cout << "System updated" << std::endl;
-        _systems[i]->readFull(reader);
-      }
-    }
-  }
-}

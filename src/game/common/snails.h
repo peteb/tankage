@@ -61,8 +61,9 @@ public:
   Snail *snail(int id) const;
   Snail *intersectingSnails(const vec2 &start, const vec2 &end, float radius, Snail *ignore, vec2 &hitpos);
 
-  void writeFull(class PacketWriter &packet);
-  void readFull(class PacketReader &reader);
+  void onIdent(class Client *client);
+  void onTick(class Client *client);
+  void onReceive(NetPacketType type, const void *data, size_t size);
   
 private:
   class Graphics *graphics;
