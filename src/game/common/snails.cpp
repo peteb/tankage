@@ -108,7 +108,8 @@ void Snails::onIdent(class Client *client) {
 //  client->send("hej", 4, Client::PACKET_RELIABLE, NET_CHANNEL_STATE);
   // The snail positions should be updated by the onTick
   // There should be a players system that contains the players + spectators
-  // Replicate that list, and send which id the player is.
+  // Replicate that list, and send which id the player is. Possibly just send
+  // the playing players and the client's player
 }
 
 void Snails::onTick(class Client *client) {

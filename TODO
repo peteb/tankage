@@ -15,6 +15,7 @@
 * DONE New game folder structure (common, client, server)
 * DONE Add "error dialog box" to window managers, for displaying errors.
 * TODO A logging interface in the engine (+ basic stdout/stderr implementation)
+* TODO Verify that the server compiles, runs and accepts connections on PowerPC
 * Configuration Management
 ** Each system can expose variables which the administrator can configure (during runtime and before)
 * Recover old behavior
@@ -85,5 +86,4 @@
 ** TODO Message boxes in Windows for displaying errors   
 * Mac OS X support
 ** TODO Fix a proper icon for the OS X bundle   
-
   
