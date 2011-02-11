@@ -11,8 +11,9 @@ add_executable(snail-wail-server
   ${GAME_ROOT_DIR}/common/powerup.cpp
   ${GAME_ROOT_DIR}/common/texture_loader.cpp
   ${GAME_ROOT_DIR}/common/cactus.cpp
+  ${GAME_ROOT_DIR}/common/players.cpp
   
-  # bad stuff
+  # bad stuff (shouldn't be needed)
   ${GAME_ROOT_DIR}/client/particles.cpp
   
   # server specific

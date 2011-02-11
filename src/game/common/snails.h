@@ -35,13 +35,14 @@ public:
 private:
   class Texture *texture;
   vec2 _position, originalPos;
-  vec2 vel;
   
   int id;
-  bool _state[STATE_MAX];
   const SystemContext *context;
-  double secondsSinceFire;
   float radius;
+  vec2 vel;
+  bool _state[STATE_MAX];
+
+  double secondsSinceFire;
   bool takingControl;
   int health;
 };
