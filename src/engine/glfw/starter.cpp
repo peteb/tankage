@@ -18,6 +18,8 @@
 #include <engine/logging/logging.h>
 #include <engine/config.h>
 
+#include <ctime>
+
 // The GLFW module is a "starter" module, meaning, it implements 'main' and runs
 // app_main
 
@@ -56,6 +58,11 @@ int main(int argc, char **argv) {
   Logging *log = interfaces.requestInterface<Logging>();
   log->write(Logging::DEBUG, "glfw: initialized");
   //std::cout << "glfw: initialized" << std::endl;
+
+  // uncomment this to test Twitter
+  // time_t time = std::time(0);
+  // log->write(Logging::TWEET, "Starting Snail-Wail at %s", 
+  //   std::asctime(localtime(&time)));
 
   int exitCode;
   #ifndef DEV

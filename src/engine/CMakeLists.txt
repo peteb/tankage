@@ -46,10 +46,12 @@ include_directories(
    ${IL_INCLUDE_DIR}
    ${OPENGL_INCLUDE_DIR}
    ${ENET_INCLUDE_DIR}
+   ${PROJECT_ROOT_DIR}/3pp 
 )
 
 target_link_libraries(engine
   utils
+  twitcurl
   ${GLFW_LIBRARY} 
   ${Cocoa_LIBRARIES}
   ${OPENGL_LIBRARIES}
