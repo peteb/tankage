@@ -81,10 +81,14 @@ void GameServer::onReceive(Packet *packet) {
   case NET_IDENTIFY:
     assert(size >= sizeof(NetIdentifyMsg) && "packet too small for ident");
     onIdent(static_cast<const NetIdentifyMsg *>(data), packet);
+    // Fixme: if any system returns false for onIdent, the client should be
+    // disconnected.
+    
     break;
 
   }
 
+  // Fixme: onReceive should only be called on identified clients
   for (size_t i = 0; i < _systems.size(); ++i) {
     _systems[i]->onReceive(*type, data, size);
   }

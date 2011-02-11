@@ -15,7 +15,7 @@ public:
    * @param channels the system can write stuff into these
    *        the system on the other end will get a call to onReceive.
    */
-  virtual void onIdent(class Client *client) =0;
+  virtual void onIdent(class Client *client) {};
 
   /**
    * Called each server tick.
@@ -30,5 +30,8 @@ public:
    */
   virtual void onReceive(NetPacketType type, const void *data, size_t size) =0;
 };
+
+///////////////////////////////////////
+// Fixme: NetError(CODE, "blaha blaha")
 
 #endif // !GAME_COMMON_REPLICATED_SYSTEM_H

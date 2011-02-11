@@ -35,7 +35,7 @@ enum NetChannels {
   NET_CHANNEL_MAX
 };
 
-enum NetError {
+enum NetErrorCode {
   NET_IDENT_WRONG_VERSION = 1   //< the net version doesn't match the server
 };
 

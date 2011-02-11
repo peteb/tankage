@@ -15,11 +15,11 @@ public:
   bool takeDamage(const vec2 &pos, float damage, class Snail *shooter);
 
 private:
-  const class SystemContext *ctx;
   class Texture *tex;
   std::string type;
   int amount;
   vec2 vel;
+  const class SystemContext *ctx;
   float radius;
 };
 
