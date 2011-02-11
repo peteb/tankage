@@ -14,7 +14,9 @@
 * TODO System profile
 * DONE New game folder structure (common, client, server)
 * DONE Add "error dialog box" to window managers, for displaying errors.
-* TODO A logging interface in the engine (+ basic stdout/stderr implementation)  
+* TODO A logging interface in the engine (+ basic stdout/stderr implementation)
+* Configuration Management
+** Each system can expose variables which the administrator can configure (during runtime and before)
 * Recover old behavior
 *** DONE Cactii
 *** DONE Shooting

@@ -13,6 +13,17 @@
 #include <arpa/inet.h> // Fixme: this might not be possible on windows. utils
                        // for endian conversion?
 
+/*
+ * Messages are sent to the client and server, invoking onReceive on all
+ * registered ReplicatedSystems. The systems will check the type of the packet,
+ * then act accordingly (either handle the message or ignore it).
+ *
+ * Snapshots will be sent to the server (input), but mostly to the client (item
+ * position, speed, etc.)
+ * Each subsystem implements onTick, which should create the snapshot packet.
+ * onReceive will be called when snapshot data is received.
+ * The onTick function will be invoked at a certain interval (25 tps).
+ */
 GameClient::GameClient() {
   std::fill(_systems, _systems + NET_SYSTEM_MAX,
             static_cast<ReplicatedSystem *>(0));
