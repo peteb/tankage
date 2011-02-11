@@ -18,7 +18,7 @@
 ** DONE A logging interface in the engine (+ very basic stdout/stderr implementation)  
 ** TODO Implement logging level (probably some environment variable)
 ** TODO Update std::cout to use log interface
-** TODO Implement AUDIT or TWITTER LogType
+** DONE Implement AUDIT or TWITTER LogType
 * Recover old behavior
 *** DONE Cactii
 *** DONE Shooting
