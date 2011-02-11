@@ -22,7 +22,7 @@ public:
     ERROR = 0,
     WARNING = 1,
     DEBUG = 2,
-	TWEET = 3
+    TWEET = 3
   };
 
   virtual void write(LogType, const char *format, ...) =0;
