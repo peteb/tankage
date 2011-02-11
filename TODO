@@ -57,7 +57,7 @@
 *** TODO Move engine CMake rules specific for the platform to different files;
     Windows.cmake, MacOSX.cmake, Android.cmake, etc. Only for the engine and
     should specify which files to compile with (and which external libraries)
-*** TODO Add CMake module to find cURL library
+*** DONE Add CMake module to find cURL library
 * Android support
 *** TODO CMake
 *** TODO Window Manager support
