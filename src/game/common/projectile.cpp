@@ -14,8 +14,8 @@ Projectile::Projectile(class ParticleGroup *partGroup,
                        class Snail *shooter, class Texture *tex,
                        const SystemContext *ctx, const vec2 &pos)
   : partGroup(partGroup)
-  , tex(tex)
   , shooter(shooter)
+  , tex(tex)
   , ctx(ctx)
   , pos(pos)
 {
