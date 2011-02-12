@@ -13,9 +13,18 @@
 #include <arpa/inet.h> // Fixme: this might not be possible on windows. utils
                        // for endian conversion?
 
+/*
+ * Messages are sent to the client and server, invoking onReceive on all
+ * registered ReplicatedSystems. The systems will check the type of the packet,
+ * then act accordingly (either handle the message or ignore it).
+ *
+ * Snapshots will be sent to the server (input), but mostly to the client (item
+ * position, speed, etc.)
+ * Each subsystem implements onTick, which should create the snapshot packet.
+ * onReceive will be called when snapshot data is received.
+ * The onTick function will be invoked at a certain interval (25 tps).
+ */
 GameClient::GameClient() {
-  std::fill(_systems, _systems + NET_SYSTEM_MAX,
-            static_cast<ReplicatedSystem *>(0));
 }
 
 GameClient::~GameClient() {
@@ -31,7 +40,6 @@ void GameClient::init(const Portal &interfaces) {
   
   _net = interfaces.requestInterface<Network>();
   _client = _net->connect("127.0.0.1:12345", 2);
-  _systems[NET_SYSTEM_SNAILS] = context->snails();
 }
 
 void GameClient::update() {
@@ -74,6 +82,10 @@ void GameClient::disconnectGently() {
   _client = NULL;
 }
 
+void GameClient::registerSystem(class ReplicatedSystem *system) {
+  _systems.push_back(system);
+}
+
 void GameClient::onConnect() {
   std::cout << "connected" << std::endl;
 
@@ -106,10 +118,11 @@ void GameClient::onReceive(Packet *packet) {
     onError(static_cast<const NetErrorMsg *>(data), packet);
     break;
 
-  case NET_SYSTEM:
-    assert(size >= sizeof(NetSystemMsg) && "packet too small for error");
-    onSystemUpdate(static_cast<const NetSystemMsg *>(data), packet);
-    break;
+
+  }
+
+  for (size_t i = 0; i < _systems.size(); ++i) {
+    _systems[i]->onReceive(*type, data, size);
   }
 }
 
@@ -118,17 +131,3 @@ void GameClient::onError(const NetErrorMsg *error, Packet *packet) {
   disconnectGently();
 }
 
-void GameClient::onSystemUpdate(const NetSystemMsg *msg, Packet *packet) {
-  std::cout << "received system update " << msg->systems << std::endl;
-  if (msg->systems != 0) {
-    PacketReader reader((const char *)packet->data() + sizeof(NetSystemMsg),
-                        packet->size() - sizeof(NetSystemMsg));
-    
-    for (size_t i = 0; i < NET_SYSTEM_MAX; ++i) {
-      if (msg->systems & (1 << i) && _systems[i]) {
-        std::cout << "System updated" << std::endl;
-        _systems[i]->readFull(reader);
-      }
-    }
-  }
-}

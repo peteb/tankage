@@ -1,5 +1,6 @@
 #include <game/common/snails.h>
 #include <game/common/items.h>
+#include <game/common/net_protocol.h>
 
 #include <engine/graphics.h>
 #include <engine/texture.h>
@@ -9,6 +10,7 @@
 #include <engine/image.h>
 #include <engine/config.h>
 #include <engine/packet.h>
+#include <engine/network.h>
 
 #include <utils/rect.h>
 #include <utils/value.h>
@@ -92,17 +94,31 @@ Snail *Snails::intersectingSnails(const vec2 &start, const vec2 &end,
  *
  * Fixme: ReplicatedSystem::onIdent(Client *), then send own packet
  *        ReplicatedSystem::onTick(Client *)
- */  
-void Snails::writeFull(PacketWriter &packet) {
-  packet.writeU32(0xAAC0FFEE);
+ * No don't do this. 
+ */
+
+
+/*
+ * channels[EVENTS].writeU8(blabla)    // will now receive a onReceive(EVENTS, blabla)
+ * channels[ABS].write() // will now receive onReceive(ABS, bla)
+ */
+
+
+void Snails::onIdent(class Client *client) {
+//  client->send("hej", 4, Client::PACKET_RELIABLE, NET_CHANNEL_STATE);
+  // The snail positions should be updated by the onTick
+  // There should be a players system that contains the players + spectators
+  // Replicate that list, and send which id the player is. Possibly just send
+  // the playing players and the client's player
 }
 
-void Snails::readFull(PacketReader &reader) {
-  uint32_t secret = reader.readU32();
-  std::cout << "Secret: " << secret << std::endl;
+void Snails::onTick(class Client *client) {
+  
 }
 
-
+void Snails::onReceive(NetPacketType type, const void *data, size_t size) {
+  std::cout << "received packet " << (int)type << std::endl;
+}
 
 
 Snail::Snail(const vec2 &initialPos, int id, const SystemContext *ctx)

@@ -3,6 +3,7 @@
 
 #include <game/common/system.h>
 #include <game/common/net_protocol.h>
+#include <vector>
 
 class GameClient : public System {
 public:
@@ -18,6 +19,7 @@ public:
   void init(const class Portal &interfaces);
   void update();
   void disconnectGently();
+  void registerSystem(class ReplicatedSystem *system);
   
 private:
   void onConnect();
@@ -28,7 +30,7 @@ private:
   void onError(const struct NetErrorMsg *error, class Packet *packet);
   void onSystemUpdate(const struct NetSystemMsg *msg, class Packet *packet);
   
-  class ReplicatedSystem *_systems[NET_SYSTEM_MAX];
+  std::vector<class ReplicatedSystem *> _systems;
   class Network *_net;
   class Client *_client;
   ClientState _state;

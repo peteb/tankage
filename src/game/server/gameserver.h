@@ -3,6 +3,7 @@
 
 #include <game/common/system.h>
 #include <game/common/net_protocol.h>
+#include <vector>
 
 /** FIXME kaspars: Convert this to Doxygen diagram 
  * client   server
@@ -25,6 +26,7 @@ public:
   
   void init(const class Portal &interfaces);
   void update();
+  void registerSystem(class ReplicatedSystem *system);
   
 private:
   void onConnect(class Client *client);
@@ -34,8 +36,8 @@ private:
   // net protocol
   void onIdent(const struct NetIdentifyMsg *ident, class Packet *packet);
   
+  std::vector<class ReplicatedSystem *> _systems;
   class Host *_host;
-  class ReplicatedSystem *_systems[NET_SYSTEM_MAX];
 };
 
 

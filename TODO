@@ -19,6 +19,9 @@
 ** TODO Implement logging level (probably some environment variable)
 ** TODO Update std::cout to use log interface
 ** DONE Implement AUDIT or TWITTER LogType
+* TODO Verify that the server compiles, runs and accepts connections on PowerPC
+* Configuration Management
+** Each system can expose variables which the administrator can configure (during runtime and before)
 * Recover old behavior
 *** DONE Cactii
 *** DONE Shooting
