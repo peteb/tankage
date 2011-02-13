@@ -1,4 +1,6 @@
 #include <game/server/gameserver.h>
+#include <game/server/client_session.h>
+
 #include <game/common/net_protocol.h>
 #include <game/common/net_error.h>
 #include <game/common/replicated_system.h>
@@ -13,20 +15,6 @@
 #include <arpa/inet.h>
 #include <cstring>
 #include <algorithm>
-
-namespace {
-/*void SendError(Client *client, uint8_t code, const std::string &desc) {
-  NetErrorMsg msg;
-  msg.type = NET_ERROR;
-  msg.error_code = code;
-  strncpy(msg.desc, desc.c_str(), MAX_ERRDESC);
-  msg.desc[MAX_ERRDESC-1] = '\0';
-  client->send(&msg, sizeof(NetErrorMsg),
-               Client::PACKET_RELIABLE, NET_CHANNEL_STATE);
-
-
-}*/
-}
 
 GameServer::GameServer() {
   
@@ -43,7 +31,7 @@ void GameServer::init(const class Portal &interfaces) {
 }
 
 void GameServer::update() {
-  _host->update(); // Fixme: timeout should be the time until next update
+  _host->update(); // Fixme: timeout should maybe be the time until next update
   
   // Fixme: connectingClient -> clientConnecting?
   
@@ -62,16 +50,37 @@ void GameServer::update() {
   }
 }
 
+void GameServer::tick(double dt) {
+  std::cout << dt << std::endl;
+}
+
+
 void GameServer::registerSystem(class ReplicatedSystem *system) {
   _systems.push_back(system);
 }
 
 void GameServer::onConnect(Client *client) {
   std::cout << "new client: " << client->address() << "! :DD" << std::endl;
+  if (_sessions.find(client) != _sessions.end()) {
+    // The client already exists, weird..
+    std::cout << "client already exists!" << std::endl;
+    // Fixme: throw exception, disconnect the connection
+    return;
+  }
+  
+  ClientSession *session = new ClientSession(client);
+  _sessions.insert(std::make_pair(client, session));
 }
 
 void GameServer::onDisconnect(Client *client) {
   std::cout << "client disconnected :(" << std::endl;
+
+  // Remove any client connection metadata
+  SessionMap::iterator iter = _sessions.find(client);
+  if (iter != _sessions.end()) {
+    delete iter->second;
+    _sessions.erase(iter);
+  }
 }
 
 void GameServer::onReceive(Packet *packet) {
@@ -135,3 +144,4 @@ void GameServer::onIdent(const NetIdentifyMsg *data, Packet *packet) {
 
   
 }
+

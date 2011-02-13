@@ -20,6 +20,7 @@ add_executable(snail-wail-server
   # server specific
   main.cpp
   gameserver.cpp
+  client_session.cpp
 )
 
 target_link_libraries(snail-wail-server
