@@ -1,5 +1,6 @@
 #include <game/server/gameserver.h>
 #include <game/common/net_protocol.h>
+#include <game/common/net_error.h>
 #include <game/common/replicated_system.h>
 #include <game/common/snails.h>
 
@@ -14,7 +15,7 @@
 #include <algorithm>
 
 namespace {
-void SendError(Client *client, uint8_t code, const std::string &desc) {
+/*void SendError(Client *client, uint8_t code, const std::string &desc) {
   NetErrorMsg msg;
   msg.type = NET_ERROR;
   msg.error_code = code;
@@ -22,7 +23,9 @@ void SendError(Client *client, uint8_t code, const std::string &desc) {
   msg.desc[MAX_ERRDESC-1] = '\0';
   client->send(&msg, sizeof(NetErrorMsg),
                Client::PACKET_RELIABLE, NET_CHANNEL_STATE);
-}
+
+
+}*/
 }
 
 GameServer::GameServer() {
@@ -102,18 +105,27 @@ void GameServer::onIdent(const NetIdentifyMsg *data, Packet *packet) {
   ident.net_version = ntohs(data->net_version);
   
   std::cout << "net: received ident for net " << ident.net_version << std::endl;
+  Client *client = packet->sender();
 
-  if (ident.net_version != NET_VERSION) {
-    SendError(packet->sender(), NET_IDENT_WRONG_VERSION,
-              "wrong network version");
-    return;
-  }
-
-
-  class Client *sender = packet->sender();
-  for (size_t i = 0; i < _systems.size(); ++i) {
-    _systems[i]->onIdent(sender);
+  try {
+    if (ident.net_version != NET_VERSION) {
+      throw NetError(NET_IDENT_WRONG_VERSION, "wrong network version");
+    }
     
+    for (size_t i = 0; i < _systems.size(); ++i) {
+      _systems[i]->onIdent(client);
+      
+    }
+  }
+  catch (const NetError &netError) {
+    // Any failures during the ident progress will terminate the session
+
+    NetErrorMsg msg;
+    netError.fill(msg);
+    client->send(&msg, sizeof(NetErrorMsg),
+                 Client::PACKET_RELIABLE, NET_CHANNEL_STATE);
+
+    client->disconnect();
   }
   
 }
