@@ -26,7 +26,8 @@ const int MAX_PARTICIPANT_NAME = 32;
 enum {
   NET_IDENTIFY = 1,      //< NetIdentifyMsg
   NET_ERROR = 2,         //< NetErrorMsg
-  NET_ARENA_PARTICIPANTS = 3
+  NET_ARENA_PARTICIPANTS = 3,
+  NET_SNAILS_SNAPSHOT = 4
 };
 
 enum NetChannels {
@@ -77,5 +78,14 @@ struct NetArenaParticipantsMsg {
   NetArenaParticipant pcips[0];
 };
 
+struct NetSnailSnapshot {
+  uint16_t x;
+  uint16_t y;
+};
+
+struct NetSnailsSnapMsg {
+  NetPacketType type;
+  NetSnailSnapshot snaps[2];
+};
 
 #endif // !GAME_COMMON_NET_PROTOCOL_H

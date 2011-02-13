@@ -106,11 +106,22 @@ Snail *Snails::intersectingSnails(const vec2 &start, const vec2 &end,
 
 
 void Snails::onTick(class Client *client) {
+  std::cout << "BO" << std::endl;
+
+  NetSnailsSnapMsg msg;
+  msg.type = NET_SNAILS_SNAPSHOT;
   
+  for (size_t i = 0; i < snails.size() && i < 2; ++i) {
+    NetSnailSnapshot *snap = &msg.snaps[i];
+    snap->x = htons(snails[i]->position().x);
+    snap->y = htons(snails[i]->position().x);
+  }
+
+  client->send(&msg, sizeof(NetSnailsSnapMsg), 0, NET_CHANNEL_ABS);
 }
 
 void Snails::onReceive(NetPacketType type, const Packet &packet) {
-  std::cout << "received packet " << (int)type << std::endl;
+
 }
 
 

@@ -52,6 +52,14 @@ void GameServer::update() {
 
 void GameServer::tick(double dt) {
   std::cout << dt << std::endl;
+ 
+  for (size_t i = 0; i < _systems.size(); ++i) {
+    for (SessionMap::iterator it = _sessions.begin(), e = _sessions.end();
+         it != e; ++it) {
+
+      _systems[i]->onTick(it->second->client);
+    }
+  }
 }
 
 
@@ -159,7 +167,7 @@ void GameServer::onIdent(const NetIdentifyMsg *data, Packet *packet) {
     throw NetError(NET_IDENT_WRONG_VERSION, "wrong network version");
   }
   
-  
+  // Forward the ident request to all subsystems
   for (size_t i = 0; i < _systems.size(); ++i) {
     _systems[i]->onReceive(ident.type, *packet);
   }
@@ -169,7 +177,7 @@ void GameServer::onIdent(const NetIdentifyMsg *data, Packet *packet) {
   // Broadcast onIdent to all subsystems
   for (size_t i = 0; i < _systems.size(); ++i) {
     _systems[i]->onIdent(client);
-  }      
+  }
 }
 
 ClientSession *GameServer::session(Client *client) const {

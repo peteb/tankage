@@ -10,9 +10,7 @@ public:
   ClientSession(class Client *client);
 
   int state;
-  
-private:
-  class Client *_client;
+  Client * const client;
 };
 
 #endif // !GAME_SERVER_CLIENT_SESSION_H
