@@ -12,6 +12,7 @@
 #include <game/common/system.h>
 #include <game/common/items.h>
 #include <game/common/texture_loader.h>
+#include <game/common/players.h>
 
 #include <cstdlib>
 #include <iostream>
@@ -30,11 +31,14 @@ int app_main(Portal &interfaces) {
   // Register the subsystems
   GameClient gameclient;
   Snails snails;
-
+  Players players;
+  
   gameclient.registerSystem(&snails);
+  gameclient.registerSystem(&players);
   
   systems.set(SystemContext::SYSTEM_SNAILS, &snails);
   systems.set(SystemContext::SYSTEM_GAMECLIENT, &gameclient);
+  systems.set(SystemContext::SYSTEM_PLAYERS, &players);
   
   systems.init(interfaces);
 

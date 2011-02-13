@@ -77,25 +77,25 @@ void GameServer::onDisconnect(Client *client) {
 void GameServer::onReceive(Packet *packet) {
   size_t size = packet->size();
   const void *data = packet->data();
-  assert(size >= sizeof(NetPacketType) && "received a too small packet");
+
+  if (size < sizeof(NetPacketType)) {
+    return;
+  }
 
   const NetPacketType *type = static_cast<const NetPacketType *>(data);
   switch (*type) {
   case NET_IDENTIFY:
     assert(size >= sizeof(NetIdentifyMsg) && "packet too small for ident");
     onIdent(static_cast<const NetIdentifyMsg *>(data), packet);
-    // Fixme: if any system returns false for onIdent, the client should be
-    // disconnected.
-    
     break;
 
+  default:
+    // The onReceive will be called by onIdent
+    for (size_t i = 0; i < _systems.size(); ++i) {
+      _systems[i]->onReceive(*type, *packet);
+    }
   }
 
-  // Fixme: onReceive should only be called on identified clients, or if its an
-  // ident packet.
-  for (size_t i = 0; i < _systems.size(); ++i) {
-    _systems[i]->onReceive(*type, packet);
-  }
 }
 
 
@@ -114,9 +114,13 @@ void GameServer::onIdent(const NetIdentifyMsg *data, Packet *packet) {
     }
     
     for (size_t i = 0; i < _systems.size(); ++i) {
-      _systems[i]->onReceive(ident.type, packet);
-      
+      _systems[i]->onReceive(ident.type, *packet);
     }
+
+    // Broadcast onIdent to all subsystems
+    for (size_t i = 0; i < _systems.size(); ++i) {
+      _systems[i]->onIdent(client);
+    }    
   }
   catch (const NetError &netError) {
     // Any failures during the ident progress will terminate the session
@@ -128,5 +132,6 @@ void GameServer::onIdent(const NetIdentifyMsg *data, Packet *packet) {
 
     client->disconnect();
   }
+
   
 }

@@ -22,8 +22,7 @@ public:
   virtual ~Packet() {}
 
   virtual size_t size() const =0;
-  virtual void resize(size_t) =0; // Fixme: remove?
-  virtual void *data() =0; // Fixme: void *   -> const void *?
+  virtual const void *data() const =0;
   virtual class Client *sender() const =0;
   virtual size_t channel() const =0;
 };

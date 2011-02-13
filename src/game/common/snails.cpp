@@ -109,8 +109,8 @@ void Snails::onTick(class Client *client) {
   
 }
 
-void Snails::onReceive(NetPacketType type, Packet *packet) {
-//  std::cout << "received packet " << (int)type << std::endl;
+void Snails::onReceive(NetPacketType type, const Packet &packet) {
+  std::cout << "received packet " << (int)type << std::endl;
 }
 
 

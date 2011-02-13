@@ -18,6 +18,7 @@ typedef uint16_t NetVersion;
 
 const NetVersion NET_VERSION = 1;
 const int MAX_ERRDESC = 64;
+const int MAX_PARTICIPANT_NAME = 32;
 
 /**
  * Enumeration over the different packet types
@@ -25,7 +26,7 @@ const int MAX_ERRDESC = 64;
 enum {
   NET_IDENTIFY = 1,      //< NetIdentifyMsg
   NET_ERROR = 2,         //< NetErrorMsg
-  NET_SYSTEM = 3
+  NET_ARENA_PARTICIPANTS = 3
 };
 
 enum NetChannels {
@@ -40,6 +41,15 @@ enum NetErrorCode {
 };
 
 /**
+ * The generic packet for error messages/exceptions.
+ */
+struct NetErrorMsg {
+  NetPacketType type;
+  uint8_t error_code;
+  char desc[MAX_ERRDESC];   //< c-string describing the problem
+};
+
+/**
  * Message sent when the connection has been established.
  */
 struct NetIdentifyMsg {
@@ -49,18 +59,20 @@ struct NetIdentifyMsg {
                              //  will break compatibility.
 };
 
-/**
- * The generic packet for error messages/exceptions.
- */
-struct NetErrorMsg {
-  NetPacketType type;
-  uint8_t error_code;
-  char desc[MAX_ERRDESC];   //< c-string describing the problem
+
+struct NetArenaParticipant {
+  uint8_t id;
+  uint8_t flags;
+  char name[MAX_PARTICIPANT_NAME];
 };
 
-struct NetSystemMsg {
+
+struct NetArenaParticipantsMsg {
   NetPacketType type;
-  uint32_t systems;
+  uint8_t client_id;
+  uint8_t num_particips;
+  NetArenaParticipant pcips[0];
 };
+
 
 #endif // !GAME_COMMON_NET_PROTOCOL_H

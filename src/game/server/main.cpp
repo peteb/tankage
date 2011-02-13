@@ -5,6 +5,7 @@
 #include <game/server/gameserver.h>
 #include <game/common/system.h>
 #include <game/common/snails.h>
+#include <game/common/players.h>
 
 #include <cstdlib>
 #include <memory>
@@ -21,11 +22,14 @@ int app_main(Portal &interfaces) {
   // Register the subsystems
   GameServer server;
   Snails snails;
-
+  Players players;
+  
   server.registerSystem(&snails);
+  server.registerSystem(&players);
   
   systems.set(SystemContext::SYSTEM_SNAILS, &snails);
   systems.set(SystemContext::SYSTEM_GAMESERVER, &server);
+  systems.set(SystemContext::SYSTEM_PLAYERS, &players);
   
   systems.init(interfaces);
   

@@ -74,11 +74,7 @@ public:
     return _packet->dataLength;
   }
 
-  void resize(size_t newSize) {
-    enet_packet_resize(_packet, newSize);
-  }
-
-  void *data() {
+  const void *data() const {
     return _packet->data;
   }
 

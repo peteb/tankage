@@ -48,7 +48,7 @@ private:
 };
 
 
-class Snails : public System, public ReplicatedSystem {
+class Snails : public ReplicatedSystem {
 public:
   ~Snails();
 
@@ -63,7 +63,7 @@ public:
   Snail *intersectingSnails(const vec2 &start, const vec2 &end, float radius, Snail *ignore, vec2 &hitpos);
 
   void onTick(class Client *client);
-  void onReceive(NetPacketType type, class Packet *packet);
+  void onReceive(NetPacketType type, const class Packet &packet);
   
 private:
   class Graphics *graphics;
