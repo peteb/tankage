@@ -104,20 +104,13 @@ Snail *Snails::intersectingSnails(const vec2 &start, const vec2 &end,
  */
 
 
-void Snails::onIdent(class Client *client) {
-//  client->send("hej", 4, Client::PACKET_RELIABLE, NET_CHANNEL_STATE);
-  // The snail positions should be updated by the onTick
-  // There should be a players system that contains the players + spectators
-  // Replicate that list, and send which id the player is. Possibly just send
-  // the playing players and the client's player
-}
 
 void Snails::onTick(class Client *client) {
   
 }
 
-void Snails::onReceive(NetPacketType type, const void *data, size_t size) {
-  std::cout << "received packet " << (int)type << std::endl;
+void Snails::onReceive(NetPacketType type, Packet *packet) {
+//  std::cout << "received packet " << (int)type << std::endl;
 }
 
 

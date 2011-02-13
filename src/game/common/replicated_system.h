@@ -15,7 +15,7 @@ public:
    * @param channels the system can write stuff into these
    *        the system on the other end will get a call to onReceive.
    */
-  virtual void onIdent(class Client *client) {};
+//  virtual void onIdent(class Client *client) {};
 
   /**
    * Called each server tick.
@@ -28,7 +28,7 @@ public:
    * @param channelId the channel the data was received on
    * @param reader for accessing the data
    */
-  virtual void onReceive(NetPacketType type, const void *data, size_t size) =0;
+  virtual void onReceive(NetPacketType type, class Packet *packet) =0;
 };
 
 ///////////////////////////////////////

@@ -91,9 +91,10 @@ void GameServer::onReceive(Packet *packet) {
 
   }
 
-  // Fixme: onReceive should only be called on identified clients
+  // Fixme: onReceive should only be called on identified clients, or if its an
+  // ident packet.
   for (size_t i = 0; i < _systems.size(); ++i) {
-    _systems[i]->onReceive(*type, data, size);
+    _systems[i]->onReceive(*type, packet);
   }
 }
 
@@ -113,7 +114,7 @@ void GameServer::onIdent(const NetIdentifyMsg *data, Packet *packet) {
     }
     
     for (size_t i = 0; i < _systems.size(); ++i) {
-      _systems[i]->onIdent(client);
+      _systems[i]->onReceive(ident.type, packet);
       
     }
   }

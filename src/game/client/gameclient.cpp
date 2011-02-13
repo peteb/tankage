@@ -122,7 +122,7 @@ void GameClient::onReceive(Packet *packet) {
   }
 
   for (size_t i = 0; i < _systems.size(); ++i) {
-    _systems[i]->onReceive(*type, data, size);
+    _systems[i]->onReceive(*type, packet);
   }
 }
 
