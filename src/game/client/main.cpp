@@ -39,7 +39,6 @@ int app_main(Portal &interfaces) {
   systems.set(SystemContext::SYSTEM_SNAILS, &snails);
   systems.set(SystemContext::SYSTEM_GAMECLIENT, &gameclient);
   systems.set(SystemContext::SYSTEM_PLAYERS, &players);
-  
   systems.init(interfaces);
 
   bool running = true;

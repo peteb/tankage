@@ -44,7 +44,7 @@ void Snails::init(const class Portal &interfaces) {
   // Second snail
   {
     std::auto_ptr<Image> img(imgLoader->loadImage(std::string(RESOURCE_PATH) + "/snail_r.png"));
-    Snail *snail = new Snail(vec2(800-150.0f, 300.0f), Snails::SNAIL_RIGHT, context);
+    Snail *snail = new Snail(vec2(800-50.0f, 300.0f), Snails::SNAIL_RIGHT, context);
     snail->setTexture(graphics->createTexture(img.get()));
   
     snails.push_back(snail);
