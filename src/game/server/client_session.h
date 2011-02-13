@@ -3,8 +3,14 @@
 
 class ClientSession {
 public:
+  enum {
+    STATE_IDENTIFIED = 1
+  };
+    
   ClientSession(class Client *client);
 
+  int state;
+  
 private:
   class Client *_client;
 };

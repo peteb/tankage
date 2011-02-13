@@ -22,7 +22,8 @@ private:
   void onConnect(class Client *client);
   void onDisconnect(class Client *client);
   void onReceive(class Packet *packet);
-
+  class ClientSession *session(class Client *client) const;
+  
   // net protocol
   void onIdent(const struct NetIdentifyMsg *ident, class Packet *packet);
   

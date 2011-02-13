@@ -91,20 +91,47 @@ void GameServer::onReceive(Packet *packet) {
     return;
   }
 
-  const NetPacketType *type = static_cast<const NetPacketType *>(data);
-  switch (*type) {
-  case NET_IDENTIFY:
-    assert(size >= sizeof(NetIdentifyMsg) && "packet too small for ident");
-    onIdent(static_cast<const NetIdentifyMsg *>(data), packet);
-    break;
-
-  default:
-    // The onReceive will be called by onIdent
-    for (size_t i = 0; i < _systems.size(); ++i) {
-      _systems[i]->onReceive(*type, *packet);
+  Client *client = packet->sender();
+  ClientSession *clientSession = session(client);
+  
+  try {
+    
+    const NetPacketType *type = static_cast<const NetPacketType *>(data);
+    switch (*type) {
+    case NET_IDENTIFY:
+      assert(size >= sizeof(NetIdentifyMsg) && "packet too small for ident");
+      onIdent(static_cast<const NetIdentifyMsg *>(data), packet);
+      break;
+    
+    default:
+      // Some sanity checks first
+      if (!clientSession) {
+        // kinda strange, it should already be connected here
+        throw NetError(NET_NOT_CONNECTED, "please connect before issuing ident");
+      }
+      
+      if (clientSession->state != ClientSession::STATE_IDENTIFIED) {
+        throw NetError(NET_ALREADY_IDENTIFIED, "please identify first");
+      }
+      
+      // Then call onReceive on the subsystems
+      for (size_t i = 0; i < _systems.size(); ++i) {
+        _systems[i]->onReceive(*type, *packet);
+      }
+      
     }
   }
-
+  catch (const NetError &netError) {
+    // Any failures during the ident progress will terminate the session
+    
+    NetErrorMsg msg;
+    netError.fill(msg);
+    client->send(&msg, sizeof(NetErrorMsg),
+                 Client::PACKET_RELIABLE, NET_CHANNEL_STATE);
+      
+    client->disconnect();
+  }
+  
 }
 
 
@@ -116,32 +143,40 @@ void GameServer::onIdent(const NetIdentifyMsg *data, Packet *packet) {
   
   std::cout << "net: received ident for net " << ident.net_version << std::endl;
   Client *client = packet->sender();
+  ClientSession *clientSession = session(client);
 
-  try {
-    if (ident.net_version != NET_VERSION) {
-      throw NetError(NET_IDENT_WRONG_VERSION, "wrong network version");
-    }
-    
-    for (size_t i = 0; i < _systems.size(); ++i) {
-      _systems[i]->onReceive(ident.type, *packet);
-    }
-
-    // Broadcast onIdent to all subsystems
-    for (size_t i = 0; i < _systems.size(); ++i) {
-      _systems[i]->onIdent(client);
-    }    
+  // Some sanity checks first
+  if (!clientSession) {
+    // kinda strange, it should already be connected here
+    throw NetError(NET_NOT_CONNECTED, "please connect before issuing ident");
   }
-  catch (const NetError &netError) {
-    // Any failures during the ident progress will terminate the session
-
-    NetErrorMsg msg;
-    netError.fill(msg);
-    client->send(&msg, sizeof(NetErrorMsg),
-                 Client::PACKET_RELIABLE, NET_CHANNEL_STATE);
-
-    client->disconnect();
-  }
-
   
+  if (clientSession->state != 0) {
+    throw NetError(NET_ALREADY_IDENTIFIED, "you are already identified");
+  }
+  
+  if (ident.net_version != NET_VERSION) {
+    throw NetError(NET_IDENT_WRONG_VERSION, "wrong network version");
+  }
+  
+  
+  for (size_t i = 0; i < _systems.size(); ++i) {
+    _systems[i]->onReceive(ident.type, *packet);
+  }
+  
+  clientSession->state = ClientSession::STATE_IDENTIFIED;
+  
+  // Broadcast onIdent to all subsystems
+  for (size_t i = 0; i < _systems.size(); ++i) {
+    _systems[i]->onIdent(client);
+  }      
 }
 
+ClientSession *GameServer::session(Client *client) const {
+  SessionMap::const_iterator iter = _sessions.find(client);
+  if (iter == _sessions.end()) {
+    return NULL;
+  }
+
+  return iter->second;
+}

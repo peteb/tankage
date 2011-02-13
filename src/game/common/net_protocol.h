@@ -37,7 +37,10 @@ enum NetChannels {
 };
 
 enum NetErrorCode {
-  NET_IDENT_WRONG_VERSION = 1   //< the net version doesn't match the server
+  NET_IDENT_WRONG_VERSION = 1,     //< the net version doesn't match the server
+  NET_NOT_CONNECTED = 2,
+  NET_NOT_IDENTIFIED = 3,
+  NET_ALREADY_IDENTIFIED = 4,
 };
 
 /**
