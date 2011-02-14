@@ -2,9 +2,9 @@
 Ubuntu (10.10) Development Environment
 ======================================
 
-Tools and libraries required 
+Tools and libraries required (enet >= 1.3.0 must be downloaded from the net) 
     $ sudo apt-get install cmake g++ libdevil-dev libglfw-dev libgl1-mesa-dev 
-      libglu1-mesa-dev libenet-dev
+      libglu1-mesa-dev
 
 Build and install
     $ cmake -DCMAKE_INSTALL_PREFIX=/opt/snail-wail . && make && sudo make install

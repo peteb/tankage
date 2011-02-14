@@ -6,6 +6,20 @@
 #include <vector>
 #include <map>
 
+/** FIXME kaspars: Convert this to Doxygen diagram 
+ * client   server
+ * 
+ * -----> connect
+ * <----- ok
+ * 
+ * -----> id 
+ * <----- init (spectator or player, snail positions)
+ * 
+ * <----- receive stuff (sounds, positions)
+ * 
+ * -----> control
+ */
+
 class GameServer : public System {
 public:
   GameServer();

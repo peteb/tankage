@@ -69,9 +69,11 @@ set(CMAKE_MODULE_PATH "${PROJECT_ROOT_DIR}/cmake/Modules/")
 include_directories ("${PROJECT_ROOT_DIR}/inc/" "${PROJECT_ROOT_DIR}/src/")
 
 find_package(GTest)
+find_package(Curl)
 
-add_subdirectory (${PROJECT_ROOT_DIR}/src CMakeFiles/Src)
-add_subdirectory (${PROJECT_ROOT_DIR}/data CMakeFiles/Data)
+add_subdirectory(${PROJECT_ROOT_DIR}/src CMakeFiles/Src)
+add_subdirectory(${PROJECT_ROOT_DIR}/data CMakeFiles/Data)
+add_subdirectory(${PROJECT_ROOT_DIR}/3pp/twitcurl CMakeFiles/Twitcurl)
 
 add_custom_target(clean-gen
 	rm -rf CMakeFiles CMakeCache.txt Makefile cmake_install.cmake ../bin 
@@ -80,3 +82,4 @@ add_custom_target(clean-gen
 
 # Add CPack definitions for package generation on the current platform
 include(Package)
+

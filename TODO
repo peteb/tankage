@@ -12,7 +12,11 @@
 * TODO System profile
 * DONE New game folder structure (common, client, server)
 * DONE Add "error dialog box" to window managers, for displaying errors.
-* TODO A logging interface in the engine (+ basic stdout/stderr implementation)
+* Logging
+** DONE A logging interface in the engine (+ very basic stdout/stderr implementation)  
+** TODO Implement logging level (probably some environment variable)
+** TODO Update std::cout to use log interface
+** DONE Implement AUDIT or TWITTER LogType
 * TODO Verify that the server compiles, runs and accepts connections on PowerPC
 * TODO A directory for cached downloaded data, writable by the client  
 * Configuration Management
@@ -55,14 +59,15 @@
 *** TODO Move engine CMake rules specific for the platform to different files;
     Windows.cmake, MacOSX.cmake, Android.cmake, etc. Only for the engine and
     should specify which files to compile with (and which external libraries)
+*** DONE Add CMake module to find cURL library
 * Android support
-*** TODO Cmake
+*** TODO CMake
 *** TODO Window Manager support
 *** TODO OpenGLES
 *** TODO Image Loader    
 *** TODO Input    
 * Memory leaks and other Valgrind gibberish
-*** TODO Only one remarkable memory leak left
+** TODO Only one remarkable memory leak left
 	==11268== 4,152 (2,072 direct, 2,080 indirect) bytes in 1 blocks are definitely lost in loss record 30 of 30
 	==11268==    at 0x4025BD3: malloc (vg_replace_malloc.c:236)
 	==11268==    by 0x40FD9CD: ??? (in /usr/lib/mesa/libGL.so.1.2)
@@ -85,4 +90,6 @@
 ** TODO Message boxes in Windows for displaying errors   
 * Mac OS X support
 ** TODO Fix a proper icon for the OS X bundle   
-  
+* Linux support
+** TODO Add the icon for Linux as well 
+* DONE Add twitcurl library in 3pp and make it compilable 
