@@ -114,14 +114,28 @@ void Snails::onTick(class Client *client) {
   for (size_t i = 0; i < snails.size() && i < 2; ++i) {
     NetSnailSnapshot *snap = &msg.snaps[i];
     snap->x = htons(snails[i]->position().x);
-    snap->y = htons(snails[i]->position().x);
+    snap->y = htons(snails[i]->position().y);
   }
 
+  // FIXME: make sure old versions will be thrown away by the connection layer
   client->send(&msg, sizeof(NetSnailsSnapMsg), 0, NET_CHANNEL_ABS);
 }
 
 void Snails::onReceive(NetPacketType type, const Packet &packet) {
+  if (type == NET_SNAILS_SNAPSHOT) {
+    const NetSnailsSnapMsg *msg =
+      static_cast<const NetSnailsSnapMsg *>(packet.data());
 
+    for (size_t i = 0; i < 2; ++i) {
+      NetSnailSnapshot snap = msg->snaps[i];
+      snap.x = ntohs(snap.x); // FIXME: maybe there should be a multiplier here
+      snap.y = ntohs(snap.y);
+
+      // FIXME: forward this update to the snails
+      std::cout << "snail pos: " << snap.x << ":" << snap.y << std::endl;
+    }
+    
+  }
 }
 
 
