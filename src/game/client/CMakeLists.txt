@@ -14,6 +14,7 @@ add_executable(snail-wail
   ${GAME_ROOT_DIR}/common/powerup.cpp
   ${GAME_ROOT_DIR}/common/texture_loader.cpp
   ${GAME_ROOT_DIR}/common/players.cpp
+  ${GAME_ROOT_DIR}/common/configuration.cpp
 
   # client specific
   particles.cpp
