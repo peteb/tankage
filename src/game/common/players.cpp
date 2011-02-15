@@ -1,7 +1,10 @@
 #include <game/common/players.h>
 #include <engine/network.h>
 #include <engine/portal.h>
+
 #include <iostream>
+#include <cstdlib>
+#include <cstring>
 
 void Players::init(const Portal &interfaces) {
 

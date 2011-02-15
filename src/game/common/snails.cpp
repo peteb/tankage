@@ -17,6 +17,7 @@
 #include <utils/color.h>
 #include <utils/algorithm.h>
 
+#include <arpa/inet.h>
 
 #include <algorithm>
 #include <iostream>
