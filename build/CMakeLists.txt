@@ -74,6 +74,7 @@ find_package(Curl)
 add_subdirectory(${PROJECT_ROOT_DIR}/src CMakeFiles/Src)
 add_subdirectory(${PROJECT_ROOT_DIR}/data CMakeFiles/Data)
 add_subdirectory(${PROJECT_ROOT_DIR}/3pp/twitcurl CMakeFiles/Twitcurl)
+add_subdirectory(${PROJECT_ROOT_DIR}/3pp/ptrcfg CMakeFiles/Ptrcfg)
 
 add_custom_target(clean-gen
 	rm -rf CMakeFiles CMakeCache.txt Makefile cmake_install.cmake ../bin 
