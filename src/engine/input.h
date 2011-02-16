@@ -17,6 +17,8 @@ public:
 
   /// Returns true if the key has been released since the last invocation.
   virtual bool keyWasReleased(int key) =0;
+
+  virtual void mousePos(int &x, int &y) =0;
 };
 
 #endif // !ENGINE_WINDOW_MANAGER_H

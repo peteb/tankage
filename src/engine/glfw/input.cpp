@@ -83,3 +83,7 @@ Glfw::Input::KeyStateRange Glfw::Input::findKeyStates(int key) {
                           key_cmp()
     );
 }
+
+void Glfw::Input::mousePos(int &x, int &y) {
+  glfwGetMousePos(&x, &y);
+}

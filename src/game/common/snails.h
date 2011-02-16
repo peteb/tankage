@@ -25,8 +25,8 @@ public:
   
   void startState(SnailState state);
   void stopState(SnailState state);
-  void setTexture(class Texture *texture);
-
+  void setTexture(class Texture *texture, class Texture *turret);
+  
   void render(class Graphics *graphics);
   bool update(double dt);
   void takeDamage(const vec2 &pos, float damage);
@@ -34,20 +34,22 @@ public:
   
   bool intersects(const vec2 &start, const vec2 &end, float radius, vec2 &hitpos);
   void onSnap(NetSnailSnapshot &snapshot);
+
+  void setCursor(const vec2 & pos);
   
   const vec2 &position() const;
   
 private:
-  class Texture *texture;
+  class Texture *texture, *_turret;
   vec2 _position, originalPos;
-  float _dir, _speed, _rotSpeed;
+  float _dir, _speed, _rotSpeed, _turretDir;
   NetSnailSnapshot snapshots[2];
   double sinceSnap;
   
   int id;
   const SystemContext *context;
   float radius;
-  vec2 vel;
+  vec2 vel, cursorPos;
   bool _state[STATE_MAX];
 
   double secondsSinceFire;

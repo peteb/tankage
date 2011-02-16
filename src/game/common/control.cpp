@@ -2,6 +2,7 @@
 #include <game/common/snails.h>
 #include <engine/input.h>
 #include <engine/portal.h>
+#include <utils/vec.h>
 
 void Control::init(const class Portal &interfaces) {
   input = interfaces.requestInterface<Input>();
@@ -19,6 +20,12 @@ void Control::update() {
   triggerState(keyLeft, Snail::STATE_TURN_LEFT);
   triggerState(keyShoot, Snail::STATE_SHOOT);
 
+
+  Snail *target = context->snails()->snail(Snails::SNAIL_LEFT);
+
+  int x, y;
+  input->mousePos(x, y);
+  target->setCursor(vec2(x, y));
 }
 
 
