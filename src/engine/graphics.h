@@ -21,7 +21,7 @@ public:
   
   virtual void clear(const class color4 &clearColor) =0;
   virtual class Texture *createTexture(class Image *image) =0;
-  virtual void drawQuad(const class rect &quad) =0;
+  virtual void drawQuad(const class rect &quad, float dir) =0;
   virtual void drawQuad(const class rect &quad, const class rect &source) =0;
   virtual void drawQuads(const std::vector<rect> &quads) =0;
   virtual void drawLinestrip(const std::vector<vec2> &lines) =0;

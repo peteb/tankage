@@ -2,37 +2,41 @@
 #include <game/common/snails.h>
 #include <engine/input.h>
 #include <engine/portal.h>
+#include <utils/vec.h>
 
 void Control::init(const class Portal &interfaces) {
   input = interfaces.requestInterface<Input>();
   keyUp = input->keycode("up");
   keyDown = input->keycode("down");
   keyShoot = input->keycode("space");
+  keyRight = input->keycode("right");
+  keyLeft = input->keycode("left");
 }
 
 void Control::update() {
+  triggerState(keyUp, Snail::STATE_MOVE_UP);
+  triggerState(keyDown, Snail::STATE_MOVE_DOWN);
+  triggerState(keyRight, Snail::STATE_TURN_RIGHT);
+  triggerState(keyLeft, Snail::STATE_TURN_LEFT);
+  triggerState(keyShoot, Snail::STATE_SHOOT);
+
+
   Snail *target = context->snails()->snail(Snails::SNAIL_LEFT);
 
-  if (input->keyWasPressed(keyUp)) {
-    target->startState(Snail::STATE_MOVE_UP);
-  }
-  if (input->keyWasReleased(keyUp)) {
-    target->stopState(Snail::STATE_MOVE_UP);
-  }
+  int x, y;
+  input->mousePos(x, y);
+  target->setCursor(vec2(x, y));
+}
 
-  if (input->keyWasPressed(keyShoot)) {
-    target->startState(Snail::STATE_SHOOT);
+
+void Control::triggerState(int keycode, Snail::SnailState state) {
+  Snail *target = context->snails()->snail(Snails::SNAIL_LEFT);
+
+  if (input->keyWasPressed(keycode)) {
+    target->startState(state);
   }
-  if (input->keyWasReleased(keyShoot)) {
-    target->stopState(Snail::STATE_SHOOT);
-  }
-  
-  if (input->keyWasPressed(keyDown)) {
-    target->startState(Snail::STATE_MOVE_DOWN);
-  }
-  if (input->keyWasReleased(keyDown)) {
-    target->stopState(Snail::STATE_MOVE_DOWN);
+  if (input->keyWasReleased(keycode)) {
+    target->stopState(state);
   }
 
 }
-

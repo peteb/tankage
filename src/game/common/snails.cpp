@@ -22,6 +22,7 @@
 #include <algorithm>
 #include <iostream>
 #include <memory>
+#include <cmath>
 
 Snails::~Snails() {
   // delete all the snails when game terminates
@@ -35,9 +36,11 @@ void Snails::init(const class Portal &interfaces) {
 
   // First snail
   {
-    std::auto_ptr<Image> img(imgLoader->loadImage(std::string(RESOURCE_PATH) + "/snail_l.png"));
+    std::auto_ptr<Image> img(imgLoader->loadImage(std::string(RESOURCE_PATH) + "/tank_base.png"));
+    std::auto_ptr<Image> img2(imgLoader->loadImage(std::string(RESOURCE_PATH) + "/tank_turret.png"));
     Snail *snail = new Snail(vec2(50.0f, 300.0f), Snails::SNAIL_LEFT, context);
-    snail->setTexture(graphics->createTexture(img.get()));
+    snail->setTexture(graphics->createTexture(img.get()),
+                      graphics->createTexture(img2.get()));
   
     snails.push_back(snail);
   }
@@ -46,7 +49,7 @@ void Snails::init(const class Portal &interfaces) {
   {
     std::auto_ptr<Image> img(imgLoader->loadImage(std::string(RESOURCE_PATH) + "/snail_r.png"));
     Snail *snail = new Snail(vec2(800-50.0f, 300.0f), Snails::SNAIL_RIGHT, context);
-    snail->setTexture(graphics->createTexture(img.get()));
+    snail->setTexture(graphics->createTexture(img.get()), NULL);
   
     snails.push_back(snail);
   }
@@ -87,28 +90,8 @@ Snail *Snails::intersectingSnails(const vec2 &start, const vec2 &end,
   return 0;
 }
 
-/*
- * Snails subsystem network use cases:
- * - Send full state on new connection
- * - Send events when snails die, shoot, etc.
- * - Frequent updates of positions, etc.
- *
- * Fixme: ReplicatedSystem::onIdent(Client *), then send own packet
- *        ReplicatedSystem::onTick(Client *)
- * No don't do this. 
- */
-
-
-/*
- * channels[EVENTS].writeU8(blabla)    // will now receive a onReceive(EVENTS, blabla)
- * channels[ABS].write() // will now receive onReceive(ABS, bla)
- */
-
-
 
 void Snails::onTick(class Client *client) {
-  std::cout << "BO" << std::endl;
-
   NetSnailsSnapMsg msg;
   msg.type = NET_SNAILS_SNAPSHOT;
   
@@ -154,6 +137,10 @@ Snail::Snail(const vec2 &initialPos, int id, const SystemContext *ctx)
   secondsSinceFire = 0.0;
   sinceSnap = 0.0;
   health = 100;
+  _dir = 0.0f;
+  _speed = 0.0f;
+  _rotSpeed = 0.0f;
+  _turretDir = 0.0f;
 }
 
 Snail::~Snail() {
@@ -168,8 +155,9 @@ void Snail::stopState(SnailState state) {
   _state[state] = false;
 }
 
-void Snail::setTexture(Texture *texture) {
+void Snail::setTexture(Texture *texture, Texture *turret) {
   this->texture = texture;
+  _turret = turret;
 }
 
 void Snail::onSnap(NetSnailSnapshot &snapshot) {
@@ -190,7 +178,13 @@ void Snail::render(Graphics *graphics) {
   roundedPos.x = round(_position.x);
   roundedPos.y = round(_position.y);
 
-  graphics->drawQuad(rect(roundedPos, 32, 32));
+  graphics->drawQuad(rect(roundedPos, 16, 16), _dir);
+
+  if (_turret) {
+    _turret->bind();
+    graphics->drawQuad(rect(roundedPos, 16, 16), _turretDir);
+  }
+  
 //   graphics->disableTextures();
 //   graphics->drawCircle(roundedPos, radius, 18);
 }
@@ -202,50 +196,87 @@ bool Snail::update(double dt) {
   }
 
 //  _position.y = double(snapshots[0].y + double(snapshots[0].y - snapshots[1].y) * sinceSnap / 25.0);
-  _position.y = snapshots[0].y + double(snapshots[0].y - snapshots[1].y) * sinceSnap / (1.0/25.0);
+//  _position.y = snapshots[0].y + double(snapshots[0].y - snapshots[1].y) * sinceSnap / (1.0/25.0);
   
   sinceSnap += dt;
   secondsSinceFire += dt;
+
+  vec2 vDir(cos(_dir / 180.0f * M_PI), sin(_dir / 180.0f * M_PI));
   
-  if (_state[STATE_MOVE_UP])
-    _position += vec2(0.0f, -500.0f) * dt;
-  if (_state[STATE_MOVE_DOWN])
-    _position += vec2(0.0f, 500.0f) * dt;
-
-  _position += vel * dt;
-  vel -= vec2(vel.x * 0.5, vel.y) * dt * 4.5;
-
-  if (vel.magnitude() < 90.0) {
-    takingControl = true;
+  if (_state[STATE_MOVE_UP]) {
+    _speed = std::min(_speed + 200.0f * dt, 150.0);
+  }
+  else if (_state[STATE_MOVE_DOWN]) {
+    _speed = std::max(_speed - 80.0f * dt, -40.0);    
+  }
+  else {
+    if (_speed > 0.0)
+      _speed = std::max(_speed -= 300.0f * dt, 0.0f);
+    else
+      _speed = std::min(_speed += 300.0f * dt, 0.0f);
   }
 
-  if (takingControl) {
-    const vec2 wantedPos(originalPos.x, _position.y);
+  _position += vDir * _speed * dt;
 
-    vec2 diff = _position - wantedPos;
-    if (diff.x < 1.0f) {
-      takingControl = false;
-
-    }
-    else {
-      vel -= diff.normalize() * dt * 400.0;
-    }
+  if (_state[STATE_TURN_RIGHT]) {
+    _rotSpeed = std::min(_rotSpeed + 800.0f * dt, 120.0);
+    if (_speed > 0.0)
+      _speed -= 140.0 * dt;
   }
+  else if (_state[STATE_TURN_LEFT]) {
+    _rotSpeed = std::max(_rotSpeed - 800.0f * dt, -120.0);    
+    if (_speed > 0.0)
+      _speed -= 140.0 * dt;
+  }
+  else {
+    if (_rotSpeed > 0.0)
+      _rotSpeed = std::max(_rotSpeed -= 800.0f * dt, 0.0f);
+    else
+      _rotSpeed = std::min(_rotSpeed += 800.0f * dt, 0.0f);
+  }
+
+  _dir += _rotSpeed * dt;
+  _turretDir += _rotSpeed * dt;
+
+  vec2 targetDiff = cursorPos - _position;
+  targetDiff.normalize();
+  double targetDir = -atan2(targetDiff.x, targetDiff.y) / M_PI * 180.0 + 90.0;
+
+  if (abs(targetDir - _turretDir) > 180.0) {
+    if (targetDir > _turretDir)
+      _turretDir -= 200.0 * dt;
+    else if (targetDir < _turretDir)
+      _turretDir += 200.0 * dt;
+
+  }
+  else {
+    if (targetDir > _turretDir)
+      _turretDir += 200.0 * dt;
+    else if (targetDir < _turretDir)
+      _turretDir -= 200.0 * dt;
+  }
+
   
-  _position.y = clamp(_position.y, 32.0f, 600.0f - 32.0f);
-  _position.x = clamp(_position.x, 32.0f, 800.0f - 32.0f);
-  _position.x = std::max(_position.x, originalPos.x);
+  if (_turretDir > 360.0)
+    _turretDir -= 360.0;
+
+  if (_turretDir < -360.0)
+    _turretDir += 360.0;
   
-  if (_state[STATE_SHOOT]) {// FIXME: rename SHOOT to SHOOTING
+/*  if (_state[STATE_SHOOT]) {// FIXME: rename SHOOT to SHOOTING
     if (secondsSinceFire >= 0.2) {
       vec2 dir = (id == Snails::SNAIL_LEFT ? vec2(1.0f, 0.0f) : vec2(-1.0f, 0.0f));
       context->items()->spawnProjectile(Items::PROJECTILE_BULLET, _position + dir * 64.0f, dir, this);
       secondsSinceFire = 0.0;
     }
     
-  }
+    }*/
 
   return true;
+}
+
+void Snail::setCursor(const vec2 & pos) {
+  cursorPos = pos;
 }
 
 void Snail::takeDamage(const vec2 &pos, float damage) {

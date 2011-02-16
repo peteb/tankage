@@ -25,6 +25,10 @@ int Glfw::Input::keycode(const std::string &key) {
     return GLFW_KEY_UP;
   else if (key == "down")
     return GLFW_KEY_DOWN;
+  else if (key == "right")
+    return GLFW_KEY_RIGHT;
+  else if (key == "left")
+    return GLFW_KEY_LEFT;
   else if (key == "space")
     return GLFW_KEY_SPACE;
   
@@ -78,4 +82,8 @@ Glfw::Input::KeyStateRange Glfw::Input::findKeyStates(int key) {
                           key,
                           key_cmp()
     );
+}
+
+void Glfw::Input::mousePos(int &x, int &y) {
+  glfwGetMousePos(&x, &y);
 }
