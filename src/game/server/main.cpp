@@ -76,7 +76,3 @@ int app_main(Portal &interfaces) {
   return EXIT_SUCCESS;
 }
 
-
-snails {
-  background hello
-}
