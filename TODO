@@ -18,7 +18,12 @@
 ** TODO Update std::cout to use log interface
 ** DONE Implement AUDIT or TWITTER LogType
 * TODO Verify that the server compiles, runs and accepts connections on PowerPC
-* TODO A directory for cached downloaded data, writable by the client  
+* TODO A directory for cached downloaded data, writable by the client
+* Network
+** TODO Add some more replicated systems, bullets/projectiles
+** TODO Replicate player input to the server
+** TODO Replicate items (cactii)
+** TODO Player events (player was hurt, player picked up item, player died)
 * Configuration Management
 ** Each system can expose variables which the administrator can configure (during runtime and before)
 * Recover old behavior
