@@ -29,12 +29,15 @@ public:
   bool takeItem(const std::string &type, int amount);
   
   bool intersects(const vec2 &start, const vec2 &end, float radius, vec2 &hitpos);
-
+  void onSnap(NetSnailSnapshot &snapshot);
+  
   const vec2 &position() const;
   
 private:
   class Texture *texture;
   vec2 _position, originalPos;
+  NetSnailSnapshot snapshots[2];
+  double sinceSnap;
   
   int id;
   const SystemContext *context;

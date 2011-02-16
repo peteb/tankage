@@ -32,10 +32,12 @@ int app_main(Portal &interfaces) {
   GameClient gameclient;
   Snails snails;
   Players players;
+  Background background;
   
   gameclient.registerSystem(&snails);
   gameclient.registerSystem(&players);
-  
+
+  systems.set(SystemContext::SYSTEM_BACKGROUND, &background);
   systems.set(SystemContext::SYSTEM_SNAILS, &snails);
   systems.set(SystemContext::SYSTEM_GAMECLIENT, &gameclient);
   systems.set(SystemContext::SYSTEM_PLAYERS, &players);
@@ -44,8 +46,14 @@ int app_main(Portal &interfaces) {
   bool running = true;
   const int escape = input->keycode("escape");
   
-  while (running) {          
+  while (running) {
+    const rect wndSize = wm->size();
+    gfx->setViewport(wndSize);
+    gfx->setOrtho(wndSize);
+
+    background.render();
     gameclient.update();
+    snails.render();
     
     wm->swapBuffers();
 

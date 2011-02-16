@@ -134,6 +134,7 @@ void Snails::onReceive(NetPacketType type, const Packet &packet) {
 
       // FIXME: forward this update to the snails
       std::cout << "snail pos: " << snap.x << ":" << snap.y << std::endl;
+      snails[i]->onSnap(snap);
     }
     
   }
@@ -151,6 +152,7 @@ Snail::Snail(const vec2 &initialPos, int id, const SystemContext *ctx)
 {
   std::fill(_state, _state + STATE_MAX, 0);
   secondsSinceFire = 0.0;
+  sinceSnap = 0.0;
   health = 100;
 }
 
@@ -170,7 +172,15 @@ void Snail::setTexture(Texture *texture) {
   this->texture = texture;
 }
 
+void Snail::onSnap(NetSnailSnapshot &snapshot) {
+  snapshots[1] = snapshots[0];
+  snapshots[0] = snapshot;
+  sinceSnap = 0.0;
+//  _position.y = snapshot.y;
+}
+
 void Snail::render(Graphics *graphics) {
+  
   graphics->setBlend(Graphics::BLEND_ALPHA);
   graphics->enableTextures();
   graphics->setColor(color4::White());
@@ -190,7 +200,11 @@ bool Snail::update(double dt) {
     std::cout << "snail: I'm dead :( returning false" << std::endl;
     return false;
   }
+
+//  _position.y = double(snapshots[0].y + double(snapshots[0].y - snapshots[1].y) * sinceSnap / 25.0);
+  _position.y = snapshots[0].y + double(snapshots[0].y - snapshots[1].y) * sinceSnap / (1.0/25.0);
   
+  sinceSnap += dt;
   secondsSinceFire += dt;
   
   if (_state[STATE_MOVE_UP])
@@ -217,8 +231,6 @@ bool Snail::update(double dt) {
       vel -= diff.normalize() * dt * 400.0;
     }
   }
-
-  // TODO: add proper euler integration
   
   _position.y = clamp(_position.y, 32.0f, 600.0f - 32.0f);
   _position.x = clamp(_position.x, 32.0f, 800.0f - 32.0f);

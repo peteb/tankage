@@ -1,4 +1,5 @@
 Contributors
 ============
-Peter Backman 
-Kaspars Skels -- Debian Package, general CMake stuff, testing and bugfixing
+Kaspars Skels -- Debian Package, general CMake stuff, testing and bugfixing,
+                 logging interface with Twitter implementation
+Peter Backman -- Everything else
