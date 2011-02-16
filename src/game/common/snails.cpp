@@ -21,6 +21,7 @@
 #include <algorithm>
 #include <iostream>
 #include <memory>
+#include <cmath>
 
 Snails::~Snails() {
   // delete all the snails when game terminates
@@ -154,6 +155,8 @@ Snail::Snail(const vec2 &initialPos, int id, const SystemContext *ctx)
   sinceSnap = 0.0;
   health = 100;
   _dir = 0.0f;
+  _speed = 0.0f;
+  _rotSpeed = 0.0f;
 }
 
 Snail::~Snail() {
@@ -207,17 +210,50 @@ bool Snail::update(double dt) {
   sinceSnap += dt;
   secondsSinceFire += dt;
 
-  vec2 vDir(cos(_dir / 180.0f * 3.14159265), sin(_dir / 180.0f * 3.14159265));
+  vec2 vDir(cos(_dir / 180.0f * M_PI), sin(_dir / 180.0f * M_PI));
   
-  if (_state[STATE_MOVE_UP])
-    _position += vDir * 100.0f * dt;
-  if (_state[STATE_MOVE_DOWN])
+  if (_state[STATE_MOVE_UP]) {
+    _speed = std::min(_speed + 200.0f * dt, 150.0);
+  }
+  else if (_state[STATE_MOVE_DOWN]) {
+    _speed = std::max(_speed - 80.0f * dt, -40.0);    
+  }
+  else {
+    if (_speed > 0.0)
+      _speed = std::max(_speed -= 300.0f * dt, 0.0f);
+    else
+      _speed = std::min(_speed += 300.0f * dt, 0.0f);
+  }
+
+  _position += vDir * _speed * dt;
+
+  if (_state[STATE_TURN_RIGHT]) {
+    _rotSpeed = std::min(_rotSpeed + 800.0f * dt, 200.0);
+    if (_speed > 0.0)
+      _speed -= 140.0 * dt;
+  }
+  else if (_state[STATE_TURN_LEFT]) {
+    _rotSpeed = std::max(_rotSpeed - 800.0f * dt, -200.0);    
+    if (_speed > 0.0)
+      _speed -= 140.0 * dt;
+  }
+  else {
+    if (_rotSpeed > 0.0)
+      _rotSpeed = std::max(_rotSpeed -= 800.0f * dt, 0.0f);
+    else
+      _rotSpeed = std::min(_rotSpeed += 800.0f * dt, 0.0f);
+  }
+
+  _dir += _rotSpeed * dt;
+  
+  //  _position += vDir * 100.0f * dt;
+/*  if (_state[STATE_MOVE_DOWN])
     _position += vDir * -100.0f * dt;
   if (_state[STATE_TURN_RIGHT])
     _dir += 100.0f * dt;
   if (_state[STATE_TURN_LEFT])
     _dir -= 100.0f * dt;
-
+*/
   
 /*  if (_state[STATE_SHOOT]) {// FIXME: rename SHOOT to SHOOTING
     if (secondsSinceFire >= 0.2) {

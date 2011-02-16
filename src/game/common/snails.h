@@ -40,7 +40,7 @@ public:
 private:
   class Texture *texture;
   vec2 _position, originalPos;
-  float _dir;
+  float _dir, _speed, _rotSpeed;
   NetSnailSnapshot snapshots[2];
   double sinceSnap;
   
