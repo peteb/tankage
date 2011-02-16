@@ -33,6 +33,7 @@ int app_main(Portal &interfaces) {
   Snails snails;
   Players players;
   Background background;
+  Control control;
   
   gameclient.registerSystem(&snails);
   gameclient.registerSystem(&players);
@@ -41,6 +42,7 @@ int app_main(Portal &interfaces) {
   systems.set(SystemContext::SYSTEM_SNAILS, &snails);
   systems.set(SystemContext::SYSTEM_GAMECLIENT, &gameclient);
   systems.set(SystemContext::SYSTEM_PLAYERS, &players);
+  systems.set(SystemContext::SYSTEM_CONTROL, &control);
   systems.init(interfaces);
 
   bool running = true;
@@ -51,6 +53,7 @@ int app_main(Portal &interfaces) {
     gfx->setViewport(wndSize);
     gfx->setOrtho(wndSize);
 
+    control.update();
     background.render();
     gameclient.update();
     snails.render();

@@ -3,6 +3,7 @@
 
 #include <string>
 #include <game/common/system.h>
+#include <game/common/snails.h>
 
 class Control : public System {
 public:
@@ -10,7 +11,9 @@ public:
   void update();
   
 private:
-  int keyUp, keyDown, keyShoot;
+  void triggerState(int keycode, Snail::SnailState state);
+  
+  int keyUp, keyDown, keyLeft, keyRight, keyShoot;
   class Input *input;
   std::string snail;
 };

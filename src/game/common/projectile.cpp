@@ -68,7 +68,7 @@ void Projectile::render(Graphics *gfx) {
   gfx->enableTextures();
   tex->bind();
 
-  gfx->drawQuad(rect(pos, 32, 32)); // FIXME: get rid of hardcoded sizes
+  gfx->drawQuad(rect(pos, 32, 32), 0.0f); // FIXME: get rid of hardcoded sizes
 
 }
 

@@ -34,7 +34,7 @@ void Snails::init(const class Portal &interfaces) {
 
   // First snail
   {
-    std::auto_ptr<Image> img(imgLoader->loadImage(std::string(RESOURCE_PATH) + "/snail_l.png"));
+    std::auto_ptr<Image> img(imgLoader->loadImage(std::string(RESOURCE_PATH) + "/tank.png"));
     Snail *snail = new Snail(vec2(50.0f, 300.0f), Snails::SNAIL_LEFT, context);
     snail->setTexture(graphics->createTexture(img.get()));
   
@@ -153,6 +153,7 @@ Snail::Snail(const vec2 &initialPos, int id, const SystemContext *ctx)
   secondsSinceFire = 0.0;
   sinceSnap = 0.0;
   health = 100;
+  _dir = 0.0f;
 }
 
 Snail::~Snail() {
@@ -189,7 +190,7 @@ void Snail::render(Graphics *graphics) {
   roundedPos.x = round(_position.x);
   roundedPos.y = round(_position.y);
 
-  graphics->drawQuad(rect(roundedPos, 32, 32));
+  graphics->drawQuad(rect(roundedPos, 16, 16), _dir);
 //   graphics->disableTextures();
 //   graphics->drawCircle(roundedPos, radius, 18);
 }
@@ -201,48 +202,31 @@ bool Snail::update(double dt) {
   }
 
 //  _position.y = double(snapshots[0].y + double(snapshots[0].y - snapshots[1].y) * sinceSnap / 25.0);
-  _position.y = snapshots[0].y + double(snapshots[0].y - snapshots[1].y) * sinceSnap / (1.0/25.0);
+//  _position.y = snapshots[0].y + double(snapshots[0].y - snapshots[1].y) * sinceSnap / (1.0/25.0);
   
   sinceSnap += dt;
   secondsSinceFire += dt;
+
+  vec2 vDir(cos(_dir / 180.0f * 3.14159265), sin(_dir / 180.0f * 3.14159265));
   
   if (_state[STATE_MOVE_UP])
-    _position += vec2(0.0f, -500.0f) * dt;
+    _position += vDir * 100.0f * dt;
   if (_state[STATE_MOVE_DOWN])
-    _position += vec2(0.0f, 500.0f) * dt;
+    _position += vDir * -100.0f * dt;
+  if (_state[STATE_TURN_RIGHT])
+    _dir += 100.0f * dt;
+  if (_state[STATE_TURN_LEFT])
+    _dir -= 100.0f * dt;
 
-  _position += vel * dt;
-  vel -= vec2(vel.x * 0.5, vel.y) * dt * 4.5;
-
-  if (vel.magnitude() < 90.0) {
-    takingControl = true;
-  }
-
-  if (takingControl) {
-    const vec2 wantedPos(originalPos.x, _position.y);
-
-    vec2 diff = _position - wantedPos;
-    if (diff.x < 1.0f) {
-      takingControl = false;
-
-    }
-    else {
-      vel -= diff.normalize() * dt * 400.0;
-    }
-  }
   
-  _position.y = clamp(_position.y, 32.0f, 600.0f - 32.0f);
-  _position.x = clamp(_position.x, 32.0f, 800.0f - 32.0f);
-  _position.x = std::max(_position.x, originalPos.x);
-  
-  if (_state[STATE_SHOOT]) {// FIXME: rename SHOOT to SHOOTING
+/*  if (_state[STATE_SHOOT]) {// FIXME: rename SHOOT to SHOOTING
     if (secondsSinceFire >= 0.2) {
       vec2 dir = (id == Snails::SNAIL_LEFT ? vec2(1.0f, 0.0f) : vec2(-1.0f, 0.0f));
       context->items()->spawnProjectile(Items::PROJECTILE_BULLET, _position + dir * 64.0f, dir, this);
       secondsSinceFire = 0.0;
     }
     
-  }
+    }*/
 
   return true;
 }

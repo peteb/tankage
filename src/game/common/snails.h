@@ -12,6 +12,10 @@ public:
   enum SnailState {
     STATE_MOVE_UP,
     STATE_MOVE_DOWN,
+    STATE_TURN_LEFT,
+    STATE_TURN_RIGHT,
+    STATE_TURN_TURRET_LEFT,
+    STATE_TURN_TURRET_RIGHT,
     STATE_SHOOT,
     STATE_MAX
   };
@@ -36,6 +40,7 @@ public:
 private:
   class Texture *texture;
   vec2 _position, originalPos;
+  float _dir;
   NetSnailSnapshot snapshots[2];
   double sinceSnap;
   

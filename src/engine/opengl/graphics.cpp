@@ -79,14 +79,32 @@ class Texture *OpenGl::Graphics::createTexture(Image *image) {
                image->data()
                );
   
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
   
   return new OpenGlTexture(texId);
 }
 
-void OpenGl::Graphics::drawQuad(const rect &quad) {
-  drawQuad(quad, rect(vec2(0.5f, 0.5f), 0.5f, 0.5f));
+void OpenGl::Graphics::drawQuad(const rect &quad, float dir) {
+  glTranslatef(quad.origin.x, quad.origin.y, 0.0f);
+  glRotatef(dir, 0.0f, 0.0f, 1.0f);
+  
+  glEnable(GL_COLOR_MATERIAL);
+  glBegin(GL_QUADS);
+  glTexCoord2f(0.0f, 0.0f);
+  glVertex2f(-quad.halfSize.x, -quad.halfSize.y);
+
+  glTexCoord2f(1.0f, 0.0f);
+  glVertex2f(quad.halfSize.x, -quad.halfSize.y);
+
+  glTexCoord2f(1.0f, 1.0f);
+  glVertex2f(quad.halfSize.x, quad.halfSize.y);
+
+  glTexCoord2f(0.0f, 1.0f);
+  glVertex2f(-quad.halfSize.x, quad.halfSize.y);
+  glEnd();
+
+  glLoadIdentity();
 }
 
 void OpenGl::Graphics::drawQuad(const class rect &quad, const class rect &source) {
