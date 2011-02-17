@@ -189,6 +189,13 @@ void Snail::render(Graphics *graphics) {
 //   graphics->drawCircle(roundedPos, radius, 18);
 }
 
+double Wrap(double value, double lower, double upper) {
+  double distance = upper - lower;
+  double times = floor((value - lower) / distance);
+  return value - (times * distance);
+}
+
+
 bool Snail::update(double dt) {
   if (health <= 0) {
     std::cout << "snail: I'm dead :( returning false" << std::endl;
@@ -240,29 +247,23 @@ bool Snail::update(double dt) {
 
   vec2 targetDiff = cursorPos - _position;
   targetDiff.normalize();
-  double targetDir = -atan2(targetDiff.x, targetDiff.y) / M_PI * 180.0 + 90.0;
+  double targetDir = atan2(targetDiff.y, targetDiff.x) / M_PI * 180.0;
 
-  if (abs(targetDir - _turretDir) > 180.0) {
-    if (targetDir > _turretDir)
-      _turretDir -= 200.0 * dt;
-    else if (targetDir < _turretDir)
-      _turretDir += 200.0 * dt;
+  double angle = Wrap(targetDir - _turretDir, 0.0, 360.0);
+  if (angle >= 180.0)
+    angle -= 360.0;
 
-  }
-  else {
-    if (targetDir > _turretDir)
-      _turretDir += 200.0 * dt;
-    else if (targetDir < _turretDir)
-      _turretDir -= 200.0 * dt;
-  }
-
+  if (angle > 0.0)
+    _turretDir += 200.0 * dt;
+  else if (angle < 0.0)
+    _turretDir -= 200.0 * dt;
   
-  if (_turretDir > 360.0)
+/*  if (_turretDir > 360.0)
     _turretDir -= 360.0;
 
   if (_turretDir < -360.0)
     _turretDir += 360.0;
-  
+*/
 /*  if (_state[STATE_SHOOT]) {// FIXME: rename SHOOT to SHOOTING
     if (secondsSinceFire >= 0.2) {
       vec2 dir = (id == Snails::SNAIL_LEFT ? vec2(1.0f, 0.0f) : vec2(-1.0f, 0.0f));
