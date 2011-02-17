@@ -75,7 +75,4 @@ int app_main(Portal &interfaces) {
   
   return EXIT_SUCCESS;
 }
-<<<<<<< HEAD
 
-=======
->>>>>>> peter/tank
