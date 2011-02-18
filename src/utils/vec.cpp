@@ -6,7 +6,7 @@
  
 #include "vec.h"
 #include <sstream>
-
+#include <cmath>
 
 vec2 vec2::Zero() {
   static vec2 zero(0.0f, 0.0f);
@@ -16,6 +16,11 @@ vec2 vec2::Zero() {
 vec2 vec2::Identity() {
   static vec2 identity(0.0f, 0.0f);
   return identity;
+}
+
+vec2 vec2::Direction(double degrees) {
+  double radians = degrees / 180.0 * M_PI;
+  return vec2(cos(radians), sin(radians));
 }
 
 vec2::operator std::string() const {

@@ -22,6 +22,10 @@ void GLFWCALL WindowResize(int w, int h) {
 void GLFWCALL KeyStateChange(int key, int state) {
   Glfw::KeyStateChange(key, state);
 }
+
+void GLFWCALL MouseButtonChange(int key, int state) {
+  Glfw::KeyStateChange(GLFW_KEY_LAST + key, state);
+}
 }
 
 Glfw::WindowManager::WindowManager() {
@@ -43,6 +47,7 @@ void Glfw::WindowManager::createWindow(int width, int height) {
   
   glfwSetWindowSizeCallback(WindowResize);
   glfwSetKeyCallback(KeyStateChange);
+  glfwSetMouseButtonCallback(MouseButtonChange);
 
   #ifdef DEV
   glfwSetWindowTitle("Snail Wail [DEVELOPER VERSION]");

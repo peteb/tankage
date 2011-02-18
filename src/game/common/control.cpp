@@ -6,11 +6,11 @@
 
 void Control::init(const class Portal &interfaces) {
   input = interfaces.requestInterface<Input>();
-  keyUp = input->keycode("up");
-  keyDown = input->keycode("down");
-  keyShoot = input->keycode("space");
-  keyRight = input->keycode("right");
-  keyLeft = input->keycode("left");
+  keyUp = input->keycode("W");
+  keyDown = input->keycode("S");
+  keyShoot = input->keycode("mouse1");
+  keyRight = input->keycode("D");
+  keyLeft = input->keycode("A");
 }
 
 void Control::update() {

@@ -7,7 +7,7 @@
 
 // Called by glfw/wm.cpp
 namespace Glfw {
-void KeyStateChange(int key, int state) {
+void GLFWCALL KeyStateChange(int key, int state) {
   Glfw::Input::instance().onKeyStateChange(key, state);
 }
 }
@@ -31,6 +31,10 @@ int Glfw::Input::keycode(const std::string &key) {
     return GLFW_KEY_LEFT;
   else if (key == "space")
     return GLFW_KEY_SPACE;
+  else if (key.size() == 1) // handle single-letter names (ASCII)
+    return key[0];
+  else if (key == "mouse1")
+    return GLFW_KEY_LAST + GLFW_MOUSE_BUTTON_LEFT;
   
   throw std::runtime_error("glfw: no keycode for '" + key + "'");
 }
