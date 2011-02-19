@@ -13,8 +13,10 @@ public:
 };
 
 TEST(ConfUnittest, TestAll) {
+  // non-existing configuration file
+  EXPECT_ANY_THROW(Conf("tron"));
   // verify constructor and get property
-  Conf conf("../src/game/common/unittest/test.cosnf");
+  Conf conf("../src/game/common/unittest/test.conf");
   EXPECT_EQ(conf.property("control", "keyUp"), "W");  
   // init consumer
   TestConsumer consumer;

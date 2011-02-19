@@ -1,12 +1,11 @@
 
-# Check GTest status and skip the file if negative
 if (NOT GTEST_FLAG) 
 	return()
 endif (NOT GTEST_FLAG)
 
 include_directories(
-	${GTEST_INCLUDE_DIR}
-    ${PROJECT_ROOT_DIR}/3pp
+  ${GTEST_INCLUDE_DIR}
+  ${PROJECT_ROOT_DIR}/3pp
 )
 
 add_executable(conf_unittest EXCLUDE_FROM_ALL
@@ -20,4 +19,6 @@ target_link_libraries(conf_unittest
   pthread
   ptrcfg 
 )
+
+add_dependencies(unittest conf_unittest)
 

@@ -71,6 +71,8 @@ include_directories ("${PROJECT_ROOT_DIR}/inc/" "${PROJECT_ROOT_DIR}/src/")
 find_package(GTest)
 find_package(Curl)
 
+add_custom_target(unittest)
+
 add_subdirectory(${PROJECT_ROOT_DIR}/src CMakeFiles/Src)
 add_subdirectory(${PROJECT_ROOT_DIR}/data CMakeFiles/Data)
 add_subdirectory(${PROJECT_ROOT_DIR}/3pp/twitcurl CMakeFiles/Twitcurl)
