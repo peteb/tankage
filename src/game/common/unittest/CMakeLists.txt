@@ -9,7 +9,7 @@ include_directories(
 )
 
 add_executable(conf_unittest EXCLUDE_FROM_ALL
-  ../conf.cpp
+  ${PROJECT_ROOT_DIR}/src/game/common/conf.cpp
   conf_unittest.cpp
 )
 
