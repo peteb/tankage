@@ -14,16 +14,16 @@
 *--*/
 twitCurl::twitCurl():
 m_curlHandle( NULL ),
-m_twitterUsername( "" ),
-m_twitterPassword( "" ),
 m_callbackData( "" ),
-m_proxyUserName( "" ),
-m_proxyPassword( "" ),
-m_proxyServerIp( "" ),
-m_proxyServerPort( "" ),
 m_curlProxyParamsSet( false ),
 m_curlLoginParamsSet( false ),
-m_curlCallbackParamsSet( false )
+m_curlCallbackParamsSet( false ),
+m_proxyServerIp( "" ),
+m_proxyServerPort( "" ),
+m_proxyUserName( "" ),
+m_proxyPassword( "" ),
+m_twitterUsername( "" ),
+m_twitterPassword( "" )
 {
     /* Clear callback buffers */
     clearCurlCallbackBuffers();
