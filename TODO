@@ -29,6 +29,7 @@
 ** DONE Basic stuff, read from file, get, add and update properties
 ** DONE Support for CM consumers, triggered when properties are updated
 ** Each system can expose variables which the administrator can configure (during runtime and before)
+** TODO Integrate CM in the game
 * Recover old behavior
 *** DONE Cactii
 *** DONE Shooting
