@@ -53,7 +53,7 @@ void PropertyTreeParser::parseBlock(PropertyNode & node) {
 			try {
 				PropertyNode newNode(attributes.at(0));
 			
-				for (int i = 1; i < attributes.size(); ++i)
+				for (size_t i = 1; i < attributes.size(); ++i)
 					newNode.addAttribute(attributes[i]);
 			
 				attributes.clear();

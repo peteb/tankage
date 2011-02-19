@@ -34,7 +34,7 @@ private:
 	void addLine(const std::vector<std::string> & line, PropertyNode & node) const;
 	
 	std::vector<Token> tokens;
-	int currentToken, braceCount;
+	size_t currentToken, braceCount;
 };
 
 #endif // !CONFIG_PROPERTYTREEPARSER_H

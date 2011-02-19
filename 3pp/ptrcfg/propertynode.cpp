@@ -70,7 +70,7 @@ std::string PropertyNode::getProperty(const std::string & name) const {
 Property PropertyNode::getProperty(int id) const {
 	PropertyMap::const_iterator iter = properties.begin();
 	
-	for (int i = 0; i < id, iter != properties.end(); ++i, ++iter) {
+	for (int i = 0; i < id && iter != properties.end(); ++i, ++iter) {
 		if (i == id)
 			return *iter;
 	}
@@ -83,7 +83,7 @@ const PropertyNode & PropertyNode::getNode(int id) const {
 }
 
 const PropertyNode & PropertyNode::getNode(const std::string & name) const {
-	for (int i = 0; i < children.size(); ++i) {
+	for (size_t i = 0; i < children.size(); ++i) {
 		if (children[i].getName() == name)
 			return children[i];
 	}
@@ -92,7 +92,7 @@ const PropertyNode & PropertyNode::getNode(const std::string & name) const {
 }
 
 PropertyNode & PropertyNode::getNode(const std::string & name) {
-	for (int i = 0; i < children.size(); ++i) {
+	for (size_t i = 0; i < children.size(); ++i) {
 		if (children[i].getName() == name)
 			return children[i];
 	}
