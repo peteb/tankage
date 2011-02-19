@@ -34,15 +34,25 @@ int app_main(Portal &interfaces) {
   Players players;
   Background background;
   Control control;
+  Items items;
+  Particles particles;
+  TextureLoader texLoader;
   
   gameclient.registerSystem(&snails);
   gameclient.registerSystem(&players);
 
+  // TODO: this is fugly, registering like this. maybe it should be done
+  //       like gameClient above
+  
   systems.set(SystemContext::SYSTEM_BACKGROUND, &background);
   systems.set(SystemContext::SYSTEM_SNAILS, &snails);
+  systems.set(SystemContext::SYSTEM_ITEMS, &items);
   systems.set(SystemContext::SYSTEM_GAMECLIENT, &gameclient);
   systems.set(SystemContext::SYSTEM_PLAYERS, &players);
   systems.set(SystemContext::SYSTEM_CONTROL, &control);
+  systems.set(SystemContext::SYSTEM_PARTICLES, &particles);
+  systems.set(SystemContext::SYSTEM_TEXTURE_LOADER, &texLoader);
+
   systems.init(interfaces);
 
   bool running = true;
@@ -57,6 +67,8 @@ int app_main(Portal &interfaces) {
     background.render();
     gameclient.update();
     snails.render();
+    items.update();
+    items.render();
     
     wm->swapBuffers();
 

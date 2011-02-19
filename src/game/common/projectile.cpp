@@ -9,6 +9,7 @@
 
 #include <utils/vec.h>
 #include <utils/rect.h>
+#include <cmath>
 
 Projectile::Projectile(class ParticleGroup *partGroup,
                        class Snail *shooter, class Texture *tex,
@@ -68,7 +69,9 @@ void Projectile::render(Graphics *gfx) {
   gfx->enableTextures();
   tex->bind();
 
-  gfx->drawQuad(rect(pos, 32, 32), 0.0f); // FIXME: get rid of hardcoded sizes
+  vec2 dir = vel;
+  dir.normalize();
+  gfx->drawQuad(rect(pos, 32, 32), degrees(dir)); // FIXME: get rid of hardcoded sizes
 
 }
 

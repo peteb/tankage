@@ -264,14 +264,14 @@ bool Snail::update(double dt) {
   if (_turretDir < -360.0)
     _turretDir += 360.0;
 */
-/*  if (_state[STATE_SHOOT]) {// FIXME: rename SHOOT to SHOOTING
+  if (_state[STATE_SHOOT]) {// FIXME: rename SHOOT to SHOOTING
     if (secondsSinceFire >= 0.2) {
-      vec2 dir = (id == Snails::SNAIL_LEFT ? vec2(1.0f, 0.0f) : vec2(-1.0f, 0.0f));
+      vec2 dir = vec2::Direction(_turretDir);
       context->items()->spawnProjectile(Items::PROJECTILE_BULLET, _position + dir * 64.0f, dir, this);
       secondsSinceFire = 0.0;
     }
     
-    }*/
+    }
 
   return true;
 }

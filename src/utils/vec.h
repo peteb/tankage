@@ -34,7 +34,7 @@ public:
   vec2 operator - (const vec2 &rh) const {return vec2(*this) -= rh; }
   
   float magnitude() const {return sqrt(x * x + y * y); }
-
+  
   vec2 &normalize() {
     float mag = magnitude();
     if (mag > 0.0f) {
@@ -50,6 +50,7 @@ public:
   
   static vec2 Zero();
   static vec2 Identity();
+  static vec2 Direction(double degrees);
   
   float x;
   float y;
@@ -67,6 +68,10 @@ inline vec2 closest_point(const vec2 &start, const vec2 &end, const vec2 &pos) {
   float t = apab / ab2;
 
   return ab * clamp(t, 0.0f, 1.0f) + start;
+}
+
+inline float degrees(const vec2 &v) {
+  return atan2(v.y, v.x) / M_PI * 180.0f;
 }
 
 #endif /* end of include guard: VEC2_H_8BJJJ5TN */
