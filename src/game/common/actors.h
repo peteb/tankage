@@ -31,6 +31,8 @@ public:
 private:
   typedef std::vector<class Tank *> TankVector;
 
+  void createTank(const NetTankSnapshot &net_snapshot);
+  
   class Graphics *graphics;
   class WindowManager *wm;
   class Texture *tankBase;

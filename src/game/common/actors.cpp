@@ -100,12 +100,19 @@ void Actors::onReceive(NetPacketType type, const Packet &packet) {
       }
       else {
         std::cout << "got update for not existing tank" << std::endl;
+        createTank(snapshot);
       }
     }
     
   }
 }
 
+void Actors::createTank(const NetTankSnapshot &net_snapshot) {
+  Tank *newTank = new Tank(ntohs(net_snapshot.id), context);
+  newTank->setTexture(tankBase, tankTurret);
+  tanks.push_back(newTank);
+  newTank->onSnap(net_snapshot);
+}
 
 Tank *Actors::tank(int id) const {
   for (TankVector::const_iterator i = tanks.begin(), e = tanks.end();
