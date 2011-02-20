@@ -15,6 +15,7 @@ private:
   
   int keyUp, keyDown, keyLeft, keyRight, keyShoot;
   class Input *input;
+  class Cfg *cfg;
   std::string snail;
 };
 

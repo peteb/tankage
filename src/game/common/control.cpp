@@ -1,16 +1,18 @@
 #include <game/common/control.h>
 #include <game/common/snails.h>
 #include <engine/input.h>
+#include <engine/cfg.h>
 #include <engine/portal.h>
 #include <utils/vec.h>
 
 void Control::init(const class Portal &interfaces) {
   input = interfaces.requestInterface<Input>();
-  keyUp = input->keycode("W");
-  keyDown = input->keycode("S");
-  keyShoot = input->keycode("mouse1");
-  keyRight = input->keycode("D");
-  keyLeft = input->keycode("A");
+  cfg = interfaces.requestInterface<Cfg>();
+  keyUp = input->keycode(cfg->property("control", "keyUp"));
+  keyDown = input->keycode(cfg->property("control", "keyDown"));
+  keyRight = input->keycode(cfg->property("control", "keyRight"));
+  keyLeft = input->keycode(cfg->property("control", "keyLeft"));
+  keyShoot = input->keycode(cfg->property("control", "keyShoot"));
 }
 
 void Control::update() {
