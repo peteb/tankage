@@ -6,6 +6,15 @@
 
 class ReplicatedSystem : public System {
 public:
+  enum {
+    SERVER_TICK      = 0x0001,
+    CLIENT_TICK      = 0x0002,
+    SERVER_RECEIVE   = 0x0004,
+    CLIENT_RECEIVE   = 0x0008
+  };
+  
+  ReplicatedSystem(unsigned flags = 0xFFFFFFFF) : flags(flags) {}
+  
   virtual ~ReplicatedSystem() {}
 
   /**
@@ -21,7 +30,9 @@ public:
   /**
    * A message has been received, broadcasted to all registered subsystems
    */
-  virtual void onReceive(NetPacketType type, const class Packet &packet) =0;
+  virtual void onReceive(NetPacketType type, const class Packet &packet) {};
+
+  const unsigned flags;
 };
 
 #endif // !GAME_COMMON_REPLICATED_SYSTEM_H

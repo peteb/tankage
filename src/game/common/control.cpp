@@ -1,15 +1,25 @@
 #include <game/common/control.h>
 #include <game/common/actors.h>
 #include <game/common/tank.h>
+#include <game/common/players.h>
 
 #include <engine/input.h>
 #include <engine/portal.h>
+#include <engine/window_manager.h>
+
 #include <utils/vec.h>
 #include <iostream>
-#include <game/common/players.h>
+
+Control::Control()
+  : ReplicatedSystem(CLIENT_TICK|SERVER_RECEIVE)
+{
+}
 
 void Control::init(const class Portal &interfaces) {
   input = interfaces.requestInterface<Input>();
+  wm = interfaces.requestInterface<WindowManager>();
+  lastTick = wm->timeSeconds();
+  
   keyUp = input->keycode("W");
   keyDown = input->keycode("S");
   keyShoot = input->keycode("mouse1");
@@ -35,6 +45,7 @@ void Control::update() {
         int x, y;
         input->mousePos(x, y);
         target->setCursor(vec2(x, y));
+        // TODO: replicate to server if >= 1/25 since last
       }
       else {
         std::cout << "no tank :(" << std::endl;
@@ -44,6 +55,10 @@ void Control::update() {
     
 }
 
+#include <iostream>
+void Control::onTick(Client *client) {
+  std::cout << "CONTROL TICK" << std::endl;
+}
 
 void Control::triggerState(int keycode, Tank::State state, Tank *target) {
   if (input->keyWasPressed(keycode)) {

@@ -14,6 +14,7 @@ add_executable(snail-wail-server
   ${GAME_ROOT_DIR}/common/cactus.cpp
   ${GAME_ROOT_DIR}/common/players.cpp
   ${GAME_ROOT_DIR}/common/net_error.cpp
+  ${GAME_ROOT_DIR}/common/control.cpp
   
   # bad stuff (shouldn't be needed)
   ${GAME_ROOT_DIR}/client/particles.cpp

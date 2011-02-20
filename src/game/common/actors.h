@@ -25,8 +25,7 @@ public:
   // Misc
   class Tank *tank(ActorId id) const;
   class Tank *intersectingTank(const vec2 &start, const vec2 &end, float radius, ActorId ignore, vec2 &hitpos);
-
-  class Tank *createActor(class Client *client);
+  class Tank *createActor();
   
 private:
   typedef std::vector<class Tank *> TankVector;

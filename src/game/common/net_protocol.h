@@ -93,4 +93,10 @@ struct NetTanksSnapMsg {
   NetTankSnapshot snaps[0];
 };
 
+struct NetPlayerInput {
+  uint8_t state; // forward, back, left, right, shoot
+  uint16_t target_x;
+  uint16_t target_y;
+};
+
 #endif // !GAME_COMMON_NET_PROTOCOL_H

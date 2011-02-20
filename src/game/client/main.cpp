@@ -40,7 +40,8 @@ int app_main(Portal &interfaces) {
   
   gameclient.registerSystem(&actors);
   gameclient.registerSystem(&players);
-
+  gameclient.registerSystem(&control);
+  
   // TODO: this is fugly, registering like this. maybe it should be done
   //       like gameClient above
   

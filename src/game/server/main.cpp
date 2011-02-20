@@ -8,6 +8,7 @@
 #include <game/common/actors.h>
 #include <game/common/players.h>
 #include <game/common/tank.h>
+#include <game/common/control.h>
 
 #include <cstdlib>
 #include <memory>
@@ -26,13 +27,16 @@ int app_main(Portal &interfaces) {
   GameServer server;
   Actors actors;
   Players players;
+  Control control;
   
   server.registerSystem(&actors);
   server.registerSystem(&players);
+  server.registerSystem(&control);
   
   systems.set(SystemContext::SYSTEM_ACTORS, &actors);
   systems.set(SystemContext::SYSTEM_GAMESERVER, &server);
   systems.set(SystemContext::SYSTEM_PLAYERS, &players);
+  systems.set(SystemContext::SYSTEM_CONTROL, &control);
   
   systems.init(interfaces);
 
