@@ -29,7 +29,7 @@ public:
   void onIdent(class Client *client);
   Player *player(PlayerId id) const;
   PlayerId localPlayer() const;
-  
+
 private:
   typedef std::vector<Player *> PlayerVector;
   PlayerVector _players;

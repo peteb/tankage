@@ -31,6 +31,8 @@ private:
 
   class Graphics *graphics;
   class WindowManager *wm;
+  class Texture *tankBase;
+  class Texture *tankTurret;
   
   TankVector tanks;
   double lastUpdate;
