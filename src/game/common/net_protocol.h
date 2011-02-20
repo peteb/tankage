@@ -65,7 +65,8 @@ struct NetIdentifyMsg {
 
 
 struct NetArenaParticipant {
-  uint8_t id;
+  uint16_t id;
+  uint16_t actor;
   uint8_t flags;
   char name[MAX_PARTICIPANT_NAME];
 };
@@ -73,7 +74,7 @@ struct NetArenaParticipant {
 
 struct NetArenaParticipantsMsg {
   NetPacketType type;
-  uint8_t client_id;
+  uint16_t client_id;
   uint8_t num_particips;
   NetArenaParticipant pcips[0];
 };
