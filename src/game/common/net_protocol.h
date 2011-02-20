@@ -27,7 +27,7 @@ enum {
   NET_IDENTIFY = 1,      //< NetIdentifyMsg
   NET_ERROR = 2,         //< NetErrorMsg
   NET_ARENA_PARTICIPANTS = 3,
-  NET_SNAILS_SNAPSHOT = 4
+  NET_TANKS_UPDATE = 4
 };
 
 enum NetChannels {
@@ -78,14 +78,17 @@ struct NetArenaParticipantsMsg {
   NetArenaParticipant pcips[0];
 };
 
-struct NetSnailSnapshot {
+struct NetTankSnapshot {
   uint16_t x;
   uint16_t y;
+  uint16_t base_dir;
+  uint16_t turret_dir;
 };
 
-struct NetSnailsSnapMsg {
+struct NetTanksSnapMsg {
   NetPacketType type;
-  NetSnailSnapshot snaps[2];
+  unsigned char num_snapshots;
+  NetTankSnapshot snaps[0];
 };
 
 #endif // !GAME_COMMON_NET_PROTOCOL_H

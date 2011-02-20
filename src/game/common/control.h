@@ -1,9 +1,11 @@
 #ifndef GAME_CONTROL_H
 #define GAME_CONTROL_H
 
-#include <string>
 #include <game/common/system.h>
 #include <game/common/snails.h>
+#include <game/common/tank.h>
+
+#include <string>
 
 class Control : public System {
 public:

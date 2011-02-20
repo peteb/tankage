@@ -7,6 +7,7 @@
 #include <game/common/system.h>
 #include <game/common/snails.h>
 #include <game/common/players.h>
+#include <game/common/tank.h>
 
 #include <cstdlib>
 #include <memory>

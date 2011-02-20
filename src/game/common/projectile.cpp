@@ -1,6 +1,7 @@
 #include <game/common/projectile.h>
 #include <game/common/system.h>
 #include <game/common/snails.h>
+#include <game/common/tank.h>
 #include <game/common/items.h>
 #include <game/client/particles.h>
 

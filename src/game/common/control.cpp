@@ -1,5 +1,7 @@
 #include <game/common/control.h>
 #include <game/common/snails.h>
+#include <game/common/tank.h>
+
 #include <engine/input.h>
 #include <engine/portal.h>
 #include <utils/vec.h>

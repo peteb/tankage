@@ -1,5 +1,6 @@
 #include <game/common/powerup.h>
 #include <game/common/snails.h>
+#include <game/common/tank.h>
 #include <engine/graphics.h>
 #include <engine/texture.h>
 #include <utils/rect.h>

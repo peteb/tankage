@@ -1,5 +1,6 @@
 #include "ai_control.h"
 #include <game/common/snails.h>
+#include <game/common/tank.h>
 
 AIControl::AIControl()
 {
