@@ -66,6 +66,7 @@ int app_main(Portal &interfaces) {
     control.update();
     background.render();
     gameclient.update();
+    //   particles.render();
     snails.render();
     items.update();
     items.render();

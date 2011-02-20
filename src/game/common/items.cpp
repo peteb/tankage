@@ -116,7 +116,7 @@ Item::Item(const vec2 &pos, float radius)
 
 bool Item::intersects(const vec2 &start, const vec2 &end, float radius, vec2 &hitpos) {
   vec2 closest = closest_point(start, end, pos);
-  if ((pos - closest).magnitude() <= radius + this->radius) {
+  if (length(pos - closest) <= radius + this->radius) {
     hitpos = closest;
     return true;
   }
