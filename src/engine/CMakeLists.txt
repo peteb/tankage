@@ -65,3 +65,5 @@ target_link_libraries(engine
 
 configure_file(${PROJECT_ROOT_DIR}/src/engine/config.h.in ${PROJECT_ROOT_DIR}/src/engine/config.h)
 
+add_subdirectory(cfg/unittest)
+
