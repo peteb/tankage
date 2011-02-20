@@ -78,7 +78,7 @@ inline vec2 normalized(const vec2 &v) {
 }
 
 // TODO: research if it's possible to autogenerate x, y, z etc names over
-// elements[2]
+// elements[3]
 // TODO: define rough release outline, maybe draw some fancy graphics
 
 #endif /* end of include guard: VEC2_H_8BJJJ5TN */

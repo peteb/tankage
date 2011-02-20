@@ -250,13 +250,16 @@ bool Snail::update(double dt) {
   if (angle >= 180.0)
     angle -= 360.0;
 
-  // FIXME: how to avoid jerky turret motion when high dt?
-  if (angle > 1.0)
-    _turretDir += 200.0 * dt;
-  else if (angle < 1.0f)
-    _turretDir -= 200.0 * dt;
+  double add = 0.0;
+  if (angle > 1.0) {
+    add = std::min(200.0 * dt, angle);
+    
+  }
+  else if (angle < 1.0f) {
+    add = std::max(-200.0 * dt, angle);
+  }
 
-
+  _turretDir += add;
   _turretDir += _rotSpeed * dt;
 
   
