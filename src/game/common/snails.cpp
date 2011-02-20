@@ -243,35 +243,35 @@ bool Snail::update(double dt) {
   }
 
   _dir += _rotSpeed * dt;
-  _turretDir += _rotSpeed * dt;
 
-  vec2 targetDiff = cursorPos - _position;
-  targetDiff.normalize();
+  vec2 targetDiff = normalized(cursorPos - _position);
   double targetDir = atan2(targetDiff.y, targetDiff.x) / M_PI * 180.0;
 
   double angle = Wrap(targetDir - _turretDir, 0.0, 360.0);
   if (angle >= 180.0)
     angle -= 360.0;
 
-  if (angle > 0.0)
-    _turretDir += 200.0 * dt;
-  else if (angle < 0.0)
-    _turretDir -= 200.0 * dt;
-  
-/*  if (_turretDir > 360.0)
-    _turretDir -= 360.0;
+  double add = 0.0;
+  if (angle > 1.0) {
+    add = std::min(200.0 * dt, angle);
+    
+  }
+  else if (angle < 1.0f) {
+    add = std::max(-200.0 * dt, angle);
+  }
 
-  if (_turretDir < -360.0)
-    _turretDir += 360.0;
-*/
+  _turretDir += add;
+  _turretDir += _rotSpeed * dt;
+
+  
   if (_state[STATE_SHOOT]) {// FIXME: rename SHOOT to SHOOTING
     if (secondsSinceFire >= 0.2) {
-      vec2 dir = vec2::Direction(_turretDir);
-      context->items()->spawnProjectile(Items::PROJECTILE_BULLET, _position + dir * 64.0f, dir, this);
+      vec2 dir = vec2::FromDirection(_turretDir);
+      context->items()->spawnProjectile(Items::PROJECTILE_BULLET, _position + dir * 32.0f, dir, this);
       secondsSinceFire = 0.0;
     }
     
-    }
+  }
 
   return true;
 }
@@ -281,8 +281,8 @@ void Snail::setCursor(const vec2 & pos) {
 }
 
 void Snail::takeDamage(const vec2 &pos, float damage) {
-  vel += (_position - pos).normalize()  * damage * 10.0f;
-  std::cout << std::string((_position - pos).normalize()) << std::endl;
+  vel += normalized(_position - pos)  * damage * 10.0f;
+  std::cout << std::string(normalized(_position - pos)) << std::endl;
   
   takingControl = false;
   health -= static_cast<int>(damage);
@@ -300,7 +300,7 @@ bool Snail::takeItem(const std::string &type, int amount) {
 bool Snail::intersects(const vec2 &start, const vec2 &end,
                        float radius, vec2 &hitpos) {
   vec2 closest = closest_point(start, end, _position);
-  if ((_position - closest).magnitude() <= radius + this->radius) {
+  if (length(_position - closest) <= radius + this->radius) {
     hitpos = closest;
     return true;
   }

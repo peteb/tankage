@@ -6,23 +6,36 @@
 * TODO SDL support
 * TODO ImageIO support
 * TODO SDL_image support
-* TODO Finer collision areas for geoms (one big-pass, then a finer-grained pass customized by the geom)
 * DONE Smoke trails for bullets   
-* TODO Slight aiming
 * TODO System profile
 * DONE New game folder structure (common, client, server)
 * DONE Add "error dialog box" to window managers, for displaying errors.
-* Logging
+* TODO Verify that the server compiles, runs and accepts connections on PowerPC
+* TODO A directory for cached downloaded data, writable by the client
+* DONE Add twitcurl library in 3pp and make it compilable * Logging
 ** DONE A logging interface in the engine (+ very basic stdout/stderr implementation)  
 ** TODO Implement logging level (probably some environment variable)
 ** TODO Update std::cout to use log interface
 ** DONE Implement AUDIT or TWITTER LogType
-* TODO Verify that the server compiles, runs and accepts connections on PowerPC
-* TODO A directory for cached downloaded data, writable by the client
+* "Sprint" planning
+** 2011-02-20: "Tanks Communicate"
+*** DoD: driving around on server together with other tanks and shooting 
+*** TODO Connect to server, get a tank
+*** TODO Replicate tanks over server
+*** TODO Replicate user input to server
+*** TODO Replicate projectiles
+** --: "Tanks are Dangerous..."
+*** DoD: kill other tanks, collide with terrain and other tanks
+** --: "... and Powerful!"
+*** DoD: destroy terrain
+** --: "It matters what I do"
+*** DoD: tanks and terrain drop score, store score permanently on server
+** --: "And whom I play with"
+*** DoD: team games can be scripted
 * Network
+** TODO Replicate tanks
 ** TODO Add some more replicated systems, bullets/projectiles
 ** TODO Replicate player input to the server
-** TODO Replicate items (cactii)
 ** TODO Player events (player was hurt, player picked up item, player died)
 * Configuration Management
 ** DONE Add Peter's configuration library and fix CMake 
@@ -101,4 +114,4 @@
 ** TODO Fix a proper icon for the OS X bundle   
 * Linux support
 ** TODO Add the icon for Linux as well 
-* DONE Add twitcurl library in 3pp and make it compilable 
+

@@ -33,24 +33,12 @@ public:
   vec2 operator + (const vec2 &rh) const {return vec2(*this) += rh; }
   vec2 operator - (const vec2 &rh) const {return vec2(*this) -= rh; }
   
-  float magnitude() const {return sqrt(x * x + y * y); }
-  
-  vec2 &normalize() {
-    float mag = magnitude();
-    if (mag > 0.0f) {
-      x /= mag;
-      y /= mag;
-    }
-
-    return *this;
-  }
-
   /// Textual representation of a vector for easy outputting
   operator std::string() const;
   
   static vec2 Zero();
   static vec2 Identity();
-  static vec2 Direction(double degrees);
+  static vec2 FromDirection(double degrees);
   
   float x;
   float y;
@@ -73,5 +61,24 @@ inline vec2 closest_point(const vec2 &start, const vec2 &end, const vec2 &pos) {
 inline float degrees(const vec2 &v) {
   return atan2(v.y, v.x) / M_PI * 180.0f;
 }
+
+inline float length(const vec2 &v) {
+  return sqrt(v.x * v.x + v.y * v.y);
+}
+
+inline vec2 normalized(const vec2 &v) {
+  vec2 nv = v;
+  float mag = length(nv);
+  if (mag > 0.0f) {
+    nv.x /= mag;
+    nv.y /= mag;
+  }
+  
+  return nv;
+}
+
+// TODO: research if it's possible to autogenerate x, y, z etc names over
+// elements[3]
+// TODO: define rough release outline, maybe draw some fancy graphics
 
 #endif /* end of include guard: VEC2_H_8BJJJ5TN */

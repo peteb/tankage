@@ -60,8 +60,12 @@ bool Projectile::update(double dt) {
   // update effect
   // partGroup->emitParticle(Particle(blabla));
 //  emitter.setPosition(pos);
+  if (pos.x - 64.0f > 800.0f || pos.x + 64.0f < 0.0f)
+    return false;
+  if (pos.y - 64.0f > 800.0f || pos.y + 64.0f < 0.0f)
+    return false;
   
-  return pos.x - 64.0f <= 800.0f; // FIXME: screenRect vs pos + radius (circle)
+  return true;
 }
 
 void Projectile::render(Graphics *gfx) {
@@ -69,8 +73,7 @@ void Projectile::render(Graphics *gfx) {
   gfx->enableTextures();
   tex->bind();
 
-  vec2 dir = vel;
-  dir.normalize();
+  vec2 dir = normalized(vel);
   gfx->drawQuad(rect(pos, 32, 32), degrees(dir)); // FIXME: get rid of hardcoded sizes
 
 }
