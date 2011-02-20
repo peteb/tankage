@@ -5,7 +5,7 @@ include_directories(${PROJECT_ROOT_DIR})
 add_executable(snail-wail-server
   # common stuff
   ${GAME_ROOT_DIR}/common/system.cpp
-  ${GAME_ROOT_DIR}/common/snails.cpp
+  ${GAME_ROOT_DIR}/common/actors.cpp
   ${GAME_ROOT_DIR}/common/tank.cpp
   ${GAME_ROOT_DIR}/common/items.cpp
   ${GAME_ROOT_DIR}/common/projectile.cpp

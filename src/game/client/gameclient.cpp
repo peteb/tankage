@@ -1,7 +1,7 @@
 #include <game/client/gameclient.h>
 #include <game/common/net_protocol.h>
 #include <game/common/replicated_system.h>
-#include <game/common/snails.h>
+#include <game/common/actors.h>
 
 #include <engine/portal.h>
 #include <engine/network.h>

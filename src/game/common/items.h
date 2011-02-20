@@ -2,6 +2,8 @@
 #define GAME_ITEMS_H
 
 #include <game/common/system.h>
+#include <game/common/actors.h>
+
 #include <utils/vec.h>
 #include <vector>
 
@@ -14,7 +16,7 @@ public:
   virtual void render(class Graphics *gfx) =0;
   virtual bool update(double dt) {return true; }
   bool intersects(const vec2 &start, const vec2 &end, float radius, vec2 &hitpos);
-  virtual bool takeDamage(const vec2 &pos, float damage, class Snail *shooter) =0;
+  virtual bool takeDamage(const vec2 &pos, float damage, ActorId shooter) =0;
   
 protected:
   vec2 pos;
@@ -27,7 +29,7 @@ public:
   enum ProjectileType {
     PROJECTILE_BULLET
   };
-  
+
   Items() {}
   ~Items();
   void init(const class Portal &interfaces);
@@ -37,7 +39,7 @@ public:
   void spawnProjectile(ProjectileType type,
                        const vec2 &pos,
                        const vec2 &dir,
-                       class Snail *shooter);
+                       int shooterId);
   Item *intersectingItem(const vec2 &start, const vec2 &end, float radius, vec2 &hitpos);
   
 private:

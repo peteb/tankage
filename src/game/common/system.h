@@ -7,7 +7,7 @@ public:
   SystemContext();
 
   enum {
-    SYSTEM_SNAILS = 0,
+    SYSTEM_ACTORS = 0,
     SYSTEM_BACKGROUND,
     SYSTEM_CONTROL,
     SYSTEM_TEXTURE_LOADER,
@@ -32,8 +32,8 @@ public:
     return system<Items>(SystemContext::SYSTEM_ITEMS);
   }
 
-  class Snails *snails() const {
-    return system<Snails>(SystemContext::SYSTEM_SNAILS);
+  class Actors *actors() const {
+    return system<Actors>(SystemContext::SYSTEM_ACTORS);
   }
 
   class Particles *particles() const {

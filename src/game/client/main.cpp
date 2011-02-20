@@ -7,7 +7,7 @@
 #include <game/client/background.h>
 #include <game/client/particles.h>
 #include <game/client/gameclient.h>
-#include <game/common/snails.h>
+#include <game/common/actors.h>
 #include <game/common/control.h>
 #include <game/common/system.h>
 #include <game/common/items.h>
@@ -30,7 +30,7 @@ int app_main(Portal &interfaces) {
 
   // Register the subsystems
   GameClient gameclient;
-  Snails snails;
+  Actors actors;
   Players players;
   Background background;
   Control control;
@@ -38,14 +38,14 @@ int app_main(Portal &interfaces) {
   Particles particles;
   TextureLoader texLoader;
   
-  gameclient.registerSystem(&snails);
+  gameclient.registerSystem(&actors);
   gameclient.registerSystem(&players);
 
   // TODO: this is fugly, registering like this. maybe it should be done
   //       like gameClient above
   
   systems.set(SystemContext::SYSTEM_BACKGROUND, &background);
-  systems.set(SystemContext::SYSTEM_SNAILS, &snails);
+  systems.set(SystemContext::SYSTEM_ACTORS, &actors);
   systems.set(SystemContext::SYSTEM_ITEMS, &items);
   systems.set(SystemContext::SYSTEM_GAMECLIENT, &gameclient);
   systems.set(SystemContext::SYSTEM_PLAYERS, &players);
@@ -67,7 +67,7 @@ int app_main(Portal &interfaces) {
     background.render();
     gameclient.update();
     //   particles.render();
-    snails.render();
+    actors.render();
     items.update();
     items.render();
     

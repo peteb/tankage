@@ -1,5 +1,5 @@
 #include <game/common/control.h>
-#include <game/common/snails.h>
+#include <game/common/actors.h>
 #include <game/common/tank.h>
 
 #include <engine/input.h>
@@ -16,29 +16,30 @@ void Control::init(const class Portal &interfaces) {
 }
 
 void Control::update() {
-  triggerState(keyUp, Snail::STATE_MOVE_UP);
-  triggerState(keyDown, Snail::STATE_MOVE_DOWN);
-  triggerState(keyRight, Snail::STATE_TURN_RIGHT);
-  triggerState(keyLeft, Snail::STATE_TURN_LEFT);
-  triggerState(keyShoot, Snail::STATE_SHOOT);
+  triggerState(keyUp, Tank::STATE_MOVE_UP);
+  triggerState(keyDown, Tank::STATE_MOVE_DOWN);
+  triggerState(keyRight, Tank::STATE_TURN_RIGHT);
+  triggerState(keyLeft, Tank::STATE_TURN_LEFT);
+  triggerState(keyShoot, Tank::STATE_SHOOT);
 
 
-  Snail *target = context->snails()->snail(Snails::SNAIL_LEFT);
+/*  Tank *target = context->snails()->snail(Snails::SNAIL_LEFT);
 
   int x, y;
   input->mousePos(x, y);
-  target->setCursor(vec2(x, y));
+  target->setCursor(vec2(x, y));*/
+  
 }
 
 
-void Control::triggerState(int keycode, Snail::SnailState state) {
-  Snail *target = context->snails()->snail(Snails::SNAIL_LEFT);
+void Control::triggerState(int keycode, Tank::State state) {
+  /*Snail *target = context->snails()->snail(Snails::SNAIL_LEFT);
 
   if (input->keyWasPressed(keycode)) {
     target->startState(state);
   }
   if (input->keyWasReleased(keycode)) {
     target->stopState(state);
-  }
+    }*/
 
 }

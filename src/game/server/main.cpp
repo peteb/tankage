@@ -5,7 +5,7 @@
 
 #include <game/server/gameserver.h>
 #include <game/common/system.h>
-#include <game/common/snails.h>
+#include <game/common/actors.h>
 #include <game/common/players.h>
 #include <game/common/tank.h>
 
@@ -24,13 +24,13 @@ int app_main(Portal &interfaces) {
 
   // Register the subsystems
   GameServer server;
-  Snails snails;
+  Actors actors;
   Players players;
   
-  server.registerSystem(&snails);
+  server.registerSystem(&actors);
   server.registerSystem(&players);
   
-  systems.set(SystemContext::SYSTEM_SNAILS, &snails);
+  systems.set(SystemContext::SYSTEM_ACTORS, &actors);
   systems.set(SystemContext::SYSTEM_GAMESERVER, &server);
   systems.set(SystemContext::SYSTEM_PLAYERS, &players);
   
@@ -49,22 +49,7 @@ int app_main(Portal &interfaces) {
 
     
     server.update();
-    snails.render();
-
-    if (thisTime - lastTurn > 2.0) {
-      if (upOrDown == 0) {
-        snails.snail(Snails::SNAIL_RIGHT)->stopState(Snail::STATE_MOVE_DOWN);
-        snails.snail(Snails::SNAIL_RIGHT)->startState(Snail::STATE_MOVE_UP);
-        upOrDown = 1;
-      }
-      else {
-        snails.snail(Snails::SNAIL_RIGHT)->stopState(Snail::STATE_MOVE_UP);
-        snails.snail(Snails::SNAIL_RIGHT)->startState(Snail::STATE_MOVE_DOWN);
-        upOrDown = 0;
-      }
-      lastTurn = thisTime;
-
-    }
+    actors.render();
 
     if (thisTime - lastTick >= 1.0/25.0) { // Tickrate
       server.tick(thisTime - lastTick);

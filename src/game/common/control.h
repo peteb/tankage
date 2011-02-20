@@ -2,7 +2,7 @@
 #define GAME_CONTROL_H
 
 #include <game/common/system.h>
-#include <game/common/snails.h>
+#include <game/common/actors.h>
 #include <game/common/tank.h>
 
 #include <string>
@@ -13,7 +13,7 @@ public:
   void update();
   
 private:
-  void triggerState(int keycode, Snail::SnailState state);
+  void triggerState(int keycode, Tank::State state);
   
   int keyUp, keyDown, keyLeft, keyRight, keyShoot;
   class Input *input;

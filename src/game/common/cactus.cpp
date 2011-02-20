@@ -42,7 +42,7 @@ bool Cactus::update(double dt) {
   return (pos.y + 64.0f >= 0.0f);
 }
 
-bool Cactus::takeDamage(const vec2 &pos, float damage, class Snail *shooter) {
+bool Cactus::takeDamage(const vec2 &pos, float damage, ActorId shooter) {
   if (health <= 0.0f)
     return false;
   

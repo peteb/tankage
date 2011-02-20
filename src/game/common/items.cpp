@@ -2,7 +2,7 @@
 #include <game/common/cactus.h>
 #include <game/common/projectile.h>
 #include <game/common/powerup.h>
-#include <game/common/snails.h>
+#include <game/common/actors.h>
 #include <game/common/texture_loader.h>
 #include <game/client/particles.h>
 
@@ -82,10 +82,10 @@ void Items::update() {
 }
 
 void Items::spawnProjectile(ProjectileType type, const vec2 &pos,
-                            const vec2 &dir, class Snail *shooter) {
+                            const vec2 &dir, int shooterId) {
   class ParticleGroup *particles = context->particles()->group(smoke);
   std::auto_ptr<Projectile> newProjectile(
-    new Projectile(particles, shooter, bulletTexture, context, pos));
+    new Projectile(particles, shooterId, bulletTexture, context, pos));
 
   newProjectile->setVel(dir * 2000.0f);
   projectiles.push_back(newProjectile.release());

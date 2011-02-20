@@ -1,6 +1,6 @@
 #include <game/common/projectile.h>
 #include <game/common/system.h>
-#include <game/common/snails.h>
+#include <game/common/actors.h>
 #include <game/common/tank.h>
 #include <game/common/items.h>
 #include <game/client/particles.h>
@@ -13,13 +13,13 @@
 #include <cmath>
 
 Projectile::Projectile(class ParticleGroup *partGroup,
-                       class Snail *shooter, class Texture *tex,
+                       int shooterId, class Texture *tex,
                        const SystemContext *ctx, const vec2 &pos)
   : partGroup(partGroup)
-  , shooter(shooter)
   , tex(tex)
   , ctx(ctx)
   , pos(pos)
+  , shooterId(shooterId)
 {
   sinceEmit = 0.0;
   /*
@@ -35,7 +35,7 @@ bool Projectile::update(double dt) {
   sinceEmit += dt;
   
   vec2 hitPos;
-  Snail *hit = ctx->snails()->intersectingSnails(prevPos, pos, 1.0f, shooter, hitPos);
+  Tank *hit = ctx->actors()->intersectingTank(prevPos, pos, 1.0f, shooterId, hitPos);
   if (hit) {
     hit->takeDamage(hitPos, 10.0f);
     return false;
@@ -43,7 +43,7 @@ bool Projectile::update(double dt) {
 
   Item *hitItem = ctx->items()->intersectingItem(prevPos, pos, 1.0f, hitPos);
   if (hitItem) {
-    if (hitItem->takeDamage(hitPos, 10.0f, shooter)) {  // FIXME: takeDamage -> DISINTEGRATE, IGNORE, REFLECT
+    if (hitItem->takeDamage(hitPos, 10.0f, shooterId)) {  // FIXME: takeDamage -> DISINTEGRATE, IGNORE, REFLECT
       return false;
     }
 
