@@ -44,6 +44,7 @@
 ** Each system can expose variables which the administrator can configure (during runtime and before)
 ** TODO Integrate CM in the game
 ** DONE Move CM to the engine
+** TODO Add support for configuring over the network
 * Recover old behavior
 *** DONE Cactii
 *** DONE Shooting
