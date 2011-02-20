@@ -10,6 +10,8 @@ typedef int PlayerId;
 
 class Player {
 public:
+  Player(PlayerId id, ActorId actor);
+  
   PlayerId id() const;
   ActorId actor() const;
 
@@ -22,6 +24,7 @@ private:
 
 class Players : public ReplicatedSystem {
 public:
+  Players();
   void init(const class Portal &interfaces);
 
   void onTick(class Client *client);
@@ -29,11 +32,13 @@ public:
   void onIdent(class Client *client);
   Player *player(PlayerId id) const;
   PlayerId localPlayer() const;
-
+  Player *createPlayer(ActorId actor);
+  
 private:
   typedef std::vector<Player *> PlayerVector;
   PlayerVector _players;
   PlayerId _localPlayer;
+  PlayerId _lastId;
 };
 
 #endif // !GAME_COMMON_PLAYERS_H

@@ -20,7 +20,7 @@
 * "Sprint" planning
 ** 2011-02-20: "Tanks Communicate"
 *** DoD: driving around on server together with other tanks and shooting 
-*** TODO Connect to server, get a tank
+*** DONE Connect to server, get a tank
 *** TODO Replicate tanks over server
 *** TODO Replicate user input to server
 *** TODO Replicate projectiles

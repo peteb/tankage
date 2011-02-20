@@ -11,6 +11,7 @@ typedef int ActorId;
 
 class Actors : public ReplicatedSystem {
 public:
+  Actors();
   ~Actors();
 
   // System stuff
@@ -25,6 +26,7 @@ public:
   class Tank *tank(int id) const;
   class Tank *intersectingTank(const vec2 &start, const vec2 &end, float radius, ActorId ignore, vec2 &hitpos);
 
+  class Tank *createActor(class Client *client);
   
 private:
   typedef std::vector<class Tank *> TankVector;
@@ -36,6 +38,7 @@ private:
   
   TankVector tanks;
   double lastUpdate;
+  ActorId lastId;
 };
 
 #endif // !GAME_ACTORS_H

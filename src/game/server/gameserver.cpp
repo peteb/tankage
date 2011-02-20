@@ -5,6 +5,7 @@
 #include <game/common/net_error.h>
 #include <game/common/replicated_system.h>
 #include <game/common/actors.h>
+#include <game/common/tank.h>
 
 #include <engine/packet.h>
 #include <engine/network.h>
@@ -173,6 +174,10 @@ void GameServer::onIdent(const NetIdentifyMsg *data, Packet *packet) {
   }
   
   clientSession->state = ClientSession::STATE_IDENTIFIED;
+
+  Tank *tank = context->actors()->createActor(client);
+  Player *player = context->players()->createPlayer(tank->id());
+  clientSession->player = player->id();
   
   // Broadcast onIdent to all subsystems
   for (size_t i = 0; i < _systems.size(); ++i) {

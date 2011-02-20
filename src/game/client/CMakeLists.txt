@@ -15,6 +15,10 @@ add_executable(snail-wail
   ${GAME_ROOT_DIR}/common/powerup.cpp
   ${GAME_ROOT_DIR}/common/texture_loader.cpp
   ${GAME_ROOT_DIR}/common/players.cpp
+  ${GAME_ROOT_DIR}/common/net_error.cpp
+
+  ${GAME_ROOT_DIR}/server/gameserver.cpp  # shouldn't be used, but is needed for linking
+  ${GAME_ROOT_DIR}/server/client_session.cpp
 
   # client specific
   particles.cpp

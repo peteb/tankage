@@ -1,11 +1,18 @@
 #include <game/common/players.h>
+#include <game/server/gameserver.h>
+#include <game/server/client_session.h>
 #include <engine/network.h>
 #include <engine/portal.h>
+
 #include <iostream>
 #include <cassert>
 
-void Players::init(const Portal &interfaces) {
+Players::Players() {
   _localPlayer = 0;
+  _lastId = 0;
+}
+
+void Players::init(const Portal &interfaces) {
 }
 
 
@@ -24,17 +31,19 @@ void Players::onReceive(NetPacketType type, const Packet &packet) {
     const NetArenaParticipantsMsg *pcips = static_cast<const NetArenaParticipantsMsg *>(
       packet.data());
 
-    std::cout << "   client id: " << int(pcips->client_id) << std::endl;
-    _localPlayer = pcips->client_id;
+    std::cout << "   client id: " << int(ntohs(pcips->client_id)) << std::endl;
+    _localPlayer = ntohs(pcips->client_id);
     
     for (size_t i = 0; i < pcips->num_particips; ++i) {
-      std::cout << "   pcip " << int(pcips->pcips[i].id) << ": '" << pcips->pcips[i].name << "'" << std::endl;
+      std::cout << "   pcip " << int(ntohs(pcips->pcips[i].id)) << ": '" << pcips->pcips[i].name << "'" << std::endl;
     }
   }
 }
 
 void Players::onIdent(Client *client) {
   assert(_players.size() < 255 && "too many players");
+
+  PlayerId playerId = context->gameserver()->session(client)->player;
   
   size_t packetSize = sizeof(NetArenaParticipantsMsg) +
     sizeof(NetArenaParticipant) * _players.size();
@@ -42,7 +51,7 @@ void Players::onIdent(Client *client) {
   NetArenaParticipantsMsg *pcips = static_cast<NetArenaParticipantsMsg *>(
     malloc(packetSize));
   pcips->type = NET_ARENA_PARTICIPANTS;
-  pcips->client_id = htons(123);
+  pcips->client_id = htons(playerId);
   pcips->num_particips = _players.size();
 
   for (size_t i = 0, e = _players.size(); i != e; ++i) {
@@ -68,6 +77,18 @@ PlayerId Players::localPlayer() const {
   return _localPlayer;
 }
 
+Player *Players::createPlayer(ActorId actor) {
+  Player *newPlayer = new Player(++_lastId, actor);
+  _players.push_back(newPlayer);
+  return newPlayer;
+}
+
+Player::Player(PlayerId id, ActorId actor)
+  : _id(id)
+  , _actor(actor)
+{
+}
+
 PlayerId Player::id() const {
   return _id;
 }
@@ -77,7 +98,7 @@ ActorId Player::actor() const {
 }
 
 void Player::participant(NetArenaParticipant &pant) const {
-  pant.id = htons(123);
+  pant.id = htons(_id);
   pant.flags = 0;
   strcpy(pant.name, "peter");
 }

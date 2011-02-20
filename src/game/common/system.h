@@ -43,6 +43,14 @@ public:
   class TextureLoader *textureLoader() const {
     return system<TextureLoader>(SystemContext::SYSTEM_TEXTURE_LOADER);
   }
+
+  class Players *players() const {
+    return system<Players>(SystemContext::SYSTEM_PLAYERS);
+  }
+
+  class GameServer *gameserver() const {
+    return system<GameServer>(SystemContext::SYSTEM_GAMESERVER);
+  }
   
 private:
   class System *resolveSystem(unsigned id) const;

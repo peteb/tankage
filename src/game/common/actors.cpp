@@ -24,6 +24,10 @@
 #include <memory>
 #include <cmath>
 
+Actors::Actors() {
+  lastId = 0;
+}
+
 Actors::~Actors() {
   // delete all the tanks when game terminates
   std::for_each(tanks.begin(), tanks.end(), delete_op());
@@ -51,6 +55,14 @@ void Actors::init(const class Portal &interfaces) {
     }*/
 
   lastUpdate = wm->timeSeconds();
+}
+
+Tank *Actors::createActor(class Client *client) {
+  Tank *newTank = new Tank(++lastId, context);
+  newTank->setTexture(tankBase, tankTurret);
+  tanks.push_back(newTank);
+
+  return newTank;
 }
 
 void Actors::render() {
