@@ -74,7 +74,7 @@ void Actors::render() {
 void Actors::onTick(class Client *client) {
   size_t packetSize = sizeof(NetTanksSnapMsg) +
     sizeof(NetTankSnapshot) * tanks.size();
-  
+
   NetTanksSnapMsg *msg = static_cast<NetTanksSnapMsg *>(malloc(packetSize));
   msg->type = NET_TANKS_UPDATE;
   msg->num_snapshots = tanks.size();
@@ -83,7 +83,7 @@ void Actors::onTick(class Client *client) {
     msg->snaps[i] = tanks[i]->snapshot();
   }
 
-  client->send(&msg, packetSize, 0, NET_CHANNEL_ABS);
+  client->send(msg, packetSize, 0, NET_CHANNEL_ABS);
 }
 
 void Actors::onReceive(NetPacketType type, const Packet &packet) {
@@ -92,7 +92,15 @@ void Actors::onReceive(NetPacketType type, const Packet &packet) {
       static_cast<const NetTanksSnapMsg *>(packet.data());
 
     for (size_t i = 0; i < msg->num_snapshots; ++i) {
-      tanks[i]->onSnap(msg->snaps[i]);
+      const NetTankSnapshot &snapshot = msg->snaps[i];
+      const ActorId actor = ntohs(snapshot.id);
+      Tank *tankEntry = tank(actor);
+      if (tankEntry) {
+        tankEntry->onSnap(msg->snaps[i]);
+      }
+      else {
+        std::cout << "got update for not existing tank" << std::endl;
+      }
     }
     
   }

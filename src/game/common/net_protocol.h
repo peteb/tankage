@@ -80,6 +80,7 @@ struct NetArenaParticipantsMsg {
 };
 
 struct NetTankSnapshot {
+  uint16_t id;
   uint16_t x;
   uint16_t y;
   uint16_t base_dir;

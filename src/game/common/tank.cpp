@@ -69,6 +69,7 @@ void Tank::onSnap(const NetTankSnapshot &netshot) {
 
 NetTankSnapshot Tank::snapshot() const {
   NetTankSnapshot snap;
+  snap.id = htons(_id);
   snap.x = htons(_position.x);
   snap.y = htons(_position.y);
   snap.base_dir = htons(_dir);
