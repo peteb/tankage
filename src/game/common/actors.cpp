@@ -100,7 +100,14 @@ void Actors::onReceive(NetPacketType type, const Packet &packet) {
 
 
 Tank *Actors::tank(int id) const {
-  return tanks.at(id);
+  for (TankVector::const_iterator i = tanks.begin(), e = tanks.end();
+       i != e; ++i) {
+    if ((*i)->id() == id) {
+      return *i;
+    }
+  }
+
+  return static_cast<Tank *>(0);
 }
 
 Tank *Actors::intersectingTank(const vec2 &start, const vec2 &end,

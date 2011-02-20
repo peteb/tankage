@@ -13,7 +13,7 @@ public:
   void update();
   
 private:
-  void triggerState(int keycode, Tank::State state);
+  void triggerState(int keycode, Tank::State state, Tank *target);
   
   int keyUp, keyDown, keyLeft, keyRight, keyShoot;
   class Input *input;

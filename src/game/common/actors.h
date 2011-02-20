@@ -23,7 +23,7 @@ public:
   void onReceive(NetPacketType type, const class Packet &packet);
   
   // Misc
-  class Tank *tank(int id) const;
+  class Tank *tank(ActorId id) const;
   class Tank *intersectingTank(const vec2 &start, const vec2 &end, float radius, ActorId ignore, vec2 &hitpos);
 
   class Tank *createActor(class Client *client);
