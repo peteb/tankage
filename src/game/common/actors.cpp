@@ -43,16 +43,6 @@ void Actors::init(const class Portal &interfaces) {
 
   tankBase = graphics->createTexture(img.get());
   tankTurret = graphics->createTexture(img2.get());
-  // First snail
-/*  {
-    std::auto_ptr<Image> img(imgLoader->loadImage(std::string(RESOURCE_PATH) + "/tank_base.png"));
-    std::auto_ptr<Image> img2(imgLoader->loadImage(std::string(RESOURCE_PATH) + "/tank_turret.png"));
-    Tank *tank = new Tank(1, context);
-    tank->setTexture(graphics->createTexture(img.get()),
-                      graphics->createTexture(img2.get()));
-    
-    tanks.push_back(tank);
-    }*/
 
   lastUpdate = wm->timeSeconds();
 }

@@ -35,6 +35,7 @@ void Players::onReceive(NetPacketType type, const Packet &packet) {
     _localPlayer = ntohs(pcips->client_id);
     
     for (size_t i = 0; i < pcips->num_particips; ++i) {
+      updatePlayer(pcips->pcips[i]);
       std::cout << "   pcip " << int(ntohs(pcips->pcips[i].id)) << ": '" << pcips->pcips[i].name << "'" << std::endl;
     }
   }
@@ -83,6 +84,24 @@ Player *Players::createPlayer(ActorId actor) {
   return newPlayer;
 }
 
+
+void Players::updatePlayer(const NetArenaParticipant &net_pant) {
+  const PlayerId playerId = ntohs(net_pant.id);
+
+  Player *playerEntry = player(playerId);
+  if (!playerEntry) {
+    std::cout << "NEW PLAYER: " << playerId << std::endl;
+    const ActorId actorId = ntohs(net_pant.actor);
+    playerEntry = new Player(playerId, actorId);
+    _players.push_back(playerEntry);
+  }
+  else {
+    playerEntry->update(net_pant);
+  }
+}
+
+
+
 Player::Player(PlayerId id, ActorId actor)
   : _id(id)
   , _actor(actor)
@@ -99,8 +118,13 @@ ActorId Player::actor() const {
 
 void Player::participant(NetArenaParticipant &pant) const {
   pant.id = htons(_id);
+  pant.actor = htons(_actor);
   pant.flags = 0;
   strcpy(pant.name, "peter");
+}
+
+void Player::update(const NetArenaParticipant &pant) {
+  _actor = ntohs(pant.actor);
 }
 
 

@@ -16,6 +16,7 @@ public:
   ActorId actor() const;
 
   void participant(NetArenaParticipant &pant) const;
+  void update(const NetArenaParticipant &pant);
   
 private:
   PlayerId _id;
@@ -35,6 +36,8 @@ public:
   Player *createPlayer(ActorId actor);
   
 private:
+  void updatePlayer(const NetArenaParticipant &participant);
+  
   typedef std::vector<Player *> PlayerVector;
   PlayerVector _players;
   PlayerId _localPlayer;
