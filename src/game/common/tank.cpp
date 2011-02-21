@@ -37,6 +37,7 @@ Tank::Tank(ActorId id, const SystemContext *ctx)
   _speed = 0.0f;
   _rotSpeed = 0.0f;
   _turretDir = 0.0f;
+  _snapshotted = false;
 }
 
 Tank::~Tank() {
@@ -67,6 +68,7 @@ void Tank::onSnap(const NetTankSnapshot &netshot) {
   snapshots[0] = snapshot;
   std::cout << "GOT: " << snapshot.x << ", " << snapshot.y << std::endl;
   sinceSnap = 0.0;
+  _snapshotted = true;
 }
 
 NetTankSnapshot Tank::snapshot() const {
@@ -119,10 +121,12 @@ bool Tank::update(double dt) {
   // _position.x = snapshots[0].x + double(snapshots[0].x - snapshots[1].x) * sinceSnap / (1.0/25.0);
   if (_id != context->players()->localPlayer()) {
     // Only update tank if it's a remote player
-    _position.x = snapshots[0].x;
-    _position.y = snapshots[0].y;
-    _turretDir = snapshots[0].turret_dir;
-    _dir = snapshots[0].base_dir;
+    if (_snapshotted) {
+      _position.x = snapshots[0].x;
+      _position.y = snapshots[0].y;
+      _turretDir = snapshots[0].turret_dir;
+      _dir = snapshots[0].base_dir;
+    }
   }
 
   // FIXME: improve the jerkiness. Probably enet doesn't throw away old packets?
