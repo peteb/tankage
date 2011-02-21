@@ -10,7 +10,7 @@
 #include <game/common/actors.h>
 #include <game/common/control.h>
 #include <game/common/system.h>
-#include <game/common/items.h>
+#include <game/common/projectiles.h>
 #include <game/common/texture_loader.h>
 #include <game/common/players.h>
 

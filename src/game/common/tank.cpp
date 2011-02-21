@@ -1,5 +1,5 @@
 #include <game/common/tank.h>
-#include <game/common/items.h>
+#include <game/common/projectiles.h>
 #include <game/common/net_protocol.h>
 #include <game/common/players.h>
 
@@ -66,7 +66,7 @@ void Tank::onSnap(const NetTankSnapshot &netshot) {
   
   snapshots[1] = snapshots[0];
   snapshots[0] = snapshot;
-  std::cout << "GOT: " << snapshot.x << ", " << snapshot.y << std::endl;
+
   sinceSnap = 0.0;
   _snapshotted = true;
 }
@@ -194,11 +194,13 @@ bool Tank::update(double dt) {
     if (secondsSinceFire >= 0.2) {
       vec2 dir = vec2::FromDirection(_turretDir);
 
-      context->items()->spawnProjectile(
-        Items::PROJECTILE_BULLET,
-        _position + dir * 32.0f,
-        dir,
-        _id);
+      if (!_snapshotted) {
+        context->items()->spawnProjectile(
+          Items::PROJECTILE_BULLET,
+          _position + dir * 32.0f,
+          dir,
+          _id);
+      }
       
       secondsSinceFire = 0.0;
     }

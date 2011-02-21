@@ -2,7 +2,6 @@
 #include <game/common/system.h>
 #include <game/common/actors.h>
 #include <game/common/tank.h>
-#include <game/common/items.h>
 #include <game/client/particles.h>
 
 #include <engine/graphics.h>
@@ -40,15 +39,6 @@ bool Projectile::update(double dt) {
   if (hit) {
     hit->takeDamage(hitPos, 10.0f);
     return false;
-  }
-
-  Item *hitItem = ctx->items()->intersectingItem(prevPos, pos, 1.0f, hitPos);
-  if (hitItem) {
-    if (hitItem->takeDamage(hitPos, 10.0f, shooterId)) {  // FIXME: takeDamage -> DISINTEGRATE, IGNORE, REFLECT
-      return false;
-    }
-
-    // If reflect: emitter.addMidpoint()
   }
 
   if (sinceEmit > 0.01) {
@@ -90,4 +80,12 @@ NetProjectileSnapshot Projectile::snapshot() const {
   snap.x = htons(pos.x);
   snap.y = htons(pos.y);
   return snap;
+}
+
+void Projectile::onSnap(const NetProjectileSnapshot &netshot) {
+  NetProjectileSnapshot snapshot;
+  snapshot.x = ntohs(netshot.x);
+  snapshot.y = ntohs(netshot.y);
+  pos.x = snapshot.x;
+  pos.y = snapshot.y;
 }

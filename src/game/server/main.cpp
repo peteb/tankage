@@ -9,7 +9,7 @@
 #include <game/common/players.h>
 #include <game/common/tank.h>
 #include <game/common/control.h>
-#include <game/common/items.h>
+#include <game/common/projectiles.h>
 #include <game/common/texture_loader.h>
 #include <game/client/particles.h>
 

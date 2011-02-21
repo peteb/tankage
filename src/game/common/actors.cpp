@@ -1,5 +1,5 @@
 #include <game/common/actors.h>
-#include <game/common/items.h>
+#include <game/common/projectiles.h>
 #include <game/common/net_protocol.h>
 #include <game/common/tank.h>
 
@@ -92,9 +92,9 @@ void Actors::onTick(class Client *client) {
 
 void Actors::onReceive(NetPacketType type, const Packet &packet) {
   if (type == NET_TANKS_UPDATE) {
-    std::cout << "RECEIVE" << std::endl;
     const NetTanksSnapMsg *msg =
       static_cast<const NetTanksSnapMsg *>(packet.data());
+    
     if (ntohl(msg->snap_id) >= lastSnapId) {
       lastSnapId = ntohl(msg->snap_id);
       for (size_t i = 0; i < msg->num_snapshots; ++i) {

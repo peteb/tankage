@@ -9,10 +9,8 @@ add_executable(snail-wail
   ${GAME_ROOT_DIR}/common/control.cpp
   ${GAME_ROOT_DIR}/common/ai_control.cpp
   ${GAME_ROOT_DIR}/common/system.cpp
-  ${GAME_ROOT_DIR}/common/items.cpp
-  ${GAME_ROOT_DIR}/common/cactus.cpp
+  ${GAME_ROOT_DIR}/common/projectiles.cpp
   ${GAME_ROOT_DIR}/common/projectile.cpp
-  ${GAME_ROOT_DIR}/common/powerup.cpp
   ${GAME_ROOT_DIR}/common/texture_loader.cpp
   ${GAME_ROOT_DIR}/common/players.cpp
   ${GAME_ROOT_DIR}/common/net_error.cpp
