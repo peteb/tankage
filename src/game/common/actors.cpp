@@ -84,7 +84,7 @@ void Actors::onTick(class Client *client) {
     msg->snaps[i] = tanks[i]->snapshot();
   }
 
-  client->send(msg, packetSize, 0, NET_CHANNEL_ABS);
+  client->send(msg, packetSize, Client::PACKET_UNSEQUENCED, NET_CHANNEL_ABS);
 }
 
 void Actors::onReceive(NetPacketType type, const Packet &packet) {
