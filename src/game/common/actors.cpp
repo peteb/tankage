@@ -18,7 +18,6 @@
 #include <utils/color.h>
 #include <utils/algorithm.h>
 
-
 #include <algorithm>
 #include <iostream>
 #include <memory>
@@ -28,7 +27,6 @@ Actors::Actors()
   : ReplicatedSystem(SERVER_TICK|CLIENT_RECEIVE)
 {
   lastId = 0;
-  lastSnapId = 0;
 }
 
 Actors::~Actors() {
@@ -81,7 +79,6 @@ void Actors::onTick(class Client *client) {
   NetTanksSnapMsg *msg = static_cast<NetTanksSnapMsg *>(malloc(packetSize));
   msg->type = NET_TANKS_UPDATE;
   msg->num_snapshots = tanks.size();
-  msg->snap_id = htonl(++lastSnapId);
 
   for (size_t i = 0; i < tanks.size(); ++i) {
     msg->snaps[i] = tanks[i]->snapshot();
@@ -95,25 +92,20 @@ void Actors::onReceive(NetPacketType type, const Packet &packet) {
     const NetTanksSnapMsg *msg =
       static_cast<const NetTanksSnapMsg *>(packet.data());
     
-    if (ntohl(msg->snap_id) >= lastSnapId) {
-      lastSnapId = ntohl(msg->snap_id);
-      for (size_t i = 0; i < msg->num_snapshots; ++i) {
-        const NetTankSnapshot &snapshot = msg->snaps[i];
-        const ActorId actor = ntohs(snapshot.id);
-        Tank *tankEntry = tank(actor);
-        if (tankEntry) {
-          tankEntry->onSnap(msg->snaps[i]);
-        }
-        else {
-          std::cout << "got update for not existing tank" << std::endl;
-          createTank(snapshot);
-        }
+    for (size_t i = 0; i < msg->num_snapshots; ++i) {
+      const NetTankSnapshot &snapshot = msg->snaps[i];
+      const ActorId actor = ntohs(snapshot.id);
+      Tank *tankEntry = tank(actor);
+      if (tankEntry) {
+        tankEntry->onSnap(msg->snaps[i]);
+      }
+      else {
+        std::cout << "got update for not existing tank" << std::endl;
+        createTank(snapshot);
       }
     }
-    else {
-      std::cout << "OLD CRAPPY DATA: " << lastSnapId << " vs " << ntohl(msg->snap_id) << std::endl;
-    }
-  }
+
+}
 }
 
 void Actors::createTank(const NetTankSnapshot &net_snapshot) {
@@ -123,7 +115,7 @@ void Actors::createTank(const NetTankSnapshot &net_snapshot) {
   newTank->onSnap(net_snapshot);
 }
 
-Tank *Actors::tank(int id) const {
+Tank *Actors::tank(ActorId id) const {
   for (TankVector::const_iterator i = tanks.begin(), e = tanks.end();
        i != e; ++i) {
     if ((*i)->id() == id) {

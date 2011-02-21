@@ -11,50 +11,27 @@
 #include <utils/rect.h>
 #include <cmath>
 
-Projectile::Projectile(class ParticleGroup *partGroup,
-                       int shooterId, class Texture *tex,
-                       const SystemContext *ctx, const vec2 &pos, int id)
-  : partGroup(partGroup)
-  , tex(tex)
-  , ctx(ctx)
-  , pos(pos)
-  , shooterId(shooterId)
+Projectile::Projectile(const SystemContext *ctx, uint32_t id)
+  : ctx(ctx)
   , _id(id)
 {
-  sinceEmit = 0.0;
-  /*
-    group = ctx->particles()->group(particle_texture);
-    group->addParticle(pos);
-  */
-
+  snapshotted = false;
 }
 
 bool Projectile::update(double dt) {
-  const vec2 prevPos = pos;
-  pos += vel * dt;
-  sinceEmit += dt;
+  const vec2 prevPos = position;
+  position += velocity * dt;
   
   vec2 hitPos;
-  Tank *hit = ctx->actors()->intersectingTank(prevPos, pos, 1.0f, shooterId, hitPos);
+  Tank *hit = ctx->actors()->intersectingTank(prevPos, position, 1.0f, shooterId, hitPos);
   if (hit) {
     hit->takeDamage(hitPos, 10.0f);
     return false;
   }
 
-  if (sinceEmit > 0.01) {
-    Particle particle;
-    particle.pos = pos;
-    particle.ttd = 0.2;
-    partGroup->addParticle(particle);
-    sinceEmit = 0.0;
-  }
-  
-  // update effect
-  // partGroup->emitParticle(Particle(blabla));
-//  emitter.setPosition(pos);
-  if (pos.x - 64.0f > 800.0f || pos.x + 64.0f < 0.0f)
+  if (position.x - 64.0f > 800.0f || position.x + 64.0f < 0.0f)
     return false;
-  if (pos.y - 64.0f > 800.0f || pos.y + 64.0f < 0.0f)
+  if (position.y - 64.0f > 800.0f || position.y + 64.0f < 0.0f)
     return false;
   
   return true;
@@ -65,27 +42,45 @@ void Projectile::render(Graphics *gfx) {
   gfx->enableTextures();
   tex->bind();
 
-  vec2 dir = normalized(vel);
-  gfx->drawQuad(rect(pos, 32, 32), degrees(dir)); // FIXME: get rid of hardcoded sizes
-
+  vec2 dir = normalized(velocity);
+  gfx->drawQuad(rect(position, 32, 32), degrees(dir)); // FIXME: get rid of hardcoded sizes
 }
 
-void Projectile::setVel(const vec2 &vel) {
-  this->vel = vel;
+void Projectile::setVelocity(const vec2 &vel) {
+  velocity = vel;
+}
+
+void Projectile::setPosition(const vec2 &pos) {
+  position = pos;
 }
 
 NetProjectileSnapshot Projectile::snapshot() const {
   NetProjectileSnapshot snap;
   snap.id = htons(_id);
-  snap.x = htons(pos.x);
-  snap.y = htons(pos.y);
+  snap.x = htons(position.x);
+  snap.y = htons(position.y);
+  snap.dir = htons(degrees(velocity));
   return snap;
 }
-
+#include <iostream>
 void Projectile::onSnap(const NetProjectileSnapshot &netshot) {
   NetProjectileSnapshot snapshot;
   snapshot.x = ntohs(netshot.x);
   snapshot.y = ntohs(netshot.y);
-  pos.x = snapshot.x;
-  pos.y = snapshot.y;
+
+  const vec2 lastPos = position;
+  vec2 newPos(snapshot.x, snapshot.y);
+  if (length(newPos - position) >= 2.0) {
+    std::cout << "big corr: " << length(newPos - position) << std::endl;
+    position = newPos;
+  }
+
+  if (snapshotted) {
+    velocity = vec2::FromDirection(ntohs(netshot.dir)) * 1000.0; //position - lastPos);
+  }
+  else {
+    velocity = vec2::FromDirection(ntohs(netshot.dir)) * 1000.0;
+  }
+
+  snapshotted = true;
 }

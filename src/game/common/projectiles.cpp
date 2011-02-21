@@ -43,7 +43,7 @@ void Projectiles::update() {
   double dt = thisUpdate - lastUpdate;
   lastUpdate = thisUpdate;
 
-
+  // Execute update on all projectiles, remove those who return false
   ProjectileVector::iterator beg =
     remove_nif(projectiles.begin(), projectiles.end(),
                &Projectile::update, dt);
@@ -53,17 +53,19 @@ void Projectiles::update() {
 }
 
 void Projectiles::spawnProjectile(ProjectileType type, const vec2 &pos,
-                            const vec2 &dir, int shooterId) {
-  class ParticleGroup *particles = context->particles()->group(smoke);
-  std::auto_ptr<Projectile> newProjectile(
-    new Projectile(particles, shooterId, bulletTexture, context, pos, ++projectileId));
-
-  newProjectile->setVel(dir * 2000.0f);
-  projectiles.push_back(newProjectile.release());
+                                  float dir, ActorId shooterId) {
+  Projectile *newProjectile = new Projectile(context, ++projectileId);
+  newProjectile->setVelocity(vec2::FromDirection(dir) * 2000.0f);
+  newProjectile->setPosition(pos);
+  newProjectile->setTexture(bulletTexture);
+  projectiles.push_back(newProjectile);
 }
 
 void Projectiles::render() {
-  std::for_each(projectiles.begin(), projectiles.end(), std::bind2nd(std::mem_fun(&Projectile::render), gfx));
+  for (ProjectileVector::iterator i = projectiles.begin(), e = projectiles.end();
+       i != e; ++i) {
+    (*i)->render(gfx);
+  }
 }
 
 void Projectiles::onTick(Client *client) {
@@ -88,7 +90,7 @@ void Projectiles::onReceive(NetPacketType type, const Packet &packet) {
 
     for (size_t i = 0; i < msg->num_snapshots; ++i) {
       const NetProjectileSnapshot &snapshot = msg->snaps[i];
-      const int projectileId = ntohs(snapshot.id);
+      const uint32_t projectileId = ntohs(snapshot.id);
 
       bool found = false;
       for (size_t a = 0; a < projectiles.size(); ++a) {
@@ -100,10 +102,8 @@ void Projectiles::onReceive(NetPacketType type, const Packet &packet) {
       }
 
       if (!found) {
-        class ParticleGroup *particles = context->particles()->group(smoke);
-        Projectile *newProjectile = new Projectile(
-          particles, 0, bulletTexture, context, vec2::Zero(), projectileId);
-
+        Projectile *newProjectile = new Projectile(context, projectileId);
+        newProjectile->setTexture(bulletTexture);
         newProjectile->onSnap(snapshot);
         projectiles.push_back(newProjectile);
       }

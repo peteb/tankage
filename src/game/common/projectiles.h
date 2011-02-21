@@ -7,6 +7,8 @@
 #include <utils/vec.h>
 #include <vector>
 
+typedef uint32_t ProjectileId;
+
 class Projectiles : public ReplicatedSystem {
 public:
   enum ProjectileType {
@@ -15,14 +17,14 @@ public:
 
   Projectiles();
   ~Projectiles();
+  
   void init(const class Portal &interfaces);
-
   void update();
   void render();
   void spawnProjectile(ProjectileType type,
                        const vec2 &pos,
-                       const vec2 &dir,
-                       int shooterId);
+                       float dir,
+                       ActorId shooterId);
 
   void onTick(class Client *client);
   void onReceive(NetPacketType type, const class Packet &packet);

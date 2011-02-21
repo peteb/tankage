@@ -98,7 +98,6 @@ struct NetProjectileSnapshot {
 
 struct NetTanksSnapMsg {
   NetPacketType type;
-  uint32_t snap_id;
   uint8_t num_snapshots;
   NetTankSnapshot snaps[0];
 };

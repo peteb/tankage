@@ -198,7 +198,7 @@ bool Tank::update(double dt) {
         context->projectiles()->spawnProjectile(
           Projectiles::PROJECTILE_BULLET,
           _position + dir * 32.0f,
-          dir,
+          _turretDir,
           _id);
       }
       
