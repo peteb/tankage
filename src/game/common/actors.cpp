@@ -24,8 +24,11 @@
 #include <memory>
 #include <cmath>
 
-Actors::Actors() {
+Actors::Actors()
+  : ReplicatedSystem(SERVER_TICK|CLIENT_RECEIVE)
+{
   lastId = 0;
+  lastSnapId = 0;
 }
 
 Actors::~Actors() {
@@ -78,7 +81,8 @@ void Actors::onTick(class Client *client) {
   NetTanksSnapMsg *msg = static_cast<NetTanksSnapMsg *>(malloc(packetSize));
   msg->type = NET_TANKS_UPDATE;
   msg->num_snapshots = tanks.size();
-  
+  msg->snap_id = htonl(++lastSnapId);
+
   for (size_t i = 0; i < tanks.size(); ++i) {
     msg->snaps[i] = tanks[i]->snapshot();
   }
@@ -88,22 +92,27 @@ void Actors::onTick(class Client *client) {
 
 void Actors::onReceive(NetPacketType type, const Packet &packet) {
   if (type == NET_TANKS_UPDATE) {
+    std::cout << "RECEIVE" << std::endl;
     const NetTanksSnapMsg *msg =
       static_cast<const NetTanksSnapMsg *>(packet.data());
-
-    for (size_t i = 0; i < msg->num_snapshots; ++i) {
-      const NetTankSnapshot &snapshot = msg->snaps[i];
-      const ActorId actor = ntohs(snapshot.id);
-      Tank *tankEntry = tank(actor);
-      if (tankEntry) {
-        tankEntry->onSnap(msg->snaps[i]);
-      }
-      else {
-        std::cout << "got update for not existing tank" << std::endl;
-        createTank(snapshot);
+    if (ntohl(msg->snap_id) >= lastSnapId) {
+      lastSnapId = ntohl(msg->snap_id);
+      for (size_t i = 0; i < msg->num_snapshots; ++i) {
+        const NetTankSnapshot &snapshot = msg->snaps[i];
+        const ActorId actor = ntohs(snapshot.id);
+        Tank *tankEntry = tank(actor);
+        if (tankEntry) {
+          tankEntry->onSnap(msg->snaps[i]);
+        }
+        else {
+          std::cout << "got update for not existing tank" << std::endl;
+          createTank(snapshot);
+        }
       }
     }
-    
+    else {
+      std::cout << "OLD CRAPPY DATA: " << lastSnapId << " vs " << ntohl(msg->snap_id) << std::endl;
+    }
   }
 }
 

@@ -90,7 +90,8 @@ struct NetTankSnapshot {
 
 struct NetTanksSnapMsg {
   NetPacketType type;
-  unsigned char num_snapshots;
+  uint32_t snap_id;
+  uint8_t num_snapshots;
   NetTankSnapshot snaps[0];
 };
 
