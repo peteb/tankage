@@ -39,7 +39,7 @@ void GameClient::init(const Portal &interfaces) {
   _state = GameClient::STATE_DISCONNECTED;
   
   _net = interfaces.requestInterface<Network>();
-  _client = _net->connect("127.0.0.1:12345", 2);
+  _client = _net->connect("127.0.0.1:12345", 2); //192.168.0.145:12345", 2); //"127.0.0.1:12345", 2);
 }
 
 void GameClient::update() {
