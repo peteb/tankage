@@ -131,7 +131,9 @@ void GameClient::onReceive(Packet *packet) {
   }
 
   for (size_t i = 0; i < _systems.size(); ++i) {
-    _systems[i]->onReceive(*type, *packet);
+    if (_systems[i]->flags & ReplicatedSystem::CLIENT_RECEIVE) {
+      _systems[i]->onReceive(*type, *packet);
+    }
   }
 }
 

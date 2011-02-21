@@ -55,6 +55,7 @@ private:
   double secondsSinceFire;
   int health;
   ActorId _id;
+  bool _snapshotted;
 };
 
 
