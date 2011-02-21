@@ -46,6 +46,7 @@
 ** TODO Integrate CM in the game
 ** DONE Move CM to the engine
 ** TODO Add support for configuring over the network
+** DONE Support to override cfg via command line arguments
 * Recover old behavior
 *** DONE Cactii
 *** DONE Shooting
