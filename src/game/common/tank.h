@@ -9,7 +9,7 @@
 class Tank {
 public:
   enum State {
-    STATE_MOVE_UP,
+    STATE_MOVE_UP = 0,
     STATE_MOVE_DOWN,
     STATE_TURN_LEFT,
     STATE_TURN_RIGHT,

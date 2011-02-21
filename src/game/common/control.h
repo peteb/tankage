@@ -28,6 +28,7 @@ private:
 
   // data that will be replicated
   vec2 cursorPos;
+  uint8_t state;
 };
 
 #endif // !GAME_CONTROL_H

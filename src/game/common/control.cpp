@@ -17,6 +17,7 @@
 Control::Control()
   : ReplicatedSystem(CLIENT_TICK|SERVER_RECEIVE)
 {
+  state = 0;
 }
 
 void Control::init(const class Portal &interfaces) {
@@ -62,7 +63,7 @@ void Control::update() {
 void Control::onTick(Client *client) {
   NetPlayerInput msg;
   msg.type = NET_PLAYER_INPUT;
-  msg.state = 0;
+  msg.state = state;
   msg.target_x = htons(cursorPos.x + 32768);
   msg.target_y = htons(cursorPos.y + 32768);
 
@@ -97,6 +98,16 @@ void Control::onReceive(NetPacketType type, const Packet &packet) {
       return;
     }
 
+    for (unsigned i = 0; i < Tank::STATE_MAX; ++i) {
+      // TODO: just work on deltas here
+      if (msg->state & (1 << i)) {
+        tank->startState((Tank::State)i);
+      }
+      else {
+        tank->stopState((Tank::State)i);
+      }
+    }
+    
     vec2 cursor(ntohs(msg->target_x) - 32768,
                 ntohs(msg->target_y) - 32768);
 
@@ -107,8 +118,10 @@ void Control::onReceive(NetPacketType type, const Packet &packet) {
 void Control::triggerState(int keycode, Tank::State state, Tank *target) {
   if (input->keyWasPressed(keycode)) {
     target->startState(state);
+    this->state |= (1 << state);
   }
   if (input->keyWasReleased(keycode)) {
     target->stopState(state);
+    this->state &= ~(1 << state);
   }
 }
