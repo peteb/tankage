@@ -27,7 +27,8 @@ enum {
   NET_IDENTIFY = 1,      //< NetIdentifyMsg
   NET_ERROR = 2,         //< NetErrorMsg
   NET_ARENA_PARTICIPANTS = 3,
-  NET_TANKS_UPDATE = 4
+  NET_TANKS_UPDATE = 4,
+  NET_PLAYER_INPUT = 5
 };
 
 enum NetChannels {
@@ -94,6 +95,7 @@ struct NetTanksSnapMsg {
 };
 
 struct NetPlayerInput {
+  NetPacketType type;
   uint8_t state; // forward, back, left, right, shoot
   uint16_t target_x;
   uint16_t target_y;

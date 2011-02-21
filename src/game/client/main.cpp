@@ -56,10 +56,12 @@ int app_main(Portal &interfaces) {
 
   systems.init(interfaces);
 
+  double lastTick = wm->timeSeconds();
   bool running = true;
   const int escape = input->keycode("escape");
   
   while (running) {
+    double thisTime = wm->timeSeconds();
     const rect wndSize = wm->size();
     gfx->setViewport(wndSize);
     gfx->setOrtho(wndSize);
@@ -67,6 +69,12 @@ int app_main(Portal &interfaces) {
     control.update();
     background.render();
     gameclient.update();
+
+    if (thisTime - lastTick >= 1.0/25.0) {
+      gameclient.tick(thisTime - lastTick);
+      lastTick = thisTime;
+    }
+    
     //   particles.render();
     actors.render();
     items.update();

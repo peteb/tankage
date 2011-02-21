@@ -14,6 +14,7 @@ public:
   
   void init(const class Portal &interfaces);
   void update();
+  void onReceive(NetPacketType type, const class Packet &packet);
   
 private:
   void triggerState(int keycode, Tank::State state, Tank *target);
@@ -24,6 +25,9 @@ private:
   int keyUp, keyDown, keyLeft, keyRight, keyShoot;
   class Input *input;
   std::string snail;
+
+  // data that will be replicated
+  vec2 cursorPos;
 };
 
 #endif // !GAME_CONTROL_H

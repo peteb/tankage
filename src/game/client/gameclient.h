@@ -20,6 +20,7 @@ public:
   void update();
   void disconnectGently();
   void registerSystem(class ReplicatedSystem *system);
+  void tick(double dt);
   
 private:
   void onConnect();

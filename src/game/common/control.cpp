@@ -3,9 +3,13 @@
 #include <game/common/tank.h>
 #include <game/common/players.h>
 
+#include <game/server/client_session.h>
+#include <game/server/gameserver.h>
+
 #include <engine/input.h>
 #include <engine/portal.h>
 #include <engine/window_manager.h>
+#include <engine/network.h>
 
 #include <utils/vec.h>
 #include <iostream>
@@ -45,7 +49,7 @@ void Control::update() {
         int x, y;
         input->mousePos(x, y);
         target->setCursor(vec2(x, y));
-        // TODO: replicate to server if >= 1/25 since last
+        cursorPos = vec2(x, y);
       }
       else {
         std::cout << "no tank :(" << std::endl;
@@ -55,9 +59,49 @@ void Control::update() {
     
 }
 
-#include <iostream>
 void Control::onTick(Client *client) {
-  std::cout << "CONTROL TICK" << std::endl;
+  NetPlayerInput msg;
+  msg.type = NET_PLAYER_INPUT;
+  msg.state = 0;
+  msg.target_x = htons(cursorPos.x + 32768);
+  msg.target_y = htons(cursorPos.y + 32768);
+
+  client->send(&msg, sizeof(NetPlayerInput), 0, NET_CHANNEL_ABS);
+}
+
+void Control::onReceive(NetPacketType type, const Packet &packet) {
+  if (type == NET_PLAYER_INPUT) {
+    if (packet.size() < sizeof(NetPlayerInput)) {
+      return;
+    }
+    
+    const NetPlayerInput *msg = static_cast<const NetPlayerInput *>(packet.data());
+    Client *client = packet.sender();
+    if (!client) {
+      return;
+    }
+    
+    ClientSession *session = context->gameserver()->session(client);
+    if (!session) {
+      // No session? Huh.
+      return;
+    }
+
+    Player *player = context->players()->player(session->player);
+    if (!player) {
+      return;
+    }
+
+    Tank *tank = context->actors()->tank(player->actor());
+    if (!tank) {
+      return;
+    }
+
+    vec2 cursor(ntohs(msg->target_x) - 32768,
+                ntohs(msg->target_y) - 32768);
+
+    tank->setCursor(cursor);
+  }
 }
 
 void Control::triggerState(int keycode, Tank::State state, Tank *target) {

@@ -52,8 +52,6 @@ void GameServer::update() {
 }
 
 void GameServer::tick(double dt) {
-  std::cout << dt << std::endl;
- 
   for (size_t i = 0; i < _systems.size(); ++i) {
     for (SessionMap::iterator it = _sessions.begin(), e = _sessions.end();
          it != e; ++it) {

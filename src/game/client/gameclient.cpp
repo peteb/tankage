@@ -65,6 +65,15 @@ void GameClient::update() {
   }
 }
 
+void GameClient::tick(double dt) {
+  for (size_t i = 0; i < _systems.size(); ++i) {
+    if (_systems[i]->flags & ReplicatedSystem::CLIENT_TICK) {
+      _systems[i]->onTick(_client);
+    }
+  }
+
+}
+
 void GameClient::disconnectGently() {
   if (!_client) {
     return;
