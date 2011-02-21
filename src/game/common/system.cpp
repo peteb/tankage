@@ -1,5 +1,5 @@
 #include <game/common/system.h>
-#include <game/common/snails.h>
+#include <game/common/actors.h>
 #include <game/common/control.h>
 #include <game/common/items.h>
 #include <game/client/background.h>

@@ -1,7 +1,7 @@
 #include <game/client/gameclient.h>
 #include <game/common/net_protocol.h>
 #include <game/common/replicated_system.h>
-#include <game/common/snails.h>
+#include <game/common/actors.h>
 
 #include <engine/portal.h>
 #include <engine/network.h>
@@ -39,7 +39,7 @@ void GameClient::init(const Portal &interfaces) {
   _state = GameClient::STATE_DISCONNECTED;
   
   _net = interfaces.requestInterface<Network>();
-  _client = _net->connect("192.168.0.103:12345", 2); //127.0.0.1:12345", 2);
+  _client = _net->connect("127.0.0.1:12345", 2);
 }
 
 void GameClient::update() {
@@ -63,6 +63,15 @@ void GameClient::update() {
     onReceive(packet);
     delete packet;
   }
+}
+
+void GameClient::tick(double dt) {
+  for (size_t i = 0; i < _systems.size(); ++i) {
+    if (_systems[i]->flags & ReplicatedSystem::CLIENT_TICK) {
+      _systems[i]->onTick(_client);
+    }
+  }
+
 }
 
 void GameClient::disconnectGently() {

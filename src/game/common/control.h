@@ -1,22 +1,35 @@
 #ifndef GAME_CONTROL_H
 #define GAME_CONTROL_H
 
-#include <string>
 #include <game/common/system.h>
-#include <game/common/snails.h>
+#include <game/common/actors.h>
+#include <game/common/tank.h>
+#include <game/common/replicated_system.h>
 
-class Control : public System {
+#include <string>
+
+class Control : public ReplicatedSystem {
 public:
+  Control();
+  
   void init(const class Portal &interfaces);
   void update();
+  void onReceive(NetPacketType type, const class Packet &packet);
   
 private:
-  void triggerState(int keycode, Snail::SnailState state);
+  void triggerState(int keycode, Tank::State state, Tank *target);
+  void onTick(class Client *client);
   
+  class WindowManager *wm;
+  double lastTick;
   int keyUp, keyDown, keyLeft, keyRight, keyShoot;
   class Input *input;
   class Cfg *cfg;
   std::string snail;
+
+  // data that will be replicated
+  vec2 cursorPos;
+  uint8_t state;
 };
 
 #endif // !GAME_CONTROL_H

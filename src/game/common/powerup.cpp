@@ -1,5 +1,6 @@
 #include <game/common/powerup.h>
-#include <game/common/snails.h>
+#include <game/common/actors.h>
+#include <game/common/tank.h>
 #include <engine/graphics.h>
 #include <engine/texture.h>
 #include <utils/rect.h>
@@ -33,7 +34,7 @@ bool Powerup::update(double dt) {
   pos += vel * dt;
   
   vec2 hitPos;
-  Snail *hit = ctx->snails()->intersectingSnails(prevPos, pos, radius, NULL, hitPos);
+  Tank *hit = ctx->actors()->intersectingTank(prevPos, pos, radius, 0, hitPos);
   if (hit) {
     if (hit->takeItem(type, amount))
       return false; // remove the powerup if the snail took it
@@ -43,12 +44,13 @@ bool Powerup::update(double dt) {
   return (pos.y + 16.0f >= 0.0f) || (pos.x < -16.0f) || (pos.x > 816.0f);
 }
 
-bool Powerup::takeDamage(const vec2 &pos, float damage, Snail *shooter) {
+bool Powerup::takeDamage(const vec2 &pos, float damage, ActorId shooter) {
   // See in which direction we should start flying, then change the velocity
   // accordingly
   vec2 velfactor = vec2::Identity();
+  Tank *tank = ctx->actors()->tank(shooter);
   
-  if (shooter->position().x < this->pos.x)
+  if (tank->position().x < this->pos.x)
     velfactor = vec2(-1.0f, 0.0f);
   else
     velfactor = vec2(1.0f, 0.0f);

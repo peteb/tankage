@@ -5,7 +5,7 @@
 
 class Projectile {
 public:
-  Projectile(class ParticleGroup *partGroup, class Snail *shooter,
+  Projectile(class ParticleGroup *partGroup, int shooterId,
              class Texture *tex, const class SystemContext *ctx, const vec2 &pos);
 
   bool update(double dt);
@@ -14,13 +14,13 @@ public:
   
 private:
   class ParticleGroup *partGroup;
-  class Snail *shooter;
   class Texture *tex;
   const class SystemContext *ctx;
   
   vec2 pos;
   vec2 vel;
   double sinceEmit;
+  int shooterId;
 };
 
 

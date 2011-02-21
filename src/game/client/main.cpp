@@ -7,7 +7,7 @@
 #include <game/client/background.h>
 #include <game/client/particles.h>
 #include <game/client/gameclient.h>
-#include <game/common/snails.h>
+#include <game/common/actors.h>
 #include <game/common/control.h>
 #include <game/common/system.h>
 #include <game/common/items.h>
@@ -30,7 +30,7 @@ int app_main(Portal &interfaces) {
 
   // Register the subsystems
   GameClient gameclient;
-  Snails snails;
+  Actors actors;
   Players players;
   Background background;
   Control control;
@@ -38,14 +38,15 @@ int app_main(Portal &interfaces) {
   Particles particles;
   TextureLoader texLoader;
   
-  gameclient.registerSystem(&snails);
+  gameclient.registerSystem(&actors);
   gameclient.registerSystem(&players);
-
+  gameclient.registerSystem(&control);
+  
   // TODO: this is fugly, registering like this. maybe it should be done
   //       like gameClient above
   
   systems.set(SystemContext::SYSTEM_BACKGROUND, &background);
-  systems.set(SystemContext::SYSTEM_SNAILS, &snails);
+  systems.set(SystemContext::SYSTEM_ACTORS, &actors);
   systems.set(SystemContext::SYSTEM_ITEMS, &items);
   systems.set(SystemContext::SYSTEM_GAMECLIENT, &gameclient);
   systems.set(SystemContext::SYSTEM_PLAYERS, &players);
@@ -55,10 +56,12 @@ int app_main(Portal &interfaces) {
 
   systems.init(interfaces);
 
+  double lastTick = wm->timeSeconds();
   bool running = true;
   const int escape = input->keycode("escape");
   
   while (running) {
+    double thisTime = wm->timeSeconds();
     const rect wndSize = wm->size();
     gfx->setViewport(wndSize);
     gfx->setOrtho(wndSize);
@@ -66,8 +69,14 @@ int app_main(Portal &interfaces) {
     control.update();
     background.render();
     gameclient.update();
+
+    if (thisTime - lastTick >= 1.0/25.0) {
+      gameclient.tick(thisTime - lastTick);
+      lastTick = thisTime;
+    }
+    
     //   particles.render();
-    snails.render();
+    actors.render();
     items.update();
     items.render();
     

@@ -1,6 +1,7 @@
-#include <game/common/snails.h>
+#include <game/common/tank.h>
 #include <game/common/items.h>
 #include <game/common/net_protocol.h>
+#include <game/common/players.h>
 
 #include <engine/graphics.h>
 #include <engine/texture.h>
@@ -24,114 +25,11 @@
 #include <memory>
 #include <cmath>
 
-Snails::~Snails() {
-  // delete all the snails when game terminates
-  std::for_each(snails.begin(), snails.end(), delete_op());
-}
 
-void Snails::init(const class Portal &interfaces) {
-  graphics = interfaces.requestInterface<Graphics>();
-  wm = interfaces.requestInterface<WindowManager>();
-  ImageLoader *imgLoader = interfaces.requestInterface<ImageLoader>();
-
-  // First snail
-  {
-    std::auto_ptr<Image> img(imgLoader->loadImage(std::string(RESOURCE_PATH) + "/tank_base.png"));
-    std::auto_ptr<Image> img2(imgLoader->loadImage(std::string(RESOURCE_PATH) + "/tank_turret.png"));
-    Snail *snail = new Snail(vec2(50.0f, 300.0f), Snails::SNAIL_LEFT, context);
-    snail->setTexture(graphics->createTexture(img.get()),
-                      graphics->createTexture(img2.get()));
-  
-    snails.push_back(snail);
-  }
-
-  // Second snail
-  {
-    std::auto_ptr<Image> img(imgLoader->loadImage(std::string(RESOURCE_PATH) + "/snail_r.png"));
-    Snail *snail = new Snail(vec2(800-50.0f, 300.0f), Snails::SNAIL_RIGHT, context);
-    snail->setTexture(graphics->createTexture(img.get()), NULL);
-  
-    snails.push_back(snail);
-  }
-  
-  lastUpdate = wm->timeSeconds();
-}
-
-void Snails::render() {
-  double thisUpdate = wm->timeSeconds();
-  double dt = thisUpdate - lastUpdate;
-  lastUpdate = thisUpdate;
-  
-  SnailVector::iterator i = snails.begin(), e = snails.end();
-  for (; i != e; ++i) {
-    if ((*i)->update(dt)) {
-      // It's alive!
-      (*i)->render(graphics);
-    }
-  }
-}
-
-Snail *Snails::snail(int id) const {
-  return snails.at(id);
-}
-
-Snail *Snails::intersectingSnails(const vec2 &start, const vec2 &end,
-                                  float radius, Snail *ignore, vec2 &hitpos) {
-
-  for (SnailVector::iterator i = snails.begin(); i != snails.end(); ++i) {
-    Snail *snail = *i;
-    if (snail != ignore) {
-      if (snail->intersects(start, end, radius, hitpos)) {
-        return snail;
-      }
-    }
-  }
-  
-  return 0;
-}
-
-
-void Snails::onTick(class Client *client) {
-  NetSnailsSnapMsg msg;
-  msg.type = NET_SNAILS_SNAPSHOT;
-  
-  for (size_t i = 0; i < snails.size() && i < 2; ++i) {
-    NetSnailSnapshot *snap = &msg.snaps[i];
-    snap->x = htons(snails[i]->position().x);
-    snap->y = htons(snails[i]->position().y);
-  }
-
-  // FIXME: make sure old versions will be thrown away by the connection layer
-  client->send(&msg, sizeof(NetSnailsSnapMsg), 0, NET_CHANNEL_ABS);
-}
-
-void Snails::onReceive(NetPacketType type, const Packet &packet) {
-  if (type == NET_SNAILS_SNAPSHOT) {
-    const NetSnailsSnapMsg *msg =
-      static_cast<const NetSnailsSnapMsg *>(packet.data());
-
-    for (size_t i = 0; i < 2; ++i) {
-      NetSnailSnapshot snap = msg->snaps[i];
-      snap.x = ntohs(snap.x); // FIXME: maybe there should be a multiplier here
-      snap.y = ntohs(snap.y);
-
-      // FIXME: forward this update to the snails
-      std::cout << "snail pos: " << snap.x << ":" << snap.y << std::endl;
-      snails[i]->onSnap(snap);
-    }
-    
-  }
-}
-
-
-Snail::Snail(const vec2 &initialPos, int id, const SystemContext *ctx)
-  : _position(initialPos)
-  , originalPos(initialPos)
-  , id(id)
-  , context(ctx)
+Tank::Tank(ActorId id, const SystemContext *ctx)
+  : context(ctx)
   , radius(29.0f)
-  , vel(0.0f, 0.0f)
-  , takingControl(false)
+  , _id(id)
 {
   std::fill(_state, _state + STATE_MAX, 0);
   secondsSinceFire = 0.0;
@@ -143,32 +41,48 @@ Snail::Snail(const vec2 &initialPos, int id, const SystemContext *ctx)
   _turretDir = 0.0f;
 }
 
-Snail::~Snail() {
-  delete this->texture;
+Tank::~Tank() {
 }
 
-void Snail::startState(SnailState state) {
+void Tank::startState(State state) {
   _state[state] = true;
 }
 
-void Snail::stopState(SnailState state) {
+void Tank::stopState(State state) {
   _state[state] = false;
 }
 
-void Snail::setTexture(Texture *texture, Texture *turret) {
+void Tank::setTexture(Texture *texture, Texture *turret) {
   this->texture = texture;
   _turret = turret;
 }
 
-void Snail::onSnap(NetSnailSnapshot &snapshot) {
+void Tank::onSnap(const NetTankSnapshot &netshot) {
+  // Convert byte order
+  NetTankSnapshot snapshot;
+  snapshot.x = ntohs(netshot.x);
+  snapshot.y = ntohs(netshot.y);
+  snapshot.base_dir = ntohs(netshot.base_dir);
+  snapshot.turret_dir = ntohs(netshot.turret_dir);
+  
   snapshots[1] = snapshots[0];
   snapshots[0] = snapshot;
+  std::cout << "GOT: " << snapshot.x << ", " << snapshot.y << std::endl;
   sinceSnap = 0.0;
-//  _position.y = snapshot.y;
 }
 
-void Snail::render(Graphics *graphics) {
+NetTankSnapshot Tank::snapshot() const {
+  NetTankSnapshot snap;
+  snap.id = htons(_id);
+  snap.x = htons(_position.x);
+  snap.y = htons(_position.y);
+  snap.base_dir = htons(_dir);
+  snap.turret_dir = htons(_turretDir);
   
+  return snap;
+}
+
+void Tank::render(Graphics *graphics) {
   graphics->setBlend(Graphics::BLEND_ALPHA);
   graphics->enableTextures();
   graphics->setColor(color4::White());
@@ -196,14 +110,24 @@ double Wrap(double value, double lower, double upper) {
 }
 
 
-bool Snail::update(double dt) {
+bool Tank::update(double dt) {
   if (health <= 0) {
     std::cout << "snail: I'm dead :( returning false" << std::endl;
     return false;
   }
 
 //  _position.y = double(snapshots[0].y + double(snapshots[0].y - snapshots[1].y) * sinceSnap / 25.0);
-//  _position.y = snapshots[0].y + double(snapshots[0].y - snapshots[1].y) * sinceSnap / (1.0/25.0);
+  //_position.y = snapshots[0].y + double(snapshots[0].y - snapshots[1].y) * sinceSnap / (1.0/25.0);
+  // _position.x = snapshots[0].x + double(snapshots[0].x - snapshots[1].x) * sinceSnap / (1.0/25.0);
+  if (_id != context->players()->localPlayer()) {
+    // Only update tank if it's a remote player
+    _position.x = snapshots[0].x;
+    _position.y = snapshots[0].y;
+    _turretDir = snapshots[0].turret_dir;
+    _dir = snapshots[0].base_dir;
+  }
+
+  // FIXME: improve the jerkiness. Probably enet doesn't throw away old packets?
   
   sinceSnap += dt;
   secondsSinceFire += dt;
@@ -267,7 +191,13 @@ bool Snail::update(double dt) {
   if (_state[STATE_SHOOT]) {// FIXME: rename SHOOT to SHOOTING
     if (secondsSinceFire >= 0.2) {
       vec2 dir = vec2::FromDirection(_turretDir);
-      context->items()->spawnProjectile(Items::PROJECTILE_BULLET, _position + dir * 32.0f, dir, this);
+
+      context->items()->spawnProjectile(
+        Items::PROJECTILE_BULLET,
+        _position + dir * 32.0f,
+        dir,
+        _id);
+      
       secondsSinceFire = 0.0;
     }
     
@@ -276,29 +206,28 @@ bool Snail::update(double dt) {
   return true;
 }
 
-void Snail::setCursor(const vec2 & pos) {
+void Tank::setCursor(const vec2 & pos) {
   cursorPos = pos;
 }
 
-void Snail::takeDamage(const vec2 &pos, float damage) {
+void Tank::takeDamage(const vec2 &pos, float damage) {
   vel += normalized(_position - pos)  * damage * 10.0f;
   std::cout << std::string(normalized(_position - pos)) << std::endl;
   
-  takingControl = false;
   health -= static_cast<int>(damage);
   std::cout << "snail: I received " << damage
             << " amount of hurt >:-/" << std::endl;
 }
 
-bool Snail::takeItem(const std::string &type, int amount) {
+bool Tank::takeItem(const std::string &type, int amount) {
   std::cout << "snail: I received " << amount
             << " amount of " << type << std::endl;
   
   return true; // we took it
 }
 
-bool Snail::intersects(const vec2 &start, const vec2 &end,
-                       float radius, vec2 &hitpos) {
+bool Tank::intersects(const vec2 &start, const vec2 &end,
+                       float radius, vec2 &hitpos) const {
   vec2 closest = closest_point(start, end, _position);
   if (length(_position - closest) <= radius + this->radius) {
     hitpos = closest;
@@ -308,6 +237,10 @@ bool Snail::intersects(const vec2 &start, const vec2 &end,
   return false;
 }
 
-const vec2 &Snail::position() const {
+const vec2 &Tank::position() const {
   return _position;
+}
+
+const ActorId Tank::id() const {
+  return _id;
 }

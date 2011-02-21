@@ -4,7 +4,8 @@
 #include <game/common/net_protocol.h>
 #include <game/common/net_error.h>
 #include <game/common/replicated_system.h>
-#include <game/common/snails.h>
+#include <game/common/actors.h>
+#include <game/common/tank.h>
 
 #include <engine/packet.h>
 #include <engine/network.h>
@@ -51,13 +52,13 @@ void GameServer::update() {
 }
 
 void GameServer::tick(double dt) {
-  std::cout << dt << std::endl;
- 
   for (size_t i = 0; i < _systems.size(); ++i) {
     for (SessionMap::iterator it = _sessions.begin(), e = _sessions.end();
          it != e; ++it) {
 
-      _systems[i]->onTick(it->second->client);
+      if (_systems[i]->flags & ReplicatedSystem::SERVER_TICK) {
+        _systems[i]->onTick(it->second->client);
+      }
     }
   }
 }
@@ -169,10 +170,16 @@ void GameServer::onIdent(const NetIdentifyMsg *data, Packet *packet) {
   
   // Forward the ident request to all subsystems
   for (size_t i = 0; i < _systems.size(); ++i) {
-    _systems[i]->onReceive(ident.type, *packet);
+    if (_systems[i]->flags & ReplicatedSystem::SERVER_RECEIVE) {
+      _systems[i]->onReceive(ident.type, *packet);
+    }
   }
   
   clientSession->state = ClientSession::STATE_IDENTIFIED;
+
+  Tank *tank = context->actors()->createActor();
+  Player *player = context->players()->createPlayer(tank->id());
+  clientSession->player = player->id();
   
   // Broadcast onIdent to all subsystems
   for (size_t i = 0; i < _systems.size(); ++i) {
