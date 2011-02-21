@@ -195,8 +195,8 @@ bool Tank::update(double dt) {
       vec2 dir = vec2::FromDirection(_turretDir);
 
       if (!_snapshotted) {
-        context->items()->spawnProjectile(
-          Items::PROJECTILE_BULLET,
+        context->projectiles()->spawnProjectile(
+          Projectiles::PROJECTILE_BULLET,
           _position + dir * 32.0f,
           dir,
           _id);

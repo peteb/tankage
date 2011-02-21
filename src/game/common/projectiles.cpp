@@ -17,38 +17,28 @@
 #include <algorithm>
 #include <iostream>
 
-Items::Items()
+Projectiles::Projectiles()
   : ReplicatedSystem(CLIENT_RECEIVE|SERVER_TICK)
 {
   projectileId = 0;
 }
 
-Items::~Items() {
-  // deletes all the items when game terminates
-  std::for_each(items.begin(), items.end(), delete_op());
-  // delete all the textures
-  delete cactusTexture;
-  delete bulletTexture;
-  delete healthPowerup;
-  delete smoke;
+Projectiles::~Projectiles() {
+
 }
 
-void Items::init(const class Portal &interfaces) {
+void Projectiles::init(const class Portal &interfaces) {
   wm = interfaces.requestInterface<WindowManager>();
   gfx = interfaces.requestInterface<Graphics>();
   TextureLoader *textures = context->textureLoader();
   
-  cactusTexture = textures->texture("cactii.png");
   bulletTexture = textures->texture("bullet.png");
-  healthPowerup = textures->texture("health_powerup.png");
   smoke = textures->texture("smoke.png");
 
-    
   lastUpdate = wm->timeSeconds();
-  lastGentime = lastUpdate;
 }
                                         
-void Items::update() {
+void Projectiles::update() {
   double thisUpdate = wm->timeSeconds();
   double dt = thisUpdate - lastUpdate;
   lastUpdate = thisUpdate;
@@ -62,7 +52,7 @@ void Items::update() {
   projectiles.erase(beg, projectiles.end());
 }
 
-void Items::spawnProjectile(ProjectileType type, const vec2 &pos,
+void Projectiles::spawnProjectile(ProjectileType type, const vec2 &pos,
                             const vec2 &dir, int shooterId) {
   class ParticleGroup *particles = context->particles()->group(smoke);
   std::auto_ptr<Projectile> newProjectile(
@@ -72,11 +62,11 @@ void Items::spawnProjectile(ProjectileType type, const vec2 &pos,
   projectiles.push_back(newProjectile.release());
 }
 
-void Items::render() {
+void Projectiles::render() {
   std::for_each(projectiles.begin(), projectiles.end(), std::bind2nd(std::mem_fun(&Projectile::render), gfx));
 }
 
-void Items::onTick(Client *client) {
+void Projectiles::onTick(Client *client) {
   size_t packetSize = sizeof(NetProjectilesSnapMsg) +
     sizeof(NetProjectileSnapshot) * projectiles.size();
 
@@ -91,7 +81,7 @@ void Items::onTick(Client *client) {
   client->send(msg, packetSize, Client::PACKET_UNSEQUENCED, NET_CHANNEL_ABS);
 }
 
-void Items::onReceive(NetPacketType type, const Packet &packet) {
+void Projectiles::onReceive(NetPacketType type, const Packet &packet) {
   if (type == NET_PROJECTILES_UPDATE) {
     const NetProjectilesSnapMsg *msg =
       static_cast<const NetProjectilesSnapMsg *>(packet.data());
