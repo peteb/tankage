@@ -78,7 +78,7 @@ NetTankSnapshot Tank::snapshot() const {
   snap.id = htons(_id);
   snap.x = htons(_position.x);
   snap.y = htons(_position.y);
-  snap.base_dir = htons(_dir);
+  snap.base_dir = htons((360.0 + _dir) * 4.0);
   snap.turret_dir = htons(_turretDir);
   
   return snap;
@@ -127,7 +127,7 @@ bool Tank::update(double dt) {
       _position.x = snapshots[0].x;
       _position.y = snapshots[0].y;
       _turretDir = snapshots[0].turret_dir;
-      _dir = snapshots[0].base_dir;
+      _dir = (static_cast<double>(snapshots[0].base_dir) / 4.0) - 360.0;
     }
     // }
 
