@@ -10,6 +10,7 @@
 #include <engine/graphics.h>
 #include <engine/portal.h>
 #include <engine/texture.h>
+#include <engine/network.h>
 
 #include <utils/algorithm.h>
 
@@ -17,6 +18,12 @@
 #include <functional>
 #include <algorithm>
 #include <iostream>
+
+Items::Items()
+  : ReplicatedSystem(CLIENT_RECEIVE|SERVER_TICK)
+{
+  projectileId = 0;
+}
 
 Items::~Items() {
   // deletes all the items when game terminates
@@ -85,7 +92,7 @@ void Items::spawnProjectile(ProjectileType type, const vec2 &pos,
                             const vec2 &dir, int shooterId) {
   class ParticleGroup *particles = context->particles()->group(smoke);
   std::auto_ptr<Projectile> newProjectile(
-    new Projectile(particles, shooterId, bulletTexture, context, pos));
+    new Projectile(particles, shooterId, bulletTexture, context, pos, ++projectileId));
 
   newProjectile->setVel(dir * 2000.0f);
   projectiles.push_back(newProjectile.release());
@@ -125,3 +132,21 @@ bool Item::intersects(const vec2 &start, const vec2 &end, float radius, vec2 &hi
 }
 
 
+void Items::onTick(Client *client) {
+  size_t packetSize = sizeof(NetProjectilesSnapMsg) +
+    sizeof(NetProjectileSnapshot) * projectiles.size();
+
+  NetProjectilesSnapMsg *msg = static_cast<NetProjectilesSnapMsg *>(malloc(packetSize));
+  msg->type = NET_PROJECTILES_UPDATE;
+  msg->num_snapshots = projectiles.size();
+
+  for (size_t i = 0; i < projectiles.size(); ++i) {
+    msg->snaps[i] = projectiles[i]->snapshot();
+  }
+
+  client->send(msg, packetSize, Client::PACKET_UNSEQUENCED, NET_CHANNEL_ABS);
+}
+
+void Items::onReceive(NetPacketType type, const Packet &packet) {
+  std::cout << "receive" << std::endl;
+}

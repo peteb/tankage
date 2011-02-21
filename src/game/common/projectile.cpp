@@ -14,12 +14,13 @@
 
 Projectile::Projectile(class ParticleGroup *partGroup,
                        int shooterId, class Texture *tex,
-                       const SystemContext *ctx, const vec2 &pos)
+                       const SystemContext *ctx, const vec2 &pos, int id)
   : partGroup(partGroup)
   , tex(tex)
   , ctx(ctx)
   , pos(pos)
   , shooterId(shooterId)
+  , _id(id)
 {
   sinceEmit = 0.0;
   /*
@@ -83,3 +84,10 @@ void Projectile::setVel(const vec2 &vel) {
   this->vel = vel;
 }
 
+NetProjectileSnapshot Projectile::snapshot() const {
+  NetProjectileSnapshot snap;
+  snap.id = htons(_id);
+  snap.x = htons(pos.x);
+  snap.y = htons(pos.y);
+  return snap;
+}

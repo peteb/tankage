@@ -28,7 +28,8 @@ enum {
   NET_ERROR = 2,         //< NetErrorMsg
   NET_ARENA_PARTICIPANTS = 3,
   NET_TANKS_UPDATE = 4,
-  NET_PLAYER_INPUT = 5
+  NET_PROJECTILES_UPDATE = 5,
+  NET_PLAYER_INPUT = 6
 };
 
 enum NetChannels {
@@ -88,11 +89,24 @@ struct NetTankSnapshot {
   uint16_t turret_dir;
 };
 
+struct NetProjectileSnapshot {
+  uint16_t id;
+  uint16_t x;
+  uint16_t y;
+  uint16_t dir;
+};
+
 struct NetTanksSnapMsg {
   NetPacketType type;
   uint32_t snap_id;
   uint8_t num_snapshots;
   NetTankSnapshot snaps[0];
+};
+
+struct NetProjectilesSnapMsg {
+  NetPacketType type;
+  uint8_t num_snapshots;
+  NetProjectileSnapshot snaps[0];
 };
 
 struct NetPlayerInput {

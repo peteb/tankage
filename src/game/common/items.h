@@ -1,7 +1,7 @@
 #ifndef GAME_ITEMS_H
 #define GAME_ITEMS_H
 
-#include <game/common/system.h>
+#include <game/common/replicated_system.h>
 #include <game/common/actors.h>
 
 #include <utils/vec.h>
@@ -24,13 +24,13 @@ protected:
 };
 
 
-class Items : public System {
+class Items : public ReplicatedSystem {
 public:
   enum ProjectileType {
     PROJECTILE_BULLET
   };
 
-  Items() {}
+  Items();
   ~Items();
   void init(const class Portal &interfaces);
 
@@ -41,6 +41,9 @@ public:
                        const vec2 &dir,
                        int shooterId);
   Item *intersectingItem(const vec2 &start, const vec2 &end, float radius, vec2 &hitpos);
+
+  void onTick(class Client *client);
+  void onReceive(NetPacketType type, const class Packet &packet);
   
 private:
   Items(const Items &) {} // private copy ctor
@@ -61,6 +64,8 @@ private:
   
   ItemVector items;
   ProjectileVector projectiles;
+
+  int projectileId;
 };
 
 #endif // !GAME_ITEMS_H
