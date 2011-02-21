@@ -1,6 +1,7 @@
 #include <game/common/tank.h>
 #include <game/common/items.h>
 #include <game/common/net_protocol.h>
+#include <game/common/players.h>
 
 #include <engine/graphics.h>
 #include <engine/texture.h>
@@ -64,6 +65,7 @@ void Tank::onSnap(const NetTankSnapshot &netshot) {
   
   snapshots[1] = snapshots[0];
   snapshots[0] = snapshot;
+  std::cout << "GOT: " << snapshot.x << ", " << snapshot.y << std::endl;
   sinceSnap = 0.0;
 }
 
@@ -113,7 +115,17 @@ bool Tank::update(double dt) {
   }
 
 //  _position.y = double(snapshots[0].y + double(snapshots[0].y - snapshots[1].y) * sinceSnap / 25.0);
-//  _position.y = snapshots[0].y + double(snapshots[0].y - snapshots[1].y) * sinceSnap / (1.0/25.0);
+  //_position.y = snapshots[0].y + double(snapshots[0].y - snapshots[1].y) * sinceSnap / (1.0/25.0);
+  // _position.x = snapshots[0].x + double(snapshots[0].x - snapshots[1].x) * sinceSnap / (1.0/25.0);
+  if (_id != context->players()->localPlayer()) {
+    // Only update tank if it's a remote player
+    _position.x = snapshots[0].x;
+    _position.y = snapshots[0].y;
+    _turretDir = snapshots[0].turret_dir;
+    _dir = snapshots[0].base_dir;
+  }
+
+  // FIXME: improve the jerkiness. Probably enet doesn't throw away old packets?
   
   sinceSnap += dt;
   secondsSinceFire += dt;
