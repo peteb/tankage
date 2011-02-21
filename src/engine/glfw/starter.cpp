@@ -66,6 +66,9 @@ int main(int argc, char **argv) {
   // log->write(Logging::TWEET, "Starting Snail-Wail at %s", 
   //   std::asctime(localtime(&time)));
 
+  // update configuration with input arguments
+  interfaces.requestInterface<Cfg>()->updateProperties(argc, argv);
+
   int exitCode;
   #ifndef DEV
   // Catch any exceptions thrown from main, then show it to the user

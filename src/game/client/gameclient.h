@@ -32,6 +32,8 @@ private:
   void onSystemUpdate(const struct NetSystemMsg *msg, class Packet *packet);
   
   std::vector<class ReplicatedSystem *> _systems;
+  class Cfg *_cfg;
+  class Logging *_log;
   class Network *_net;
   class Client *_client;
   ClientState _state;

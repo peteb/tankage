@@ -9,7 +9,7 @@ Configuration::Cfg::Cfg(const std::string &path) {
   std::ifstream file(path.c_str(), std::ifstream::in); 
 
   if (!file.is_open() || !file.good()) 
-    throw std::runtime_error("failed to open conf file: " + path);   
+    throw std::runtime_error("failed to open cfg file: " + path);   
 
   std::stringstream buffer;
   buffer << file.rdbuf();
@@ -40,6 +40,30 @@ void Configuration::Cfg::updateProperty(const std::string &system,
     }
   } // for 
 } // updateProperty 
+
+
+void Configuration::Cfg::updateProperties(int argc, char **argv) {
+  for (int i(1); i != argc; ++i) {
+    std::string arg = argv[i];
+    size_t dot = arg.find(".");
+    if (dot == std::string::npos) 
+      throw std::runtime_error("invalid argument: missing ."); 
+    
+    size_t equals = arg.find("=");
+    if (equals == std::string::npos || dot > equals)
+      throw std::runtime_error("invalid argument: missing =");
+
+    std::string system = arg.substr(0, dot); 
+    std::string name = arg.substr(dot+1, equals-(dot+1));
+    std::string value = arg.substr(equals+1);
+    if (system.empty() || name.empty() || value.empty())
+      throw std::runtime_error("invalid argument: " + arg);    
+
+    std::cout << "updating configuration: " << system 
+      << ", " << name << ", " << value << std::endl;
+    updateProperty(system, name, value);
+  } // for
+} // updateProperties
 
 void Configuration::Cfg::registerConsumer(const std::string &system, 
 										  CfgConsumer* consumer) {

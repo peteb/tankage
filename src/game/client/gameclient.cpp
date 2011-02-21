@@ -6,6 +6,8 @@
 #include <engine/portal.h>
 #include <engine/network.h>
 #include <engine/packet.h>
+#include <engine/logging.h>
+#include <engine/cfg.h>
 
 #include <iostream>
 #include <cassert>
@@ -37,9 +39,14 @@ GameClient::~GameClient() {
 
 void GameClient::init(const Portal &interfaces) {
   _state = GameClient::STATE_DISCONNECTED;
-  
+ 
+  _cfg = interfaces.requestInterface<Cfg>(); 
   _net = interfaces.requestInterface<Network>();
-  _client = _net->connect("127.0.0.1:12345", 2); //"192.168.0.145:12345", 2); //"127.0.0.1:12345", 2);
+  _log = interfaces.requestInterface<Logging>();
+
+  _log->write(Logging::DEBUG, "Connecting to host: %s", 
+    _cfg->property("client", "host").c_str());
+  _client = _net->connect(_cfg->property("client", "host"), 2);
 }
 
 void GameClient::update() {

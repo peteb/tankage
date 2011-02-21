@@ -19,6 +19,8 @@ public:
   virtual void updateProperty(const std::string &system,
 						      const std::string &name,
                               const std::string &value) =0; 
+  /// Overrides configuration file with input arguments
+  virtual void updateProperties(int argc, char **argv) =0;
   virtual void registerConsumer(const std::string &system,
                                 CfgConsumer* consumer) =0;
 };

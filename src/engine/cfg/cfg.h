@@ -18,6 +18,7 @@ public:
   std::string property(const std::string &system, const std::string &name);
   void updateProperty(const std::string &system, const std::string &name,
                       const std::string &value); 
+  void updateProperties(int argc, char **argv);
   void registerConsumer(const std::string &system, CfgConsumer* consumer);
 
 private:
