@@ -103,7 +103,6 @@ void GameClient::onConnect() {
   msg.type = NET_IDENTIFY;
   msg.client_version = htons(100);
   msg.net_version = htons(NET_VERSION);
-
   _client->send(&msg, sizeof(msg), Client::PACKET_RELIABLE, NET_CHANNEL_STATE);
 }
 
@@ -112,8 +111,6 @@ void GameClient::onDisconnect() {
 }
 
 void GameClient::onReceive(Packet *packet) {
-  std::cout << "receive" << std::endl;
-
   // Fixme: this code looks suspiciously similar to gameserver::onReceive..
   
   size_t size = packet->size();
@@ -126,8 +123,6 @@ void GameClient::onReceive(Packet *packet) {
     assert(size >= sizeof(NetErrorMsg) && "packet too small for error");
     onError(static_cast<const NetErrorMsg *>(data), packet);
     break;
-
-
   }
 
   for (size_t i = 0; i < _systems.size(); ++i) {

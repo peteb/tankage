@@ -34,8 +34,6 @@ void GameServer::init(const class Portal &interfaces) {
 void GameServer::update() {
   _host->update(); // Fixme: timeout should maybe be the time until next update
   
-  // Fixme: connectingClient -> clientConnecting?
-  
   while (Client *client = _host->connectingClient()) {
     onConnect(client);
   }
@@ -104,19 +102,16 @@ void GameServer::onReceive(Packet *packet) {
   ClientSession *clientSession = session(client);
   
   try {
-    
     const NetPacketType *type = static_cast<const NetPacketType *>(data);
-    switch (*type) {
-    case NET_IDENTIFY:
+    if (*type == NET_IDENTIFY) {
       assert(size >= sizeof(NetIdentifyMsg) && "packet too small for ident");
       onIdent(static_cast<const NetIdentifyMsg *>(data), packet);
-      break;
-    
-    default:
+    }
+    else {
       // Some sanity checks first
       if (!clientSession) {
         // kinda strange, it should already be connected here
-        throw NetError(NET_NOT_CONNECTED, "please connect before issuing ident");
+        throw NetError(NET_NOT_CONNECTED, "please connect first");
       }
       
       if (clientSession->state != ClientSession::STATE_IDENTIFIED) {
@@ -125,14 +120,15 @@ void GameServer::onReceive(Packet *packet) {
       
       // Then call onReceive on the subsystems
       for (size_t i = 0; i < _systems.size(); ++i) {
-        _systems[i]->onReceive(*type, *packet);
+        if (_systems[i]->flags & ReplicatedSystem::SERVER_RECEIVE) {
+          _systems[i]->onReceive(*type, *packet);
+        }
       }
-      
     }
+    
   }
   catch (const NetError &netError) {
-    // Any failures during the ident progress will terminate the session
-    
+    // Any failures will terminate the session
     NetErrorMsg msg;
     netError.fill(msg);
     client->send(&msg, sizeof(NetErrorMsg),
