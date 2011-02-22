@@ -55,7 +55,7 @@ int main(int argc, char **argv) {
   interfaces.registerInterface<DevIl::ImageLoader>();
   interfaces.registerInterface<Enet::Network>();
   interfaces.registerInterface<Log::Logging>();
-  interfaces.registerInterface<Configuration::Cfg>();
+  interfaces.registerInterface<Engine::Config>();
 
   Logging *log = interfaces.requestInterface<Logging>();
   log->write(Logging::DEBUG, "glfw: initialized");
@@ -67,7 +67,7 @@ int main(int argc, char **argv) {
   //   std::asctime(localtime(&time)));
 
   // update configuration with input arguments
-  interfaces.requestInterface<Cfg>()->updateProperties(argc, argv);
+  interfaces.requestInterface<Config>()->updateProperties(argc, argv);
 
   int exitCode;
   #ifndef DEV

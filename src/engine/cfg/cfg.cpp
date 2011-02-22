@@ -5,7 +5,7 @@
 #include <fstream>
 #include <iostream>
 
-Configuration::Cfg::Cfg(const std::string &path) {
+Engine::Config::Config(const std::string &path) {
   std::ifstream file(path.c_str(), std::ifstream::in); 
 
   if (!file.is_open() || !file.good()) 
@@ -17,32 +17,32 @@ Configuration::Cfg::Cfg(const std::string &path) {
   _node = new PropertyNode(parser.parse(buffer.str()));
 
   file.close();
-} // Cfg
+} // Config
 
-Configuration::Cfg::~Cfg() {
+Engine::Config::~Config() {
   delete _node;
-} // ~Cfg
+} // ~Config
 
-std::string Configuration::Cfg::property(const std::string &system,
+std::string Engine::Config::property(const std::string &system,
                                          const std::string &name) {
   return _node->getNode(system).getProperty(name);  
 } // property
 
-void Configuration::Cfg::updateProperty(const std::string &system, 
+void Engine::Config::updateProperty(const std::string &system, 
 										const std::string &name, 
 									    const std::string &value) {
   _node->getNode(system).addProperty(Property(name, value));
 
-  std::multimap<std::string, CfgConsumer*>::iterator it;
+  std::multimap<std::string, ConfigConsumer*>::iterator it;
   for (it = _consumers.begin(); it != _consumers.end(); ++it) {
     if (it->first == system) {
-      it->second->updateCfg(name, value);
+      it->second->updateConfig(name, value);
     }
   } // for 
 } // updateProperty 
 
 
-void Configuration::Cfg::updateProperties(int argc, char **argv) {
+void Engine::Config::updateProperties(int argc, char **argv) {
   for (int i(1); i != argc; ++i) {
     std::string arg = argv[i];
     size_t dot = arg.find(".");
@@ -63,8 +63,8 @@ void Configuration::Cfg::updateProperties(int argc, char **argv) {
   } // for
 } // updateProperties
 
-void Configuration::Cfg::registerConsumer(const std::string &system, 
-										  CfgConsumer* consumer) {
-  _consumers.insert(std::pair<std::string,CfgConsumer*>(system, consumer));
+void Engine::Config::registerConsumer(const std::string &system, 
+										  ConfigConsumer* consumer) {
+  _consumers.insert(std::pair<std::string,ConfigConsumer*>(system, consumer));
 } // registerConsumer
 

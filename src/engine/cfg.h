@@ -4,15 +4,15 @@
 #include <engine/interface.h>
 #include <string>
 
-class CfgConsumer {
+class ConfigConsumer {
 public:
-  virtual void updateCfg(const std::string &name, const std::string &value) =0;
+  virtual void updateConfig(const std::string &name, const std::string &value) =0;
 };
 
-class Cfg : public Interface {
+class Config : public Interface {
 public:
   static std::string id() {
-    return "cfg";
+    return "config";
   }
   virtual std::string property(const std::string &system, 
 							   const std::string &name) =0;
@@ -22,7 +22,7 @@ public:
   /// Overrides configuration file with input arguments
   virtual void updateProperties(int argc, char **argv) =0;
   virtual void registerConsumer(const std::string &system,
-                                CfgConsumer* consumer) =0;
+                                ConfigConsumer* consumer) =0;
 };
 
 #endif // !ENGINE_CFG_H

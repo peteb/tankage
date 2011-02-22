@@ -40,13 +40,13 @@ GameClient::~GameClient() {
 void GameClient::init(const Portal &interfaces) {
   _state = GameClient::STATE_DISCONNECTED;
  
-  _cfg = interfaces.requestInterface<Cfg>(); 
+  _config = interfaces.requestInterface<Config>(); 
   _net = interfaces.requestInterface<Network>();
   _log = interfaces.requestInterface<Logging>();
 
   _log->write(Logging::DEBUG, "Connecting to host: %s", 
-    _cfg->property("client", "host").c_str());
-  _client = _net->connect(_cfg->property("client", "host"), 2);
+    _config->property("client", "host").c_str());
+  _client = _net->connect(_config->property("client", "host"), 2);
 }
 
 void GameClient::update() {

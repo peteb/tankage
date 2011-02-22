@@ -25,14 +25,14 @@ Control::Control()
 
 void Control::init(const class Portal &interfaces) {
   input = interfaces.requestInterface<Input>();
-  cfg = interfaces.requestInterface<Cfg>();
+  config = interfaces.requestInterface<Config>();
   wm = interfaces.requestInterface<WindowManager>();
   lastTick = wm->timeSeconds();
-  keyUp = input->keycode(cfg->property("control", "keyUp"));
-  keyDown = input->keycode(cfg->property("control", "keyDown"));
-  keyShoot = input->keycode(cfg->property("control", "keyShoot"));
-  keyRight = input->keycode(cfg->property("control", "keyRight"));
-  keyLeft = input->keycode(cfg->property("control", "keyLeft"));
+  keyUp = input->keycode(config->property("control", "keyUp"));
+  keyDown = input->keycode(config->property("control", "keyDown"));
+  keyShoot = input->keycode(config->property("control", "keyShoot"));
+  keyRight = input->keycode(config->property("control", "keyRight"));
+  keyLeft = input->keycode(config->property("control", "keyLeft"));
 }
 
 void Control::update() {

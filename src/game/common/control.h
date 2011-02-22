@@ -24,7 +24,7 @@ private:
   double lastTick;
   int keyUp, keyDown, keyLeft, keyRight, keyShoot;
   class Input *input;
-  class Cfg *cfg;
+  class Config *config;
   std::string snail;
 
   // data that will be replicated

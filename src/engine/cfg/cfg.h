@@ -9,21 +9,21 @@
 #include <string>
 #include <map>
 
-namespace Configuration {
-class Cfg : public ::Cfg, public Singleton<Cfg> { 
+namespace Engine {
+class Config : public ::Config, public Singleton<Config> { 
 public:
-  Cfg(const std::string &path = std::string(RESOURCE_PATH) + "/snail-wail.cfg");
-  ~Cfg();
+  Config(const std::string &path = std::string(RESOURCE_PATH) + "/snail-wail.cfg");
+  ~Config();
 
   std::string property(const std::string &system, const std::string &name);
   void updateProperty(const std::string &system, const std::string &name,
                       const std::string &value); 
   void updateProperties(int argc, char **argv);
-  void registerConsumer(const std::string &system, CfgConsumer* consumer);
+  void registerConsumer(const std::string &system, ConfigConsumer* consumer);
 
 private:
   PropertyNode *_node;
-  std::multimap<std::string,CfgConsumer*> _consumers;  
+  std::multimap<std::string,ConfigConsumer*> _consumers;  
 };
 }
 
