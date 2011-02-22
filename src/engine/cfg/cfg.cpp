@@ -59,8 +59,6 @@ void Configuration::Cfg::updateProperties(int argc, char **argv) {
     if (system.empty() || name.empty() || value.empty())
       throw std::runtime_error("invalid argument: " + arg);    
 
-    std::cout << "updating configuration: " << system 
-      << ", " << name << ", " << value << std::endl;
     updateProperty(system, name, value);
   } // for
 } // updateProperties
