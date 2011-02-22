@@ -59,10 +59,10 @@ NetProjectileSnapshot Projectile::snapshot() const {
   snap.id = htons(_id);
   snap.x = htons(position.x);
   snap.y = htons(position.y);
-  snap.dir = htons(degrees(velocity));
+  snap.dir = htons(degrees(normalized(velocity)) + 180.0);
   return snap;
 }
-#include <iostream>
+
 void Projectile::onSnap(const NetProjectileSnapshot &netshot) {
   NetProjectileSnapshot snapshot;
   snapshot.x = ntohs(netshot.x);
@@ -71,16 +71,8 @@ void Projectile::onSnap(const NetProjectileSnapshot &netshot) {
   const vec2 lastPos = position;
   vec2 newPos(snapshot.x, snapshot.y);
   if (length(newPos - position) >= 2.0) {
-    std::cout << "big corr: " << length(newPos - position) << std::endl;
     position = newPos;
   }
 
-  if (snapshotted) {
-    velocity = vec2::FromDirection(ntohs(netshot.dir)) * 1000.0; //position - lastPos);
-  }
-  else {
-    velocity = vec2::FromDirection(ntohs(netshot.dir)) * 1000.0;
-  }
-
-  snapshotted = true;
+  velocity = vec2::FromDirection(ntohs(netshot.dir) - 180.0) * 1000.0;
 }

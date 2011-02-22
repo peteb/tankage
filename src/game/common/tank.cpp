@@ -63,7 +63,7 @@ void Tank::onSnap(const NetTankSnapshot &netshot) {
   snapshot.y = ntohs(netshot.y);
   snapshot.base_dir = ntohs(netshot.base_dir);
   snapshot.turret_dir = ntohs(netshot.turret_dir);
-  
+
   snapshots[1] = snapshots[0];
   snapshots[0] = snapshot;
 
@@ -76,7 +76,7 @@ NetTankSnapshot Tank::snapshot() const {
   snap.id = htons(_id);
   snap.x = htons(_position.x);
   snap.y = htons(_position.y);
-  snap.base_dir = htons((360.0 + _dir) * 4.0);
+  snap.base_dir = htons(_dir); //(360.0 + _dir) * 4.0);
   snap.turret_dir = htons(_turretDir);
   
   return snap;
@@ -125,7 +125,7 @@ bool Tank::update(double dt) {
       _position.x = snapshots[0].x;
       _position.y = snapshots[0].y;
       _turretDir = snapshots[0].turret_dir;
-      _dir = (static_cast<double>(snapshots[0].base_dir) / 4.0) - 360.0;
+      _dir = (static_cast<double>(snapshots[0].base_dir)); // / 4.0) - 360.0;
     }
     // }
 
@@ -172,11 +172,12 @@ bool Tank::update(double dt) {
 
   vec2 targetDiff = normalized(cursorPos - _position);
   double targetDir = atan2(targetDiff.y, targetDiff.x) / M_PI * 180.0;
-
   double angle = Wrap(targetDir - _turretDir, 0.0, 360.0);
+
   if (angle >= 180.0)
     angle -= 360.0;
 
+  
   double add = 0.0;
   if (angle > 1.0) {
     add = std::min(200.0 * dt, angle);
@@ -189,6 +190,8 @@ bool Tank::update(double dt) {
   _turretDir += add;
   _turretDir += _rotSpeed * dt;
 
+  _dir = Wrap(_dir, 0.0, 360.0);
+  _turretDir = Wrap(_turretDir, 0.0, 360.0);
   
   if (_state[STATE_SHOOT]) {// FIXME: rename SHOOT to SHOOTING
     if (secondsSinceFire >= 0.2) {
