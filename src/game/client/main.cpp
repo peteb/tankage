@@ -10,7 +10,7 @@
 #include <game/common/actors.h>
 #include <game/common/control.h>
 #include <game/common/system.h>
-#include <game/common/items.h>
+#include <game/common/projectiles.h>
 #include <game/common/texture_loader.h>
 #include <game/common/players.h>
 
@@ -34,20 +34,21 @@ int app_main(Portal &interfaces) {
   Players players;
   Background background;
   Control control;
-  Items items;
+  Projectiles projectiles;
   Particles particles;
   TextureLoader texLoader;
   
   gameclient.registerSystem(&actors);
   gameclient.registerSystem(&players);
   gameclient.registerSystem(&control);
+  gameclient.registerSystem(&projectiles);
   
   // TODO: this is fugly, registering like this. maybe it should be done
   //       like gameClient above
   
   systems.set(SystemContext::SYSTEM_BACKGROUND, &background);
   systems.set(SystemContext::SYSTEM_ACTORS, &actors);
-  systems.set(SystemContext::SYSTEM_ITEMS, &items);
+  systems.set(SystemContext::SYSTEM_PROJECTILES, &projectiles);
   systems.set(SystemContext::SYSTEM_GAMECLIENT, &gameclient);
   systems.set(SystemContext::SYSTEM_PLAYERS, &players);
   systems.set(SystemContext::SYSTEM_CONTROL, &control);
@@ -77,8 +78,8 @@ int app_main(Portal &interfaces) {
     
     //   particles.render();
     actors.render();
-    items.update();
-    items.render();
+    projectiles.update();
+    projectiles.render();
     
     wm->swapBuffers();
 

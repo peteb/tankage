@@ -40,7 +40,6 @@ private:
   TankVector tanks;
   double lastUpdate;
   ActorId lastId;
-  uint32_t lastSnapId;
 };
 
 #endif // !GAME_ACTORS_H

@@ -9,6 +9,9 @@
 #include <game/common/players.h>
 #include <game/common/tank.h>
 #include <game/common/control.h>
+#include <game/common/projectiles.h>
+#include <game/common/texture_loader.h>
+#include <game/client/particles.h>
 
 #include <cstdlib>
 #include <memory>
@@ -28,15 +31,23 @@ int app_main(Portal &interfaces) {
   Actors actors;
   Players players;
   Control control;
+  Projectiles projectiles;
+  Particles particles;
+  TextureLoader texLoader;
   
   server.registerSystem(&actors);
   server.registerSystem(&players);
   server.registerSystem(&control);
+  server.registerSystem(&projectiles);
   
   systems.set(SystemContext::SYSTEM_ACTORS, &actors);
   systems.set(SystemContext::SYSTEM_GAMESERVER, &server);
   systems.set(SystemContext::SYSTEM_PLAYERS, &players);
   systems.set(SystemContext::SYSTEM_CONTROL, &control);
+  systems.set(SystemContext::SYSTEM_PROJECTILES, &projectiles);
+  systems.set(SystemContext::SYSTEM_PARTICLES, &particles);
+  systems.set(SystemContext::SYSTEM_TEXTURE_LOADER, &texLoader);
+
   
   systems.init(interfaces);
 
@@ -54,7 +65,9 @@ int app_main(Portal &interfaces) {
     
     server.update();
     actors.render();
-
+    projectiles.update();
+    projectiles.render();
+    
     if (thisTime - lastTick >= 1.0/25.0) { // Tickrate
       server.tick(thisTime - lastTick);
       lastTick = thisTime;

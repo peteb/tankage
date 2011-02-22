@@ -11,7 +11,7 @@ public:
     SYSTEM_BACKGROUND,
     SYSTEM_CONTROL,
     SYSTEM_TEXTURE_LOADER,
-    SYSTEM_ITEMS,            // dependent on texture loader
+    SYSTEM_PROJECTILES,            // dependent on texture loader
     SYSTEM_PARTICLES,
     SYSTEM_GAMESERVER,
     SYSTEM_GAMECLIENT,
@@ -28,8 +28,8 @@ public:
   
   void init(class Portal &modules);
 
-  class Items *items() const {
-    return system<Items>(SystemContext::SYSTEM_ITEMS);
+  class Projectiles *projectiles() const {
+    return system<Projectiles>(SystemContext::SYSTEM_PROJECTILES);
   }
 
   class Actors *actors() const {
