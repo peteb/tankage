@@ -13,14 +13,16 @@ public:
 };
 
 TEST(CfgUnittest, TestProperty) {
-  // non-existing configiguration filehttp://www.ericsson.com/careers
+  // non-existing configiguration file
   EXPECT_ANY_THROW(Engine::Config("tron"));
   // verify constructor and get property
   Engine::Config config("../src/engine/cfg/unittest/cfg_unittest.cfg");
-  EXPECT_EQ(config.property("control", "keyUp"), "W");  
-  EXPECT_EQ(config.property("california", "city"), "san-jose");  
+  EXPECT_EQ(config.property("control", "keyUp", ""), "W");  
+  EXPECT_EQ(config.property("california", "city", ""), "san-jose");  
   // not existing node
-  EXPECT_ANY_THROW(config.property("batman", "weight"));
+  EXPECT_ANY_THROW(config.property("batman", "weight", ""));
+  // not existing property
+  EXPECT_EQ(config.property("control", "batman", "signal"), "signal");
 } // TestProperty
 
 TEST(CfgUnittest, TestConsumer) {

@@ -15,7 +15,8 @@ public:
   Config(const std::string &path = std::string(RESOURCE_PATH) + "/snail-wail.cfg");
   ~Config();
 
-  std::string property(const std::string &system, const std::string &name);
+  std::string property(const std::string &system, const std::string &name,
+					   const std::string &defaultValue);
   void updateProperty(const std::string &system, const std::string &name,
                       const std::string &value); 
   void updateProperties(int argc, char **argv);

@@ -28,11 +28,11 @@ void Control::init(const class Portal &interfaces) {
   config = interfaces.requestInterface<Config>();
   wm = interfaces.requestInterface<WindowManager>();
   lastTick = wm->timeSeconds();
-  keyUp = input->keycode(config->property("control", "keyUp"));
-  keyDown = input->keycode(config->property("control", "keyDown"));
-  keyShoot = input->keycode(config->property("control", "keyShoot"));
-  keyRight = input->keycode(config->property("control", "keyRight"));
-  keyLeft = input->keycode(config->property("control", "keyLeft"));
+  keyUp = input->keycode(config->property("control", "keyUp", "W"));
+  keyDown = input->keycode(config->property("control", "keyDown", "S"));
+  keyShoot = input->keycode(config->property("control", "keyShoot", "mouse1"));
+  keyRight = input->keycode(config->property("control", "keyRight", "D"));
+  keyLeft = input->keycode(config->property("control", "keyLeft", "A"));
 }
 
 void Control::update() {

@@ -15,7 +15,8 @@ public:
     return "config";
   }
   virtual std::string property(const std::string &system, 
-							   const std::string &name) =0;
+							   const std::string &name,
+                               const std::string &defaultValue) =0;
   virtual void updateProperty(const std::string &system,
 						      const std::string &name,
                               const std::string &value) =0; 

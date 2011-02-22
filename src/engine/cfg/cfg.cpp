@@ -24,8 +24,9 @@ Engine::Config::~Config() {
 } // ~Config
 
 std::string Engine::Config::property(const std::string &system,
-                                         const std::string &name) {
-  return _node->getNode(system).getProperty(name);  
+                                     const std::string &name,
+                                     const std::string &defaultValue) {
+  return _node->getNode(system).getProperty(name, defaultValue);  
 } // property
 
 void Engine::Config::updateProperty(const std::string &system, 
