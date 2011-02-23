@@ -125,14 +125,14 @@ bool Tank::update(double dt) {
     // Only update tank if it's a remote player
     if (_snapshotted) {
       vec2 lPos;
-      lPos.x = lerp<double, double>(snapshots[0].x, snapshots[1].x, sinceSnap / (1.0/25.0));
-      lPos.y = lerp<double, double>(snapshots[0].y, snapshots[1].y, sinceSnap / (1.0/25.0));
+      lPos.x = snapshots[0].x; //lerp<double, double>(snapshots[0].x, snapshots[1].x, sinceSnap / (1.0/25.0));
+      lPos.y = snapshots[0].y; //lerp<double, double>(snapshots[0].y, snapshots[1].y, sinceSnap / (1.0/25.0));
       _turretDir = snapshots[0].turret_dir;
       _dir = (static_cast<double>(snapshots[0].base_dir)); // / 4.0) - 360.0;
 
-      if (length(lPos - _position) > 1.0) {
+      // if (length(lPos - _position) > 1.0) {
         _position = lPos;
-      }
+        //}
     }
     // }
 

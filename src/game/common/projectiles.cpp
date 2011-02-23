@@ -94,6 +94,8 @@ void Projectiles::onReceive(NetPacketType type, const Packet &packet) {
       const NetProjectileSnapshot &snapshot = msg->snaps[i];
       const uint32_t projectileId = ntohs(snapshot.id);
 
+      // FIXME: make this look better
+      // FIXME: 
       bool found = false;
       for (size_t a = 0; a < projectiles.size(); ++a) {
         if (projectiles[a]->id() == projectileId) {
