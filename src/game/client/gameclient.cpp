@@ -45,8 +45,8 @@ void GameClient::init(const Portal &interfaces) {
   _log = interfaces.requestInterface<Logging>();
 
   _log->write(Logging::DEBUG, "Connecting to host: %s", 
-    _config->property("client", "host", "127.0.0.1:12345").c_str());
-  _client = _net->connect(_config->property("client", "host", "127.0.0.1:12345"), 2);
+    _config->property("client", "host", "iostream.cc:12345").c_str());
+  _client = _net->connect(_config->property("client", "host", "iostream.cc:12345"), 2);
 }
 
 void GameClient::update() {
