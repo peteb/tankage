@@ -113,7 +113,7 @@ double Wrap(double value, double lower, double upper) {
 
 bool Tank::update(double dt) {
   if (health <= 0) {
-    std::cout << "snail: I'm dead :( returning false" << std::endl;
+//    std::cout << "snail: I'm dead :( returning false" << std::endl;
     return false;
   }
 
