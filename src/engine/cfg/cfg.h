@@ -23,6 +23,7 @@ public:
   void registerConsumer(const std::string &system, ConfigConsumer* consumer);
 
 private:
+  std::string _path;
   PropertyNode *_node;
   std::multimap<std::string,ConfigConsumer*> _consumers;  
 };

@@ -1,15 +1,16 @@
 #include <engine/cfg/cfg.h>
 #include <ptrcfg/propertytreeparser.h>
+#include <ptrcfg/propertytreeprinter.h>
 
 #include <sstream>
 #include <fstream>
 #include <iostream>
 
-Engine::Config::Config(const std::string &path) {
-  std::ifstream file(path.c_str(), std::ifstream::in); 
+Engine::Config::Config(const std::string &path) : _path(path) {
+  std::ifstream file(_path.c_str(), std::ifstream::in); 
 
   if (!file.is_open() || !file.good()) 
-    throw std::runtime_error("failed to open cfg file: " + path);   
+    throw std::runtime_error("failed to open cfg file: " + _path);   
 
   std::stringstream buffer;
   buffer << file.rdbuf();
@@ -20,6 +21,16 @@ Engine::Config::Config(const std::string &path) {
 } // Config
 
 Engine::Config::~Config() {
+  std::stringstream buffer;
+  PropertyTreePrinter printer(buffer);
+  printer.print(*_node); 
+
+  std::ofstream file(_path.c_str(), std::ios::out); 
+  if (!file.is_open() || !file.good())
+    throw std::runtime_error("failed to open cfg file: " + _path);   
+
+  file << buffer.str();
+  file.close();
   delete _node;
 } // ~Config
 

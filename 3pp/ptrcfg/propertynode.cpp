@@ -70,7 +70,7 @@ std::string PropertyNode::getProperty(const std::string & name) const {
 Property PropertyNode::getProperty(int id) const {
 	PropertyMap::const_iterator iter = properties.begin();
 	
-	for (int i = 0; i < id && iter != properties.end(); ++i, ++iter) {
+	for (int i = 0; i <= id && iter != properties.end(); ++i, ++iter) {
 		if (i == id)
 			return *iter;
 	}
