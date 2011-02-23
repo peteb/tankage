@@ -39,7 +39,7 @@ void GameClient::init(const Portal &interfaces) {
   _state = GameClient::STATE_DISCONNECTED;
   
   _net = interfaces.requestInterface<Network>();
-  _client = _net->connect("iostream.cc:12345", 2); //"192.168.0.145:12345", 2); //"127.0.0.1:12345", 2);
+  _client = _net->connect("127.0.0.1:12345", 2); //"192.168.0.145:12345", 2); //"127.0.0.1:12345", 2);
 }
 
 void GameClient::update() {
@@ -63,6 +63,7 @@ void GameClient::update() {
     onReceive(packet);
     delete packet;
   }
+
 }
 
 void GameClient::tick(double dt) {
@@ -112,6 +113,12 @@ void GameClient::onDisconnect() {
 
 void GameClient::onReceive(Packet *packet) {
   // Fixme: this code looks suspiciously similar to gameserver::onReceive..
+  static int packetCount = 0;
+  if (packetCount++ > 50) {
+    packetCount = 0;
+    std::cout << "rtt: " << packet->sender()->stats(Client::STAT_RTT) << std::endl;
+    
+  }
   
   size_t size = packet->size();
   const void *data = packet->data();
