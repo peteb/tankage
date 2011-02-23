@@ -1,3 +1,4 @@
+#include <netinet/in.h>
 #include <game/common/control.h>
 #include <game/common/actors.h>
 #include <game/common/tank.h>

@@ -1,3 +1,4 @@
+#include <netinet/in.h>
 #include <game/common/actors.h>
 #include <game/common/projectiles.h>
 #include <game/common/net_protocol.h>
