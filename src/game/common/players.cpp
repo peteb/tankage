@@ -1,3 +1,5 @@
+#include <string.h>
+#include <netinet/in.h>
 #include <game/common/players.h>
 #include <game/server/gameserver.h>
 #include <game/server/client_session.h>

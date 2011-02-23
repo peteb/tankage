@@ -1,3 +1,4 @@
+#include <netinet/in.h>
 #include <game/common/control.h>
 #include <game/common/actors.h>
 #include <game/common/tank.h>
@@ -70,7 +71,7 @@ void Control::onTick(Client *client) {
   msg.target_x = htons(cursorPos.x + 32768);
   msg.target_y = htons(cursorPos.y + 32768);
 
-  client->send(&msg, sizeof(NetPlayerInput), Client::PACKET_UNSEQUENCED, NET_CHANNEL_ABS);
+  client->send(&msg, sizeof(NetPlayerInput), 0 /*Client::PACKET_UNSEQUENCED*/, NET_CHANNEL_ABS);
 }
 
 void Control::onReceive(NetPacketType type, const Packet &packet) {

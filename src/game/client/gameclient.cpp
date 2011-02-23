@@ -70,6 +70,7 @@ void GameClient::update() {
     onReceive(packet);
     delete packet;
   }
+
 }
 
 void GameClient::tick(double dt) {
@@ -119,6 +120,12 @@ void GameClient::onDisconnect() {
 
 void GameClient::onReceive(Packet *packet) {
   // Fixme: this code looks suspiciously similar to gameserver::onReceive..
+  static int packetCount = 0;
+  if (packetCount++ > 50) {
+    packetCount = 0;
+    std::cout << "rtt: " << packet->sender()->stats(Client::STAT_RTT) << std::endl;
+    
+  }
   
   size_t size = packet->size();
   const void *data = packet->data();
