@@ -5,44 +5,68 @@
 #include <sstream>
 #include <fstream>
 #include <iostream>
+#include <cstdlib>
 
 Engine::Config::Config(const std::string &path) : _path(path) {
-  std::ifstream file(_path.c_str(), std::ifstream::in); 
-
-  if (!file.is_open() || !file.good()) 
-    throw std::runtime_error("failed to open cfg file: " + _path);   
-
+  if (_path.empty() && __linux__) {
+    char *home = getenv("HOME");
+    if (home) {
+      _path = std::string(home).append("/.snail-wail.conf");
+    }
+  } else {
+    // FIXME kaspars: add Mac and Windows stuff
+  }
   std::stringstream buffer;
-  buffer << file.rdbuf();
   PropertyTreeParser parser;
+  // read config file
+  std::ifstream file(_path.c_str(), std::ifstream::in); 
+  if (file.is_open()) {
+    buffer << file.rdbuf();
+    file.close();
+  } else {
+    // initial start-up, file is not created, yet
+    std::cout << "DE failed to read config file: " << _path << std::endl;
+  }
   _node = new PropertyNode(parser.parse(buffer.str()));
-
-  file.close();
 } // Config
 
 Engine::Config::~Config() {
   std::stringstream buffer;
   PropertyTreePrinter printer(buffer);
   printer.print(*_node); 
-
+  // write config file
   std::ofstream file(_path.c_str(), std::ios::out); 
-  if (!file.is_open() || !file.good())
-    throw std::runtime_error("failed to open cfg file: " + _path);   
-
-  file << buffer.str();
-  file.close();
+  if (file.is_open()) {
+    file << buffer.str();
+    file.close();
+  } else {
+    // don't bather, probably no permissions, keep using defaults
+    std::cout << "DE failed to write config file: " << _path << std::endl;
+  }
   delete _node;
 } // ~Config
 
 std::string Engine::Config::property(const std::string &system,
                                      const std::string &name,
                                      const std::string &defaultValue) {
-  return _node->getNode(system).getProperty(name, defaultValue);  
+  try {
+    _node->getNode(system); 
+  } catch (...) {
+    _node->addNode(PropertyNode(system));
+  }    
+  try {
+    _node->getNode(system).getProperty(name);
+  } catch (...) {
+    _node->getNode(system).addProperty(Property(name, defaultValue));
+  }
+  return _node->getNode(system).getProperty(name);  
 } // property
 
 void Engine::Config::updateProperty(const std::string &system, 
 										const std::string &name, 
 									    const std::string &value) {
+  // don't allow to update non-existing attributes
+  _node->getNode(system).getProperty(name);
   _node->getNode(system).addProperty(Property(name, value));
 
   std::multimap<std::string, ConfigConsumer*>::iterator it;
