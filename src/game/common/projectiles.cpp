@@ -80,7 +80,7 @@ void Projectiles::onTick(Client *client) {
     msg->snaps[i] = projectiles[i]->snapshot();
   }
 
-  client->send(msg, packetSize, Client::PACKET_UNSEQUENCED, NET_CHANNEL_ABS);
+  client->send(msg, packetSize, 0 /*Client::PACKET_UNSEQUENCED*/, NET_CHANNEL_ABS);
 }
 
 void Projectiles::onReceive(NetPacketType type, const Packet &packet) {
