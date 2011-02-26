@@ -26,7 +26,7 @@
  * onReceive will be called when snapshot data is received.
  * The onTick function will be invoked at a certain interval (25 tps).
  */
-GameClient::GameClient() {
+GameClient::GameClient() : _client(0) {
 }
 
 GameClient::~GameClient() {
