@@ -17,7 +17,7 @@
 #include <cstring>
 #include <algorithm>
 
-GameServer::GameServer() {
+GameServer::GameServer() : _host(0) {
   
 }
 
