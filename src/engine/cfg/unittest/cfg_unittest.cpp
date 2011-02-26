@@ -14,15 +14,9 @@ public:
 
 TEST(CfgUnittest, TestProperty) {
   // non-existing configiguration file
-  EXPECT_ANY_THROW(Engine::Config("tron"));
-  // verify constructor and get property
   Engine::Config config("../src/engine/cfg/unittest/cfg_unittest.cfg");
   EXPECT_EQ(config.property("control", "keyUp", ""), "W");  
   EXPECT_EQ(config.property("california", "city", ""), "san-jose");  
-  // not existing node
-  EXPECT_ANY_THROW(config.property("batman", "weight", ""));
-  // not existing property
-  EXPECT_EQ(config.property("control", "batman", "signal"), "signal");
 } // TestProperty
 
 TEST(CfgUnittest, TestConsumer) {
@@ -48,5 +42,8 @@ TEST(CfgUnittest, TestConsumer) {
   EXPECT_EQ(consumer1.value, "Spiderman"); 
   EXPECT_EQ(consumer2.name, consumer1.name); 
   EXPECT_EQ(consumer2.value, consumer1.value); 
+  // restore defaults
+  config.updateProperty("control", "keyUp", "W");
+  config.updateProperty("california", "city", "san-jose");
 } // TestConsumer
 
