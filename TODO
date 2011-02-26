@@ -114,7 +114,7 @@
 *** DONE Implement network interface using Enet
 *** Add more statistics data points for Client::stats()
     http://enet.bespin.org/struct__ENetPeer.html
-*** TODO Add enet library under 3PPs
+*** DONE Add enet library under 3PPs
 * Windows support
 ** TODO Message boxes in Windows for displaying errors   
 * Mac OS X support
