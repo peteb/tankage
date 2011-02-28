@@ -139,10 +139,10 @@ void Actors::onReceive(NetPacketType type, const Packet &packet) {
           // Control::history(time) -> iterator beg, iterator end
           Control::MoveRange history =
             context->control()->history(msg->last_input);
-          
-          if (history.first != history.second) {
             std::cout << "Predicted length: " <<
               std::distance(history.first, history.second) << std::endl;
+          
+          if (history.first != history.second) {
             
             Tank::State rState(msg->snaps[i]); // FIXME: use same in tankEntry->assign
             vec2 diff = history.first->absolute.pos - rState.pos;

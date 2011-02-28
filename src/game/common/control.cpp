@@ -62,6 +62,7 @@ void Control::update() {
 
     state = newState;
     inputBegan = timeNow;
+    state.time = timeNow;
     states[actor] = newState;
   }
 }
@@ -120,7 +121,7 @@ void Control::onTick(Client *client) {
 
     // Add the move to the buffer of previous commands
     Move lastMove;
-    lastMove.time = inputBegan;
+    lastMove.time = wm->timeSeconds() - inputBegan;
     lastMove.delta = state;
     lastMove.absolute = target->snapshot();
     moves.push_back(lastMove);
@@ -174,7 +175,7 @@ const Tank::Input *Control::lastInput(ActorId actor) const {
 
 Control::MoveRange Control::history(float time) {
   MoveRing::reverse_iterator iter = moves.rbegin(), e = moves.rend();
-  for (; iter != e && iter->time > time; ++iter);
+  for (; iter != e && iter->delta.time > time; ++iter);
   // FIXME: make sure there's no bug here if iter reaches moves.rend(),
   // what happens when we return moves.rend().base()?
   
