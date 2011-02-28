@@ -98,6 +98,7 @@ struct NetProjectileSnapshot {
 
 struct NetTanksSnapMsg {
   NetPacketType type;
+  float last_input;
   uint8_t num_snapshots;
   NetTankSnapshot snaps[0];
 };
@@ -110,6 +111,7 @@ struct NetProjectilesSnapMsg {
 
 struct NetPlayerInput {
   NetPacketType type;
+  float time;
   uint8_t state; // forward, back, left, right, shoot
   uint16_t target_x;
   uint16_t target_y;

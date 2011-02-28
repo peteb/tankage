@@ -6,6 +6,7 @@
 class ClientSession {
 public:
   enum {
+    STATE_UNKNOWN = 0,
     STATE_IDENTIFIED = 1
   };
     

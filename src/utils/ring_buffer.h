@@ -3,8 +3,6 @@
 
 #include <vector>
 
-#include <iostream>
-
 template<typename T>
 class ring_buffer {
 public:
@@ -39,7 +37,8 @@ public:
       : iterator_base(pos, source) {}
     
     iterator &operator++() {
-      iterator_base::pos = (iterator_base::pos + 1) % iterator_base::source->size();
+      iterator_base::pos = (iterator_base::pos + 1) %
+        iterator_base::source->size();
       return *this;
     }
   };

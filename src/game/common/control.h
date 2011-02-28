@@ -6,6 +6,8 @@
 #include <game/common/tank.h>
 #include <game/common/replicated_system.h>
 
+#include <utils/ring_buffer.h>
+
 #include <string>
 #include <map>
 #include <vector>
@@ -19,38 +21,8 @@ public:
     Tank::State absolute;
   };
 
-  typedef std::vector<Move> MoveVector;
-
-  template<typename T>
-  class CircularForwardIterator : public std::iterator<std::forward_iterator_tag,
-                                                       T, ptrdiff_t, const T *, const T&> {
-  public:
-    CircularForwardIterator(size_t pos, T &source)
-      : pos(pos)
-      , source(source)
-    {
-    }
-    
-    CircularForwardIterator &operator++() {
-      pos = (pos + 1) % source.size();
-      return *this;
-    }
-
-    const typename T::value_type operator *() const {
-      return source[pos];
-    }
-    
-    bool operator != (const CircularForwardIterator &other) const {
-      return pos != other.pos;
-    }
-    
-  private:
-    size_t pos;
-    T &source;
-  };
-
-  typedef CircularForwardIterator<MoveVector> MoveIterator;
-  typedef std::pair<MoveIterator, MoveIterator> MoveRange;
+  typedef ring_buffer<Move> MoveRing;
+  typedef std::pair<MoveRing::iterator, MoveRing::iterator> MoveRange;
   
   Control();
   
@@ -70,9 +42,9 @@ private:
   class Input *input;
   class Config *config;
   std::string snail;
-
+  MoveRing moves;
   std::map<ActorId, Tank::Input> states;
-  MoveVector moves;
+  
   
   // data that will be replicated
   double inputBegan;

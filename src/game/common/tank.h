@@ -15,6 +15,7 @@ typedef int ActorId;
 class Tank {
 public:
   struct Input {
+    float time;
     uint8_t buttons;
     int aim_x;
     int aim_y;

@@ -6,6 +6,9 @@
 #include <game/common/players.h>
 #include <game/common/control.h>
 
+#include <game/server/client_session.h>
+#include <game/server/gameserver.h>
+
 #include <engine/graphics.h>
 #include <engine/texture.h>
 #include <engine/image_loader.h>
@@ -82,13 +85,28 @@ void Actors::render() {
 
 
 void Actors::onTick(class Client *client) {
+  ClientSession *session = context->gameserver()->session(client);
+  if (!session) {
+    // No session? Huh.
+    return;
+  }
+  
+  Player *player = context->players()->player(session->player);
+  if (!player) {
+    return;
+  }
+
+    
   size_t packetSize = sizeof(NetTanksSnapMsg) +
     sizeof(NetTankSnapshot) * tanks.size();
 
   NetTanksSnapMsg *msg = static_cast<NetTanksSnapMsg *>(malloc(packetSize));
   msg->type = NET_TANKS_UPDATE;
   msg->num_snapshots = tanks.size();
-
+  
+  const Tank::Input *lastInput = context->control()->lastInput(player->actor());
+  msg->last_input = (lastInput ? lastInput->time : 0.0f);
+  
   for (size_t i = 0; i < tanks.size(); ++i) {
     msg->snaps[i] = tanks[i]->snapshot();
   }
@@ -112,6 +130,7 @@ void Actors::onReceive(NetPacketType type, const Packet &packet) {
           tankEntry->assign(msg->snaps[i]);
         }
         else {
+          std::cout << "LAST INPUT: " << msg->last_input << std::endl;
           // Correct failures in the prediction
           // 1. get delta for time in packet
           // 2. set tank to this delta

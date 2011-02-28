@@ -20,6 +20,7 @@
 
 Control::Control()
   : ReplicatedSystem(CLIENT_TICK|SERVER_RECEIVE)
+  , moves(100)
 {
   inputBegan = 0.0;
   state.buttons = 0;
@@ -37,7 +38,6 @@ void Control::init(const class Portal &interfaces) {
   keyShoot = input->keycode(config->property("control", "keyShoot", "mouse1"));
   keyRight = input->keycode(config->property("control", "keyRight", "D"));
   keyLeft = input->keycode(config->property("control", "keyLeft", "A"));
-  moves.resize(100);
 }
 
 void Control::update() {
@@ -95,16 +95,35 @@ Tank::Input Control::currentState() const {
 }
 
 void Control::onTick(Client *client) {
+  // Only tick on the client side
+  ActorId actor = context->players()->localActor();
+  if (actor == 0) {
+    return;
+  }
+  
+  Tank *target = context->actors()->tank(actor);
+  if (!target) {
+    return;
+  }
+
   static NetPlayerInput lastMsg;
   NetPlayerInput msg;
   msg.type = NET_PLAYER_INPUT;
   msg.state = state.buttons;
   msg.target_x = htons(state.aim_x + 32768);
   msg.target_y = htons(state.aim_y + 32768);
-
+  msg.time = inputBegan;
+  
   if (lastMsg.state != msg.state || lastMsg.target_x != msg.target_x || lastMsg.target_y != msg.target_y) {
     client->send(&msg, sizeof(NetPlayerInput), Client::PACKET_RELIABLE, NET_CHANNEL_STATE);
     lastMsg = msg;
+
+    // Add the move to the buffer of previous commands
+    Move lastMove;
+    lastMove.time = inputBegan;
+    lastMove.delta = state;
+    lastMove.absolute = target->snapshot();
+    moves.push_back(lastMove);
   }
 }
 
@@ -137,6 +156,7 @@ void Control::onReceive(NetPacketType type, const Packet &packet) {
     }
 
     Tank::Input state;
+    state.time = msg->time;
     state.buttons = msg->state;
     state.aim_x = ntohs(msg->target_x) - 32768;
     state.aim_y = ntohs(msg->target_y) - 32768;
@@ -153,5 +173,5 @@ const Tank::Input *Control::lastInput(ActorId actor) const {
 }
 
 Control::MoveRange Control::history(float time) {
-  return Control::MoveRange(MoveIterator(99, moves), MoveIterator(99, moves));
+  return Control::MoveRange(moves.begin(), moves.end());
 }
