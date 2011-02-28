@@ -130,7 +130,6 @@ void Actors::onReceive(NetPacketType type, const Packet &packet) {
           tankEntry->assign(msg->snaps[i]);
         }
         else {
-          std::cout << "LAST INPUT: " << msg->last_input << std::endl;
           // Correct failures in the prediction
           // 1. get delta for time in packet
           // 2. set tank to this delta
@@ -141,12 +140,23 @@ void Actors::onReceive(NetPacketType type, const Packet &packet) {
           Control::MoveRange history =
             context->control()->history(msg->last_input);
           
-          std::cout << "Predicted length: " <<
-            std::distance(history.first, history.second) << std::endl;
-
           if (history.first != history.second) {
-            std::cout << "checking diff" << std::endl;
+            std::cout << "Predicted length: " <<
+              std::distance(history.first, history.second) << std::endl;
             
+            Tank::State rState(msg->snaps[i]); // FIXME: use same in tankEntry->assign
+            vec2 diff = history.first->absolute.pos - rState.pos;
+            std::cout << "DIFF: " << length(diff) << std::endl;
+
+
+            Tank::State beforeRewind = tankEntry->snapshot();
+            tankEntry->assign(rState);
+
+            // Replay
+            Control::MoveRing::iterator iter = history.first;
+            for (; iter != history.second; ++iter) {
+
+            }
           }
         }
       }
