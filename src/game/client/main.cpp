@@ -14,8 +14,6 @@
 #include <game/common/texture_loader.h>
 #include <game/common/players.h>
 
-#include <utils/ring_buffer.h>
-
 #include <cstdlib>
 #include <iostream>
 
