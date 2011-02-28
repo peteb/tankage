@@ -34,6 +34,8 @@ void Control::init(const class Portal &interfaces) {
   keyShoot = input->keycode("mouse1");
   keyRight = input->keycode("D");
   keyLeft = input->keycode("A");
+
+  moves.resize(100);
 }
 
 void Control::update() {
@@ -146,4 +148,8 @@ const Tank::Input *Control::lastInput(ActorId actor) const {
     return NULL;
 
   return &iter->second;
+}
+
+Control::MoveRange Control::history(float time) {
+  return Control::MoveRange(MoveIterator(99, moves), MoveIterator(99, moves));
 }

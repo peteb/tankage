@@ -109,6 +109,19 @@ void Actors::onReceive(NetPacketType type, const Packet &packet) {
         if (actor != localActor) {
           tankEntry->assign(msg->snaps[i]);
         }
+        else {
+          // Correct failures in the prediction
+          // 1. get delta for time in packet
+          // 2. set tank to this delta
+          // 3. step forward all inputs after
+          // 4. get the state at this point in time -> retval
+
+          // Control::history(time) -> iterator beg, iterator end
+          Control::MoveRange history = context->control()->history(0.0f);
+          std::cout << "Predicted length: " <<
+            std::distance(history.first, history.second) << std::endl;
+          
+        }
       }
       else {
         std::cout << "got update for not existing tank" << std::endl;
