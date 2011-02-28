@@ -3,11 +3,10 @@
 
 #include <game/common/system.h>
 #include <game/common/replicated_system.h>
+#include <game/common/tank.h>
 
 #include <utils/vec.h>
 #include <vector>
-
-typedef int ActorId;
 
 class Actors : public ReplicatedSystem {
 public:
@@ -22,13 +21,13 @@ public:
   void onTick(class Client *client);
   void onReceive(NetPacketType type, const class Packet &packet);
   
-  // Misc
-  class Tank *tank(ActorId id) const;
-  class Tank *intersectingTank(const vec2 &start, const vec2 &end, float radius, ActorId ignore, vec2 &hitpos);
-  class Tank *createActor();
+  // Misc  
+  Tank *tank(ActorId id) const;
+  Tank *intersectingTank(const vec2 &start, const vec2 &end, float radius, ActorId ignore, vec2 &hitpos);
+  Tank *createActor();
   
 private:
-  typedef std::vector<class Tank *> TankVector;
+  typedef std::vector<Tank *> TankVector;
 
   void createTank(const NetTankSnapshot &net_snapshot);
   

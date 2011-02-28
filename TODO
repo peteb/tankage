@@ -19,12 +19,13 @@
 ** DONE Implement AUDIT or TWITTER LogType
 * "Sprint" planning
 ** 2011-02-20: "Tanks Communicate"
-*** DoD: driving around on server together with other tanks and shooting 
+*** DoD: driving around on server together with other tanks and shooting
 *** DONE Connect to server, get a tank
 *** DONE Replicate tanks over server
 *** DONE Replicate user input to server
 *** DONE Replicate projectiles
-*** DONE Improve network smoothness
+*** TODO Improve network smoothness
+*** TODO Client prediction    
 *** TODO Items should be removed (bullets, tanks, players)    
 ** --: "Tanks are Dangerous..."
 *** DoD: kill other tanks, collide with terrain and other tanks

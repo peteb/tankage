@@ -68,7 +68,7 @@ int app_main(Portal &interfaces) {
     projectiles.update();
     projectiles.render();
     
-    if (thisTime - lastTick >= 1.0/25.0) { // Tickrate
+    if (thisTime - lastTick >= 1.0/20.0) { // Tickrate
       server.tick(thisTime - lastTick);
       lastTick = thisTime;
     }

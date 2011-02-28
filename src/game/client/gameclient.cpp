@@ -25,6 +25,7 @@
  * The onTick function will be invoked at a certain interval (25 tps).
  */
 GameClient::GameClient() {
+  _time = 0.0f;
 }
 
 GameClient::~GameClient() {
@@ -39,7 +40,7 @@ void GameClient::init(const Portal &interfaces) {
   _state = GameClient::STATE_DISCONNECTED;
   
   _net = interfaces.requestInterface<Network>();
-  _client = _net->connect("iostream.cc:12345", 2); //"192.168.0.145:12345", 2); //"127.0.0.1:12345", 2);
+  _client = _net->connect("127.0.0.1:12345", 2); //"192.168.0.145:12345", 2); //"127.0.0.1:12345", 2);
 }
 
 void GameClient::update() {
@@ -67,6 +68,10 @@ void GameClient::update() {
 }
 
 void GameClient::tick(double dt) {
+  if (_state == STATE_CONNECTED) {
+    _time += dt;
+  }
+  
   for (size_t i = 0; i < _systems.size(); ++i) {
     if (_systems[i]->flags & ReplicatedSystem::CLIENT_TICK) {
       _systems[i]->onTick(_client);
@@ -96,8 +101,13 @@ void GameClient::registerSystem(class ReplicatedSystem *system) {
   _systems.push_back(system);
 }
 
+float GameClient::localTime() const {
+  return _time;
+}
+
 void GameClient::onConnect() {
-  std::cout << "connected" << std::endl;
+  _time = 0.0f;
+  std::cout << "*** connected!" << std::endl;
 
   // send the identification packet
   NetIdentifyMsg msg;
@@ -114,7 +124,7 @@ void GameClient::onDisconnect() {
 void GameClient::onReceive(Packet *packet) {
   // Fixme: this code looks suspiciously similar to gameserver::onReceive..
   static int packetCount = 0;
-  if (packetCount++ > 50) {
+  if (packetCount++ > 10) {
     packetCount = 0;
     std::cout << "rtt: " << packet->sender()->stats(Client::STAT_RTT) << std::endl;
     

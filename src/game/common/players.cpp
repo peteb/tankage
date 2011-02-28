@@ -86,6 +86,14 @@ Player *Players::createPlayer(ActorId actor) {
   return newPlayer;
 }
 
+ActorId Players::localActor() const {
+  Player *local = player(localPlayer());
+  if (local) {
+    return local->actor();
+  }
+
+  return 0;
+}
 
 void Players::updatePlayer(const NetArenaParticipant &net_pant) {
   const PlayerId playerId = ntohs(net_pant.id);
