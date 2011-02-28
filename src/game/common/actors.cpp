@@ -143,7 +143,11 @@ void Actors::onReceive(NetPacketType type, const Packet &packet) {
           
           std::cout << "Predicted length: " <<
             std::distance(history.first, history.second) << std::endl;
-          
+
+          if (history.first != history.second) {
+            std::cout << "checking diff" << std::endl;
+            
+          }
         }
       }
       else {
