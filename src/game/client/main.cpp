@@ -14,6 +14,8 @@
 #include <game/common/texture_loader.h>
 #include <game/common/players.h>
 
+#include <utils/ring_buffer.h>
+
 #include <cstdlib>
 #include <iostream>
 
@@ -24,8 +26,7 @@ int app_main(Portal &interfaces) {
   
   
   wm->createWindow(800, 600);
-
-
+  
   SystemContext systems;
 
   // Register the subsystems
