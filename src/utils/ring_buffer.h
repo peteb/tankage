@@ -26,7 +26,7 @@ public:
     bool operator != (const iterator_base &other) const {return pos != other.pos; }
     bool operator == (const iterator_base &other) const {return !(*this != other); }
     
-//  protected:
+  protected:
     size_type pos;
     container_type &source;
   };
