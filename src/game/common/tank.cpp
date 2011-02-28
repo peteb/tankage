@@ -50,29 +50,20 @@ void Tank::setTexture(Texture *texture, Texture *turret) {
   _turret = turret;
 }
 
-void Tank::onSnap(const NetTankSnapshot &netshot) {
-  // Convert byte order
-  NetTankSnapshot snapshot;
-  snapshot.x = ntohs(netshot.x);
-  snapshot.y = ntohs(netshot.y);
-  snapshot.base_dir = ntohs(netshot.base_dir);
-  snapshot.turret_dir = ntohs(netshot.turret_dir);
-
+void Tank::assign(const Tank::State &state) {
   _snapshotted = true;
-  _position.x = snapshot.x;
-  _position.y = snapshot.y;
-  _dir = snapshot.base_dir;
+  _position = state.pos;
+  _dir = state.base_dir;
 }
 
-NetTankSnapshot Tank::snapshot() const {
-  NetTankSnapshot snap;
-  snap.id = htons(_id);
-  snap.x = htons(_position.x);
-  snap.y = htons(_position.y);
-  snap.base_dir = htons(_dir); //(360.0 + _dir) * 4.0);
-  snap.turret_dir = htons(_turretDir);
+Tank::State Tank::snapshot() const {
+  Tank::State state;
+  state.actor = _id;
+  state.pos = _position; 
+  state.base_dir = _dir;
+  state.turret_dir = _turretDir;
   
-  return snap;
+  return state;
 }
 
 void Tank::render(Graphics *graphics) {
@@ -92,6 +83,27 @@ void Tank::render(Graphics *graphics) {
     graphics->drawQuad(rect(roundedPos, 16, 16), _turretDir);
   }
 }
+
+Tank::State::State(const NetTankSnapshot &snapshot) {
+  actor = ntohs(snapshot.id);
+  pos.x = static_cast<float>(ntohs(snapshot.x)) / 60.0f;
+  pos.y = static_cast<float>(ntohs(snapshot.y)) / 60.0f;
+  base_dir = ntohs(snapshot.base_dir);
+  turret_dir = ntohs(snapshot.turret_dir);
+}
+
+Tank::State::operator NetTankSnapshot() const {
+  NetTankSnapshot ret;
+  ret.id = htons(actor);
+  ret.x = htons(pos.x * 60.0f);
+  ret.y = htons(pos.y * 60.0f);
+  ret.base_dir = htons(base_dir);
+  ret.turret_dir = htons(turret_dir);
+
+  return ret;
+}
+
+
 
 double Wrap(double value, double lower, double upper) {
   double distance = upper - lower;

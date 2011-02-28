@@ -107,7 +107,7 @@ void Actors::onReceive(NetPacketType type, const Packet &packet) {
       Tank *tankEntry = tank(actor);
       if (tankEntry) {
         if (actor != localActor) {
-          tankEntry->onSnap(msg->snaps[i]);
+          tankEntry->assign(msg->snaps[i]);
         }
       }
       else {
@@ -123,7 +123,7 @@ void Actors::createTank(const NetTankSnapshot &net_snapshot) {
   Tank *newTank = new Tank(ntohs(net_snapshot.id), context);
   newTank->setTexture(tankBase, tankTurret);
   tanks.push_back(newTank);
-  newTank->onSnap(net_snapshot);
+  newTank->assign(net_snapshot);
 }
 
 Tank *Actors::tank(ActorId id) const {

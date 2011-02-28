@@ -19,8 +19,19 @@ public:
     int aim_x;
     int aim_y;
   };
+
+  struct State {
+    State() {}
+    State(const NetTankSnapshot &snapshot);
+    operator NetTankSnapshot() const;
+    
+    ActorId actor;
+    vec2 pos;
+    float base_dir;
+    float turret_dir;
+  };
   
-  enum State {
+  enum Buttons {
     STATE_MOVE_UP =    0x01,
     STATE_MOVE_DOWN =  0x02,
     STATE_TURN_LEFT =  0x04,
@@ -31,8 +42,8 @@ public:
   Tank(ActorId id, const class SystemContext *ctx);
   ~Tank();
 
-  void onSnap(const NetTankSnapshot &snapshot); // FIXME: rename to 'assign' or 'read'
-  NetTankSnapshot snapshot() const;
+  void assign(const State &snapshot);
+  State snapshot() const;
 
   
   void render(class Graphics *graphics);

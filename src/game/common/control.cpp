@@ -68,7 +68,7 @@ Tank::Input Control::currentState() const {
   ret.aim_x = 0;
   ret.aim_y = 0;
   
-  struct {Tank::State state; int keycode; } stateMap[] = {
+  struct {Tank::Buttons state; int keycode; } stateMap[] = {
     {Tank::STATE_MOVE_UP, keyUp},
     {Tank::STATE_MOVE_DOWN, keyDown},
     {Tank::STATE_TURN_RIGHT, keyRight},
@@ -78,7 +78,7 @@ Tank::Input Control::currentState() const {
   // Map keycodes to bits
   for (size_t i = 0; i < 5; ++i) {
     const int keycode = stateMap[i].keycode;
-    const Tank::State state = stateMap[i].state;
+    const Tank::Buttons state = stateMap[i].state;
       
     if (input->keyPressed(keycode)) {
       ret.buttons |= state;
