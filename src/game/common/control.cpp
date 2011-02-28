@@ -173,5 +173,10 @@ const Tank::Input *Control::lastInput(ActorId actor) const {
 }
 
 Control::MoveRange Control::history(float time) {
-  return Control::MoveRange(moves.begin(), moves.end());
+  MoveRing::reverse_iterator iter = moves.rbegin(), e = moves.rend();
+  for (; iter != e && iter->time > time; ++iter);
+  // FIXME: make sure there's no bug here if iter reaches moves.rend(),
+  // what happens when we return moves.rend().base()?
+  
+  return Control::MoveRange(iter.base(), moves.end());
 }

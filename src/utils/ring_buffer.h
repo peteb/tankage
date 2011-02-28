@@ -20,7 +20,7 @@ public:
       : pos(pos), source(source) {}
     
     const reference operator *() const {return (*source)[pos]; }
-    const reference operator ->() const {return (*source)[pos]; }
+    const value_type *operator ->() const {return &((*source)[pos]); }
     bool operator != (const iterator_base &other) const {return pos != other.pos; }
     bool operator == (const iterator_base &other) const {return !(*this != other); }
 

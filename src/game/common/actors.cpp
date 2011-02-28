@@ -138,7 +138,9 @@ void Actors::onReceive(NetPacketType type, const Packet &packet) {
           // 4. get the state at this point in time -> retval
 
           // Control::history(time) -> iterator beg, iterator end
-          Control::MoveRange history = context->control()->history(0.0f);
+          Control::MoveRange history =
+            context->control()->history(msg->last_input);
+          
           std::cout << "Predicted length: " <<
             std::distance(history.first, history.second) << std::endl;
           
