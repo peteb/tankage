@@ -32,26 +32,19 @@ Tank::Tank(ActorId id, const SystemContext *ctx)
   , radius(29.0f)
   , _id(id)
 {
-  std::fill(_state, _state + STATE_MAX, 0);
+  //std::fill(_state, _state + STATE_MAX, 0);
   secondsSinceFire = 0.0;
-  sinceSnap = 0.0;
+  //sinceSnap = 0.0;
   health = 100;
   _dir = 0.0f;
   _speed = 0.0f;
   _rotSpeed = 0.0f;
   _turretDir = 0.0f;
   _snapshotted = false;
+  //sinceHistory = 0.0;
 }
 
 Tank::~Tank() {
-}
-
-void Tank::startState(State state) {
-  _state[state] = true;
-}
-
-void Tank::stopState(State state) {
-  _state[state] = false;
 }
 
 void Tank::setTexture(Texture *texture, Texture *turret) {
@@ -59,30 +52,20 @@ void Tank::setTexture(Texture *texture, Texture *turret) {
   _turret = turret;
 }
 
-void Tank::onSnap(const NetTankSnapshot &netshot) {
-  // Convert byte order
-  NetTankSnapshot snapshot;
-  snapshot.x = ntohs(netshot.x);
-  snapshot.y = ntohs(netshot.y);
-  snapshot.base_dir = ntohs(netshot.base_dir);
-  snapshot.turret_dir = ntohs(netshot.turret_dir);
-
-  snapshots[1] = snapshots[0];
-  snapshots[0] = snapshot;
-  
-  sinceSnap = 0.0;
+void Tank::assign(const Tank::State &state) {
   _snapshotted = true;
+  _position = state.pos;
+  _dir = state.base_dir;
 }
 
-NetTankSnapshot Tank::snapshot() const {
-  NetTankSnapshot snap;
-  snap.id = htons(_id);
-  snap.x = htons(_position.x);
-  snap.y = htons(_position.y);
-  snap.base_dir = htons(_dir); //(360.0 + _dir) * 4.0);
-  snap.turret_dir = htons(_turretDir);
+Tank::State Tank::snapshot() const {
+  Tank::State state;
+  state.actor = _id;
+  state.pos = _position; 
+  state.base_dir = _dir;
+  state.turret_dir = _turretDir;
   
-  return snap;
+  return state;
 }
 
 void Tank::render(Graphics *graphics) {
@@ -101,10 +84,28 @@ void Tank::render(Graphics *graphics) {
     _turret->bind();
     graphics->drawQuad(rect(roundedPos, 16, 16), _turretDir);
   }
-  
-//   graphics->disableTextures();
-//   graphics->drawCircle(roundedPos, radius, 18);
 }
+
+Tank::State::State(const NetTankSnapshot &snapshot) {
+  actor = ntohs(snapshot.id);
+  pos.x = static_cast<float>(ntohs(snapshot.x)) / 60.0f;
+  pos.y = static_cast<float>(ntohs(snapshot.y)) / 60.0f;
+  base_dir = ntohs(snapshot.base_dir);
+  turret_dir = ntohs(snapshot.turret_dir);
+}
+
+Tank::State::operator NetTankSnapshot() const {
+  NetTankSnapshot ret;
+  ret.id = htons(actor);
+  ret.x = htons(pos.x * 60.0f);
+  ret.y = htons(pos.y * 60.0f);
+  ret.base_dir = htons(base_dir);
+  ret.turret_dir = htons(turret_dir);
+
+  return ret;
+}
+
+
 
 double Wrap(double value, double lower, double upper) {
   double distance = upper - lower;
@@ -113,70 +114,48 @@ double Wrap(double value, double lower, double upper) {
 }
 
 
-bool Tank::update(double dt) {
+bool Tank::advance(const Input &delta, double time) {
   if (health <= 0) {
-//    std::cout << "snail: I'm dead :( returning false" << std::endl;
     return false;
   }
 
-//  _position.y = double(snapshots[0].y + double(snapshots[0].y - snapshots[1].y) * sinceSnap / 25.0);
-  //_position.y = snapshots[0].y + double(snapshots[0].y - snapshots[1].y) * sinceSnap / (1.0/25.0);
-  // _position.x = snapshots[0].x + double(snapshots[0].x - snapshots[1].x) * sinceSnap / (1.0/25.0);
-  //if (_id != context->players()->localPlayer()) {
-    // Only update tank if it's a remote player
-    if (_snapshotted) {
-      vec2 lPos;
-      lPos.x = snapshots[0].x; //lerp<double, double>(snapshots[0].x, snapshots[1].x, sinceSnap / (1.0/25.0));
-      lPos.y = snapshots[0].y; //lerp<double, double>(snapshots[0].y, snapshots[1].y, sinceSnap / (1.0/25.0));
-      _turretDir = snapshots[0].turret_dir;
-      _dir = (static_cast<double>(snapshots[0].base_dir)); // / 4.0) - 360.0;
-
-      // if (length(lPos - _position) > 1.0) {
-        _position = lPos;
-        //}
-    }
-    // }
-
-  // FIXME: improve the jerkiness. Probably enet doesn't throw away old packets?
-  
-  sinceSnap += dt;
-  secondsSinceFire += dt;
+  secondsSinceFire += time;
 
   vec2 vDir(cos(_dir / 180.0f * M_PI), sin(_dir / 180.0f * M_PI));
   
-  if (_state[STATE_MOVE_UP]) {
-    _speed = std::min(_speed + 200.0f * dt, 150.0);
+  if (delta.buttons & STATE_MOVE_UP) {
+    _speed = std::min(_speed + 200.0f * time, 150.0);
   }
-  else if (_state[STATE_MOVE_DOWN]) {
-    _speed = std::max(_speed - 80.0f * dt, -40.0);    
+  else if (delta.buttons & STATE_MOVE_DOWN) {
+    _speed = std::max(_speed - 80.0f * time, -40.0);    
   }
   else {
     if (_speed > 0.0)
-      _speed = std::max(_speed -= 300.0f * dt, 0.0f);
+      _speed = std::max(_speed -= 300.0f * time, 0.0f);
     else
-      _speed = std::min(_speed += 300.0f * dt, 0.0f);
+      _speed = std::min(_speed += 300.0f * time, 0.0f);
   }
 
-  _position += vDir * _speed * dt;
+  _position += vDir * _speed * time;
 
-  if (_state[STATE_TURN_RIGHT]) {
-    _rotSpeed = std::min(_rotSpeed + 800.0f * dt, 120.0);
+  if (delta.buttons & STATE_TURN_RIGHT) {
+    _rotSpeed = std::min(_rotSpeed + 800.0f * time, 120.0);
     if (_speed > 0.0)
-      _speed -= 140.0 * dt;
+      _speed -= 140.0 * time;
   }
-  else if (_state[STATE_TURN_LEFT]) {
-    _rotSpeed = std::max(_rotSpeed - 800.0f * dt, -120.0);    
+  else if (delta.buttons & STATE_TURN_LEFT) {
+    _rotSpeed = std::max(_rotSpeed - 800.0f * time, -120.0);    
     if (_speed > 0.0)
-      _speed -= 140.0 * dt;
+      _speed -= 140.0 * time;
   }
   else {
     if (_rotSpeed > 0.0)
-      _rotSpeed = std::max(_rotSpeed -= 800.0f * dt, 0.0f);
+      _rotSpeed = std::max(_rotSpeed -= 800.0f * time, 0.0f);
     else
-      _rotSpeed = std::min(_rotSpeed += 800.0f * dt, 0.0f);
+      _rotSpeed = std::min(_rotSpeed += 800.0f * time, 0.0f);
   }
 
-  _dir += _rotSpeed * dt;
+  _dir += _rotSpeed * time;
 
   vec2 targetDiff = normalized(cursorPos - _position);
   double targetDir = atan2(targetDiff.y, targetDiff.x) / M_PI * 180.0;
@@ -188,20 +167,20 @@ bool Tank::update(double dt) {
   
   double add = 0.0;
   if (angle > 1.0) {
-    add = std::min(200.0 * dt, angle);
+    add = std::min(200.0 * time, angle);
     
   }
   else if (angle < 1.0f) {
-    add = std::max(-200.0 * dt, angle);
+    add = std::max(-200.0 * time, angle);
   }
 
   _turretDir += add;
-  _turretDir += _rotSpeed * dt;
+  _turretDir += _rotSpeed * time;
 
   _dir = Wrap(_dir, 0.0, 360.0);
   _turretDir = Wrap(_turretDir, 0.0, 360.0);
   
-  if (_state[STATE_SHOOT]) {// FIXME: rename SHOOT to SHOOTING
+/*  if (delta.buttons & STATE_SHOOT) {// FIXME: rename SHOOT to SHOOTING
     if (secondsSinceFire >= 0.2) {
       vec2 dir = vec2::FromDirection(_turretDir);
 
@@ -216,7 +195,7 @@ bool Tank::update(double dt) {
       secondsSinceFire = 0.0;
     }
     
-  }
+    }*/
 
   return true;
 }

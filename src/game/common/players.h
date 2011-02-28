@@ -34,6 +34,7 @@ public:
   Player *player(PlayerId id) const;
   PlayerId localPlayer() const;
   Player *createPlayer(ActorId actor);
+  ActorId localActor() const;
   
 private:
   void updatePlayer(const NetArenaParticipant &participant);

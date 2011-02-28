@@ -36,6 +36,10 @@ public:
     return system<Actors>(SystemContext::SYSTEM_ACTORS);
   }
 
+  class Control *control() const {
+    return system<Control>(SystemContext::SYSTEM_CONTROL);
+  }
+
   class Particles *particles() const {
     return system<Particles>(SystemContext::SYSTEM_PARTICLES);
   }

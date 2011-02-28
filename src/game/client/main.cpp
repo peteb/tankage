@@ -71,10 +71,10 @@ int app_main(Portal &interfaces) {
     background.render();
     gameclient.update();
 
-    if (thisTime - lastTick >= 1.0/25.0) {
+//    if (thisTime - lastTick >= 1.0/100.0) {
       gameclient.tick(thisTime - lastTick);
       lastTick = thisTime;
-    }
+      //  }
     
     //   particles.render();
     actors.render();

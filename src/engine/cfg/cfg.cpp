@@ -8,13 +8,13 @@
 #include <cstdlib>
 
 Engine::Config::Config(const std::string &path) : _path(path) {
-  if (_path.empty() && __linux__) {
+  if (_path.empty()) {
     char *home = getenv("HOME");
     if (home) {
       _path = std::string(home).append("/.snail-wail.conf");
     }
   } else {
-    // FIXME kaspars: add Mac and Windows stuff
+    // FIXME kaspars: add Windows stuff
   }
   std::stringstream buffer;
   PropertyTreeParser parser;

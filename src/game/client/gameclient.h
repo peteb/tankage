@@ -21,6 +21,7 @@ public:
   void disconnectGently();
   void registerSystem(class ReplicatedSystem *system);
   void tick(double dt);
+  float localTime() const;
   
 private:
   void onConnect();
@@ -37,6 +38,8 @@ private:
   class Network *_net;
   class Client *_client;
   ClientState _state;
+
+  float _time;
 };
 
 

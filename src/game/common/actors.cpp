@@ -3,6 +3,8 @@
 #include <game/common/projectiles.h>
 #include <game/common/net_protocol.h>
 #include <game/common/tank.h>
+#include <game/common/players.h>
+#include <game/common/control.h>
 
 #include <engine/graphics.h>
 #include <engine/texture.h>
@@ -63,14 +65,18 @@ void Actors::render() {
   double thisUpdate = wm->timeSeconds();
   double dt = thisUpdate - lastUpdate;
   lastUpdate = thisUpdate;
-
-  // The tanks list should be immutable during update operations
+  
   TankVector::iterator i = tanks.begin(), e = tanks.end();
   for (; i != e; ++i) {
-    if ((*i)->update(dt)) {
-      // It's alive!
-      (*i)->render(graphics);
+    Tank *tank = *i;
+    const Tank::Input *predictDelta = context->control()->lastInput(tank->id());
+
+    if (predictDelta) {
+      // Client side prediction
+      tank->advance(*predictDelta, dt);
     }
+
+    tank->render(graphics);
   }
 }
 
@@ -94,13 +100,30 @@ void Actors::onReceive(NetPacketType type, const Packet &packet) {
   if (type == NET_TANKS_UPDATE) {
     const NetTanksSnapMsg *msg =
       static_cast<const NetTanksSnapMsg *>(packet.data());
+
+    ActorId localActor = context->players()->localActor();
     
     for (size_t i = 0; i < msg->num_snapshots; ++i) {
       const NetTankSnapshot &snapshot = msg->snaps[i];
       const ActorId actor = ntohs(snapshot.id);
       Tank *tankEntry = tank(actor);
       if (tankEntry) {
-        tankEntry->onSnap(msg->snaps[i]);
+        if (actor != localActor) {
+          tankEntry->assign(msg->snaps[i]);
+        }
+        else {
+          // Correct failures in the prediction
+          // 1. get delta for time in packet
+          // 2. set tank to this delta
+          // 3. step forward all inputs after
+          // 4. get the state at this point in time -> retval
+
+          // Control::history(time) -> iterator beg, iterator end
+          Control::MoveRange history = context->control()->history(0.0f);
+          std::cout << "Predicted length: " <<
+            std::distance(history.first, history.second) << std::endl;
+          
+        }
       }
       else {
         std::cout << "got update for not existing tank" << std::endl;
@@ -108,14 +131,14 @@ void Actors::onReceive(NetPacketType type, const Packet &packet) {
       }
     }
 
-}
+  }
 }
 
 void Actors::createTank(const NetTankSnapshot &net_snapshot) {
   Tank *newTank = new Tank(ntohs(net_snapshot.id), context);
   newTank->setTexture(tankBase, tankTurret);
   tanks.push_back(newTank);
-  newTank->onSnap(net_snapshot);
+  newTank->assign(net_snapshot);
 }
 
 Tank *Actors::tank(ActorId id) const {
