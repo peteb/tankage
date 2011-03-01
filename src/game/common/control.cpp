@@ -20,7 +20,7 @@
 
 Control::Control()
   : ReplicatedSystem(CLIENT_TICK|SERVER_RECEIVE)
-  , moves(100)
+  , moves(300)
 {
   inputBegan = 0.0;
   state.buttons = 0;
@@ -180,4 +180,8 @@ Control::MoveRange Control::history(float time) {
   // what happens when we return moves.rend().base()?
   
   return Control::MoveRange(iter.base(), moves.end());
+}
+
+void Control::removeHistory(const MoveRing::iterator &first) {
+  moves.pop_front(first);
 }

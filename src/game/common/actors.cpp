@@ -139,8 +139,6 @@ void Actors::onReceive(NetPacketType type, const Packet &packet) {
           // Control::history(time) -> iterator beg, iterator end
           Control::MoveRange history =
             context->control()->history(msg->last_input);
-            std::cout << "Predicted length: " <<
-              std::distance(history.first, history.second) << std::endl;
           
           if (history.first != history.second) {
             
@@ -148,14 +146,20 @@ void Actors::onReceive(NetPacketType type, const Packet &packet) {
             vec2 diff = history.first->absolute.pos - rState.pos;
             std::cout << "DIFF: " << length(diff) << std::endl;
 
+            if (length(diff) > 1.0f || abs(history.first->absolute.base_dir - rState.base_dir) > 1.0f) {
+              std::cout << "Rewinding: " <<
+                std::distance(history.first, history.second) << std::endl;
 
-            Tank::State beforeRewind = tankEntry->snapshot();
-            tankEntry->assign(rState);
-
-            // Replay
-            Control::MoveRing::iterator iter = history.first;
-            for (; iter != history.second; ++iter) {
-
+              Tank::State beforeRewind = tankEntry->snapshot();
+              tankEntry->assign(rState);
+              
+              // Replay
+              Control::MoveRing::iterator iter = history.first;
+              for (; iter != history.second; ++iter) {
+                tankEntry->advance(iter->delta, iter->time);
+              }
+              
+              context->control()->removeHistory(history.second);
             }
           }
         }

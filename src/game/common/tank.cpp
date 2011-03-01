@@ -124,16 +124,16 @@ bool Tank::advance(const Input &delta, double time) {
   vec2 vDir(cos(_dir / 180.0f * M_PI), sin(_dir / 180.0f * M_PI));
   
   if (delta.buttons & STATE_MOVE_UP) {
-    _speed = std::min(_speed + 200.0f * time, 150.0);
+    _speed = 200.0f; //std::min(_speed + 200.0f * time, 150.0);
   }
   else if (delta.buttons & STATE_MOVE_DOWN) {
-    _speed = std::max(_speed - 80.0f * time, -40.0);    
+    _speed = -80.0f; //std::max(_speed - 80.0f * time, -40.0);    
   }
   else {
     if (_speed > 0.0)
-      _speed = std::max(_speed -= 300.0f * time, 0.0f);
+      _speed = 0.0f; //std::max(_speed -= 300.0f * time, 0.0f);
     else
-      _speed = std::min(_speed += 300.0f * time, 0.0f);
+      _speed = 0.0f; //std::min(_speed += 300.0f * time, 0.0f);
   }
 
   _position += vDir * _speed * time;

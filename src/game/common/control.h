@@ -31,6 +31,7 @@ public:
   void onReceive(NetPacketType type, const class Packet &packet);
   const Tank::Input *lastInput(ActorId actor) const;
   MoveRange history(float time);
+  void removeHistory(const MoveRing::iterator &first);
   
 private:  
   void onTick(class Client *client);
