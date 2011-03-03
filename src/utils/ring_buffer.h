@@ -32,34 +32,41 @@ public:
   };
 
   class iterator : public iterator_base {
+  private:
+    using iterator_base::pos;
+    using iterator_base::source;
+
   public:
     iterator(size_type pos, container_type *source)
       : iterator_base(pos, source) {}
     
     iterator &operator++() {
-      iterator_base::pos = (iterator_base::pos + 1) %
-        iterator_base::source->size();
+      pos = (pos + 1) % source->size();
       return *this;
     }
   };
   
   class reverse_iterator : public iterator_base {
+  private:
+    using iterator_base::pos;
+    using iterator_base::source;
+    
   public:
     reverse_iterator(size_type pos, container_type *source)
       : iterator_base(pos, source) {}
     
     reverse_iterator &operator++() {
-      if (iterator_base::pos == 0) {
-        iterator_base::pos = iterator_base::source->size() - 1;
+      if (pos == 0) {
+        pos = source->size() - 1;
       }
       else {
-        --iterator_base::pos;
+        --pos;
       }
       return *this;
     }
 
     iterator base() const {
-      iterator iter(iterator_base::pos, iterator_base::source);
+      iterator iter(pos, source);
       ++iter;
       return iter;
     }
