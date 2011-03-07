@@ -2,20 +2,28 @@
 
 #include <cstdio>
 #include <cstdarg>
+#include <cstdlib>
 
 
-Log::Logging::Logging() {
-	// Snail-Wail is registered in Twitter as an application. They provide
-	// consumer key and secret. These will probably never change
-    _twitter.getOAuth().setConsumerKey("dL0G2z0Uc3tz88mU8Kww");
-    _twitter.getOAuth().setConsumerSecret("B7iNYddua7DWxEg2kBKlomUYfKMM88rSIvr0c7Cc");
-	// Tokens are generated semi-manually using user provided pin code
-	_twitter.getOAuth().setOAuthTokenKey("95492131-kGGgFMi14Cra8uhDmLI3kkKJ8aI1GUTauP660fSM");
-    _twitter.getOAuth().setOAuthTokenSecret("lDeMu1aW2QVAQR9XskbpRNQnt215X87PcKfGVS9I");
+Log::Logging::Logging(std::ostream &output) : _level(3), _output(output) {
+  // check logging level  
+  const char* level = getenv("TANKAGE_LOGGING_LEVEL");
+  if (level) {
+    _level = atoi(level);
+  }   
+  // Snail-Wail is registered in Twitter as an application. They provide
+  // consumer key and secret. These will probably never change
+  _twitter.getOAuth().setConsumerKey("dL0G2z0Uc3tz88mU8Kww");
+  _twitter.getOAuth().setConsumerSecret("B7iNYddua7DWxEg2kBKlomUYfKMM88rSIvr0c7Cc");
+  // Tokens are generated semi-manually using user provided pin code
+  _twitter.getOAuth().setOAuthTokenKey("95492131-kGGgFMi14Cra8uhDmLI3kkKJ8aI1GUTauP660fSM");
+  _twitter.getOAuth().setOAuthTokenSecret("lDeMu1aW2QVAQR9XskbpRNQnt215X87PcKfGVS9I");
 } // Logging
 
 void Log::Logging::write(Logging::LogType type, const char *format, ...) {
-
+  if (_level < static_cast<size_t>(type)) {
+    return;
+  }
   switch (type) {
     case Logging::ERROR:
       printf("ER ");
@@ -35,8 +43,10 @@ void Log::Logging::write(Logging::LogType type, const char *format, ...) {
 
   va_list args;
   va_start (args, format);
-  vprintf(format, args);
-  printf("\n");
+  const size_t max = 1024;
+  char buffer[max];
+  vsnprintf(buffer, max, format, args);
+  _output << buffer << std::endl;
 
   if (type == Logging::TWEET) {
     char buffer[1024];

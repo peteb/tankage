@@ -14,7 +14,7 @@
 * TODO A directory for cached downloaded data, writable by the client
 * DONE Add twitcurl library in 3pp and make it compilable * Logging
 ** DONE A logging interface in the engine (+ very basic stdout/stderr implementation)  
-** TODO Implement logging level (probably some environment variable)
+** DONE Implement logging level (probably some environment variable)
 ** TODO Update std::cout to use log interface
 ** DONE Implement AUDIT or TWITTER LogType
 * "Sprint" planning
