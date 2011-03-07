@@ -53,12 +53,12 @@ void SimpleTokenizer::tokenize(const std::string & input, std::vector<Token> & o
 
 int SimpleTokenizer::getIgnoreLength() const {
 	// checks for ignores and comments
-	for (int i = 0; i < ignores.size(); ++i) {
+	for (size_t i = 0; i < ignores.size(); ++i) {
 		if (strncmp(currentChar, ignores[i].c_str(), ignores[i].size()) == 0)
 			return ignores[i].size();
 	}
 
-	for (int i = 0; i < comments.size(); ++i) {
+	for (size_t i = 0; i < comments.size(); ++i) {
 		if (strncmp(currentChar, comments[i].first.c_str(), comments[i].first.size()) == 0) {
 			return strstr(currentChar, comments[i].second.c_str()) - currentChar + comments[i].first.size();
 		}
@@ -68,7 +68,7 @@ int SimpleTokenizer::getIgnoreLength() const {
 }
 
 SimpleTokenizer::VerbatimLength SimpleTokenizer::getVerbatimLength() const {
-	for (int i = 0; i < verbatims.size(); ++i) {
+	for (size_t i = 0; i < verbatims.size(); ++i) {
 		if (strncmp(currentChar, verbatims[i].first.c_str(), verbatims[i].first.size()) == 0) {
 			std::pair<int, int> endcaps(verbatims[i].first.size(), verbatims[i].second.size());
 			int length = strstr(currentChar + verbatims[i].first.size(), verbatims[i].second.c_str()) - currentChar - verbatims[i].first.size();
@@ -81,7 +81,7 @@ SimpleTokenizer::VerbatimLength SimpleTokenizer::getVerbatimLength() const {
 }
 
 Token SimpleTokenizer::getCustomToken() const {
-	for (int i = 0; i < customTokens.size(); ++i) {
+	for (size_t i = 0; i < customTokens.size(); ++i) {
 		if (strncmp(currentChar, customTokens[i].second.c_str(), customTokens[i].second.size()) == 0) {
 			return customTokens[i];
 		}

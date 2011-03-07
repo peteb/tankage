@@ -20,6 +20,8 @@ public:
   void update();
   void disconnectGently();
   void registerSystem(class ReplicatedSystem *system);
+  void tick(double dt);
+  float localTime() const;
   
 private:
   void onConnect();
@@ -31,9 +33,13 @@ private:
   void onSystemUpdate(const struct NetSystemMsg *msg, class Packet *packet);
   
   std::vector<class ReplicatedSystem *> _systems;
+  class Config *_config;
+  class Logging *_log;
   class Network *_net;
   class Client *_client;
   ClientState _state;
+
+  float _time;
 };
 
 

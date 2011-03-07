@@ -40,24 +40,29 @@ if (NOT HAVE_STD_SMARTPTRS)
   endif (NOT HAVE_TR1_SMARTPTRS)
 endif (NOT HAVE_STD_SMARTPTRS)
 
-IF(DEV AND CMAKE_COMPILER_IS_GNUCXX)
+IF (CMAKE_BUILD_TYPE)
+  # convert to upper to ignore the case for the build type
+  STRING(TOUPPER ${CMAKE_BUILD_TYPE} CMAKE_BUILD_TYPE)
+ENDIF (CMAKE_BUILD_TYPE)
+
+IF(${CMAKE_BUILD_TYPE} MATCHES "DEBUG" AND CMAKE_COMPILER_IS_GNUCXX)
   ADD_DEFINITIONS(-g -Wall)
-ENDIF(DEV AND CMAKE_COMPILER_IS_GNUCXX)
+ENDIF(${CMAKE_BUILD_TYPE} MATCHES "DEBUG" AND CMAKE_COMPILER_IS_GNUCXX)
 
 set(PROJECT_ROOT_DIR ${PROJECT_SOURCE_DIR}/..)
 
 set(EXECUTABLE_OUTPUT_PATH ${PROJECT_ROOT_DIR}/bin)
 set(LIBRARY_OUTPUT_PATH ${PROJECT_ROOT_DIR}/bin)
 
-IF(DEV)
+IF(${CMAKE_BUILD_TYPE} MATCHES "DEBUG")
   SET(RESOURCE_PATH "../data")
-ELSE(DEV)
+ELSE(${CMAKE_BUILD_TYPE} MATCHES "DEBUG")
   IF(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
     SET(RESOURCE_PATH "${CMAKE_INSTALL_PREFIX}/share/snail-wail/data")
   ELSE(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
     SET(RESOURCE_PATH "share/snail-wail/data")    
   ENDIF(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
-ENDIF(DEV)
+ENDIF(${CMAKE_BUILD_TYPE} MATCHES "DEBUG")
 
 if(COMMAND cmake_policy)
   cmake_policy(SET CMP0003 NEW)
@@ -71,10 +76,13 @@ include_directories ("${PROJECT_ROOT_DIR}/inc/" "${PROJECT_ROOT_DIR}/src/")
 find_package(GTest)
 find_package(Curl)
 
+add_custom_target(unittest)
+
 add_subdirectory(${PROJECT_ROOT_DIR}/src CMakeFiles/Src)
 add_subdirectory(${PROJECT_ROOT_DIR}/data CMakeFiles/Data)
 add_subdirectory(${PROJECT_ROOT_DIR}/3pp/twitcurl CMakeFiles/Twitcurl)
 add_subdirectory(${PROJECT_ROOT_DIR}/3pp/ptrcfg CMakeFiles/Ptrcfg)
+add_subdirectory(${PROJECT_ROOT_DIR}/3pp/enet CMakeFiles/ENet)
 
 add_custom_target(clean-gen
 	rm -rf CMakeFiles CMakeCache.txt Makefile cmake_install.cmake ../bin 

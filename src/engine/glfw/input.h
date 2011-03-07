@@ -17,7 +17,8 @@ public:
   bool keyWasReleased(int key);
 
   void onKeyStateChange(int key, int state);
-  
+  void mousePos(int &x, int &y);  
+
 private:
   enum {
     KEY_STATE_PRESSED  = 0x01,

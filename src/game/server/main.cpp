@@ -5,8 +5,13 @@
 
 #include <game/server/gameserver.h>
 #include <game/common/system.h>
-#include <game/common/snails.h>
+#include <game/common/actors.h>
 #include <game/common/players.h>
+#include <game/common/tank.h>
+#include <game/common/control.h>
+#include <game/common/projectiles.h>
+#include <game/common/texture_loader.h>
+#include <game/client/particles.h>
 
 #include <cstdlib>
 #include <memory>
@@ -23,15 +28,26 @@ int app_main(Portal &interfaces) {
 
   // Register the subsystems
   GameServer server;
-  Snails snails;
+  Actors actors;
   Players players;
+  Control control;
+  Projectiles projectiles;
+  Particles particles;
+  TextureLoader texLoader;
   
-  server.registerSystem(&snails);
+  server.registerSystem(&actors);
   server.registerSystem(&players);
+  server.registerSystem(&control);
+  server.registerSystem(&projectiles);
   
-  systems.set(SystemContext::SYSTEM_SNAILS, &snails);
+  systems.set(SystemContext::SYSTEM_ACTORS, &actors);
   systems.set(SystemContext::SYSTEM_GAMESERVER, &server);
   systems.set(SystemContext::SYSTEM_PLAYERS, &players);
+  systems.set(SystemContext::SYSTEM_CONTROL, &control);
+  systems.set(SystemContext::SYSTEM_PROJECTILES, &projectiles);
+  systems.set(SystemContext::SYSTEM_PARTICLES, &particles);
+  systems.set(SystemContext::SYSTEM_TEXTURE_LOADER, &texLoader);
+
   
   systems.init(interfaces);
 
@@ -48,24 +64,11 @@ int app_main(Portal &interfaces) {
 
     
     server.update();
-    snails.render();
-
-    if (thisTime - lastTurn > 2.0) {
-      if (upOrDown == 0) {
-        snails.snail(Snails::SNAIL_RIGHT)->stopState(Snail::STATE_MOVE_DOWN);
-        snails.snail(Snails::SNAIL_RIGHT)->startState(Snail::STATE_MOVE_UP);
-        upOrDown = 1;
-      }
-      else {
-        snails.snail(Snails::SNAIL_RIGHT)->stopState(Snail::STATE_MOVE_UP);
-        snails.snail(Snails::SNAIL_RIGHT)->startState(Snail::STATE_MOVE_DOWN);
-        upOrDown = 0;
-      }
-      lastTurn = thisTime;
-
-    }
-
-    if (thisTime - lastTick >= 1.0/25.0) { // Tickrate
+    actors.render();
+    projectiles.update();
+    projectiles.render();
+    
+    if (thisTime - lastTick >= 1.0/20.0) { // Tickrate
       server.tick(thisTime - lastTick);
       lastTick = thisTime;
     }

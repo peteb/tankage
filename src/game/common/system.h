@@ -7,11 +7,11 @@ public:
   SystemContext();
 
   enum {
-    SYSTEM_SNAILS = 0,
+    SYSTEM_ACTORS = 0,
     SYSTEM_BACKGROUND,
     SYSTEM_CONTROL,
     SYSTEM_TEXTURE_LOADER,
-    SYSTEM_ITEMS,            // dependent on texture loader
+    SYSTEM_PROJECTILES,            // dependent on texture loader
     SYSTEM_PARTICLES,
     SYSTEM_GAMESERVER,
     SYSTEM_GAMECLIENT,
@@ -28,12 +28,16 @@ public:
   
   void init(class Portal &modules);
 
-  class Items *items() const {
-    return system<Items>(SystemContext::SYSTEM_ITEMS);
+  class Projectiles *projectiles() const {
+    return system<Projectiles>(SystemContext::SYSTEM_PROJECTILES);
   }
 
-  class Snails *snails() const {
-    return system<Snails>(SystemContext::SYSTEM_SNAILS);
+  class Actors *actors() const {
+    return system<Actors>(SystemContext::SYSTEM_ACTORS);
+  }
+
+  class Control *control() const {
+    return system<Control>(SystemContext::SYSTEM_CONTROL);
   }
 
   class Particles *particles() const {
@@ -42,6 +46,14 @@ public:
 
   class TextureLoader *textureLoader() const {
     return system<TextureLoader>(SystemContext::SYSTEM_TEXTURE_LOADER);
+  }
+
+  class Players *players() const {
+    return system<Players>(SystemContext::SYSTEM_PLAYERS);
+  }
+
+  class GameServer *gameserver() const {
+    return system<GameServer>(SystemContext::SYSTEM_GAMESERVER);
   }
   
 private:

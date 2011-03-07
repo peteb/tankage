@@ -1,11 +1,13 @@
 #include <game/client/gameclient.h>
 #include <game/common/net_protocol.h>
 #include <game/common/replicated_system.h>
-#include <game/common/snails.h>
+#include <game/common/actors.h>
 
 #include <engine/portal.h>
 #include <engine/network.h>
 #include <engine/packet.h>
+#include <engine/logging.h>
+#include <engine/cfg.h>
 
 #include <iostream>
 #include <cassert>
@@ -24,7 +26,8 @@
  * onReceive will be called when snapshot data is received.
  * The onTick function will be invoked at a certain interval (25 tps).
  */
-GameClient::GameClient() {
+GameClient::GameClient() : _client(0) {
+  _time = 0.0f;
 }
 
 GameClient::~GameClient() {
@@ -37,9 +40,14 @@ GameClient::~GameClient() {
 
 void GameClient::init(const Portal &interfaces) {
   _state = GameClient::STATE_DISCONNECTED;
-  
+ 
+  _config = interfaces.requestInterface<Config>(); 
   _net = interfaces.requestInterface<Network>();
-  _client = _net->connect("192.168.0.103:12345", 2); //127.0.0.1:12345", 2);
+  _log = interfaces.requestInterface<Logging>();
+
+  _log->write(Logging::DEBUG, "Connecting to host: %s", 
+    _config->property("client", "host", "iostream.cc:12345").c_str());
+  _client = _net->connect(_config->property("client", "host", "iostream.cc:12345"), 2);
 }
 
 void GameClient::update() {
@@ -63,6 +71,20 @@ void GameClient::update() {
     onReceive(packet);
     delete packet;
   }
+
+}
+
+void GameClient::tick(double dt) {
+  if (_state == STATE_CONNECTED) {
+    _time += dt;
+  }
+  
+  for (size_t i = 0; i < _systems.size(); ++i) {
+    if (_systems[i]->flags & ReplicatedSystem::CLIENT_TICK) {
+      _systems[i]->onTick(_client);
+    }
+  }
+
 }
 
 void GameClient::disconnectGently() {
@@ -86,15 +108,19 @@ void GameClient::registerSystem(class ReplicatedSystem *system) {
   _systems.push_back(system);
 }
 
+float GameClient::localTime() const {
+  return _time;
+}
+
 void GameClient::onConnect() {
-  std::cout << "connected" << std::endl;
+  _time = 0.0f;
+  std::cout << "*** connected!" << std::endl;
 
   // send the identification packet
   NetIdentifyMsg msg;
   msg.type = NET_IDENTIFY;
   msg.client_version = htons(100);
   msg.net_version = htons(NET_VERSION);
-
   _client->send(&msg, sizeof(msg), Client::PACKET_RELIABLE, NET_CHANNEL_STATE);
 }
 
@@ -103,9 +129,13 @@ void GameClient::onDisconnect() {
 }
 
 void GameClient::onReceive(Packet *packet) {
-  std::cout << "receive" << std::endl;
-
   // Fixme: this code looks suspiciously similar to gameserver::onReceive..
+  static int packetCount = 0;
+  if (packetCount++ > 10) {
+    packetCount = 0;
+    std::cout << "rtt: " << packet->sender()->stats(Client::STAT_RTT) << std::endl;
+    
+  }
   
   size_t size = packet->size();
   const void *data = packet->data();
@@ -117,12 +147,12 @@ void GameClient::onReceive(Packet *packet) {
     assert(size >= sizeof(NetErrorMsg) && "packet too small for error");
     onError(static_cast<const NetErrorMsg *>(data), packet);
     break;
-
-
   }
 
   for (size_t i = 0; i < _systems.size(); ++i) {
-    _systems[i]->onReceive(*type, *packet);
+    if (_systems[i]->flags & ReplicatedSystem::CLIENT_RECEIVE) {
+      _systems[i]->onReceive(*type, *packet);
+    }
   }
 }
 

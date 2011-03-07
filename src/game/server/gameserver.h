@@ -29,6 +29,7 @@ public:
   void update();
   void registerSystem(class ReplicatedSystem *system);
   void tick(double dt);
+  class ClientSession *session(class Client *client) const;
   
 private:
   typedef std::map<class Client *, class ClientSession *> SessionMap;
@@ -36,7 +37,6 @@ private:
   void onConnect(class Client *client);
   void onDisconnect(class Client *client);
   void onReceive(class Packet *packet);
-  class ClientSession *session(class Client *client) const;
   
   // net protocol
   void onIdent(const struct NetIdentifyMsg *ident, class Packet *packet);

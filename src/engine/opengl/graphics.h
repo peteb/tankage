@@ -12,7 +12,7 @@ public:
   class Texture *createTexture(class Image *image);
 
   void clear(const class color4 &clearColor);
-  void drawQuad(const class rect &quad);
+  void drawQuad(const class rect &quad, float dir);
   void drawQuad(const class rect &quad, const class rect &source);
   void drawQuads(const std::vector<rect> &quads);
   

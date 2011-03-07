@@ -1,7 +1,8 @@
+#include <netinet/in.h>
 #include <game/common/projectile.h>
 #include <game/common/system.h>
-#include <game/common/snails.h>
-#include <game/common/items.h>
+#include <game/common/actors.h>
+#include <game/common/tank.h>
 #include <game/client/particles.h>
 
 #include <engine/graphics.h>
@@ -10,57 +11,34 @@
 #include <utils/vec.h>
 #include <utils/rect.h>
 
-Projectile::Projectile(class ParticleGroup *partGroup,
-                       class Snail *shooter, class Texture *tex,
-                       const SystemContext *ctx, const vec2 &pos)
-  : partGroup(partGroup)
-  , shooter(shooter)
-  , tex(tex)
-  , ctx(ctx)
-  , pos(pos)
-{
-  sinceEmit = 0.0;
-  /*
-    group = ctx->particles()->group(particle_texture);
-    group->addParticle(pos);
-  */
+#include <arpa/inet.h>
 
+#include <cmath>
+
+Projectile::Projectile(const SystemContext *ctx, uint32_t id)
+  : ctx(ctx)
+  , _id(id)
+{
+  snapshotted = false;
 }
 
 bool Projectile::update(double dt) {
-  const vec2 prevPos = pos;
-  pos += vel * dt;
-  sinceEmit += dt;
+  const vec2 prevPos = position;
+  position += velocity * dt;
   
   vec2 hitPos;
-  Snail *hit = ctx->snails()->intersectingSnails(prevPos, pos, 1.0f, shooter, hitPos);
+  Tank *hit = ctx->actors()->intersectingTank(prevPos, position, 1.0f, shooterId, hitPos);
   if (hit) {
     hit->takeDamage(hitPos, 10.0f);
     return false;
   }
 
-  Item *hitItem = ctx->items()->intersectingItem(prevPos, pos, 1.0f, hitPos);
-  if (hitItem) {
-    if (hitItem->takeDamage(hitPos, 10.0f, shooter)) {  // FIXME: takeDamage -> DISINTEGRATE, IGNORE, REFLECT
-      return false;
-    }
-
-    // If reflect: emitter.addMidpoint()
-  }
-
-  if (sinceEmit > 0.01) {
-    Particle particle;
-    particle.pos = pos;
-    particle.ttd = 0.2;
-    partGroup->addParticle(particle);
-    sinceEmit = 0.0;
-  }
+  if (position.x - 64.0f > 800.0f || position.x + 64.0f < 0.0f)
+    return false;
+  if (position.y - 64.0f > 800.0f || position.y + 64.0f < 0.0f)
+    return false;
   
-  // update effect
-  // partGroup->emitParticle(Particle(blabla));
-//  emitter.setPosition(pos);
-  
-  return pos.x - 64.0f <= 800.0f; // FIXME: screenRect vs pos + radius (circle)
+  return true;
 }
 
 void Projectile::render(Graphics *gfx) {
@@ -68,11 +46,37 @@ void Projectile::render(Graphics *gfx) {
   gfx->enableTextures();
   tex->bind();
 
-  gfx->drawQuad(rect(pos, 32, 32)); // FIXME: get rid of hardcoded sizes
-
+  vec2 dir = normalized(velocity);
+  gfx->drawQuad(rect(position, 32, 32), degrees(dir)); // FIXME: get rid of hardcoded sizes
 }
 
-void Projectile::setVel(const vec2 &vel) {
-  this->vel = vel;
+void Projectile::setVelocity(const vec2 &vel) {
+  velocity = vel;
 }
 
+void Projectile::setPosition(const vec2 &pos) {
+  position = pos;
+}
+
+NetProjectileSnapshot Projectile::snapshot() const {
+  NetProjectileSnapshot snap;
+  snap.id = htons(_id);
+  snap.x = htons(position.x);
+  snap.y = htons(position.y);
+  snap.dir = htons(degrees(normalized(velocity)) + 180.0);
+  return snap;
+}
+
+void Projectile::onSnap(const NetProjectileSnapshot &netshot) {
+  NetProjectileSnapshot snapshot;
+  snapshot.x = ntohs(netshot.x);
+  snapshot.y = ntohs(netshot.y);
+
+  const vec2 lastPos = position;
+  vec2 newPos(snapshot.x, snapshot.y);
+  if (length(newPos - position) >= 2.0) {
+    position = newPos;
+  }
+
+  velocity = vec2::FromDirection(ntohs(netshot.dir) - 180.0) * 1000.0;
+}

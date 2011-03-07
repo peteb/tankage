@@ -23,5 +23,9 @@ struct delete_op {
   }
 };
 
+template<typename T, typename Scalar>
+T lerp(const T &begin, const T &end, Scalar amount) {
+  return begin + (begin - end) * amount;
+}
 #endif //!UTILS_ALGORITHM_H
 

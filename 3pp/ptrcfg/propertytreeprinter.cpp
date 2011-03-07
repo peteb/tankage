@@ -12,9 +12,9 @@
 #include "propertynode.h"
 
 PropertyTreePrinter::PropertyTreePrinter(std::ostream & output) 
-	: output(output)
-	, bracketOwnLine(false)
+	: bracketOwnLine(false)
 	, indentLevel("\t")
+    , output(output)
 {
 }
 

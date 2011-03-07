@@ -27,7 +27,9 @@ enum {
   NET_IDENTIFY = 1,      //< NetIdentifyMsg
   NET_ERROR = 2,         //< NetErrorMsg
   NET_ARENA_PARTICIPANTS = 3,
-  NET_SNAILS_SNAPSHOT = 4
+  NET_TANKS_UPDATE = 4,
+  NET_PROJECTILES_UPDATE = 5,
+  NET_PLAYER_INPUT = 6
 };
 
 enum NetChannels {
@@ -65,7 +67,8 @@ struct NetIdentifyMsg {
 
 
 struct NetArenaParticipant {
-  uint8_t id;
+  uint16_t id;
+  uint16_t actor;
   uint8_t flags;
   char name[MAX_PARTICIPANT_NAME];
 };
@@ -73,19 +76,45 @@ struct NetArenaParticipant {
 
 struct NetArenaParticipantsMsg {
   NetPacketType type;
-  uint8_t client_id;
+  uint16_t client_id;
   uint8_t num_particips;
   NetArenaParticipant pcips[0];
 };
 
-struct NetSnailSnapshot {
+struct NetTankSnapshot {
+  uint16_t id;
   uint16_t x;
   uint16_t y;
+  uint16_t base_dir;
+  uint16_t turret_dir;
 };
 
-struct NetSnailsSnapMsg {
+struct NetProjectileSnapshot {
+  uint16_t id;
+  uint16_t x;
+  uint16_t y;
+  uint16_t dir;
+};
+
+struct NetTanksSnapMsg {
   NetPacketType type;
-  NetSnailSnapshot snaps[2];
+  float last_input;
+  uint8_t num_snapshots;
+  NetTankSnapshot snaps[0];
+};
+
+struct NetProjectilesSnapMsg {
+  NetPacketType type;
+  uint8_t num_snapshots;
+  NetProjectileSnapshot snaps[0];
+};
+
+struct NetPlayerInput {
+  NetPacketType type;
+  float time;
+  uint8_t state; // forward, back, left, right, shoot
+  uint16_t target_x;
+  uint16_t target_y;
 };
 
 #endif // !GAME_COMMON_NET_PROTOCOL_H

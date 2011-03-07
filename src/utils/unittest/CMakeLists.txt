@@ -1,5 +1,4 @@
 
-# Check GTest status and skip the file if negative
 if (NOT GTEST_FLAG) 
 	return()
 endif (NOT GTEST_FLAG)
@@ -21,4 +20,6 @@ target_link_libraries(utils_unittest
 	pthread
 	utils
 )
+
+add_dependencies(unittest utils_unittest)
 
