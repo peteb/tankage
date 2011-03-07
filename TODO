@@ -65,6 +65,7 @@
 ** TODO Find out why game takes 60% of 2GHz duo core processor resources
 * Unit tests using Gtest
 *** DONE Unittests for mat, vec, rect in utils
+*** DONE Unittest for ring_buffer
 * CMake support
 *** DONE CMake should create and use 'bin' and 'build' directories 
 *** TODO Investigate how-to report CMake error and get rid of gen files
