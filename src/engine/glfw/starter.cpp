@@ -62,9 +62,9 @@ int main(int argc, char **argv) {
   //std::cout << "glfw: initialized" << std::endl;
 
   // uncomment this to test Twitter
-  // time_t time = std::time(0);
-  // log->write(Logging::TWEET, "Starting Snail-Wail at %s", 
-  //   std::asctime(localtime(&time)));
+  //time_t time = std::time(0);
+  //log->write(Logging::TWEET, "Starting Snail-Wail at %s", 
+	//std::asctime(localtime(&time)));
 
   // update configuration with input arguments
   interfaces.requestInterface<Config>()->updateProperties(argc, argv);

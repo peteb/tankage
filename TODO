@@ -14,7 +14,7 @@
 * TODO A directory for cached downloaded data, writable by the client
 * DONE Add twitcurl library in 3pp and make it compilable * Logging
 ** DONE A logging interface in the engine (+ very basic stdout/stderr implementation)  
-** TODO Implement logging level (probably some environment variable)
+** DONE Implement logging level (probably some environment variable)
 ** TODO Update std::cout to use log interface
 ** DONE Implement AUDIT or TWITTER LogType
 * "Sprint" planning
@@ -65,6 +65,7 @@
 ** TODO Find out why game takes 60% of 2GHz duo core processor resources
 * Unit tests using Gtest
 *** DONE Unittests for mat, vec, rect in utils
+*** DONE Unittest for ring_buffer
 * CMake support
 *** DONE CMake should create and use 'bin' and 'build' directories 
 *** TODO Investigate how-to report CMake error and get rid of gen files
@@ -95,21 +96,7 @@
 *** TODO OpenGLES
 *** TODO Image Loader    
 *** TODO Input    
-* Memory leaks and other Valgrind gibberish
-** TODO Only one remarkable memory leak left
-	==11268== 4,152 (2,072 direct, 2,080 indirect) bytes in 1 blocks are definitely lost in loss record 30 of 30
-	==11268==    at 0x4025BD3: malloc (vg_replace_malloc.c:236)
-	==11268==    by 0x40FD9CD: ??? (in /usr/lib/mesa/libGL.so.1.2)
-	==11268==    by 0x40FDE01: ??? (in /usr/lib/mesa/libGL.so.1.2)
-	==11268==    by 0x40D9285: ??? (in /usr/lib/mesa/libGL.so.1.2)
-	==11268==    by 0x40D5F79: ??? (in /usr/lib/mesa/libGL.so.1.2)
-	==11268==    by 0x40D6B47: glXGetConfig (in /usr/lib/mesa/libGL.so.1.2)
-	==11268==    by 0x404E121: _glfwChooseVisual (in /usr/lib/libglfw.so.2.6)
-	==11268==    by 0x404E609: _glfwPlatformOpenWindow (in /usr/lib/libglfw.so.2.6)
-	==11268==    by 0x404B3BF: glfwOpenWindow (in /usr/lib/libglfw.so.2.6)
-	==11268==    by 0x8067CED: Glfw::WindowManager::createWindow(int, int) (wm.cpp:32)
-	==11268==    by 0x805A99A: app_main(Portal&) (main.cpp:22)
-	==11268==    by 0x8065963: main (starter.cpp:38)
+* TODO Check and fix Valgrind reported memory leaks
 * ENet library
 *** DONE Add CMake find module
 *** DONE Implement network interface using Enet

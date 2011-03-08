@@ -18,10 +18,10 @@ public:
   }
 
   enum LogType {
-    ERROR = 0,
-    WARNING = 1,
-    DEBUG = 2,
-    TWEET = 3
+    TWEET = 0,
+    ERROR = 1,
+    WARNING = 2,
+    DEBUG = 3
   };
 
   virtual void write(LogType, const char *format, ...) =0;

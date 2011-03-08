@@ -8,12 +8,14 @@
 namespace Log {
 class Logging : public ::Logging, public Singleton<Logging> {
 public:
-  Logging();
+  Logging(std::ostream &output = std::cout);
   
   void write(LogType type, const char *format, ...);
 
 private:
-	twitCurl _twitter;
+  twitCurl _twitter;
+  size_t _level; 
+  std::ostream &_output; 
 };
 }
 

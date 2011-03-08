@@ -28,12 +28,11 @@ TEST(utils_unittest, test_vec)
     EXPECT_EQ(std::string(v1), "1.1, 2.2");
 
     // methods
-    EXPECT_FLOAT_EQ(v2.magnitude(), 5.0f);
-    EXPECT_EQ(std::string(v2.normalize()), "0.6, 0.8");
+    EXPECT_FLOAT_EQ(length(v2), 5.0f);
+    EXPECT_EQ(std::string(normalized(v2)), "0.6, 0.8");
 
-    // static methods
-    EXPECT_FLOAT_EQ(dot(v1, v2), 2.42f);
-    EXPECT_EQ(std::string(vec2::Zero()), "0, 0");
-    EXPECT_EQ(std::string(vec2::Identity()), "0, 0");
+	EXPECT_FLOAT_EQ(dot(v1, v2), 12.1f);
+	EXPECT_EQ(std::string(vec2::Zero()), "0, 0");
+	EXPECT_EQ(std::string(vec2::Identity()), "0, 0");
 } // test_vec
 
