@@ -30,8 +30,34 @@ TEST(utils_unittest, test_ring_buffer) {
   } 
   EXPECT_EQ(std::distance(ring.begin(), ring.end()), (size_t)2);
 
-  ring.pop_front(ring.begin());
-  EXPECT_EQ(*ring.begin(), "herble");
+  ring.erase(ring.begin());
+  EXPECT_EQ(*ring.begin(), "tokachu");
   EXPECT_EQ(std::distance(ring.begin(), ring.end()), (size_t)1);
+
+  // Testing erasing
+  ring_buffer<std::string> new_ring(2);
+  new_ring.push_back("herble");
+  new_ring.push_back("tokachu");
+  EXPECT_EQ(*(new_ring.begin()), "herble");
+  new_ring.erase(new_ring.begin());
+  EXPECT_EQ(*(new_ring.begin()), "tokachu");
+  new_ring.erase(new_ring.begin());
+  EXPECT_TRUE(new_ring.begin() == new_ring.end());
+
+  ring_buffer<int> int_ring(100);
+  for (int i = 0; i < 100; ++i) {
+    int_ring.push_back(i);
+  }
+
+  // Locate number 40
+  ring_buffer<int>::iterator element40 = std::find(
+    int_ring.begin(), int_ring.end(), 40);
+
+  EXPECT_EQ(*element40, 40);
+  EXPECT_EQ(std::distance(int_ring.begin(), element40), 40);
+  *element40 = 1337;
+  int_ring.erase(int_ring.begin(), element40);
+  EXPECT_EQ(std::distance(int_ring.begin(), int_ring.end()), 60);
+  
 } // test_ring_buffer
 

@@ -135,28 +135,31 @@ void Actors::onReceive(NetPacketType type, const Packet &packet) {
           // 2. set tank to this delta
           // 3. step forward all inputs after
           // 4. get the state at this point in time -> retval
-
+          // FIXME: send input 10hz anyway, verify that saved moves are the correct ones
           // Control::history(time) -> iterator beg, iterator end
+          // onTick will subsample the active move and send that
+          
           Control::MoveRange history =
             context->control()->history(msg->last_input);
           
           if (history.first != history.second) {
-            
             Tank::State rState(msg->snaps[i]); // FIXME: use same in tankEntry->assign
             vec2 diff = history.first->absolute.pos - rState.pos;
-            std::cout << "DIFF: " << length(diff) << std::endl;
 
+            std::cout << "DIFF: " << length(diff) << std::endl;
             if (length(diff) > 1.0f || abs(history.first->absolute.base_dir - rState.base_dir) > 1.0f) {
               std::cout << "Rewinding: " <<
                 std::distance(history.first, history.second) << std::endl;
-
-              Tank::State beforeRewind = tankEntry->snapshot();
+              std::cout << "   to snap: " << history.first->absolute.pos.x << std::endl;
+              
+              // Tank::State beforeRewind = tankEntry->snapshot();
               tankEntry->assign(rState);
               
               // Replay
               Control::MoveRing::iterator iter = history.first;
               for (; iter != history.second; ++iter) {
-                tankEntry->advance(iter->delta, iter->time);
+                //std::cout << "   advance " << iter->time << std::endl;
+                //tankEntry->advance(iter->delta, iter->time);
               }
               
               context->control()->removeHistory(history.second);

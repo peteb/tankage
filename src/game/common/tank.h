@@ -8,6 +8,24 @@
 
 typedef int ActorId;
 
+
+
+/*
+ * C: Control::update, creates a new move with time T1
+ * -- some time later --
+ * C: Control::onTick, sends input state from time T1
+ * -- some time later --
+ * Server receives input state T1, sends it to the tank
+ * -- some time later --
+ * Server updates the world
+ * -- some time later --
+ * Server gets snapshot from tank, sends it to player with T1
+ * -- some time later --
+ * Client receives snapshot for T1
+  
+  
+ */
+
 /*
  * Tanks can be updated using absolute data (snapshot)
  * Delta changes can be applied (input) for a certain amount of time (dt)
@@ -15,7 +33,7 @@ typedef int ActorId;
 class Tank {
 public:
   struct Input {
-    float time;
+    float time; // FIXME: probably overlapping with move::time in control
     uint8_t buttons;
     int aim_x;
     int aim_y;

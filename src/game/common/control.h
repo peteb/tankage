@@ -16,7 +16,6 @@
 class Control : public ReplicatedSystem {
 public:
   struct Move {
-    float time;
     Tank::Input delta;
     Tank::State absolute;
   };

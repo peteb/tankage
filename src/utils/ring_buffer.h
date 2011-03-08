@@ -2,6 +2,7 @@
 #define UTILS_RING_BUFFER_H
 
 #include <vector>
+#include <cassert>
 
 template<typename T>
 class ring_buffer {
@@ -15,10 +16,11 @@ public:
   class iterator_base : public std::iterator<
     std::forward_iterator_tag, T, ptrdiff_t, const T *, const T&>
   {
-  public:
+  protected:
     iterator_base(size_type pos, container_type *source)
       : pos(pos), source(source) {}
     
+  public:
     const reference operator *() const {return (*source)[pos]; }
     const value_type *operator ->() const {return &((*source)[pos]); }
     bool operator != (const iterator_base &other) const {return pos != other.pos; }
@@ -28,11 +30,11 @@ public:
     
   protected:
     size_type pos;
-    container_type *source;
+    container_type *source; // TODO: possible opt: just point to the data, the
+                            // iterators can be invalidated
   };
 
   class iterator : public iterator_base {
-  private:
     using iterator_base::pos;
     using iterator_base::source;
 
@@ -47,7 +49,6 @@ public:
   };
   
   class reverse_iterator : public iterator_base {
-  private:
     using iterator_base::pos;
     using iterator_base::source;
     
@@ -83,8 +84,10 @@ public:
     }
   }
 
-  void pop_front(const iterator &to) {
-    tail.pos = to.pos;
+  void erase(const iterator &beg) {erase(beg, ++iterator(beg)); }
+  void erase(const iterator &beg, const iterator &e) {
+    assert(beg.pos == tail.pos && "implementation only supports erasing from begin");
+    tail.pos = e.pos;
   }
 
   iterator &begin() {return tail; }
