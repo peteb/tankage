@@ -153,16 +153,16 @@ void Actors::onReceive(NetPacketType type, const Packet &packet) {
               std::cout << "   to snap: " << history.first->absolute.pos.x << std::endl;
               
               // Tank::State beforeRewind = tankEntry->snapshot();
-              tankEntry->assign(rState);
+              //tankEntry->assign(rState);
               
               // Replay
-              Control::MoveRing::iterator iter = history.first;
+              Control::MoveBuffer::iterator iter = history.first;
               for (; iter != history.second; ++iter) {
                 //std::cout << "   advance " << iter->time << std::endl;
                 //tankEntry->advance(iter->delta, iter->time);
               }
               
-              context->control()->removeHistory(history.second);
+              //  context->control()->removeHistory(history.second);
             }
           }
         }

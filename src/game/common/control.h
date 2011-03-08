@@ -20,8 +20,8 @@ public:
     Tank::State absolute;
   };
 
-  typedef ring_buffer<Move> MoveRing;
-  typedef std::pair<MoveRing::iterator, MoveRing::iterator> MoveRange;
+  typedef ring_buffer<Move> MoveBuffer;
+  typedef std::pair<MoveBuffer::iterator, MoveBuffer::iterator> MoveRange;
   
   Control();
   
@@ -30,7 +30,7 @@ public:
   void onReceive(NetPacketType type, const class Packet &packet);
   const Tank::Input *lastInput(ActorId actor) const;
   MoveRange history(float time);
-  void removeHistory(const MoveRing::iterator &first);
+  void removeHistory(const MoveBuffer::iterator &first);
   
 private:  
   void onTick(class Client *client);
@@ -42,7 +42,7 @@ private:
   class Input *input;
   class Config *config;
   std::string snail;
-  MoveRing moves;
+  MoveBuffer moves;
   std::map<ActorId, Tank::Input> states;
   
   

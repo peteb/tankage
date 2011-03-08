@@ -66,6 +66,13 @@ void Control::update() {
     inputBegan = timeNow;
     state.time = timeNow;
     states[actor] = newState;
+
+
+    Move stateMove;
+    stateMove.delta = newState;
+    stateMove.absolute = target->snapshot();
+    
+    moves.push_back(stateMove);
   }
 }
 
@@ -109,25 +116,31 @@ void Control::onTick(Client *client) {
     return;
   }
 
-  static NetPlayerInput lastMsg;
-  NetPlayerInput msg;
-  msg.type = NET_PLAYER_INPUT;
-  msg.state = state.buttons;
-  msg.target_x = htons(state.aim_x + 32768);
-  msg.target_y = htons(state.aim_y + 32768);
-  msg.time = inputBegan;
+  // TODO: make sure we're sending all the input data that exists.. we might
+  // miss stuff here when we subsample.
   
-  if (lastMsg.state != msg.state || lastMsg.target_x != msg.target_x || lastMsg.target_y != msg.target_y) {
-    client->send(&msg, sizeof(NetPlayerInput), Client::PACKET_RELIABLE, NET_CHANNEL_STATE);
-    lastMsg = msg;
+  static double lastSend = wm->timeSeconds();
+  
+  if (moves.begin() != moves.end()) {
+    if (wm->timeSeconds() - lastSend < 1.0/30.0)
+      return;
+    else
+      lastSend = wm->timeSeconds();
+
     
-    /*Move lastMove;
-    lastMove.time = wm->timeSeconds() - inputBegan;
-    lastMove.delta = state;
-    lastMove.absolute = target->snapshot();
-    inputBegan = wm->timeSeconds();
-    std::cout << "move added snapshot: " << lastMove.absolute.pos.x << std::endl;
-    moves.push_back(lastMove);*/
+    const Tank::Input &state1 = moves.back().delta;
+    std::cout << "send " << int(state1.buttons) << std::endl;
+    NetPlayerInput msg;
+    msg.type = NET_PLAYER_INPUT;
+    msg.state = state1.buttons;
+    msg.target_x = htons(state1.aim_x + 32768);
+    msg.target_y = htons(state1.aim_y + 32768);
+    msg.time = state1.time;
+    
+    client->send(&msg, sizeof(NetPlayerInput), 0, NET_CHANNEL_STATE);
+  }
+  else {
+    std::cout << "no moves" << std::endl;
   }
 }
 
@@ -211,7 +224,7 @@ Control::MoveRange Control::history(float time) {
   ++bo;*/
 
   // THIS IS WRONG NOW.
-  MoveRing::iterator iter = moves.begin();
+  MoveBuffer::iterator iter = moves.begin();
   for (; iter != moves.end(); ++iter) {
     if (iter->delta.time == time)
       break;
@@ -220,6 +233,6 @@ Control::MoveRange Control::history(float time) {
   return Control::MoveRange(iter, moves.end());
 }
 
-void Control::removeHistory(const MoveRing::iterator &first) {
+void Control::removeHistory(const MoveBuffer::iterator &first) {
   moves.erase(moves.begin(), first);
 }
