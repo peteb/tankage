@@ -64,7 +64,8 @@ public:
   void assign(const State &snapshot);
   State snapshot() const;
 
-  
+  void resetCount(double time = 0.0);
+  double count() const;
   void render(class Graphics *graphics);
   bool advance(const Input &delta, double time);
   
@@ -89,6 +90,7 @@ private:
   float radius;
   vec2 vel, cursorPos;
 
+  double _count;
   double secondsSinceFire;
   int health;
   bool _snapshotted;

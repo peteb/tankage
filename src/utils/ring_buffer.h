@@ -22,7 +22,7 @@ public:
     
   public:
     reference operator *() const {return (*source)[pos]; }
-    const value_type *operator ->() const {return &((*source)[pos]); }
+    value_type *operator ->() const {return &((*source)[pos]); }
     bool operator != (const iterator_base &other) const {return pos != other.pos; }
     bool operator == (const iterator_base &other) const {return !(*this != other); }
 
@@ -68,7 +68,7 @@ public:
 
     iterator base() const {
       iterator iter(pos, source);
-      ++iter;
+      //++iter;
       return iter;
     }
   };
@@ -90,8 +90,8 @@ public:
     tail.pos = e.pos;
   }
 
-  iterator &begin() {return tail; }
-  iterator &end() {return head; }
+  iterator begin() {return tail; }
+  iterator end() {return head; }
   reference back() {return *rbegin(); }
   
   reverse_iterator rbegin() {

@@ -29,8 +29,10 @@ public:
 private:
   typedef std::vector<Tank *> TankVector;
 
-  void createTank(const NetTankSnapshot &net_snapshot);
+  Tank *createTank(const NetTankSnapshot &net_snapshot);
+  Tank::State rebaseHistory(double time, const Tank::State &newState, Tank *tank);
   
+  double gameTime;
   class Graphics *graphics;
   class WindowManager *wm;
   class Texture *tankBase;
