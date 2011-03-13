@@ -84,6 +84,15 @@ void Actors::render() {
 
     tank->render(graphics);
   }
+
+  graphics->disableTextures();
+  graphics->setColor(color4(1.0f, 0.0f, 0.0f, 1.0f));
+  graphics->drawCircle(correctedState.pos, 3.0f, 12.0f);
+  vec2 delta = vec2::FromDegrees(correctedState.base_dir);
+
+  graphics->setColor(color4(0.0f, 0.0f, 1.0f, 1.0f));
+  graphics->drawCircle(correctedState.pos + delta * 16.0f, 3.0f, 12.0f);
+  
 }
 
 
@@ -140,8 +149,13 @@ void replay(const Control::MoveRange &moves,
        time.second);
         
     double duration = clamped_endtime - ofs;
-    target->advance(iter->delta, duration);
+    double tim = 0.0;
 
+    // FIXME: is this really the best way?
+    for (double tim = 0.0; tim <= duration; tim += 0.001) {
+      target->advance(iter->delta, 0.001);
+    }
+    
     ofs += duration;
   }
 }
@@ -195,18 +209,23 @@ void Actors::onReceive(NetPacketType type, const Packet &packet) {
                                               tankEntry);
         
         const Tank::State current = tankEntry->snapshot();
-        double diff = length(current.pos - corrected.pos);
-
+        double diff = std::max(length(current.pos - corrected.pos), current.base_dir - corrected.base_dir);
+        
+        correctedState = corrected; // for rendering
+        
         if (diff > 5.0f) {
           // a quick snap if too much error
           tankEntry->assign(corrected);
         }
         else if (diff >= 0.02f) {
-          /*  // lerp if minor
+          // lerp if minor
           Tank::State lerpState = current;
           lerpState.pos = lerp(current.pos, corrected.pos, 0.1);
-          tankEntry->assign(lerpState);*/
+          lerpState.base_dir = lerp(current.base_dir, corrected.base_dir, 0.1);
+          tankEntry->assign(lerpState);
+
         }
+        
       }
     }
 

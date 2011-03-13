@@ -40,7 +40,6 @@ Tank::Tank(ActorId id, const SystemContext *ctx)
   _speed = 0.0f;
   _rotSpeed = 0.0f;
   _turretDir = 0.0f;
-  _snapshotted = false;
   
   resetCount();
   //sinceHistory = 0.0;
@@ -55,7 +54,6 @@ void Tank::setTexture(Texture *texture, Texture *turret) {
 }
 
 void Tank::assign(const Tank::State &state) {
-  _snapshotted = true;
   _position = state.pos;
   _dir = state.base_dir;
 }
@@ -80,11 +78,11 @@ void Tank::render(Graphics *graphics) {
   roundedPos.x = round(_position.x);
   roundedPos.y = round(_position.y);
 
-  graphics->drawQuad(rect(roundedPos, 16, 16), _dir);
+  graphics->drawQuad(rect(_position, 16, 16), _dir);
 
   if (_turret) {
     _turret->bind();
-    graphics->drawQuad(rect(roundedPos, 16, 16), _turretDir);
+    graphics->drawQuad(rect(_position, 16, 16), _turretDir);
   }
 }
 
@@ -92,7 +90,7 @@ Tank::State::State(const NetTankSnapshot &snapshot) {
   actor = ntohs(snapshot.id);
   pos.x = static_cast<float>(ntohs(snapshot.x)) / 60.0f;
   pos.y = static_cast<float>(ntohs(snapshot.y)) / 60.0f;
-  base_dir = ntohs(snapshot.base_dir);
+  base_dir = float(ntohs(snapshot.base_dir)) / 10.0;
   turret_dir = ntohs(snapshot.turret_dir);
 }
 
@@ -101,7 +99,7 @@ Tank::State::operator NetTankSnapshot() const {
   ret.id = htons(actor);
   ret.x = htons(pos.x * 60.0f);
   ret.y = htons(pos.y * 60.0f);
-  ret.base_dir = htons(base_dir);
+  ret.base_dir = htons(base_dir * 10.0);
   ret.turret_dir = htons(turret_dir);
 
   return ret;
@@ -124,7 +122,14 @@ bool Tank::advance(const Input &delta, double time) {
 
   secondsSinceFire += time;
 
-  vec2 vDir(cos(_dir / 180.0f * M_PI), sin(_dir / 180.0f * M_PI));
+  vec2 vDir = vec2::FromDegrees(_dir);
+
+  if (delta.buttons & STATE_TURN_RIGHT) {
+    _dir += 140.0f * time;
+  }
+  if (delta.buttons & STATE_TURN_LEFT) {
+    _dir -= 140.0f * time;
+  }
   
   if (delta.buttons & STATE_MOVE_UP) {
     _speed = 200.0f; //std::min(_speed + 200.0f * time, 150.0);
@@ -141,7 +146,7 @@ bool Tank::advance(const Input &delta, double time) {
 
   _position += vDir * _speed * time;
 
-  /*if (delta.buttons & STATE_TURN_RIGHT) {
+/*  if (delta.buttons & STATE_TURN_RIGHT) {
     _rotSpeed = std::min(_rotSpeed + 800.0f * time, 120.0);
     if (_speed > 0.0)
       _speed -= 140.0 * time;
@@ -158,8 +163,9 @@ bool Tank::advance(const Input &delta, double time) {
       _rotSpeed = std::min(_rotSpeed += 800.0f * time, 0.0f);
   }
   
-  _dir += _rotSpeed * time;
-  */
+*/
+
+    
   vec2 targetDiff = normalized(cursorPos - _position);
   double targetDir = atan2(targetDiff.y, targetDiff.x) / M_PI * 180.0;
   double angle = Wrap(targetDir - _turretDir, 0.0, 360.0);

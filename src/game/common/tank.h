@@ -93,7 +93,6 @@ private:
   double _count;
   double secondsSinceFire;
   int health;
-  bool _snapshotted;
 };
 
 
