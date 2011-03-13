@@ -78,5 +78,5 @@ void Projectile::onSnap(const NetProjectileSnapshot &netshot) {
     position = newPos;
   }
 
-  velocity = vec2::FromDirection(ntohs(netshot.dir) - 180.0) * 1000.0;
+  velocity = vec2::FromDegrees(ntohs(netshot.dir) - 180.0) * 1000.0;
 }

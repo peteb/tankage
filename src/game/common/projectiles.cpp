@@ -58,7 +58,7 @@ void Projectiles::update() {
 void Projectiles::spawnProjectile(ProjectileType type, const vec2 &pos,
                                   float dir, ActorId shooterId) {
   Projectile *newProjectile = new Projectile(context, ++projectileId);
-  newProjectile->setVelocity(vec2::FromDirection(dir) * 2000.0f);
+  newProjectile->setVelocity(vec2::FromDegrees(dir) * 2000.0f);
   newProjectile->setPosition(pos);
   newProjectile->setTexture(bulletTexture);
   projectiles.push_back(newProjectile);

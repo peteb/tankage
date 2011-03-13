@@ -18,7 +18,7 @@ vec2 vec2::Identity() {
   return identity;
 }
 
-vec2 vec2::FromDirection(double degrees) {
+vec2 vec2::FromDegrees(double degrees) {
   double radians = degrees / 180.0 * M_PI;
   return vec2(cos(radians), sin(radians));
 }
