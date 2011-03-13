@@ -46,13 +46,14 @@ void Log::Logging::write(Logging::LogType type, const char *format, ...) {
   const size_t max = 1024;
   char buffer[max];
   vsnprintf(buffer, max, format, args);
+
+  // write into the stream
   _output << buffer << std::endl;
 
   if (type == Logging::TWEET) {
-    char buffer[1024];
-    vsprintf(buffer, format, args);
-    std::string message = buffer;
-    if (!_twitter.statusUpdate(message)) {
+    // send tweet, skip if empty
+	std::string message = buffer[0] ? buffer : "";
+    if (!message.empty() && !_twitter.statusUpdate(message)) {
       std::string reply;
       _twitter.getLastCurlError(reply);
       write(Logging::ERROR, reply.c_str());
