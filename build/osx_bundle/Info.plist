@@ -3,11 +3,11 @@
 <plist version="1.0">
 <dict>
 	<key>CFBundleExecutable</key>
-	<string>SnailWail</string>
+	<string>tankage</string>
 	<key>CFBundleIconFile</key>
-	<string>SnailWail.icns</string>
+	<string>tankage.icns</string>
 	<key>CFBundleName</key>
-	<string>SnailWail</string>
+	<string>tankage</string>
 	<key>CFBundleShortVersionString</key>
 	<string>1.5</string>
 	<key>CFBundleVersion</key>
