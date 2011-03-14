@@ -41,6 +41,8 @@ Tank::Tank(ActorId id, const SystemContext *ctx)
   _rotSpeed = 0.0f;
   _turretDir = 0.0f;
   _snapshotted = false;
+  
+  resetCount();
   //sinceHistory = 0.0;
 }
 
@@ -107,7 +109,7 @@ Tank::State::operator NetTankSnapshot() const {
 
 
 
-double Wrap(double value, double lower, double upper) {
+double Wrap(double value, double lower, double upper) { // FIXME: util.
   double distance = upper - lower;
   double times = floor((value - lower) / distance);
   return value - (times * distance);
@@ -115,6 +117,7 @@ double Wrap(double value, double lower, double upper) {
 
 
 bool Tank::advance(const Input &delta, double time) {
+  _count += time;
   if (health <= 0) {
     return false;
   }
@@ -138,7 +141,7 @@ bool Tank::advance(const Input &delta, double time) {
 
   _position += vDir * _speed * time;
 
-  if (delta.buttons & STATE_TURN_RIGHT) {
+  /*if (delta.buttons & STATE_TURN_RIGHT) {
     _rotSpeed = std::min(_rotSpeed + 800.0f * time, 120.0);
     if (_speed > 0.0)
       _speed -= 140.0 * time;
@@ -154,9 +157,9 @@ bool Tank::advance(const Input &delta, double time) {
     else
       _rotSpeed = std::min(_rotSpeed += 800.0f * time, 0.0f);
   }
-
+  
   _dir += _rotSpeed * time;
-
+  */
   vec2 targetDiff = normalized(cursorPos - _position);
   double targetDir = atan2(targetDiff.y, targetDiff.x) / M_PI * 180.0;
   double angle = Wrap(targetDir - _turretDir, 0.0, 360.0);
@@ -198,6 +201,14 @@ bool Tank::advance(const Input &delta, double time) {
     }*/
 
   return true;
+}
+
+void Tank::resetCount(double time) {
+  _count = time;
+}
+
+double Tank::count() const {
+  return _count;
 }
 
 void Tank::setCursor(const vec2 & pos) {

@@ -35,6 +35,7 @@ Actors::Actors()
   : ReplicatedSystem(SERVER_TICK|CLIENT_RECEIVE)
 {
   lastId = 0;
+  gameTime = 0.0;
 }
 
 Actors::~Actors() {
@@ -45,6 +46,7 @@ Actors::~Actors() {
 void Actors::init(const class Portal &interfaces) {
   graphics = interfaces.requestInterface<Graphics>();
   wm = interfaces.requestInterface<WindowManager>();
+  
   ImageLoader *imgLoader = interfaces.requestInterface<ImageLoader>();
 
   std::auto_ptr<Image> img(imgLoader->loadImage(std::string(RESOURCE_PATH) + "/tank_base.png"));
@@ -68,6 +70,7 @@ void Actors::render() {
   double thisUpdate = wm->timeSeconds();
   double dt = thisUpdate - lastUpdate;
   lastUpdate = thisUpdate;
+  gameTime += dt;
   
   TankVector::iterator i = tanks.begin(), e = tanks.end();
   for (; i != e; ++i) {
@@ -75,7 +78,7 @@ void Actors::render() {
     const Tank::Input *predictDelta = context->control()->lastInput(tank->id());
 
     if (predictDelta) {
-      // Client side prediction
+      // Client side prediction, but also updating on the server side
       tank->advance(*predictDelta, dt);
     }
 
@@ -103,15 +106,68 @@ void Actors::onTick(class Client *client) {
   NetTanksSnapMsg *msg = static_cast<NetTanksSnapMsg *>(malloc(packetSize));
   msg->type = NET_TANKS_UPDATE;
   msg->num_snapshots = tanks.size();
+
   
   const Tank::Input *lastInput = context->control()->lastInput(player->actor());
   msg->last_input = (lastInput ? lastInput->time : 0.0f);
   
   for (size_t i = 0; i < tanks.size(); ++i) {
+    if (tanks[i]->id() == player->actor()) {
+      msg->last_input += tanks[i]->count();
+    }
     msg->snaps[i] = tanks[i]->snapshot();
   }
 
   client->send(msg, packetSize, 0 /*Client::PACKET_UNSEQUENCED*/, NET_CHANNEL_ABS);
+}
+
+
+namespace {
+void replay(const Control::MoveRange &moves,
+            Tank *target,
+            const std::pair<double, double> &time)
+{
+  typedef Control::MoveRange::first_type iterator;
+  double ofs = time.first;
+
+  for (iterator iter = moves.first, next = ++iterator(moves.first);
+       iter != moves.second;
+       ++iter, ++next)
+  {
+    double clamped_endtime =
+      (next != moves.second ? 
+       std::min<double>(time.second, next->delta.time) :
+       time.second);
+        
+    double duration = clamped_endtime - ofs;
+    target->advance(iter->delta, duration);
+
+    ofs += duration;
+  }
+}
+}
+
+Tank::State Actors::rebaseHistory(double time, const Tank::State &newState, Tank *tank) {
+  Tank::State ret = newState;
+  Control::MoveRange history = context->control()->history(time);
+  
+  if (history.first != history.second) {
+    Tank::State initial_state = tank->snapshot();
+    double initial_count = tank->count();
+
+    tank->assign(newState); // rewind history
+    replay(history, tank, std::make_pair(time, gameTime + 1.0/20.0));
+    ret = tank->snapshot();
+    // FIXME: get tickrate (1.0/2.0) from server
+
+    // FIXME: instead of doing this below, we could maybe get a copy of the tank
+    // object, thus avoiding any side-effects. Need to make sure the copy can be
+    // done fast (preferably just a copy of Tank::State)
+    tank->assign(initial_state);
+    tank->resetCount(initial_count);
+  }
+
+  return ret;
 }
 
 void Actors::onReceive(NetPacketType type, const Packet &packet) {
@@ -125,62 +181,46 @@ void Actors::onReceive(NetPacketType type, const Packet &packet) {
       const NetTankSnapshot &snapshot = msg->snaps[i];
       const ActorId actor = ntohs(snapshot.id);
       Tank *tankEntry = tank(actor);
-      if (tankEntry) {
-        if (actor != localActor) {
-          tankEntry->assign(msg->snaps[i]);
-        }
-        else {
-          // Correct failures in the prediction
-          // 1. get delta for time in packet
-          // 2. set tank to this delta
-          // 3. step forward all inputs after
-          // 4. get the state at this point in time -> retval
-          // FIXME: send input 10hz anyway, verify that saved moves are the correct ones
-          // Control::history(time) -> iterator beg, iterator end
-          // onTick will subsample the active move and send that
-          
-          Control::MoveRange history =
-            context->control()->history(msg->last_input);
-          
-          if (history.first != history.second) {
-            Tank::State rState(msg->snaps[i]); // FIXME: use same in tankEntry->assign
-            vec2 diff = history.first->absolute.pos - rState.pos;
 
-            std::cout << "DIFF: " << length(diff) << std::endl;
-            if (length(diff) > 1.0f || abs(history.first->absolute.base_dir - rState.base_dir) > 1.0f) {
-              std::cout << "Rewinding: " <<
-                std::distance(history.first, history.second) << std::endl;
-              std::cout << "   to snap: " << history.first->absolute.pos.x << std::endl;
-              
-              // Tank::State beforeRewind = tankEntry->snapshot();
-              //tankEntry->assign(rState);
-              
-              // Replay
-              Control::MoveBuffer::iterator iter = history.first;
-              for (; iter != history.second; ++iter) {
-                //std::cout << "   advance " << iter->time << std::endl;
-                //tankEntry->advance(iter->delta, iter->time);
-              }
-              
-              //  context->control()->removeHistory(history.second);
-            }
-          }
-        }
+      if (!tankEntry) {
+        tankEntry = createTank(snapshot);
+      }
+
+      if (actor != localActor) {
+        tankEntry->assign(msg->snaps[i]);
       }
       else {
-        std::cout << "got update for not existing tank" << std::endl;
-        createTank(snapshot);
+        // It's the local player
+        Tank::State corrected = rebaseHistory(msg->last_input, snapshot,
+                                              tankEntry);
+        
+        const Tank::State current = tankEntry->snapshot();
+        double diff = length(current.pos - corrected.pos);
+
+        if (diff > 5.0f) {
+          // a quick snap if too much error
+          tankEntry->assign(corrected);
+        }
+        else if (diff >= 0.02f) {
+          /*  // lerp if minor
+          Tank::State lerpState = current;
+          lerpState.pos = lerp(current.pos, corrected.pos, 0.1);
+          tankEntry->assign(lerpState);*/
+        }
       }
     }
 
+    
   }
 }
 
-void Actors::createTank(const NetTankSnapshot &net_snapshot) {
+Tank *Actors::createTank(const NetTankSnapshot &net_snapshot) {
   Tank *newTank = new Tank(ntohs(net_snapshot.id), context);
   newTank->setTexture(tankBase, tankTurret);
   tanks.push_back(newTank);
   newTank->assign(net_snapshot);
+  
+  return newTank;
 }
 
 Tank *Actors::tank(ActorId id) const {

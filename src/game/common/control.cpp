@@ -23,7 +23,7 @@ Control::Control()
   , moves(300)
 {
   inputBegan = 0.0;
-  state.buttons = 0;
+  state.buttons = -1;
   state.aim_x = 0;
   state.aim_y = 0;
 }
@@ -53,26 +53,19 @@ void Control::update() {
   }
 
   Tank::Input newState = currentState();
-  if (state.buttons != newState.buttons || state.aim_x != newState.aim_x || state.aim_y != newState.aim_y) {
+  if (state.buttons != newState.buttons) {// || state.aim_x != newState.aim_x || state.aim_y != newState.aim_y) {
     // Input changed
 
-    const double timeNow = wm->timeSeconds();
-    const double stateTime = timeNow - inputBegan;
-    // FIXME: store state + stateTime in input history, do it here!
-    //        onTick will later send the input packet
-    // FIXME: change 'time' to 'duration' in Move class
-    
+    newState.time = wm->timeSeconds();
     state = newState;
-    inputBegan = timeNow;
-    state.time = timeNow;
     states[actor] = newState;
-
 
     Move stateMove;
     stateMove.delta = newState;
     stateMove.absolute = target->snapshot();
-    
+    target->resetCount();
     moves.push_back(stateMove);
+    toSend.push_back(newState);
   }
 }
 
@@ -116,32 +109,19 @@ void Control::onTick(Client *client) {
     return;
   }
 
-  // TODO: make sure we're sending all the input data that exists.. we might
-  // miss stuff here when we subsample.
-  
-  static double lastSend = wm->timeSeconds();
-  
-  if (moves.begin() != moves.end()) {
-    if (wm->timeSeconds() - lastSend < 1.0/30.0)
-      return;
-    else
-      lastSend = wm->timeSeconds();
-
-    
-    const Tank::Input &state1 = moves.back().delta;
-    std::cout << "send " << int(state1.buttons) << std::endl;
+  for (size_t i = 0; i < toSend.size(); ++i) {
+    const Tank::Input &input = toSend[i];
     NetPlayerInput msg;
     msg.type = NET_PLAYER_INPUT;
-    msg.state = state1.buttons;
-    msg.target_x = htons(state1.aim_x + 32768);
-    msg.target_y = htons(state1.aim_y + 32768);
-    msg.time = state1.time;
+    msg.state = state.buttons;
+    msg.target_x = htons(state.aim_x + 32768);
+    msg.target_y = htons(state.aim_y + 32768);
+    msg.time = state.time;
     
-    client->send(&msg, sizeof(NetPlayerInput), 0, NET_CHANNEL_STATE);
+    client->send(&msg, sizeof(NetPlayerInput), Client::PACKET_RELIABLE, NET_CHANNEL_STATE);
   }
-  else {
-    std::cout << "no moves" << std::endl;
-  }
+
+  toSend.clear();
 }
 
 void Control::onReceive(NetPacketType type, const Packet &packet) {
@@ -174,7 +154,7 @@ void Control::onReceive(NetPacketType type, const Packet &packet) {
 
     const Tank::Input *prev = lastInput(player->actor());
     if (prev) {
-      if (msg->time < prev->time) {
+      if (msg->time <= prev->time) {
         return;
       }
     }
@@ -185,6 +165,7 @@ void Control::onReceive(NetPacketType type, const Packet &packet) {
     state.aim_x = ntohs(msg->target_x) - 32768;
     state.aim_y = ntohs(msg->target_y) - 32768;
     states[player->actor()] = state;
+    tank->resetCount();
   }
 }
 
@@ -196,41 +177,21 @@ const Tank::Input *Control::lastInput(ActorId actor) const {
   return &iter->second;
 }
 
-/*
- * Player input -> create moves (create new when input changes, set time)
- * Control onTick: send the latest move (if it has changed, to begin with)
- * Server when sending latest move: add time since first receive
- * Client retrieves moves around the 'first receive time', or maybe it's the
- * last move.
- * Set state to the state received, but how much should be rewound?
- * -- Try without adding the timediff on the server
- */ 
-
 Control::MoveRange Control::history(float time) {
-/*  MoveRing::reverse_iterator iter = moves.rbegin(), e = moves.rend();
-  for (; iter != e && iter->delta.time != time; ++iter);
-  // FIXME: make sure there's no bug here if iter reaches moves.rend(),
-  // what happens when we return moves.rend().base()?
-  MoveRing::iterator fixed = iter.base();
-  MoveRing::reverse_iterator fixed2 = iter;
-  ++fixed;
-  ++fixed2;
-  std::cout << "requested: " << time << std::endl;
-  std::cout << "before: " << fixed->delta.time << std::endl;
-  std::cout << "at: " << iter->delta.time << std::endl;
-  std::cout << "after: " << fixed2->delta.time << std::endl;
-
-  MoveRing::iterator bo = iter.base();
-  ++bo;*/
-
-  // THIS IS WRONG NOW.
-  MoveBuffer::iterator iter = moves.begin();
-  for (; iter != moves.end(); ++iter) {
-    if (iter->delta.time == time)
+  MoveBuffer::reverse_iterator iter = moves.rbegin(), last = iter;
+  for (; iter != moves.rend(); ++iter) {
+    if (iter->delta.time < time) 
       break;
+    
+    last = iter;
   }
 
-  return Control::MoveRange(iter, moves.end());
+  // FIXME: better name
+  MoveBuffer::iterator baurgh = MoveBuffer::iterator(iter.base());
+  if (iter == moves.rend())
+    ++baurgh;
+  
+  return Control::MoveRange(baurgh, moves.end());
 }
 
 void Control::removeHistory(const MoveBuffer::iterator &first) {
