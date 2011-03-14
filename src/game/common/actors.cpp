@@ -213,15 +213,14 @@ void Actors::onReceive(NetPacketType type, const Packet &packet) {
         
         correctedState = corrected; // for rendering
         
-        if (diff > 5.0f) {
+        if (diff > 10.0f) {
           // a quick snap if too much error
           tankEntry->assign(corrected);
         }
         else if (diff >= 0.02f) {
           // lerp if minor
           Tank::State lerpState = current;
-          lerpState.pos = lerp(current.pos, corrected.pos, 0.1);
-          lerpState.base_dir = lerp(current.base_dir, corrected.base_dir, 0.1);
+          lerpState = lerp(current, corrected, 0.1);
           tankEntry->assign(lerpState);
 
         }
