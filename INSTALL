@@ -2,23 +2,26 @@
 Ubuntu (10.10) Development Environment
 ======================================
 
-Tools and libraries required (enet >= 1.3.0 must be downloaded from the net) 
-    $ sudo apt-get install cmake g++ libdevil-dev libglfw-dev libgl1-mesa-dev 
-      libglu1-mesa-dev
+Tools and libraries required 
+  $ sudo apt-get install cmake g++ libdevil-dev libglfw-dev libgl1-mesa-dev 
+    libglu1-mesa-dev
+
+Build for the development
+  $ cmake -DCMAKE_BUILD_TYPE=Debug . && make     
 
 Build and install
-    $ cmake -DCMAKE_INSTALL_PREFIX=/opt/snail-wail . && make && sudo make install
+  $ cmake -DCMAKE_INSTALL_PREFIX=/opt/snail-wail . && make && sudo make install
 
 Create Debian package
-    $ cmake -DCMAKE_INSTALL_PREFIX=/usr . && make && make package
+  $ cmake -DCMAKE_INSTALL_PREFIX=/usr . && make && make package
 
 
 Ubuntu (10.10) Debian Package
 =============================
 
 Runtime dependencies 
-    $ sudo apt-get install libglfw2 libdevil1c2
+  $ sudo apt-get install libglfw2 libdevil1c2
 
 Install the package 
-    $ sudo dpkg -i snail-wail_<version>_i383.deb
+  $ sudo dpkg -i snail-wail_<version>_i383.deb
 

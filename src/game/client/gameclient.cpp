@@ -114,7 +114,7 @@ float GameClient::localTime() const {
 
 void GameClient::onConnect() {
   _time = 0.0f;
-  std::cout << "*** connected!" << std::endl;
+  _log->write(Logging::DEBUG, "*** connected!");
 
   // send the identification packet
   NetIdentifyMsg msg;
@@ -125,7 +125,7 @@ void GameClient::onConnect() {
 }
 
 void GameClient::onDisconnect() {
-  std::cout << "disconnected" << std::endl;
+  _log->write(Logging::DEBUG, "disconnected");
 }
 
 void GameClient::onReceive(Packet *packet) {
@@ -133,8 +133,8 @@ void GameClient::onReceive(Packet *packet) {
   static int packetCount = 0;
   if (packetCount++ > 10) {
     packetCount = 0;
-    std::cout << "rtt: " << packet->sender()->stats(Client::STAT_RTT) << std::endl;
-    
+    _log->write(Logging::DEBUG, "rtt: %u", 
+      packet->sender()->stats(Client::STAT_RTT));
   }
   
   size_t size = packet->size();
@@ -157,7 +157,8 @@ void GameClient::onReceive(Packet *packet) {
 }
 
 void GameClient::onError(const NetErrorMsg *error, Packet *packet) {
-  std::cout << "Received error from server: " << error->desc << std::endl;
+  _log->write(Logging::DEBUG, "Received error from server: %s, code: %u", 
+    error->desc, error->error_code);
   disconnectGently();
 }
 

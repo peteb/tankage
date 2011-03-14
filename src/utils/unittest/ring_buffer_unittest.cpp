@@ -1,7 +1,9 @@
 
 #include <utils/ring_buffer.h>
 #include <gtest/gtest.h>
+
 #include <string>
+#include <algorithm> 
 
 
 TEST(utils_unittest, test_ring_buffer) {
@@ -14,12 +16,12 @@ TEST(utils_unittest, test_ring_buffer) {
   EXPECT_EQ(*(++it), "hashmander");   
 
   ring.push_back("herble");
-  EXPECT_EQ(std::distance(ring.begin(), ring.end()), (size_t)2);
+  EXPECT_EQ(std::distance(ring.begin(), ring.end()), 2);
 
   it = ring.begin();
   EXPECT_EQ(*it, "hashmander");
   EXPECT_EQ(*(++it), "herble");
-  EXPECT_EQ(std::distance(ring.rbegin(), ring.rend()), (size_t)2);
+  EXPECT_EQ(std::distance(ring.rbegin(), ring.rend()), 2);
 
   ring_buffer<std::string>::reverse_iterator rit = ring.rbegin(); 
   EXPECT_EQ(*rit, "herble");
@@ -28,11 +30,11 @@ TEST(utils_unittest, test_ring_buffer) {
   for (size_t i(0); i != 101; ++i) {
     ring.push_back("tokachu");
   } 
-  EXPECT_EQ(std::distance(ring.begin(), ring.end()), (size_t)2);
+  EXPECT_EQ(std::distance(ring.begin(), ring.end()), 2);
 
   ring.erase(ring.begin());
   EXPECT_EQ(*ring.begin(), "tokachu");
-  EXPECT_EQ(std::distance(ring.begin(), ring.end()), (size_t)1);
+  EXPECT_EQ(std::distance(ring.begin(), ring.end()), 1);
 
   // Testing erasing
   ring_buffer<std::string> new_ring(2);

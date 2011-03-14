@@ -10,6 +10,7 @@
 #include <engine/packet.h>
 #include <engine/network.h>
 #include <engine/portal.h>
+#include <engine/logging.h>
 
 #include <iostream>
 #include <cassert>
@@ -17,7 +18,7 @@
 #include <cstring>
 #include <algorithm>
 
-GameServer::GameServer() : _host(0) {
+GameServer::GameServer() : _host(0), _log(0) {
   
 }
 
@@ -27,7 +28,8 @@ GameServer::~GameServer() {
 
 void GameServer::init(const class Portal &interfaces) {
   Network *net = interfaces.requestInterface<Network>();
-
+  _log = interfaces.requestInterface<Logging>();
+  // TODO kaspars: This should be taken from cfg interface
   _host = net->startHost("0.0.0.0:12345", 32, 2);
 }
 
@@ -67,10 +69,11 @@ void GameServer::registerSystem(class ReplicatedSystem *system) {
 }
 
 void GameServer::onConnect(Client *client) {
-  std::cout << "new client: " << client->address() << "! :DD" << std::endl;
+  _log->write(Logging::DEBUG, "new client: %s ! :DD", 
+    client->address().c_str());    
   if (_sessions.find(client) != _sessions.end()) {
     // The client already exists, weird..
-    std::cout << "client already exists!" << std::endl;
+    _log->write(Logging::DEBUG, "client already exists!");
     // Fixme: throw exception, disconnect the connection
     return;
   }
@@ -80,7 +83,7 @@ void GameServer::onConnect(Client *client) {
 }
 
 void GameServer::onDisconnect(Client *client) {
-  std::cout << "client disconnected :(" << std::endl;
+  _log->write(Logging::DEBUG, "client disconnected :(");
 
   // Remove any client connection metadata
   SessionMap::iterator iter = _sessions.find(client);
@@ -146,7 +149,9 @@ void GameServer::onIdent(const NetIdentifyMsg *data, Packet *packet) {
   ident.client_version = ntohs(data->client_version);
   ident.net_version = ntohs(data->net_version);
   
-  std::cout << "net: received ident for net " << ident.net_version << std::endl;
+  _log->write(Logging::DEBUG, "net: received ident for net %u", 
+    ident.net_version);
+
   Client *client = packet->sender();
   ClientSession *clientSession = session(client);
 

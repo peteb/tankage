@@ -78,6 +78,11 @@ find_package(Curl)
 
 add_custom_target(unittest)
 
+add_custom_target(run-unittest 
+  ${PROJECT_ROOT_DIR}/cmake/Scripts/run-unittest.sh ${PROJECT_ROOT_DIR}
+)
+add_dependencies(run-unittest unittest)
+
 add_subdirectory(${PROJECT_ROOT_DIR}/src CMakeFiles/Src)
 add_subdirectory(${PROJECT_ROOT_DIR}/data CMakeFiles/Data)
 add_subdirectory(${PROJECT_ROOT_DIR}/3pp/twitcurl CMakeFiles/Twitcurl)
