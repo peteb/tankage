@@ -32,9 +32,7 @@ Tank::Tank(ActorId id, const SystemContext *ctx)
   , radius(29.0f)
   , _id(id)
 {
-  //std::fill(_state, _state + STATE_MAX, 0);
   secondsSinceFire = 0.0;
-  //sinceSnap = 0.0;
   health = 100;
   _dir = 0.0f;
   _speed = 0.0f;
@@ -42,7 +40,6 @@ Tank::Tank(ActorId id, const SystemContext *ctx)
   _turretDir = 0.0f;
   
   resetCount();
-  //sinceHistory = 0.0;
 }
 
 Tank::~Tank() {
@@ -171,22 +168,21 @@ bool Tank::advance(const Input &delta, double time) {
   _dir = Wrap(_dir, 0.0, 360.0);
   _turretDir = Wrap(_turretDir, 0.0, 360.0);
   
-/*  if (delta.buttons & STATE_SHOOT) {// FIXME: rename SHOOT to SHOOTING
-    if (secondsSinceFire >= 0.2) {
-      vec2 dir = vec2::FromDirection(_turretDir);
-
-      if (!_snapshotted) {
+  if (delta.buttons & STATE_SHOOT) {// FIXME: rename SHOOT to SHOOTING
+    if (secondsSinceFire >= 0.8) {
+      vec2 dir = vec2::FromDegrees(_turretDir);
+      
         context->projectiles()->spawnProjectile(
           Projectiles::PROJECTILE_BULLET,
           _position + dir * 32.0f,
           _turretDir,
           _id);
-      }
+
       
-      secondsSinceFire = 0.0;
+        secondsSinceFire = 0.0;
     }
     
-    }*/
+  }
 
   return true;
 }
