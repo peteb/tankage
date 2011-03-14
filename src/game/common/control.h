@@ -41,7 +41,6 @@ private:
   int keyUp, keyDown, keyLeft, keyRight, keyShoot;
   class Input *input;
   class Config *config;
-  std::string snail;
   MoveBuffer moves;
   std::vector<Tank::Input> toSend;
   std::map<ActorId, Tank::Input> states;

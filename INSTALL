@@ -10,7 +10,7 @@ Build for the development
   $ cmake -DCMAKE_BUILD_TYPE=Debug . && make     
 
 Build and install
-  $ cmake -DCMAKE_INSTALL_PREFIX=/opt/snail-wail . && make && sudo make install
+  $ cmake -DCMAKE_INSTALL_PREFIX=/opt/tankage . && make && sudo make install
 
 Create Debian package
   $ cmake -DCMAKE_INSTALL_PREFIX=/usr . && make && make package
@@ -23,5 +23,5 @@ Runtime dependencies
   $ sudo apt-get install libglfw2 libdevil1c2
 
 Install the package 
-  $ sudo dpkg -i snail-wail_<version>_i383.deb
+  $ sudo dpkg -i tankage<version>_i383.deb
 

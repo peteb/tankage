@@ -1,2 +1,2 @@
 #!/bin/sh
-mkdir -p /usr/share/snail-wail/data
+mkdir -p /usr/share/tankage/data

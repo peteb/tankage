@@ -2,7 +2,7 @@
 
 include_directories(${PROJECT_ROOT_DIR})
 
-add_executable(snail-wail
+add_executable(tankage
   # common stuff
   ${GAME_ROOT_DIR}/common/actors.cpp
   ${GAME_ROOT_DIR}/common/tank.cpp
@@ -25,9 +25,9 @@ add_executable(snail-wail
   gameclient.cpp
   )
   
-target_link_libraries(snail-wail
+target_link_libraries(tankage
   engine
   )
 
-INSTALL(TARGETS snail-wail DESTINATION bin)
+INSTALL(TARGETS tankage DESTINATION bin)
 

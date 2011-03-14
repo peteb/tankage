@@ -1,2 +1,2 @@
 #!/bin/sh
-rm -rf /usr/share/snail-wail
+rm -rf /usr/share/tankage

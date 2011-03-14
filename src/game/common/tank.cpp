@@ -208,12 +208,12 @@ void Tank::takeDamage(const vec2 &pos, float damage) {
   std::cout << std::string(normalized(_position - pos)) << std::endl;
   
   health -= static_cast<int>(damage);
-  std::cout << "snail: I received " << damage
+  std::cout << "tank: I received " << damage
             << " amount of hurt >:-/" << std::endl;
 }
 
 bool Tank::takeItem(const std::string &type, int amount) {
-  std::cout << "snail: I received " << amount
+  std::cout << "tank: I received " << amount
             << " amount of " << type << std::endl;
   
   return true; // we took it
