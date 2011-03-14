@@ -79,7 +79,9 @@ void Actors::render() {
 
     if (predictDelta) {
       // Client side prediction, but also updating on the server side
-      tank->advance(*predictDelta, dt);
+      for (double i = 0.0; i < dt; i += 0.001) {
+        tank->advance(*predictDelta, 0.001);
+      }
     }
 
     tank->render(graphics);

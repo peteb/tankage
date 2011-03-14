@@ -25,7 +25,8 @@
 *** DONE Replicate user input to server
 *** DONE Replicate projectiles
 *** TODO Improve network smoothness
-*** TODO Client prediction    
+*** DONE Client prediction
+*** TODO Shooting    
 *** TODO Items should be removed (bullets, tanks, players)    
 ** --: "Tanks are Dangerous..."
 *** DoD: kill other tanks, collide with terrain and other tanks
