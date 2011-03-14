@@ -128,6 +128,8 @@ inline Tank::State lerp(const Tank::State &begin, const Tank::State &end, double
   ret.actor = begin.actor;
   ret.pos = ::lerp(begin.pos, end.pos, scalar);
   ret.base_dir = ::lerp(begin.base_dir, end.base_dir, scalar);
+  ret.turret_dir = ::lerp(begin.turret_dir, end.turret_dir, scalar);
+  
   return ret;
 
 }

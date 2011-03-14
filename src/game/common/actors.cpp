@@ -149,7 +149,6 @@ void replay(const Control::MoveRange &moves,
        time.second);
         
     double duration = clamped_endtime - ofs;
-    double tim = 0.0;
 
     // FIXME: is this really the best way?
     for (double tim = 0.0; tim <= duration; tim += 0.001) {
@@ -215,10 +214,14 @@ void Actors::onReceive(NetPacketType type, const Packet &packet) {
         
         if (diff > 10.0f) {
           // a quick snap if too much error
+          std::cout << "snap!" << std::endl;
           tankEntry->assign(corrected);
         }
         else if (diff >= 0.02f) {
           // lerp if minor
+          // FIXME: lerping and probably be done smoother if added to the tank
+          // something like, tank->setTargetState(...);
+          
           Tank::State lerpState = current;
           lerpState = lerp(current, corrected, 0.1);
           tankEntry->assign(lerpState);

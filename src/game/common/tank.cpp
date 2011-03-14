@@ -56,6 +56,7 @@ void Tank::setTexture(Texture *texture, Texture *turret) {
 void Tank::assign(const Tank::State &state) {
   _position = state.pos;
   _dir = state.base_dir;
+  _turretDir = state.turret_dir;
 }
 
 Tank::State Tank::snapshot() const {
@@ -146,27 +147,8 @@ bool Tank::advance(const Input &delta, double time) {
 
   _position += vDir * _speed * time;
 
-/*  if (delta.buttons & STATE_TURN_RIGHT) {
-    _rotSpeed = std::min(_rotSpeed + 800.0f * time, 120.0);
-    if (_speed > 0.0)
-      _speed -= 140.0 * time;
-  }
-  else if (delta.buttons & STATE_TURN_LEFT) {
-    _rotSpeed = std::max(_rotSpeed - 800.0f * time, -120.0);    
-    if (_speed > 0.0)
-      _speed -= 140.0 * time;
-  }
-  else {
-    if (_rotSpeed > 0.0)
-      _rotSpeed = std::max(_rotSpeed -= 800.0f * time, 0.0f);
-    else
-      _rotSpeed = std::min(_rotSpeed += 800.0f * time, 0.0f);
-  }
-  
-*/
 
-    
-  vec2 targetDiff = normalized(cursorPos - _position);
+  vec2 targetDiff = normalized(vec2(delta.aim_x, delta.aim_y) - _position);
   double targetDir = atan2(targetDiff.y, targetDiff.x) / M_PI * 180.0;
   double angle = Wrap(targetDir - _turretDir, 0.0, 360.0);
 
