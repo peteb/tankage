@@ -37,7 +37,8 @@ private:
   class WindowManager *wm;
   class Texture *tankBase;
   class Texture *tankTurret;
-  
+
+  Tank::State correctedState;
   TankVector tanks;
   double lastUpdate;
   ActorId lastId;

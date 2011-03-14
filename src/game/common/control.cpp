@@ -53,7 +53,7 @@ void Control::update() {
   }
 
   Tank::Input newState = currentState();
-  if (state.buttons != newState.buttons) {// || state.aim_x != newState.aim_x || state.aim_y != newState.aim_y) {
+  if (state.buttons != newState.buttons || state.aim_x != newState.aim_x || state.aim_y != newState.aim_y) {
     // Input changed
 
     newState.time = wm->timeSeconds();
@@ -108,6 +108,8 @@ void Control::onTick(Client *client) {
   if (!target) {
     return;
   }
+
+  // FIXME: move NetPlayerInput -> Tank::Input to Input class
 
   for (size_t i = 0; i < toSend.size(); ++i) {
     const Tank::Input &input = toSend[i];

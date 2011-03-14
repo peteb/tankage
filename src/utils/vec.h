@@ -38,7 +38,7 @@ public:
   
   static vec2 Zero();
   static vec2 Identity();
-  static vec2 FromDirection(double degrees);
+  static vec2 FromDegrees(double degrees);
   
   float x;
   float y;

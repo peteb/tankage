@@ -5,6 +5,7 @@
 
 #include <utils/vec.h>
 #include <vector>
+#include <utils/algorithm.h>
 
 typedef int ActorId;
 
@@ -43,7 +44,34 @@ public:
     State() {}
     State(const NetTankSnapshot &snapshot);
     operator NetTankSnapshot() const;
+
+    /*   State operator +(const State &other) const {
+      State ret;
+      ret.actor = actor;
+      ret.pos = pos + other.pos;
+      ret.base_dir = base_dir + other.base_dir;
+
+      return ret;
+    }
+
+    State operator -(const State &other) const {
+      State ret;
+      ret.actor = actor;
+      ret.pos = pos - other.pos;
+      ret.base_dir = base_dir - other.base_dir;
+
+      return ret;
+    }
     
+    State operator *(double scalar) const {
+      State ret;
+      ret.actor = actor;
+      ret.pos = pos * scalar;
+      ret.base_dir = base_dir * scalar;
+
+      return ret;
+    }*/
+
     ActorId actor;
     vec2 pos;
     float base_dir;
@@ -93,10 +121,18 @@ private:
   double _count;
   double secondsSinceFire;
   int health;
-  bool _snapshotted;
 };
 
+inline Tank::State lerp(const Tank::State &begin, const Tank::State &end, double scalar) {
+  Tank::State ret;
+  ret.actor = begin.actor;
+  ret.pos = ::lerp(begin.pos, end.pos, scalar);
+  ret.base_dir = ::lerp(begin.base_dir, end.base_dir, scalar);
+  ret.turret_dir = ::lerp(begin.turret_dir, end.turret_dir, scalar);
+  
+  return ret;
 
+}
 
 
 #endif // !GAME_COMMON_TANK_H
