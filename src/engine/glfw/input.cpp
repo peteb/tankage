@@ -8,13 +8,21 @@
 // Called by glfw/wm.cpp
 namespace Glfw {
 void GLFWCALL KeyStateChange(int key, int state) {
+  std::cout << "KEYSTATE: " << key << " - " << state << std::endl;
   Glfw::Input::instance().onKeyStateChange(key, state);
 }
 }
 
 
 bool Glfw::Input::keyPressed(int key) {
-  return glfwGetKey(key) == GLFW_PRESS;
+  // return glfwGetKey(key) == GLFW_PRESS;
+  KeyStateRange keyRange = findKeyStates(key);
+  if (keyRange.first == keyRange.second) {
+    // Key has not received any updates
+    return false;
+  }
+
+  return keyRange.first->second & KEY_STATE_BEING_PRESSED;
 }
 
 int Glfw::Input::keycode(const std::string &key) {
@@ -46,10 +54,18 @@ void Glfw::Input::onKeyStateChange(int key, int state) {
   if (stateElements.first != stateElements.second) {
     KeyState &foundState = stateElements.first->second;
     foundState |= (state ? KEY_STATE_PRESSED : KEY_STATE_RELEASED);
+
+    if (state) {
+      foundState |= KEY_STATE_BEING_PRESSED;
+    }
+    else {
+      foundState &= ~KEY_STATE_BEING_PRESSED;
+    }
   }
   else {
     // This key has not received state updates earlier, add it.
-    KeyState initialState = (state ? KEY_STATE_PRESSED : KEY_STATE_RELEASED);
+    KeyState initialState = (state ? KEY_STATE_PRESSED | KEY_STATE_BEING_PRESSED
+                             : KEY_STATE_RELEASED);
     
     keyStates.insert(stateElements.first, std::make_pair(key, initialState));
     std::sort(keyStates.begin(), keyStates.end(), key_cmp());
@@ -60,9 +76,10 @@ bool Glfw::Input::keyWasPressed(int key) {
   KeyStateRange keyRange = findKeyStates(key);
   if (keyRange.first == keyRange.second) {
     // Key has not received any updates
+    std::cout << "no updates" << std::endl;
     return false;
   }
-  
+
   const bool wasPressed = keyRange.first->second & KEY_STATE_PRESSED;
   keyRange.first->second &= ~KEY_STATE_PRESSED;
   return wasPressed;

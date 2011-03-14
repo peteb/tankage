@@ -22,7 +22,8 @@ public:
 private:
   enum {
     KEY_STATE_PRESSED  = 0x01,
-    KEY_STATE_RELEASED = 0x02
+    KEY_STATE_RELEASED = 0x02,
+    KEY_STATE_BEING_PRESSED = 0x04
   };
     
   typedef unsigned char KeyState;
