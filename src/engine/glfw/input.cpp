@@ -8,7 +8,6 @@
 // Called by glfw/wm.cpp
 namespace Glfw {
 void GLFWCALL KeyStateChange(int key, int state) {
-  std::cout << "KEYSTATE: " << key << " - " << state << std::endl;
   Glfw::Input::instance().onKeyStateChange(key, state);
 }
 }
@@ -76,7 +75,6 @@ bool Glfw::Input::keyWasPressed(int key) {
   KeyStateRange keyRange = findKeyStates(key);
   if (keyRange.first == keyRange.second) {
     // Key has not received any updates
-    std::cout << "no updates" << std::endl;
     return false;
   }
 
