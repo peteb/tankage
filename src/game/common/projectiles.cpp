@@ -95,14 +95,11 @@ void Projectiles::onReceive(NetPacketType type, const Packet &packet) {
       const NetProjectileSnapshot &snapshot = msg->snaps[i];
       const uint32_t projectileId = ntohs(snapshot.id);
 
-      if (Projectile *ile = projectile(projectileId)) { 
-        ile->onSnap(snapshot);
-      } else {
-        Projectile *newProjectile = new Projectile(context, projectileId);
-        newProjectile->setTexture(bulletTexture);
-        newProjectile->onSnap(snapshot);
-        projectiles.push_back(newProjectile);
-      }
+      Projectile *ile = projectile(projectileId);
+      if (!ile) {
+        ile = createProjectile(projectileId);
+      } 
+      ile->onSnap(snapshot); 
     } // for
   }
 } // onReceive
@@ -116,5 +113,12 @@ Projectile *Projectiles::projectile(ProjectileId id) const {
     }
   }
   return ile;
-} // projectile
+}
+
+Projectile *Projectiles::createProjectile(ProjectileId id) {
+  Projectile *ile = new Projectile(context, id);
+  ile->setTexture(bulletTexture);
+  projectiles.push_back(ile);
+  return ile;
+}
 

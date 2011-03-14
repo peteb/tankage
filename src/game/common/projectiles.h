@@ -42,6 +42,7 @@ private:
   uint32_t projectileId;
 
   Projectile *projectile(ProjectileId id) const; 
+  Projectile *createProjectile(ProjectileId id);
 };
 
 #endif // !GAME_ITEMS_H
