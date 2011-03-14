@@ -123,8 +123,7 @@ private:
   int health;
 };
 
-template<>
-inline Tank::State lerp<>(const Tank::State &begin, const Tank::State &end, double scalar) {
+inline Tank::State lerp(const Tank::State &begin, const Tank::State &end, double scalar) {
   Tank::State ret;
   ret.actor = begin.actor;
   ret.pos = ::lerp(begin.pos, end.pos, scalar);
