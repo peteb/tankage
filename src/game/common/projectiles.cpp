@@ -95,24 +95,26 @@ void Projectiles::onReceive(NetPacketType type, const Packet &packet) {
       const NetProjectileSnapshot &snapshot = msg->snaps[i];
       const uint32_t projectileId = ntohs(snapshot.id);
 
-      // FIXME: make this look better
-      // FIXME: 
-      bool found = false;
-      for (size_t a = 0; a < projectiles.size(); ++a) {
-        if (projectiles[a]->id() == projectileId) {
-          projectiles[a]->onSnap(snapshot);
-          found = true;
-          break;
-        }
-      }
-
-      if (!found) {
+      if (Projectile *ile = projectile(projectileId)) { 
+        ile->onSnap(snapshot);
+      } else {
         Projectile *newProjectile = new Projectile(context, projectileId);
         newProjectile->setTexture(bulletTexture);
         newProjectile->onSnap(snapshot);
         projectiles.push_back(newProjectile);
       }
-    }
-
+    } // for
   }
-}
+} // onReceive
+
+Projectile *Projectiles::projectile(ProjectileId id) const {
+  Projectile *ile = 0;
+  for (size_t a(0); a != projectiles.size(); ++a) {
+    if (projectiles[a]->id() == projectileId) {
+      ile = projectiles[a];
+      break;
+    }
+  }
+  return ile;
+} // projectile
+

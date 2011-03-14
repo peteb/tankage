@@ -39,7 +39,9 @@ private:
   
   ProjectileVector projectiles;
   double lastUpdate;
-  int projectileId;
+  uint32_t projectileId;
+
+  Projectile *projectile(ProjectileId id) const; 
 };
 
 #endif // !GAME_ITEMS_H

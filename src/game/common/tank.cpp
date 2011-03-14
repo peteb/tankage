@@ -28,9 +28,9 @@
 
 
 Tank::Tank(ActorId id, const SystemContext *ctx)
-  : context(ctx)
+  : _id(id)
+  , context(ctx)
   , radius(29.0f)
-  , _id(id)
 {
   secondsSinceFire = 0.0;
   health = 100;
