@@ -168,7 +168,7 @@ bool Tank::advance(const Input &delta, double time) {
   _dir = Wrap(_dir, 0.0, 360.0);
   _turretDir = Wrap(_turretDir, 0.0, 360.0);
   
-  if (delta.buttons & STATE_SHOOT) {// FIXME: rename SHOOT to SHOOTING
+  if (delta.buttons & STATE_SHOOTING) {
     if (secondsSinceFire >= 0.8) {
       vec2 dir = vec2::FromDegrees(_turretDir);
       

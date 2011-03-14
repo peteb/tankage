@@ -80,7 +80,7 @@ Tank::Input Control::currentState() const {
     {Tank::STATE_MOVE_DOWN, keyDown},
     {Tank::STATE_TURN_RIGHT, keyRight},
     {Tank::STATE_TURN_LEFT, keyLeft},
-    {Tank::STATE_SHOOT, keyShoot}};
+    {Tank::STATE_SHOOTING, keyShoot}};
 
   // Map keycodes to bits
   for (size_t i = 0; i < 5; ++i) {
