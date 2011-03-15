@@ -30,7 +30,7 @@ private:
   typedef std::vector<Tank *> TankVector;
 
   Tank *createTank(const NetTankSnapshot &net_snapshot);
-  Tank::State rebaseHistory(double time, const Tank::State &newState, Tank *tank);
+  TankState rebaseHistory(double time, const TankState &newState, Tank *tank);
   
   double gameTime;
   class Graphics *graphics;
@@ -38,7 +38,6 @@ private:
   class Texture *tankBase;
   class Texture *tankTurret;
 
-  Tank::State correctedState;
   TankVector tanks;
   double lastUpdate;
   ActorId lastId;

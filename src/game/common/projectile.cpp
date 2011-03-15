@@ -29,7 +29,7 @@ bool Projectile::update(double dt) {
   vec2 hitPos;
   Tank *hit = ctx->actors()->intersectingTank(prevPos, position, 1.0f, shooterId, hitPos);
   if (hit) {
-    hit->takeDamage(hitPos, 10.0f);
+    //hit->takeDamage(hitPos, 10.0f);
     return false;
   }
 
