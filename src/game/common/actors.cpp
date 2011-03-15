@@ -124,13 +124,15 @@ void Actors::onTick(class Client *client) {
 
 
 namespace {
-void replay(const Control::MoveRange &moves,
-            Tank *target,
+TankState replay(const Control::MoveRange &moves,
+            const TankState &startState,
             const std::pair<double, double> &time)
 {
   typedef Control::MoveRange::first_type iterator;
-  double ofs = time.first;
 
+  double ofs = time.first;
+  TankState state = startState;
+  
   for (iterator iter = moves.first, next = ++iterator(moves.first);
        iter != moves.second;
        ++iter, ++next)
@@ -141,31 +143,26 @@ void replay(const Control::MoveRange &moves,
        time.second);
         
     double duration = clamped_endtime - ofs;
-    target->state().advance(iter->delta, duration);
+    state.advance(iter->delta, duration);
     
     ofs += duration;
   }
+
+  return state;
 }
 }
 
+/*
+ * Rebase History; insert a new version of the past at a specific time and
+ * calculate how that would change the present.
+ */
 TankState Actors::rebaseHistory(double time, const TankState &newState, Tank *tank) {
   TankState ret = newState;
   Control::MoveRange history = context->control()->history(time);
   
   if (history.first != history.second) {
-    TankState initial_state = tank->state();
-    double initial_count = tank->count();
-
-    tank->state() = newState; // rewind history
-    replay(history, tank, std::make_pair(time, gameTime + 1.0/20.0));
-    ret = tank->state();
+    ret = replay(history, newState, std::make_pair(time, gameTime + 1.0/20.0));
     // FIXME: get tickrate (1.0/2.0) from server
-
-    // FIXME: instead of doing this below, we could maybe get a copy of the tank
-    // object, thus avoiding any side-effects. Need to make sure the copy can be
-    // done fast (preferably just a copy of Tank::State)
-    tank->state() = initial_state;
-    tank->resetCount(initial_count);
   }
 
   return ret;

@@ -72,7 +72,7 @@ public:
   
   void render(class Graphics *graphics);
   void update(double dt); // render, create projectiles, crush
-                            // opponents, manipulate TankState, etc.
+                          // opponents, manipulate TankState, etc.
 
   ActorId id() const {return _state.actor; }
   TankState &state();
