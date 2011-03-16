@@ -79,7 +79,7 @@ PlayerInput Control::currentState() const {
     {PlayerInput::STATE_MOVE_DOWN, keyDown},
     {PlayerInput::STATE_TURN_RIGHT, keyRight},
     {PlayerInput::STATE_TURN_LEFT, keyLeft},
-    {PlayerInput::STATE_SHOOT, keyShoot}};
+    {PlayerInput::STATE_SHOOTING, keyShoot}};
 
   /*
     SHOOTING is not really a move. It should not have an impact on

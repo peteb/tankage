@@ -27,8 +27,6 @@
 #include <cmath>
 
 
-
-
 namespace {
 const float MAX_DELTA_TIME = 1.0 / 30.0;
 
@@ -124,15 +122,6 @@ void TankState::integrate(const PlayerInput &delta, double dt) {
   base_dir = wrap(base_dir, 0.0, 360.0);
   turret_dir = wrap(turret_dir, 0.0, 360.0);
 }
-
-
-
-
-
-
-
-
-
 
 
 Tank::Tank(const SystemContext *ctx)

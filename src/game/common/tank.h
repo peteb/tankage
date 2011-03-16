@@ -22,7 +22,7 @@ struct PlayerInput {
     STATE_MOVE_DOWN =  0x02,
     STATE_TURN_LEFT =  0x04,
     STATE_TURN_RIGHT = 0x08,
-    STATE_SHOOT =      0x10
+    STATE_SHOOTING =   0x10
   };
 
 };
