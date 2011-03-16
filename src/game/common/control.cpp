@@ -22,7 +22,6 @@ Control::Control()
   : ReplicatedSystem(CLIENT_TICK|SERVER_RECEIVE)
   , moves(300)
 {
-  inputBegan = 0.0;
   state.buttons = -1;
   state.aim_x = 0;
   state.aim_y = 0;
@@ -52,7 +51,7 @@ void Control::update() {
     return;
   }
 
-  Tank::Input newState = currentState();
+  PlayerInput newState = currentState();
   if (state.buttons != newState.buttons || state.aim_x != newState.aim_x || state.aim_y != newState.aim_y) {
     // Input changed
 
@@ -62,30 +61,37 @@ void Control::update() {
 
     Move stateMove;
     stateMove.delta = newState;
-    stateMove.absolute = target->snapshot();
+    stateMove.absolute = target->state();
     target->resetCount();
     moves.push_back(stateMove);
     toSend.push_back(newState);
   }
 }
 
-Tank::Input Control::currentState() const {
-  Tank::Input ret;
+PlayerInput Control::currentState() const {
+  PlayerInput ret;
   ret.buttons = 0;
   ret.aim_x = 0;
   ret.aim_y = 0;
   
-  struct {Tank::Buttons state; int keycode; } stateMap[] = {
-    {Tank::STATE_MOVE_UP, keyUp},
-    {Tank::STATE_MOVE_DOWN, keyDown},
-    {Tank::STATE_TURN_RIGHT, keyRight},
-    {Tank::STATE_TURN_LEFT, keyLeft},
-    {Tank::STATE_SHOOTING, keyShoot}};
+  struct {PlayerInput::Buttons state; int keycode; } stateMap[] = {
+    {PlayerInput::STATE_MOVE_UP, keyUp},
+    {PlayerInput::STATE_MOVE_DOWN, keyDown},
+    {PlayerInput::STATE_TURN_RIGHT, keyRight},
+    {PlayerInput::STATE_TURN_LEFT, keyLeft},
+    {PlayerInput::STATE_SHOOTING, keyShoot}};
 
+  /*
+    SHOOTING is not really a move. It should not have an impact on
+    prediction.
+    Also, don't create projectiles on client. Only work on server data.
+    
+   */
+  
   // Map keycodes to bits
   for (size_t i = 0; i < 5; ++i) {
     const int keycode = stateMap[i].keycode;
-    const Tank::Buttons state = stateMap[i].state;
+    const PlayerInput::Buttons state = stateMap[i].state;
       
     if (input->keyPressed(keycode)) {
       ret.buttons |= state;
@@ -112,7 +118,6 @@ void Control::onTick(Client *client) {
   // FIXME: move NetPlayerInput -> Tank::Input to Input class
 
   for (size_t i = 0; i < toSend.size(); ++i) {
-    const Tank::Input &input = toSend[i];
     NetPlayerInput msg;
     msg.type = NET_PLAYER_INPUT;
     msg.state = state.buttons;
@@ -154,14 +159,14 @@ void Control::onReceive(NetPacketType type, const Packet &packet) {
       return;
     }
 
-    const Tank::Input *prev = lastInput(player->actor());
+    const PlayerInput *prev = lastInput(player->actor());
     if (prev) {
       if (msg->time <= prev->time) {
         return;
       }
     }
     
-    Tank::Input state;
+    PlayerInput state;
     state.time = msg->time;
     state.buttons = msg->state;
     state.aim_x = ntohs(msg->target_x) - 32768;
@@ -171,8 +176,8 @@ void Control::onReceive(NetPacketType type, const Packet &packet) {
   }
 }
 
-const Tank::Input *Control::lastInput(ActorId actor) const {
-  std::map<ActorId, Tank::Input>::const_iterator iter = states.find(actor);
+const PlayerInput *Control::lastInput(ActorId actor) const {
+  std::map<ActorId, PlayerInput>::const_iterator iter = states.find(actor);
   if (iter == states.end())
     return NULL;
 

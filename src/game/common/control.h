@@ -15,9 +15,10 @@
 
 class Control : public ReplicatedSystem {
 public:
+
   struct Move {
-    Tank::Input delta;
-    Tank::State absolute;
+    PlayerInput delta;
+    TankState absolute;
   };
 
   typedef ring_buffer<Move> MoveBuffer;
@@ -28,13 +29,13 @@ public:
   void init(const class Portal &interfaces);
   void update();
   void onReceive(NetPacketType type, const class Packet &packet);
-  const Tank::Input *lastInput(ActorId actor) const;
+  const PlayerInput *lastInput(ActorId actor) const;
   MoveRange history(float time);
   void removeHistory(const MoveBuffer::iterator &first);
   
 private:  
   void onTick(class Client *client);
-  Tank::Input currentState() const;
+  PlayerInput currentState() const;
   
   class WindowManager *wm;
   double lastTick;
@@ -42,13 +43,10 @@ private:
   class Input *input;
   class Config *config;
   MoveBuffer moves;
-  std::vector<Tank::Input> toSend;
-  std::map<ActorId, Tank::Input> states;
+  std::vector<PlayerInput> toSend;
+  std::map<ActorId, PlayerInput> states;
+  PlayerInput state; // FIXME: prevstate
   
-  
-  // data that will be replicated
-  double inputBegan;
-  Tank::Input state;
 };
 
 #endif // !GAME_CONTROL_H
