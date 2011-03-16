@@ -24,12 +24,12 @@ Projectile::Projectile(const SystemContext *ctx, uint32_t id)
 
 bool Projectile::update(double dt) {
   const vec2 prevPos = position;
-  position += velocity * dt;
+  position += velocity * dt; // FIXME: do like in tank. separate into state.
   
   vec2 hitPos;
   Tank *hit = ctx->actors()->intersectingTank(prevPos, position, 1.0f, shooterId, hitPos);
   if (hit) {
-    //hit->takeDamage(hitPos, 10.0f);
+    hit->takeDamage(hitPos, 10.0f);
     return false;
   }
 
@@ -72,11 +72,11 @@ void Projectile::onSnap(const NetProjectileSnapshot &netshot) {
   snapshot.x = ntohs(netshot.x);
   snapshot.y = ntohs(netshot.y);
 
-  const vec2 lastPos = position;
+  //const vec2 lastPos = position;
   vec2 newPos(snapshot.x, snapshot.y);
-  if (length(newPos - position) >= 2.0) {
+  //if (length(newPos - position) >= 2.0) {
     position = newPos;
-  }
+    //}
 
   velocity = vec2::FromDegrees(ntohs(netshot.dir) - 180.0) * 1000.0;
 }

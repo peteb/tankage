@@ -64,6 +64,8 @@ TankState::operator NetTankSnapshot() const {
 
 
 void TankState::advance(const PlayerInput &delta, double duration) {
+  shooting = (delta.buttons & PlayerInput::STATE_SHOOT);
+  
   for (; duration >= MAX_DELTA_TIME; duration -= MAX_DELTA_TIME) {
     integrate(delta, MAX_DELTA_TIME);
   }
@@ -136,6 +138,10 @@ void TankState::integrate(const PlayerInput &delta, double dt) {
 Tank::Tank(const SystemContext *ctx)
   : context(ctx)
 {
+  _reload_time = 0.0;
+  _health = 100.0f;
+  _radius = 15.0f;
+  _alive = true;
 }
 
 void Tank::setTexture(Texture *texture, Texture *turret) {
@@ -161,8 +167,47 @@ void Tank::render(Graphics *graphics) {
   }
 }
 
-void Tank::update(double dt) {
+// FIXME: bool -> some enum
+bool Tank::update(double dt) {
+  if (!_alive) {
+    return false;
+  }
+  
   _count += dt;
+  if (_reload_time > 0.0) {
+    _reload_time -= dt;
+  }
+  
+  if (_state.shooting && _reload_time <= 0.0) {
+    _reload_time = 1.0;
+    shoot();
+  }
+
+  return _alive;
+}
+
+void Tank::shoot() {
+  if (context->isServer()) {
+    std::cout << "shoot" << std::endl;
+    vec2 turret_diff = vec2::FromDegrees(_state.turret_dir);
+    context->projectiles()->spawnProjectile(Projectiles::PROJECTILE_BULLET,
+                                            _state.pos + turret_diff,
+                                            _state.turret_dir,
+                                            id());
+  }
+}
+
+void Tank::die() {
+  std::cout << "I died." << std::endl;
+  _alive = false;
+}
+
+void Tank::takeDamage(const vec2 &pos, float damage) {
+  _health -= damage;
+
+  if (_health <= 0.0f) {
+    die();
+  }
 }
 
 const TankState &Tank::state() const {
@@ -185,12 +230,12 @@ double Tank::count() const {
 
 bool Tank::intersects(const vec2 &start, const vec2 &end,
                        float radius, vec2 &hitpos) const {
-/*  vec2 closest = closest_point(start, end, _position);
-  if (length(_position - closest) <= radius + this->radius) {
+  vec2 closest = closest_point(start, end, _state.pos);
+  if (length(_state.pos - closest) <= radius + _radius) {
     hitpos = closest;
     return true;
   }
-*/
+  
   return false;
 }
 

@@ -21,6 +21,8 @@ public:
   
   void set(unsigned id, class System *system);
 
+  bool isServer() const {return systems[SYSTEM_GAMESERVER]; }
+  
   template<typename T>
   T *system(unsigned id) const {
     return reinterpret_cast<T *>(resolveSystem(id));

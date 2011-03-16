@@ -45,6 +45,7 @@ public:
   vec2 pos;
   float base_dir;
   float turret_dir;
+  bool shooting;
   // radius might be needed if the TankState should check for
   // collisions. then we also need to know more stuff, like context.
   // I don't like bloating this class that much.
@@ -71,7 +72,7 @@ public:
   Tank(const class SystemContext *ctx);
   
   void render(class Graphics *graphics);
-  void update(double dt); // render, create projectiles, crush
+  bool update(double dt); // render, create projectiles, crush
                           // opponents, manipulate TankState, etc.
 
   ActorId id() const {return _state.actor; }
@@ -82,7 +83,7 @@ public:
   // will not be called during rewind/replay etc.
   void assign(const TankState &new_state);
 
-  //void takeDamage(const vec2 &pos, float damage);
+  void takeDamage(const vec2 &pos, float damage);
   //bool takeItem(const std::string &type, int amount);
   void resetCount(double time = 0.0);
   double count() const;
@@ -92,7 +93,15 @@ public:
   
   void setTexture(class Texture *texture, class Texture *turret);
 private:
+  void shoot();
+  void die();
+  
   double _count;
+  double _reload_time;
+  float _health;
+  float _radius;
+  bool _alive;
+  
   TankState _state;
   const class SystemContext *context;
   class Texture *texture, *_turret;

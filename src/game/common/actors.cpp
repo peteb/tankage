@@ -89,6 +89,7 @@ void Actors::render() {
       tank->assign(state);
     }
 
+    // FIXME: remove tank if update returns false
     tank->update(dt);
     tank->render(graphics);
   }  
