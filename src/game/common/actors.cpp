@@ -63,6 +63,7 @@ Tank *Actors::createActor() {
   newTank->setTexture(tankBase, tankTurret);
 
   TankState initial_state;
+  initial_state.pos = vec2(400.0f, 300.0f);
   initial_state.actor = ++lastId;
   
   newTank->assign(initial_state);
