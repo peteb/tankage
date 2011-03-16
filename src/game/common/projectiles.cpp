@@ -108,7 +108,7 @@ void Projectiles::onReceive(NetPacketType type, const Packet &packet) {
 Projectile *Projectiles::projectile(ProjectileId id) const {
   Projectile *ile = 0;
   for (size_t a(0); a != projectiles.size(); ++a) {
-    if (projectiles[a]->id() == projectileId) {
+    if (projectiles[a]->id() == id) {
       ile = projectiles[a];
       break;
     }

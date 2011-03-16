@@ -62,7 +62,7 @@ TankState::operator NetTankSnapshot() const {
 
 
 void TankState::advance(const PlayerInput &delta, double duration) {
-  shooting = (delta.buttons & PlayerInput::STATE_SHOOT);
+  shooting = (delta.buttons & PlayerInput::STATE_SHOOTING);
   
   for (; duration >= MAX_DELTA_TIME; duration -= MAX_DELTA_TIME) {
     integrate(delta, MAX_DELTA_TIME);
