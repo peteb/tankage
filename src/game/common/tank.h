@@ -75,8 +75,12 @@ public:
                           // opponents, manipulate TankState, etc.
 
   ActorId id() const {return _state.actor; }
-  TankState &state();
+  const TankState &state() const;
 
+  // assign a new state to the tank. the tank can take actions based on this;
+  // start shooting and stuff like that.
+  // will not be called during rewind/replay etc.
+  void assign(const TankState &new_state);
 
   //void takeDamage(const vec2 &pos, float damage);
   //bool takeItem(const std::string &type, int amount);

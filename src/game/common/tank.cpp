@@ -165,10 +165,13 @@ void Tank::update(double dt) {
   _count += dt;
 }
 
-TankState &Tank::state() {
+const TankState &Tank::state() const {
   return _state;
 }
 
+void Tank::assign(const TankState &new_state) {
+  _state = new_state;
+}
 
 
 void Tank::resetCount(double time) {

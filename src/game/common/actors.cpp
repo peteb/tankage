@@ -61,7 +61,11 @@ void Actors::init(const class Portal &interfaces) {
 Tank *Actors::createActor() {
   Tank *newTank = new Tank(context);
   newTank->setTexture(tankBase, tankTurret);
-  newTank->state().actor = ++lastId;
+
+  TankState initial_state;
+  initial_state.actor = ++lastId;
+  
+  newTank->assign(initial_state);
   tanks.push_back(newTank);
   
   return newTank;
@@ -79,7 +83,9 @@ void Actors::render() {
     const PlayerInput *predictDelta = context->control()->lastInput(tank->id());
 
     if (predictDelta) {
-      tank->state().advance(*predictDelta, dt);
+      TankState state = tank->state();
+      state.advance(*predictDelta, dt);
+      tank->assign(state);
     }
 
     tank->update(dt);
@@ -185,7 +191,7 @@ void Actors::onReceive(NetPacketType type, const Packet &packet) {
       }
 
       if (actor != localActor) {
-        tankEntry->state() = msg->snaps[i];
+        tankEntry->assign(msg->snaps[i]);
       }
       else {
         // It's the local player
@@ -198,7 +204,7 @@ void Actors::onReceive(NetPacketType type, const Packet &packet) {
         if (diff > 10.0f) {
           // a quick snap if too much error
           std::cout << "snap!" << std::endl;
-          tankEntry->state() = corrected;
+          tankEntry->assign(corrected);
         }
         else if (diff >= 0.02f) {
           // lerp if minor
@@ -207,7 +213,7 @@ void Actors::onReceive(NetPacketType type, const Packet &packet) {
           
           TankState lerpState = current;
           lerpState = lerp(current, corrected, 0.1);
-          tankEntry->state() = lerpState;
+          tankEntry->assign(lerpState);
 
         }
         
@@ -220,7 +226,7 @@ void Actors::onReceive(NetPacketType type, const Packet &packet) {
 
 Tank *Actors::createTank(const NetTankSnapshot &net_snapshot) {
   Tank *newTank = new Tank(context);
-  newTank->state() = net_snapshot;
+  newTank->assign(net_snapshot);
   newTank->setTexture(tankBase, tankTurret);
   tanks.push_back(newTank);
   
