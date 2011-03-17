@@ -25,6 +25,7 @@ GameServer::GameServer()
   : _host(0)
   , _log(0) 
 {  
+  _time = 0.0;
 }
 
 GameServer::~GameServer() {
@@ -62,6 +63,7 @@ void GameServer::update() {
 }
 
 void GameServer::tick(double dt) {
+
   for (size_t i = 0; i < _systems.size(); ++i) {
     for (SessionMap::iterator it = _sessions.begin(), e = _sessions.end();
          it != e; ++it) {
@@ -71,6 +73,8 @@ void GameServer::tick(double dt) {
       }
     }
   }
+
+  _time += dt;
 }
 
 
@@ -196,6 +200,10 @@ void GameServer::onIdent(const NetIdentifyMsg *data, Packet *packet) {
   for (size_t i = 0; i < _systems.size(); ++i) {
     _systems[i]->onIdent(client);
   }
+}
+
+double GameServer::localTime() const {
+  return _time;
 }
 
 ClientSession *GameServer::session(Client *client) const {

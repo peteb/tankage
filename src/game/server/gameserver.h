@@ -19,6 +19,7 @@ public:
   void registerSystem(class ReplicatedSystem *system);
   void tick(double dt);
   class ClientSession *session(class Client *client) const;
+  double localTime() const;
   
 private:
   typedef std::map<class Client *, class ClientSession *> SessionMap;
@@ -35,6 +36,7 @@ private:
   class Host *_host;
   class Logging *_log;
   class Network *_net;
+  double _time;
 };
 
 
