@@ -7,7 +7,7 @@
 #include <iostream>
 #include <cstdlib>
 
-Config::Config(const std::string &path) : _path(path) {
+void Config::init(const class Portal &modules) {
   if (_path.empty()) {
     char *home = getenv("HOME");
     if (home) {
@@ -27,47 +27,89 @@ Config::Config(const std::string &path) : _path(path) {
     // initial start-up, file is not created, yet
     std::cout << "DE failed to read config file: " << _path << std::endl;
   }
-  _node = new PropertyNode(parser.parse(buffer.str()));
+
+  _node = PropertyNode::MergeTrees(_node, parser.parse(buffer.str()));
+}
+
+void Config::start() {
+  
+}
+
+Config::Config(const std::string &path) 
+  : _path(path)
+  , _node("root")
+{
 } // Config
 
 Config::~Config() {
+  // FIXME: before we quit, loop through all consumers and get their values
+  
   std::stringstream buffer;
   PropertyTreePrinter printer(buffer);
-  printer.print(*_node); 
+  printer.print(_node); 
   // write config file
   std::ofstream file(_path.c_str(), std::ios::out); 
   if (file.is_open()) {
     file << buffer.str();
     file.close();
   } else {
-    // don't bather, probably no permissions, keep using defaults
+    // don't bother, probably no permissions, keep using defaults
     std::cout << "DE failed to write config file: " << _path << std::endl;
   }
-  delete _node;
 } // ~Config
 
-std::string Config::property(const std::string &system,
-                                     const std::string &name,
-                                     const std::string &defaultValue) {
+
+void Config::registerVariable(const char *subtree,
+                              const char *name,
+                              VariableBase *variable) {
   try {
-    _node->getNode(system); 
+    // read value from vartree if it exists
+    variable->assign(_node.getNode(subtree).getProperty(name));
+  }
+  catch (...) {
+      
+  }
+  
+  std::string varid = std::string(subtree) + "." + std::string(name);
+  if (_consumers.find(subtree) != _consumers.end()) {
+    throw std::runtime_error(std::string("variable '") + varid + "' already set");
+  }
+  
+  _consumers[varid] = variable;
+}
+
+
+std::string Config::property(const std::string &system,
+                                      const std::string &name,
+                                      const std::string &defaultValue) {
+  try {
+    _node.getNode(system); 
   } catch (...) {
-    _node->addNode(PropertyNode(system));
+    _node.addNode(PropertyNode(system));
   }    
   try {
-    _node->getNode(system).getProperty(name);
+    _node.getNode(system).getProperty(name);
   } catch (...) {
-    _node->getNode(system).addProperty(Property(name, defaultValue));
+    _node.getNode(system).addProperty(Property(name, defaultValue));
   }
-  return _node->getNode(system).getProperty(name);  
+  return _node.getNode(system).getProperty(name);  
 } // property
 
 void Config::updateProperty(const std::string &system, 
-										const std::string &name, 
-									    const std::string &value) {
+                            const std::string &name, 
+                            const std::string &value) {
   // don't allow to update non-existing attributes
-  _node->getNode(system).getProperty(name);
-  _node->getNode(system).addProperty(Property(name, value));
+  PropertyNode *sysnode;
+  try {
+    sysnode = &_node.getNode(system);    
+  }
+  catch (...) {
+    _node.addNode(PropertyNode(system));
+    sysnode = &_node.getNode(system);
+  }
+
+  sysnode->addProperty(Property(name, value));    
+  
 
   /*std::multimap<std::string, ConfigConsumer*>::iterator it;
   for (it = _consumers.begin(); it != _consumers.end(); ++it) {
@@ -78,9 +120,9 @@ void Config::updateProperty(const std::string &system,
 } // updateProperty 
 
 
-void Config::updateProperties(int argc, char **argv) {
-  for (int i(1); i != argc; ++i) {
-    std::string arg = argv[i];
+void Config::parse(const std::vector<char *> &args) {
+  for (size_t i(1); i < args.size(); ++i) {
+    const std::string &arg = args[i];
     size_t dot = arg.find(".");
     if (dot == std::string::npos) 
       throw std::runtime_error("invalid argument: missing ."); 
@@ -94,8 +136,14 @@ void Config::updateProperties(int argc, char **argv) {
     std::string value = arg.substr(equals+1);
     if (system.empty() || name.empty() || value.empty())
       throw std::runtime_error("invalid argument: " + arg);    
-
-    updateProperty(system, name, value);
+    
+    ConsumerMap::iterator iter = _consumers.find(system + "." + name);
+    if (iter == _consumers.end()) {
+      throw std::runtime_error("unknown variable: '" + system + "." + name + "'");
+    }
+    
+    iter->second->assign(value);
+    //updateProperty(system, name, value);
   } // for
 } // updateProperties
 

@@ -13,11 +13,12 @@
 #include <game/common/projectiles.h>
 #include <game/common/texture_loader.h>
 #include <game/common/players.h>
+#include <game/common/config.h>
 
 #include <cstdlib>
 #include <iostream>
 
-int app_main(Portal &interfaces) {
+int app_main(Portal &interfaces, const std::vector<char *> &args) {
   WindowManager *wm = interfaces.requestInterface<WindowManager>();
   Input *input = interfaces.requestInterface<Input>();
   Graphics *gfx = interfaces.requestInterface<Graphics>();
@@ -28,6 +29,7 @@ int app_main(Portal &interfaces) {
   SystemContext systems;
 
   // Register the subsystems
+  Config config;
   GameClient gameclient;
   Actors actors;
   Players players;
@@ -53,9 +55,12 @@ int app_main(Portal &interfaces) {
   systems.set(SystemContext::SYSTEM_CONTROL, &control);
   systems.set(SystemContext::SYSTEM_PARTICLES, &particles);
   systems.set(SystemContext::SYSTEM_TEXTURE_LOADER, &texLoader);
-
+  systems.set(SystemContext::SYSTEM_CONFIG, &config);
+  
   systems.init(interfaces);
-
+  config.parse(args);
+  systems.start();
+  
   double lastTick = wm->timeSeconds();
   bool running = true;
   const int escape = input->keycode("escape");

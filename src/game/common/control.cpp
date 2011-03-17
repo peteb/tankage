@@ -18,7 +18,12 @@
 #include <arpa/inet.h>
 #include <iostream>
 
-//var<std::string> 
+Variable<std::string> control_keyUp("W");
+Variable<std::string> control_keyDown("S");
+Variable<std::string> control_keyLeft("A");
+Variable<std::string> control_keyRight("D");
+Variable<std::string> control_keyShoot("mouse1");
+
 
 Control::Control()
   : ReplicatedSystem(CLIENT_TICK|SERVER_RECEIVE)
@@ -31,14 +36,27 @@ Control::Control()
 
 void Control::init(const class Portal &interfaces) {
   input = interfaces.requestInterface<Input>();
-  //config = interfaces.requestInterface<Config>();
   wm = interfaces.requestInterface<WindowManager>();
+  
+  Config *config = context->system<Config>(SystemContext::SYSTEM_CONFIG);
+  config->registerVariable("control", "key_up", &control_keyUp);
+  config->registerVariable("control", "key_down", &control_keyDown);
+  config->registerVariable("control", "key_left", &control_keyLeft);
+  config->registerVariable("control", "key_right", &control_keyRight);
+  config->registerVariable("control", "key_shoot", &control_keyShoot);  
+}
+
+void Control::start() {
+  reloadKeycodes();
   lastTick = wm->timeSeconds();
-  /*keyUp = input->keycode(config->property("control", "keyUp", "W"));
-  keyDown = input->keycode(config->property("control", "keyDown", "S"));
-  keyShoot = input->keycode(config->property("control", "keyShoot", "mouse1"));
-  keyRight = input->keycode(config->property("control", "keyRight", "D"));
-  keyLeft = input->keycode(config->property("control", "keyLeft", "A"));*/
+}
+
+void Control::reloadKeycodes() {
+  keyUp = input->keycode(*control_keyUp);
+  keyDown = input->keycode(*control_keyDown);
+  keyLeft = input->keycode(*control_keyLeft);
+  keyRight = input->keycode(*control_keyRight);
+  keyShoot = input->keycode(*control_keyShoot);
 }
 
 void Control::update() {

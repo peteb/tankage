@@ -15,7 +15,6 @@
 
 class Control : public ReplicatedSystem {
 public:
-
   struct Move {
     PlayerInput delta;
     TankState absolute;
@@ -27,6 +26,8 @@ public:
   Control();
   
   void init(const class Portal &interfaces);
+  void start();
+  
   void update();
   void onReceive(NetPacketType type, const class Packet &packet);
   const PlayerInput *lastInput(ActorId actor) const;
@@ -34,6 +35,8 @@ public:
   void removeHistory(const MoveBuffer::iterator &first);
   
 private:  
+  void reloadKeycodes();
+  
   void onTick(class Client *client);
   PlayerInput currentState() const;
   

@@ -6,6 +6,7 @@
 #include <game/common/replicated_system.h>
 #include <game/common/actors.h>
 #include <game/common/tank.h>
+#include <game/common/config.h>
 
 #include <engine/packet.h>
 #include <engine/network.h>
@@ -18,8 +19,12 @@
 #include <cstring>
 #include <algorithm>
 
-GameServer::GameServer() : _host(0), _log(0) {
-  
+Variable<std::string> server_host("0.0.0.0:12345");
+
+GameServer::GameServer() 
+  : _host(0)
+  , _log(0) 
+{  
 }
 
 GameServer::~GameServer() {
@@ -27,10 +32,15 @@ GameServer::~GameServer() {
 }
 
 void GameServer::init(const class Portal &interfaces) {
-  Network *net = interfaces.requestInterface<Network>();
+  _net = interfaces.requestInterface<Network>();
   _log = interfaces.requestInterface<Logging>();
-  // TODO kaspars: This should be taken from cfg interface
-  _host = net->startHost("0.0.0.0:12345", 32, 2);
+  
+  Config *config = context->system<Config>(SystemContext::SYSTEM_CONFIG);
+  config->registerVariable("server", "host", &server_host);
+}
+
+void GameServer::start() {
+  _host = _net->startHost(*server_host, 32, 2);  
 }
 
 void GameServer::update() {

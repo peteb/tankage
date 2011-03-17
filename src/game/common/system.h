@@ -16,6 +16,7 @@ public:
     SYSTEM_GAMESERVER,
     SYSTEM_GAMECLIENT,
     SYSTEM_PLAYERS,
+    SYSTEM_CONFIG,
     SYSTEM_MAX
   };
   
@@ -29,7 +30,8 @@ public:
   }
   
   void init(class Portal &modules);
-
+  void start();
+  
   class Projectiles *projectiles() const {
     return system<Projectiles>(SystemContext::SYSTEM_PROJECTILES);
   }
@@ -75,6 +77,7 @@ public:
   virtual ~System() {}
 
   virtual void init(const class Portal &modules) =0;
+  virtual void start() {}
   
   friend class SystemContext;
 protected:

@@ -17,6 +17,7 @@ public:
   ~GameClient();
 
   void init(const class Portal &interfaces);
+  void start();
   void update();
   void disconnectGently();
   void registerSystem(class ReplicatedSystem *system);

@@ -23,11 +23,11 @@
 // The GLFW module is a "starter" module, meaning, it implements 'main' and runs
 // app_main
 
-extern int app_main(Portal &portal);
+extern int app_main(Portal &portal, const std::vector<char *> &args);
 
-int catch_app_main(Portal &portal) {
+int catch_app_main(Portal &portal, const std::vector<char *> &args) {
   try {
-    return app_main(portal);
+    return app_main(portal, args);
   }
   catch (const std::exception &e) {
     std::string description = std::string("An error has occured:\n") + e.what();
@@ -64,16 +64,16 @@ int main(int argc, char **argv) {
   //log->write(Logging::TWEET, "Starting Snail-Wail at %s", 
 	//std::asctime(localtime(&time)));
 
-  // update configuration with input arguments
-
+  std::vector<char *> args(argv, argv + argc);
+  
   int exitCode;
   #ifndef DEV
   // Catch any exceptions thrown from main, then show it to the user
-  exitCode = catch_app_main(interfaces);
+  exitCode = catch_app_main(interfaces, args);
   #else
   // Don't catch any exceptions at this level during debug; makes it easier to
   // see where the error is using gdb/other debugging tool
-  exitCode = app_main(interfaces);
+  exitCode = app_main(interfaces, args);
   #endif
   
   glfwTerminate();

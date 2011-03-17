@@ -59,6 +59,10 @@ void Actors::init(const class Portal &interfaces) {
   lastUpdate = wm->timeSeconds();
 }
 
+void Actors::start() {
+  
+}
+
 Tank *Actors::createActor() {
   Tank *newTank = new Tank(context);
   newTank->setTexture(tankBase, tankTurret);

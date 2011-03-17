@@ -13,20 +13,11 @@
 #include <cassert>
 #include <sstream>
 #include <algorithm>
-#include <arpa/inet.h> // Fixme: this might not be possible on windows. utils
-                       // for endian conversion?
+#include <arpa/inet.h>
 
-/*
- * Messages are sent to the client and server, invoking onReceive on all
- * registered ReplicatedSystems. The systems will check the type of the packet,
- * then act accordingly (either handle the message or ignore it).
- *
- * Snapshots will be sent to the server (input), but mostly to the client (item
- * position, speed, etc.)
- * Each subsystem implements onTick, which should create the snapshot packet.
- * onReceive will be called when snapshot data is received.
- * The onTick function will be invoked at a certain interval (25 tps).
- */
+Variable<std::string> client_host("iostream.cc:12345");
+Variable<bool> client_predict(true);
+
 GameClient::GameClient() : _client(0) {
   _time = 0.0f;
 }
@@ -40,25 +31,23 @@ GameClient::~GameClient() {
 }
 
 void GameClient::init(const Portal &interfaces) {
-  _state = GameClient::STATE_DISCONNECTED;
- 
   _net = interfaces.requestInterface<Network>();
   _log = interfaces.requestInterface<Logging>();
 
-  _log->write(Logging::DEBUG, "Connecting to host: %s", 
-    /*_config->property("client", "host", "iostream.cc:12345").c_str()*/ "hello");
-  _client = _net->connect(/*_config->property("client", "host", "iostream.cc:12345")*/ "iostream.cc:12345", 2);
+  Config *config = context->system<Config>(SystemContext::SYSTEM_CONFIG);
+  config->registerVariable("client", "host", &client_host);
+  config->registerVariable("client", "predict", &client_predict);
+}
 
-  std::stringstream ss;
- // ss << _config->property("client", "predict", "1");
- // ss >> _predict_local;
+void GameClient::start() {
+  _state = GameClient::STATE_DISCONNECTED;
+  _log->write(Logging::DEBUG, "Connecting to host: %s", client_host->c_str());
+  _client = _net->connect(*client_host, 2);  
 }
 
 void GameClient::update() {
-  if (!_client) {
-    return;
-  }
-  
+  if (!_client) return;
+
   _client->update();
 
   const bool connectedNow = _client->isConnected();

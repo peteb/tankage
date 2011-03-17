@@ -13,6 +13,8 @@ public:
   ~GameServer();
   
   void init(const class Portal &interfaces);
+  void start();
+  
   void update();
   void registerSystem(class ReplicatedSystem *system);
   void tick(double dt);
@@ -32,6 +34,7 @@ private:
   SessionMap _sessions;
   class Host *_host;
   class Logging *_log;
+  class Network *_net;
 };
 
 
