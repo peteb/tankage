@@ -13,6 +13,7 @@ add_executable(utils_unittest EXCLUDE_FROM_ALL
   vec_unittest.cpp
   rect_unittest.cpp
   ring_buffer_unittest.cpp     
+  log_unittest.cpp
 )
 
 target_link_libraries(utils_unittest
