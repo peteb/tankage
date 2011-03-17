@@ -68,9 +68,6 @@ void GameClient::update() {
 }
 
 void GameClient::tick(double dt) {
-  if (_state == STATE_CONNECTED) {
-    _time += dt;
-  }
   
   for (size_t i = 0; i < _systems.size(); ++i) {
     if (_systems[i]->flags & ReplicatedSystem::CLIENT_TICK) {
@@ -78,6 +75,10 @@ void GameClient::tick(double dt) {
     }
   }
 
+  if (_state == STATE_CONNECTED) {
+    _time += dt;
+  }
+  
 }
 
 void GameClient::disconnectGently() {
@@ -101,7 +102,7 @@ void GameClient::registerSystem(class ReplicatedSystem *system) {
   _systems.push_back(system);
 }
 
-float GameClient::localTime() const {
+double GameClient::localTime() const {
   return _time;
 }
 

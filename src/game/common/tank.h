@@ -13,6 +13,7 @@ typedef int ActorId;
 // probably be in Control.
 struct PlayerInput {
   float time;
+  double rxtime;
   uint8_t buttons;
   int aim_x;
   int aim_y;

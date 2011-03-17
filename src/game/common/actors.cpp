@@ -131,7 +131,9 @@ void Actors::onTick(class Client *client) {
   
   for (size_t i = 0; i < tanks.size(); ++i) {
     if (tanks[i]->id() == player->actor()) {
-      msg->last_input += tanks[i]->count();
+      if (lastInput) {
+        msg->last_input += context->gameserver()->localTime() - lastInput->rxtime;
+      }
     }
     msg->snaps[i] = tanks[i]->state();
   }
@@ -178,7 +180,7 @@ TankState Actors::rebaseHistory(double time, const TankState &newState, Tank *ta
   Control::MoveRange history = context->control()->history(time);
   
   if (history.first != history.second) {
-    ret = replay(history, newState, std::make_pair(time, gameTime + 1.0/20.0));
+    ret = replay(history, newState, std::make_pair(time, gameTime));
     // FIXME: get tickrate (1.0/2.0) from server
   }
 

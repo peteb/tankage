@@ -7,6 +7,7 @@
 
 #include <game/server/client_session.h>
 #include <game/server/gameserver.h>
+#include <game/client/gameclient.h>
 
 #include <engine/input.h>
 #include <engine/portal.h>
@@ -48,7 +49,9 @@ void Control::init(const class Portal &interfaces) {
 
 void Control::start() {
   reloadKeycodes();
-  lastTick = wm->timeSeconds();
+  if (!context->isServer()) {
+    lastTick = context->gameclient()->localTime();    
+  }
 }
 
 void Control::reloadKeycodes() {
@@ -99,7 +102,7 @@ PlayerInput Control::currentState() const {
 }
 
 void Control::onTick(Client *client) {
-  double thisTick = wm->timeSeconds();
+  double thisTick = context->gameclient()->localTime();
   if (thisTick - lastTick < 1.0/10.0) {
     return;
   }
@@ -116,12 +119,8 @@ void Control::onTick(Client *client) {
     return;
   }
   
-  PlayerInput state = currentState();
- // if (state.buttons != newState.buttons || state.aim_x != newState.aim_x || state.aim_y != newState.aim_y) {
-    // Input changed
-    
-  state.time = wm->timeSeconds();
-   // state = newState;
+  PlayerInput state = currentState();    
+  state.time = thisTick;
   states[actor] = state;
     
   Move move;
@@ -129,8 +128,6 @@ void Control::onTick(Client *client) {
   move.absolute = target->state();
   target->resetCount();
   moves.push_back(move);
-    //toSend.push_back(newState);
-  //}
 
   // FIXME: move NetPlayerInput -> Tank::Input to Input class
 
@@ -142,9 +139,8 @@ void Control::onTick(Client *client) {
   msg.target_y = htons(state.aim_y + 32768);
   msg.time = state.time;
     
+  std::cout << "sending" << std::endl;
   client->send(&msg, sizeof(NetPlayerInput), 0, NET_CHANNEL_STATE);
-
-  toSend.clear();
 }
 
 void Control::onReceive(NetPacketType type, const Packet &packet) {
@@ -184,6 +180,7 @@ void Control::onReceive(NetPacketType type, const Packet &packet) {
     
     PlayerInput state;
     state.time = msg->time;
+    state.rxtime = context->gameserver()->localTime();
     state.buttons = msg->state;
     state.aim_x = ntohs(msg->target_x) - 32768;
     state.aim_y = ntohs(msg->target_y) - 32768;

@@ -22,7 +22,7 @@ public:
   void disconnectGently();
   void registerSystem(class ReplicatedSystem *system);
   void tick(double dt);
-  float localTime() const;
+  double localTime() const;
 
   bool predictLocal() const;
   
@@ -42,7 +42,7 @@ private:
   ClientState _state;
 
   bool _predict_local;
-  float _time;
+  double _time;
 };
 
 
