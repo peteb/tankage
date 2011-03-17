@@ -1,42 +1,38 @@
 #ifndef UTILS_LOG_H
 #define UTILS_LOG_H
 
-// these will go out, left for inline implementation
-// to check how stuff look like
 #include <iostream>
-#include <string.h>
-#include <cstdlib>
 #include <sstream>
+#include <list>
+#include <string>
 
 
-// suggest keep class to keep it as namespace and maybe later use some
-// common static variable like stream where to print or somthing
 struct log {
+  struct log_consumer {
+    virtual void write(const std::string& line) =0;
+    virtual ~log_consumer() {};
+  };
   enum log_level {
     error,
 	warning,
     info,
 	debug
   };
-  // constructor with level
-  log(const log_level level) : _level(level) {}
-  // printer operator
+  explicit log(log_level level);
+  ~log();
+
   template<typename T> 
-  log& operator<< (T text) {
-	// collects all the stuff during the lifecycle
-    _stream << text;
+  log& operator<< (T data) {
+    _stream << data;
 	return *this;
   }
-  ~log() {
-    // dumps all the log at dying, that means it's reached the end
-    std::cout << "level: " << _level << ", text: " << _stream.str() << std::endl;
-  }
+  static void register_consumer(log_consumer* consumer);
 
 private:
+  static std::list<log::log_consumer*> _consumers;
   log_level _level;
   std::stringstream _stream;
 };
-
 
 #endif // !UTILS_LOG_H
 
