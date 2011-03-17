@@ -6,42 +6,36 @@
 #include <iostream>
 #include <string.h>
 #include <cstdlib>
+#include <sstream>
 
 
 // suggest keep class to keep it as namespace and maybe later use some
 // common static variable like stream where to print or somthing
 struct log {
-  // i think we should keep levels to be able to filter
   enum log_level {
     error,
 	warning,
     info,
 	debug
   };
-  // main write
-  static void write(log_level type, const char *format, ...) {
-    std::cout << format << std::endl;
+  // constructor with level
+  log(const log_level level) : _level(level) {}
+  // printer operator
+  template<typename T> 
+  log& operator<< (T text) {
+	// collects all the stuff during the lifecycle
+    _stream << text;
+	return *this;
   }
-  // tweet probably should be seperate function like this
-  static void tweet(const char* format, ...) {
-    // inform in log and do tweet
-	write(info, format);
+  ~log() {
+    // dumps all the log at dying, that means it's reached the end
+    std::cout << "level: " << _level << ", text: " << _stream.str() << std::endl;
   }
-  // scoped enter, does this make sense? just came in mind?
-  struct scoped_enter {
-    scoped_enter(const char* something = "") : _something(something) {
-      write(debug, std::string("<< ").append(_something).c_str());
-    }
-    ~scoped_enter() {
-      write(debug,  std::string(">> ").append(_something).c_str());
-    }
-  private:
-    std::string _something;
-};
-private:
-  log() {}
-};
 
+private:
+  log_level _level;
+  std::stringstream _stream;
+};
 
 
 #endif // !UTILS_LOG_H
