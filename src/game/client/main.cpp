@@ -13,11 +13,12 @@
 #include <game/common/projectiles.h>
 #include <game/common/texture_loader.h>
 #include <game/common/players.h>
+#include <game/common/config.h>
 
 #include <cstdlib>
 #include <iostream>
 
-int app_main(Portal &interfaces) {
+int app_main(Portal &interfaces, const std::vector<char *> &args) {
   WindowManager *wm = interfaces.requestInterface<WindowManager>();
   Input *input = interfaces.requestInterface<Input>();
   Graphics *gfx = interfaces.requestInterface<Graphics>();
@@ -28,6 +29,7 @@ int app_main(Portal &interfaces) {
   SystemContext systems;
 
   // Register the subsystems
+  Config config;
   GameClient gameclient;
   Actors actors;
   Players players;
@@ -53,9 +55,12 @@ int app_main(Portal &interfaces) {
   systems.set(SystemContext::SYSTEM_CONTROL, &control);
   systems.set(SystemContext::SYSTEM_PARTICLES, &particles);
   systems.set(SystemContext::SYSTEM_TEXTURE_LOADER, &texLoader);
-
+  systems.set(SystemContext::SYSTEM_CONFIG, &config);
+  
   systems.init(interfaces);
-
+  config.parse(args);
+  systems.start();
+  
   double lastTick = wm->timeSeconds();
   bool running = true;
   const int escape = input->keycode("escape");
@@ -70,10 +75,8 @@ int app_main(Portal &interfaces) {
     background.render();
     gameclient.update();
 
-//    if (thisTime - lastTick >= 1.0/100.0) {
-      gameclient.tick(thisTime - lastTick);
-      lastTick = thisTime;
-      //  }
+    gameclient.tick(thisTime - lastTick);
+    lastTick = thisTime;
     
     //   particles.render();
     actors.render();
@@ -88,45 +91,6 @@ int app_main(Portal &interfaces) {
 
 
   gameclient.disconnectGently();
-
-  
-  /*bool running = true;
-  double lastTick = wm->timeSeconds();
-
-  SystemContext systems;
-
-  // Register the subsystems
-  Background bkg;
-  Control control;
-  Items items;
-  Particles particles;
-  TextureLoader texLoader;
-  
-  systems.set(SystemContext::SYSTEM_BACKGROUND, &bkg);
-  systems.set(SystemContext::SYSTEM_CONTROL, &control);
-  systems.set(SystemContext::SYSTEM_ITEMS, &items);
-  systems.set(SystemContext::SYSTEM_PARTICLES, &particles);
-  systems.set(SystemContext::SYSTEM_TEXTURE_LOADER, &texLoader);
-  
-  systems.init(interfaces);
-  
-  while (running) {          
-    const rect wndSize = wm->size();
-    
-    gfx->setViewport(wndSize);
-    gfx->setOrtho(wndSize);
-
-    control.update();
-    bkg.render();
-    particles.render();
-    items.update();
-    items.render();
-    
-    wm->swapBuffers();
-
-    running = !input->keyPressed(escape) &&
-      wm->windowState(WindowManager::OPENED);
-      }*/
 
   return EXIT_SUCCESS;
 }

@@ -17,11 +17,14 @@ public:
   ~GameClient();
 
   void init(const class Portal &interfaces);
+  void start();
   void update();
   void disconnectGently();
   void registerSystem(class ReplicatedSystem *system);
   void tick(double dt);
   float localTime() const;
+
+  bool predictLocal() const;
   
 private:
   void onConnect();
@@ -33,12 +36,12 @@ private:
   void onSystemUpdate(const struct NetSystemMsg *msg, class Packet *packet);
   
   std::vector<class ReplicatedSystem *> _systems;
-  class Config *_config;
   class Logging *_log;
   class Network *_net;
   class Client *_client;
   ClientState _state;
 
+  bool _predict_local;
   float _time;
 };
 

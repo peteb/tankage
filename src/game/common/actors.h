@@ -15,6 +15,7 @@ public:
 
   // System stuff
   void init(const class Portal &interfaces);
+  void start();
   void render();
 
   // Replicated system

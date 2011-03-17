@@ -31,6 +31,18 @@ void SystemContext::init(class Portal &modules) {
   ready = true;
 }
 
+
+void SystemContext::start() {
+  if (!ready)
+    throw std::runtime_error("sysctx not initialized");
+
+  for (unsigned i = 0; i < SYSTEM_MAX; ++i) {
+    if (systems[i]) {
+      systems[i]->start();
+    }    
+  }  
+}
+
 class System *SystemContext::resolveSystem(unsigned id) const {
   if (!systems[id])
     throw std::runtime_error("system not set");
