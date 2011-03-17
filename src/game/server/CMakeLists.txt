@@ -1,6 +1,8 @@
 # -*- cmake -*-
 
-include_directories(${PROJECT_ROOT_DIR})
+include_directories(${PROJECT_ROOT_DIR}
+  ${PROJECT_ROOT_DIR}/3pp   
+)
 
 add_executable(tankage-server
   # common stuff
@@ -13,10 +15,12 @@ add_executable(tankage-server
   ${GAME_ROOT_DIR}/common/players.cpp
   ${GAME_ROOT_DIR}/common/net_error.cpp
   ${GAME_ROOT_DIR}/common/control.cpp
+  ${GAME_ROOT_DIR}/common/config.cpp
   
   # bad stuff (shouldn't be needed)
   ${GAME_ROOT_DIR}/client/particles.cpp
-  
+  ${GAME_ROOT_DIR}/client/gameclient.cpp
+
   # server specific
   main.cpp
   gameserver.cpp
@@ -25,5 +29,6 @@ add_executable(tankage-server
 
 target_link_libraries(tankage-server
 	engine
+   ptrcfg
 )
 

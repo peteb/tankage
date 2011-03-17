@@ -57,6 +57,10 @@ public:
   class GameServer *gameserver() const {
     return system<GameServer>(SystemContext::SYSTEM_GAMESERVER);
   }
+
+  class GameClient *gameclient() const {
+    return system<GameClient>(SystemContext::SYSTEM_GAMECLIENT);
+  }
   
 private:
   class System *resolveSystem(unsigned id) const;

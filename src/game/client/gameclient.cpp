@@ -2,15 +2,16 @@
 #include <game/common/net_protocol.h>
 #include <game/common/replicated_system.h>
 #include <game/common/actors.h>
+#include <game/common/config.h>
 
 #include <engine/portal.h>
 #include <engine/network.h>
 #include <engine/packet.h>
 #include <engine/logging.h>
-#include <engine/cfg.h>
 
 #include <iostream>
 #include <cassert>
+#include <sstream>
 #include <algorithm>
 #include <arpa/inet.h> // Fixme: this might not be possible on windows. utils
                        // for endian conversion?
@@ -41,13 +42,16 @@ GameClient::~GameClient() {
 void GameClient::init(const Portal &interfaces) {
   _state = GameClient::STATE_DISCONNECTED;
  
-  _config = interfaces.requestInterface<Config>(); 
   _net = interfaces.requestInterface<Network>();
   _log = interfaces.requestInterface<Logging>();
 
   _log->write(Logging::DEBUG, "Connecting to host: %s", 
-    _config->property("client", "host", "iostream.cc:12345").c_str());
-  _client = _net->connect(_config->property("client", "host", "iostream.cc:12345"), 2);
+    /*_config->property("client", "host", "iostream.cc:12345").c_str()*/ "hello");
+  _client = _net->connect(/*_config->property("client", "host", "iostream.cc:12345")*/ "iostream.cc:12345", 2);
+
+  std::stringstream ss;
+ // ss << _config->property("client", "predict", "1");
+ // ss >> _predict_local;
 }
 
 void GameClient::update() {
@@ -110,6 +114,10 @@ void GameClient::registerSystem(class ReplicatedSystem *system) {
 
 float GameClient::localTime() const {
   return _time;
+}
+
+bool GameClient::predictLocal() const {
+  return _predict_local;
 }
 
 void GameClient::onConnect() {

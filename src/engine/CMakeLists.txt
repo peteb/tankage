@@ -9,7 +9,6 @@ SET(ENGINE_SOURCE
   devil/image_loader.cpp
   enet/network.cpp
   logging/logging.cpp
-  cfg/cfg.cpp
   )
 
 
@@ -51,7 +50,6 @@ include_directories(
 target_link_libraries(engine
   utils
   twitcurl
-  ptrcfg
   enet
   ${GLFW_LIBRARY} 
   ${Cocoa_LIBRARIES}
@@ -63,5 +61,5 @@ target_link_libraries(engine
 
 configure_file(${PROJECT_ROOT_DIR}/src/engine/config.h.in ${PROJECT_ROOT_DIR}/src/engine/config.h)
 
-add_subdirectory(cfg/unittest)
+#add_subdirectory(cfg/unittest)
 

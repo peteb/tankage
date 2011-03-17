@@ -1,4 +1,4 @@
-#include <engine/cfg/cfg.h>
+#include <game/common/config.h>
 #include <ptrcfg/propertytreeparser.h>
 #include <ptrcfg/propertytreeprinter.h>
 
@@ -7,7 +7,7 @@
 #include <iostream>
 #include <cstdlib>
 
-Engine::Config::Config(const std::string &path) : _path(path) {
+Config::Config(const std::string &path) : _path(path) {
   if (_path.empty()) {
     char *home = getenv("HOME");
     if (home) {
@@ -30,7 +30,7 @@ Engine::Config::Config(const std::string &path) : _path(path) {
   _node = new PropertyNode(parser.parse(buffer.str()));
 } // Config
 
-Engine::Config::~Config() {
+Config::~Config() {
   std::stringstream buffer;
   PropertyTreePrinter printer(buffer);
   printer.print(*_node); 
@@ -46,7 +46,7 @@ Engine::Config::~Config() {
   delete _node;
 } // ~Config
 
-std::string Engine::Config::property(const std::string &system,
+std::string Config::property(const std::string &system,
                                      const std::string &name,
                                      const std::string &defaultValue) {
   try {
@@ -62,23 +62,23 @@ std::string Engine::Config::property(const std::string &system,
   return _node->getNode(system).getProperty(name);  
 } // property
 
-void Engine::Config::updateProperty(const std::string &system, 
+void Config::updateProperty(const std::string &system, 
 										const std::string &name, 
 									    const std::string &value) {
   // don't allow to update non-existing attributes
   _node->getNode(system).getProperty(name);
   _node->getNode(system).addProperty(Property(name, value));
 
-  std::multimap<std::string, ConfigConsumer*>::iterator it;
+  /*std::multimap<std::string, ConfigConsumer*>::iterator it;
   for (it = _consumers.begin(); it != _consumers.end(); ++it) {
     if (it->first == system) {
       it->second->updateConfig(name, value);
     }
-  } // for 
+  } */// for 
 } // updateProperty 
 
 
-void Engine::Config::updateProperties(int argc, char **argv) {
+void Config::updateProperties(int argc, char **argv) {
   for (int i(1); i != argc; ++i) {
     std::string arg = argv[i];
     size_t dot = arg.find(".");
@@ -99,8 +99,8 @@ void Engine::Config::updateProperties(int argc, char **argv) {
   } // for
 } // updateProperties
 
-void Engine::Config::registerConsumer(const std::string &system, 
-										  ConfigConsumer* consumer) {
-  _consumers.insert(std::pair<std::string,ConfigConsumer*>(system, consumer));
-} // registerConsumer
-
+//void Config::registerConsumer(const std::string &system, 
+//										  ConfigConsumer* consumer) {
+//  _consumers.insert(std::pair<std::string,ConfigConsumer*>(system, consumer));
+//} // registerConsumer
+//

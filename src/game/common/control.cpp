@@ -3,12 +3,12 @@
 #include <game/common/actors.h>
 #include <game/common/tank.h>
 #include <game/common/players.h>
+#include <game/common/config.h>
 
 #include <game/server/client_session.h>
 #include <game/server/gameserver.h>
 
 #include <engine/input.h>
-#include <engine/cfg.h>
 #include <engine/portal.h>
 #include <engine/window_manager.h>
 #include <engine/network.h>
@@ -17,6 +17,8 @@
 
 #include <arpa/inet.h>
 #include <iostream>
+
+//var<std::string> 
 
 Control::Control()
   : ReplicatedSystem(CLIENT_TICK|SERVER_RECEIVE)
@@ -29,14 +31,14 @@ Control::Control()
 
 void Control::init(const class Portal &interfaces) {
   input = interfaces.requestInterface<Input>();
-  config = interfaces.requestInterface<Config>();
+  //config = interfaces.requestInterface<Config>();
   wm = interfaces.requestInterface<WindowManager>();
   lastTick = wm->timeSeconds();
-  keyUp = input->keycode(config->property("control", "keyUp", "W"));
+  /*keyUp = input->keycode(config->property("control", "keyUp", "W"));
   keyDown = input->keycode(config->property("control", "keyDown", "S"));
   keyShoot = input->keycode(config->property("control", "keyShoot", "mouse1"));
   keyRight = input->keycode(config->property("control", "keyRight", "D"));
-  keyLeft = input->keycode(config->property("control", "keyLeft", "A"));
+  keyLeft = input->keycode(config->property("control", "keyLeft", "A"));*/
 }
 
 void Control::update() {

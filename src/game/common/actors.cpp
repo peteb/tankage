@@ -8,6 +8,7 @@
 
 #include <game/server/client_session.h>
 #include <game/server/gameserver.h>
+#include <game/client/gameclient.h>
 
 #include <engine/graphics.h>
 #include <engine/texture.h>
@@ -77,6 +78,8 @@ void Actors::render() {
   double dt = thisUpdate - lastUpdate;
   lastUpdate = thisUpdate;
   gameTime += dt;
+
+  ActorId local = context->players()->localActor();
   
   TankVector::iterator i = tanks.begin(), e = tanks.end();
   for (; i != e; ++i) {
@@ -84,9 +87,11 @@ void Actors::render() {
     const PlayerInput *predictDelta = context->control()->lastInput(tank->id());
 
     if (predictDelta) {
-      TankState state = tank->state();
-      state.advance(*predictDelta, dt);
-      tank->assign(state);
+      if (tank->id() != local || context->gameclient()->predictLocal()) { 
+        TankState state = tank->state();
+        state.advance(*predictDelta, dt);
+        tank->assign(state);
+      }
     }
 
     // FIXME: remove tank if update returns false
@@ -192,33 +197,41 @@ void Actors::onReceive(NetPacketType type, const Packet &packet) {
         tankEntry = createTank(snapshot);
       }
 
+      // FIXME: if it shouldn't predict, handle it as any other tank
+      
       if (actor != localActor) {
         tankEntry->assign(msg->snaps[i]);
       }
       else {
-        // It's the local player
-        TankState corrected = rebaseHistory(msg->last_input, snapshot,
-                                            tankEntry);
-        
-        const TankState current = tankEntry->state();
-        double diff = std::max(length(current.pos - corrected.pos), current.base_dir - corrected.base_dir);
-        
-        if (diff > 10.0f) {
-          // a quick snap if too much error
-          std::cout << "snap!" << std::endl;
-          tankEntry->assign(corrected);
-        }
-        else if (diff >= 0.02f) {
-          // lerp if minor
-          // FIXME: lerping and probably be done smoother if added to the tank
-          // something like, tank->setTargetState(...);
+        if (context->gameclient()->predictLocal()) {
+          // It's the local player
+          TankState corrected = rebaseHistory(msg->last_input, snapshot,
+                                              tankEntry);
           
-          TankState lerpState = current;
-          lerpState = lerp(current, corrected, 0.1);
-          tankEntry->assign(lerpState);
-
+          const TankState current = tankEntry->state();
+          double diff = std::max(length(current.pos - corrected.pos), current.base_dir - corrected.base_dir);
+          
+          if (diff > 10.0f) {
+            // a quick snap if too much error
+            std::cout << "snap!" << std::endl;
+            tankEntry->assign(corrected);
+          }
+          else if (diff >= 0.02f) {
+            // lerp if minor
+            // FIXME: lerping and probably be done smoother if added to the tank
+            // something like, tank->setTargetState(...);
+            // TEST: send input state 10 times per second instead of one
+            // reliable packet
+            
+            TankState lerpState = current;
+            lerpState = lerp(current, corrected, 0.1);
+            tankEntry->assign(lerpState);
+            
+          }
         }
-        
+        else {
+          tankEntry->assign(msg->snaps[i]);
+        }
       }
     }
 
