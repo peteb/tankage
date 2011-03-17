@@ -1,20 +1,36 @@
 
 #include "log.h"
+#include <iostream>
 
-std::list<log::log_consumer*> log::_consumers;
+std::vector<log::log_consumer*> log::_consumers;
 
 log::log(log_level level) : _level(level) {
+  switch (level) {
+    case error: 
+      _stream << "ER ";
+      break;
+    case warning:
+      _stream << "WA ";
+      break;
+    case info:
+      _stream << "IN ";
+      break;
+	case debug:
+      _stream << "DE ";
+      break;
+    default:
+      _stream << "?? ";
+  }
 } // log
 
 log::~log() {
-    // dumps all the log at dying, that means it's reached the end
-    //std::cout << "level: " << _level << ", text: " << _stream.str() << std::endl;
     if (_consumers.empty()) {
+      // print to standard out if no consumers
       std::cout << _stream.str() << std::endl; 
     } else { 
-      for (std::list<log_consumer*>::iterator it = _consumers.begin(); 
+      for (std::vector<log_consumer*>::iterator it = _consumers.begin(); 
         it != _consumers.end(); ++it) {
-        (*it)->write(_stream.str());
+        (*it)->write(_level, _stream.str());
       }
     }
 } // ~log
