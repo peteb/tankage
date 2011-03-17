@@ -60,7 +60,7 @@ void Actors::init(const class Portal &interfaces) {
 }
 
 void Actors::start() {
-  
+  _last_tick = 0.0;  
 }
 
 Tank *Actors::createActor() {
@@ -106,6 +106,10 @@ void Actors::render() {
 
 
 void Actors::onTick(class Client *client) {
+  double thisTick = wm->timeSeconds();
+  if (thisTick - _last_tick < 1.0/20.0) return;
+  _last_tick = thisTick;
+  
   ClientSession *session = context->gameserver()->session(client);
   if (!session) {
     // No session? Huh.
@@ -137,6 +141,8 @@ void Actors::onTick(class Client *client) {
     }
     msg->snaps[i] = tanks[i]->state();
   }
+  
+  std::cout << "sending snap" << std::endl;
 
   client->send(msg, packetSize, 0 /*Client::PACKET_UNSEQUENCED*/, NET_CHANNEL_ABS);
 }

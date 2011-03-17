@@ -35,6 +35,7 @@ private:
   TankState rebaseHistory(double time, const TankState &newState, Tank *tank);
   
   double gameTime;
+  double _last_tick;
   class Graphics *graphics;
   class WindowManager *wm;
   class Texture *tankBase;
