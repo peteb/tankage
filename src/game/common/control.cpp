@@ -60,32 +60,7 @@ void Control::reloadKeycodes() {
 }
 
 void Control::update() {
-  // Only run update on the client side
-  ActorId actor = context->players()->localActor();
-  if (actor == 0) {
-    return;
-  }
-  
-  Tank *target = context->actors()->tank(actor);
-  if (!target) {
-    return;
-  }
 
-  PlayerInput newState = currentState();
-  if (state.buttons != newState.buttons || state.aim_x != newState.aim_x || state.aim_y != newState.aim_y) {
-    // Input changed
-
-    newState.time = wm->timeSeconds();
-    state = newState;
-    states[actor] = newState;
-
-    Move stateMove;
-    stateMove.delta = newState;
-    stateMove.absolute = target->state();
-    target->resetCount();
-    moves.push_back(stateMove);
-    toSend.push_back(newState);
-  }
 }
 
 PlayerInput Control::currentState() const {
@@ -124,7 +99,13 @@ PlayerInput Control::currentState() const {
 }
 
 void Control::onTick(Client *client) {
-  // Only tick on the client side
+  double thisTick = wm->timeSeconds();
+  if (thisTick - lastTick < 1.0/10.0) {
+    return;
+  }
+  
+  lastTick = thisTick;
+  // Only run update on the client side
   ActorId actor = context->players()->localActor();
   if (actor == 0) {
     return;
@@ -134,19 +115,34 @@ void Control::onTick(Client *client) {
   if (!target) {
     return;
   }
+  
+  PlayerInput state = currentState();
+ // if (state.buttons != newState.buttons || state.aim_x != newState.aim_x || state.aim_y != newState.aim_y) {
+    // Input changed
+    
+  state.time = wm->timeSeconds();
+   // state = newState;
+  states[actor] = state;
+    
+  Move move;
+  move.delta = state;
+  move.absolute = target->state();
+  target->resetCount();
+  moves.push_back(move);
+    //toSend.push_back(newState);
+  //}
 
   // FIXME: move NetPlayerInput -> Tank::Input to Input class
 
-  for (size_t i = 0; i < toSend.size(); ++i) {
-    NetPlayerInput msg;
-    msg.type = NET_PLAYER_INPUT;
-    msg.state = state.buttons;
-    msg.target_x = htons(state.aim_x + 32768);
-    msg.target_y = htons(state.aim_y + 32768);
-    msg.time = state.time;
+  
+  NetPlayerInput msg;
+  msg.type = NET_PLAYER_INPUT;
+  msg.state = state.buttons;
+  msg.target_x = htons(state.aim_x + 32768);
+  msg.target_y = htons(state.aim_y + 32768);
+  msg.time = state.time;
     
-    client->send(&msg, sizeof(NetPlayerInput), Client::PACKET_RELIABLE, NET_CHANNEL_STATE);
-  }
+  client->send(&msg, sizeof(NetPlayerInput), 0, NET_CHANNEL_STATE);
 
   toSend.clear();
 }

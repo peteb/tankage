@@ -28,6 +28,26 @@ int app_main(Portal &interfaces, const std::vector<char *> &args) {
   
   SystemContext systems;
 
+  /*
+    Proposal:
+   systems.registerSystem<Config>();
+   systems.registerSystem<GameClient>();
+   systems.registerSystem<Actors>();
+   systems.registerSystem<Players>();
+   systems.registerSystem<Background>();
+   systems.registerSystem<Control>();
+   systems.registerSystem<Projectiles>();
+   systems.registerSystem<Particles>();
+   systems.registerSystem<TextureLoader>();
+
+   Actors::init can register in gameclient
+   
+   GameClient &client = systems.system<GameClient>();
+   
+   */
+  
+  
+  
   // Register the subsystems
   Config config;
   GameClient gameclient;
