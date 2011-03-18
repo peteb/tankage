@@ -26,34 +26,31 @@ int app_main(Portal &interfaces, const std::vector<char *> &args) {
 
   
   SystemContext systems;
-
+  
   // Register the subsystems
-  Config config;
-  GameServer server;
-  Actors actors;
-  Players players;
-  Control control;
-  Projectiles projectiles;
-  Particles particles;
-  TextureLoader texLoader;
+  Config *config = systems.registerSystem<Config>();
+  GameServer *server = systems.registerSystem<GameServer>();
+  Actors *actors = systems.registerSystem<Actors>();
+  Players *players = systems.registerSystem<Players>();
+  Control *control = systems.registerSystem<Control>();
+  Projectiles *projectiles = systems.registerSystem<Projectiles>();
+  systems.registerSystem<Particles>();
+  systems.registerSystem<TextureLoader>();
   
-  server.registerSystem(&actors);
-  server.registerSystem(&players);
-  server.registerSystem(&control);
-  server.registerSystem(&projectiles);
+  server->registerSystem(players);
+  server->registerSystem(control);
+  server->registerSystem(projectiles);
   
-  systems.set(SystemContext::SYSTEM_ACTORS, &actors);
-  systems.set(SystemContext::SYSTEM_GAMESERVER, &server);
-  systems.set(SystemContext::SYSTEM_PLAYERS, &players);
-  systems.set(SystemContext::SYSTEM_CONTROL, &control);
-  systems.set(SystemContext::SYSTEM_PROJECTILES, &projectiles);
-  systems.set(SystemContext::SYSTEM_PARTICLES, &particles);
-  systems.set(SystemContext::SYSTEM_TEXTURE_LOADER, &texLoader);
-  systems.set(SystemContext::SYSTEM_CONFIG, &config);
-
+  // FIXME: requestSystem, use it everywhere
+  // FIXME: baseclass for game[client|server]
+  // FIXME: context->systemReplicator = game[client|server]
+  // FIXME: actors, players, control, projectiles should register themselves
+  // FIXME: same for server/main.cpp
+  // FIXME: delete systems in SystemContext dtor
+  // FIXME: system ctor should take portal and context
   
   systems.init(interfaces);
-  config.parse(args);
+  config->parse(args);
   systems.start();
   
   double lastTick = wm->timeSeconds();
@@ -66,13 +63,13 @@ int app_main(Portal &interfaces, const std::vector<char *> &args) {
     gfx->setOrtho(wndSize);
 
     
-    server.update();
-    actors.render();
-    projectiles.update();
-    projectiles.render();
+    server->update();
+    actors->render();
+    projectiles->update();
+    projectiles->render();
     
     if (thisTime - lastTick >= 1.0/20.0) { // Tickrate
-      server.tick(thisTime - lastTick);
+      server->tick(thisTime - lastTick);
       lastTick = thisTime;
     }
     

@@ -6,7 +6,7 @@
 #include <game/common/peer.h>
 #include <vector>
 
-class GameClient : public System, public Peer {
+class GameClient : public Peer {
 public:
   static SystemContext::SystemId id() {
     return SystemContext::SYSTEM_GAMECLIENT;

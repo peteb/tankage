@@ -41,6 +41,7 @@ void GameServer::init(const class Portal &interfaces) {
 }
 
 void GameServer::start() {
+  std::cout << "starting server at " << *server_host << std::endl;
   _host = _net->startHost(*server_host, 32, 2);  
 }
 

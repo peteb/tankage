@@ -17,6 +17,7 @@ public:
     SYSTEM_GAMECLIENT,
     SYSTEM_PLAYERS,
     SYSTEM_CONFIG,
+    SYSTEM_PEER,
     SYSTEM_MAX
   };
   
@@ -37,7 +38,11 @@ public:
   template<typename T>
   T *registerSystem() {
     T *sys = new T;
-    set(T::id(), sys);
+    SystemId id = T::id();
+    set(id, sys);
+    if (id == SYSTEM_GAMESERVER || id == SYSTEM_GAMECLIENT) {
+      set(SYSTEM_PEER, sys);
+    }
     return sys;
   }
     

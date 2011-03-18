@@ -8,7 +8,7 @@
 #include <map>
 
 
-class GameServer : public System, public Peer {
+class GameServer : public Peer {
 public:
   static SystemContext::SystemId id() {
     return SystemContext::SYSTEM_GAMESERVER;

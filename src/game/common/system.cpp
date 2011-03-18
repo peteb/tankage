@@ -37,7 +37,7 @@ void SystemContext::start() {
     throw std::runtime_error("sysctx not initialized");
 
   for (unsigned i = 0; i < SYSTEM_MAX; ++i) {
-    if (systems[i]) {
+    if (systems[i] && i != SYSTEM_PEER) {
       systems[i]->start();
     }    
   }  
