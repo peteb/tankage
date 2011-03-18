@@ -2,37 +2,38 @@
 #include "log.h"
 #include <iostream>
 
+using namespace tankage;
+
 std::vector<log::log_consumer*> log::_consumers;
 
-log::log(log_level level) : _level(level) {
-  switch (level) {
-    case error: 
-      _stream << "ER ";
-      break;
-    case warning:
-      _stream << "WA ";
-      break;
-    case info:
-      _stream << "IN ";
-      break;
-	case debug:
-      _stream << "DE ";
-      break;
-    default:
-      _stream << "?? ";
+log::log(severity_t severity, const char* file, const char* function, int line) 
+  : _severity(severity) {
+  std::string severity_name;
+  switch (_severity) {
+  case severity_error:
+    severity_name = "error";
+    break;
+  case severity_warning:
+    severity_name = "warning";
+    break;
+  case severity_info:
+    severity_name = "info";
+    break;
+  case severity_debug:
+    severity_name = "debug";
+    break;
+  default:
+    severity_name = "??";
   }
+  // FIXME kaspars: need to strip file name from it's full path
+  _stream << "(" << severity_name << " " << function << ":" << line << ")> "; 
 } // log
 
 log::~log() {
-    if (_consumers.empty()) {
-      // print to standard out if no consumers
-      std::cout << _stream.str() << std::endl; 
-    } else { 
-      for (std::vector<log_consumer*>::iterator it = _consumers.begin(); 
-        it != _consumers.end(); ++it) {
-        (*it)->write(_level, _stream.str());
-      }
-    }
+  for (std::vector<log_consumer*>::iterator it = _consumers.begin(); 
+    it != _consumers.end(); ++it) {
+    (*it)->write(_severity, _stream.str());
+  }
 } // ~log
 
 void log::register_consumer(log_consumer* consumer) {

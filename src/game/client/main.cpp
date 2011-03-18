@@ -15,10 +15,26 @@
 #include <game/common/players.h>
 #include <game/common/config.h>
 
+#include <utils/log.h>
+
 #include <cstdlib>
 #include <iostream>
+#include <ctime>
+
+
+struct client_log_consumer : public tankage::log::log_consumer {
+  void write(tankage::log::severity_t severity, const std::string &line) {
+	std::cout << line << std::endl;
+  }
+};
 
 int app_main(Portal &interfaces, const std::vector<char *> &args) {
+  // create and register log consumer 
+  client_log_consumer consumer;
+  tankage::log::register_consumer(&consumer);
+  time_t time = std::time(0);
+  tlog(debug) << "Starting-up the client " << std::asctime(localtime(&time));
+
   WindowManager *wm = interfaces.requestInterface<WindowManager>();
   Input *input = interfaces.requestInterface<Input>();
   Graphics *gfx = interfaces.requestInterface<Graphics>();

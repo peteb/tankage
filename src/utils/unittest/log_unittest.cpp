@@ -2,20 +2,20 @@
 #include "log.h"
 #include <gtest/gtest.h>
 
-struct my_log_consumer : public log::log_consumer {
-  void write(log::log_level level, const std::string &line) {
-    stream << line;
+struct my_log_consumer : public tankage::log::log_consumer {
+  void write(tankage::log::severity_t severity, const std::string &line) {
+	stream << line;
   }
   std::stringstream stream; 
 };
 
 TEST(log_unittest, test_logging) {
-  // registering the consumer
+  // create and register consumer
   my_log_consumer consumer;
-  log::register_consumer(&consumer);
-
-  log(log::warning) << "Not so bad: " << 12;
-  EXPECT_EQ(consumer.stream.str(), "WA Not so bad: 12");
-  consumer.stream.str(""); // strange way to clean it
-} 
+  tankage::log::register_consumer(&consumer);
+  // do any logging afterwards
+  tlog(error) << "bad error occurred";
+  EXPECT_NE(std::string::npos, consumer.stream.str().find("bad error"));
+  consumer.stream.str("");
+} // test_logging
 
