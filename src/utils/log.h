@@ -27,7 +27,7 @@ struct log {
   template<typename T> 
   log& operator<< (T data) {
     _stream << data;
-	return *this;
+    return *this;
   }
 
   struct log_consumer {
