@@ -103,7 +103,7 @@ double GameClient::localTime() const {
 }
 
 bool GameClient::predictLocal() const {
-  return _predict_local;
+  return true; //_predict_local;
 }
 
 void GameClient::onConnect() {

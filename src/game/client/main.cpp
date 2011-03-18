@@ -39,11 +39,6 @@ int app_main(Portal &interfaces, const std::vector<char *> &args) {
   systems.registerSystem<Particles>();
   systems.registerSystem<TextureLoader>();
 
-  gameclient->registerSystem(actors);
-  gameclient->registerSystem(players);
-  gameclient->registerSystem(control);
-  gameclient->registerSystem(projectiles);
-
   // FIXME: requestSystem, use it everywhere
   // FIXME: delete systems in SystemContext dtor
   // FIXME: system ctor should take portal and context
