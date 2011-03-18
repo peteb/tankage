@@ -16,9 +16,9 @@ namespace tankage {
 struct log {
   enum severity_t {
     severity_error,
-	severity_warning,
+    severity_warning,
     severity_info,
-	severity_debug
+    severity_debug
   };
 
   log(severity_t severity, const char* file, const char* function, int line);
@@ -43,7 +43,7 @@ private:
 };
 } // !namespace
 
-typedef struct tankage::log tlog;
+typedef tankage::log tlog;
 
 #endif // !UTILS_LOG_H
 
