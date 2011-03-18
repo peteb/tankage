@@ -19,6 +19,7 @@ Players::Players() {
 }
 
 void Players::init(const Portal &interfaces) {
+  context->system<Peer>()->registerSystem(this);
 }
 
 

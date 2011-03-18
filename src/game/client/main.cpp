@@ -39,6 +39,7 @@ int app_main(Portal &interfaces, const std::vector<char *> &args) {
   systems.registerSystem<Particles>();
   systems.registerSystem<TextureLoader>();
 
+  gameclient->registerSystem(actors);
   gameclient->registerSystem(players);
   gameclient->registerSystem(control);
   gameclient->registerSystem(projectiles);

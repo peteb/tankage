@@ -37,10 +37,6 @@ int app_main(Portal &interfaces, const std::vector<char *> &args) {
   systems.registerSystem<Particles>();
   systems.registerSystem<TextureLoader>();
   
-  server->registerSystem(players);
-  server->registerSystem(control);
-  server->registerSystem(projectiles);
-  
   // FIXME: requestSystem, use it everywhere
   // FIXME: baseclass for game[client|server]
   // FIXME: context->systemReplicator = game[client|server]

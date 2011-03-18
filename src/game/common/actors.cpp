@@ -47,8 +47,8 @@ Actors::~Actors() {
 void Actors::init(const class Portal &interfaces) {
   graphics = interfaces.requestInterface<Graphics>();
   wm = interfaces.requestInterface<WindowManager>();
-
   context->system<Peer>()->registerSystem(this);
+
   
   ImageLoader *imgLoader = interfaces.requestInterface<ImageLoader>();
 
