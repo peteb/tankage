@@ -50,6 +50,7 @@ int app_main(Portal &interfaces, const std::vector<char *> &args) {
   // FIXME: actors, players, control, projectiles should register themselves
   // FIXME: same for server/main.cpp
   // FIXME: delete systems in SystemContext dtor
+  // FIXME: system ctor should take portal and context
   
   systems.init(interfaces);
   config->parse(args);
