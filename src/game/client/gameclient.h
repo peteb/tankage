@@ -7,6 +7,10 @@
 
 class GameClient : public System {
 public:
+  static SystemContext::SystemId id() {
+    return SystemContext::SYSTEM_GAMECLIENT;
+  }
+  
   enum ClientState {
     STATE_DISCONNECTED = 0,
     STATE_CONNECTED,

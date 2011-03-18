@@ -15,6 +15,10 @@
 
 class Control : public ReplicatedSystem {
 public:
+  static SystemContext::SystemId id() {
+    return SystemContext::SYSTEM_CONTROL;
+  }
+  
   struct Move {
     PlayerInput delta;
     TankState absolute;

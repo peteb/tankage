@@ -25,6 +25,10 @@ private:
 
 class Players : public ReplicatedSystem {
 public:
+  static SystemContext::SystemId id() {
+    return SystemContext::SYSTEM_PLAYERS;
+  }
+
   Players();
   void init(const class Portal &interfaces);
 

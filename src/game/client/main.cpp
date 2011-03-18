@@ -27,58 +27,32 @@ int app_main(Portal &interfaces, const std::vector<char *> &args) {
   wm->createWindow(800, 600);
   
   SystemContext systems;
-
-  /*
-    Proposal:
-   systems.registerSystem<Config>();
-   systems.registerSystem<GameClient>();
-   systems.registerSystem<Actors>();
-   systems.registerSystem<Players>();
-   systems.registerSystem<Background>();
-   systems.registerSystem<Control>();
-   systems.registerSystem<Projectiles>();
-   systems.registerSystem<Particles>();
-   systems.registerSystem<TextureLoader>();
-
-   Actors::init can register in gameclient
-   
-   GameClient &client = systems.system<GameClient>();
-   
-   */
-  
-  
   
   // Register the subsystems
-  Config config;
-  GameClient gameclient;
-  Actors actors;
-  Players players;
-  Background background;
-  Control control;
-  Projectiles projectiles;
-  Particles particles;
-  TextureLoader texLoader;
-  
-  gameclient.registerSystem(&actors);
-  gameclient.registerSystem(&players);
-  gameclient.registerSystem(&control);
-  gameclient.registerSystem(&projectiles);
-  
-  // TODO: this is fugly, registering like this. maybe it should be done
-  //       like gameClient above
-  
-  systems.set(SystemContext::SYSTEM_BACKGROUND, &background);
-  systems.set(SystemContext::SYSTEM_ACTORS, &actors);
-  systems.set(SystemContext::SYSTEM_PROJECTILES, &projectiles);
-  systems.set(SystemContext::SYSTEM_GAMECLIENT, &gameclient);
-  systems.set(SystemContext::SYSTEM_PLAYERS, &players);
-  systems.set(SystemContext::SYSTEM_CONTROL, &control);
-  systems.set(SystemContext::SYSTEM_PARTICLES, &particles);
-  systems.set(SystemContext::SYSTEM_TEXTURE_LOADER, &texLoader);
-  systems.set(SystemContext::SYSTEM_CONFIG, &config);
+  Config *config = systems.registerSystem<Config>();
+  GameClient *gameclient = systems.registerSystem<GameClient>();
+  Actors *actors = systems.registerSystem<Actors>();
+  Players *players = systems.registerSystem<Players>();
+  Control *control = systems.registerSystem<Control>();
+  Projectiles *projectiles = systems.registerSystem<Projectiles>();
+  Background *background = systems.registerSystem<Background>();
+  systems.registerSystem<Particles>();
+  systems.registerSystem<TextureLoader>();
+
+  gameclient->registerSystem(actors);
+  gameclient->registerSystem(players);
+  gameclient->registerSystem(control);
+  gameclient->registerSystem(projectiles);
+
+  // FIXME: requestSystem, use it everywhere
+  // FIXME: baseclass for game[client|server]
+  // FIXME: context->systemReplicator = game[client|server]
+  // FIXME: actors, players, control, projectiles should register themselves
+  // FIXME: same for server/main.cpp
+  // FIXME: delete systems in SystemContext dtor
   
   systems.init(interfaces);
-  config.parse(args);
+  config->parse(args);
   systems.start();
   
   double lastTick = wm->timeSeconds();
@@ -91,17 +65,17 @@ int app_main(Portal &interfaces, const std::vector<char *> &args) {
     gfx->setViewport(wndSize);
     gfx->setOrtho(wndSize);
 
-    control.update();
-    background.render();
-    gameclient.update();
+    control->update();
+    background->render();
+    gameclient->update();
 
-    gameclient.tick(thisTime - lastTick);
+    gameclient->tick(thisTime - lastTick);
     lastTick = thisTime;
     
     //   particles.render();
-    actors.render();
-    projectiles.update();
-    projectiles.render();
+    actors->render();
+    projectiles->update();
+    projectiles->render();
     
     wm->swapBuffers();
 
@@ -110,7 +84,7 @@ int app_main(Portal &interfaces, const std::vector<char *> &args) {
   }
 
 
-  gameclient.disconnectGently();
+  gameclient->disconnectGently();
 
   return EXIT_SUCCESS;
 }

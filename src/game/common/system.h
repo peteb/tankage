@@ -6,7 +6,7 @@ class SystemContext {
 public:
   SystemContext();
 
-  enum {
+  enum SystemId {
     SYSTEM_ACTORS = 0,
     SYSTEM_BACKGROUND,
     SYSTEM_CONTROL,
@@ -27,6 +27,13 @@ public:
   template<typename T>
   T *system(unsigned id) const {
     return reinterpret_cast<T *>(resolveSystem(id));
+  }
+  
+  template<typename T>
+  T *registerSystem() {
+    T *sys = new T;
+    set(T::id(), sys);
+    return sys;
   }
   
   void init(class Portal &modules);

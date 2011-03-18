@@ -10,6 +10,10 @@
 
 class Actors : public ReplicatedSystem {
 public:
+  static SystemContext::SystemId id() {
+    return SystemContext::SYSTEM_ACTORS;
+  }
+  
   Actors();
   ~Actors();
 

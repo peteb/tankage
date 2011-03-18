@@ -6,6 +6,10 @@
 
 class TextureLoader : public System {
 public:
+  static SystemContext::SystemId id() {
+    return SystemContext::SYSTEM_TEXTURE_LOADER;
+  }
+  
   void init(const class Portal &interfaces);
   class Texture *texture(const std::string &filename);
 

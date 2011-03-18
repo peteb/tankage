@@ -5,6 +5,10 @@
 
 class Background : public System {
 public:
+  static SystemContext::SystemId id() {
+    return SystemContext::SYSTEM_BACKGROUND;
+  }
+  
   void init(const class Portal &interfaces);
   void render();
 

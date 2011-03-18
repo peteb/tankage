@@ -9,6 +9,10 @@
 
 class GameServer : public System {
 public:
+  static SystemContext::SystemId id() {
+    return SystemContext::SYSTEM_GAMESERVER;
+  }
+  
   GameServer();
   ~GameServer();
   

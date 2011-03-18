@@ -11,6 +11,10 @@ typedef uint32_t ProjectileId;
 
 class Projectiles : public ReplicatedSystem {
 public:
+  static SystemContext::SystemId id() {
+    return SystemContext::SYSTEM_PROJECTILES;
+  }
+  
   enum ProjectileType {
     PROJECTILE_BULLET
   };
