@@ -9,7 +9,7 @@ struct my_log_consumer : public tankage::log::log_consumer {
   std::stringstream stream; 
 };
 
-TEST(log_unittest, test_logging) {
+TEST(utils_unittest, test_logging) {
   // create and register consumer
   my_log_consumer consumer;
   tankage::log::register_consumer(&consumer);
