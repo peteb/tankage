@@ -16,6 +16,7 @@ add_executable(tankage-server
   ${GAME_ROOT_DIR}/common/net_error.cpp
   ${GAME_ROOT_DIR}/common/control.cpp
   ${GAME_ROOT_DIR}/common/config.cpp
+  ${GAME_ROOT_DIR}/common/peer.cpp
   
   # bad stuff (shouldn't be needed)
   ${GAME_ROOT_DIR}/client/particles.cpp

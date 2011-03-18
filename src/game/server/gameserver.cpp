@@ -78,10 +78,6 @@ void GameServer::tick(double dt) {
 }
 
 
-void GameServer::registerSystem(class ReplicatedSystem *system) {
-  _systems.push_back(system);
-}
-
 void GameServer::onConnect(Client *client) {
   _log->write(Logging::DEBUG, "new client: %s ! :DD", 
     client->address().c_str());    

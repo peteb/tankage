@@ -28,6 +28,11 @@ public:
   T *system(unsigned id) const {
     return reinterpret_cast<T *>(resolveSystem(id));
   }
+
+  template<typename T>
+  T *system() const {
+    return reinterpret_cast<T *>(resolveSystem(T::id()));
+  }
   
   template<typename T>
   T *registerSystem() {
@@ -35,7 +40,7 @@ public:
     set(T::id(), sys);
     return sys;
   }
-  
+    
   void init(class Portal &modules);
   void start();
   

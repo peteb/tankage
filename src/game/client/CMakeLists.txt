@@ -17,6 +17,7 @@ add_executable(tankage
   ${GAME_ROOT_DIR}/common/players.cpp
   ${GAME_ROOT_DIR}/common/net_error.cpp
   ${GAME_ROOT_DIR}/common/config.cpp
+  ${GAME_ROOT_DIR}/common/peer.cpp
 
   ${GAME_ROOT_DIR}/server/gameserver.cpp  # shouldn't be used, but is needed for linking
   ${GAME_ROOT_DIR}/server/client_session.cpp

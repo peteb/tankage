@@ -3,11 +3,12 @@
 
 #include <game/common/system.h>
 #include <game/common/net_protocol.h>
+#include <game/common/peer.h>
 #include <vector>
 #include <map>
 
 
-class GameServer : public System {
+class GameServer : public System, public Peer {
 public:
   static SystemContext::SystemId id() {
     return SystemContext::SYSTEM_GAMESERVER;
@@ -20,7 +21,6 @@ public:
   void start();
   
   void update();
-  void registerSystem(class ReplicatedSystem *system);
   void tick(double dt);
   class ClientSession *session(class Client *client) const;
   double localTime() const;
@@ -35,7 +35,6 @@ private:
   // net protocol
   void onIdent(const struct NetIdentifyMsg *ident, class Packet *packet);
   
-  std::vector<class ReplicatedSystem *> _systems;
   SessionMap _sessions;
   class Host *_host;
   class Logging *_log;
