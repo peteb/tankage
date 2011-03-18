@@ -45,10 +45,6 @@ int app_main(Portal &interfaces, const std::vector<char *> &args) {
   gameclient->registerSystem(projectiles);
 
   // FIXME: requestSystem, use it everywhere
-  // FIXME: baseclass for game[client|server]
-  // FIXME: context->systemReplicator = game[client|server]
-  // FIXME: actors, players, control, projectiles should register themselves
-  // FIXME: same for server/main.cpp
   // FIXME: delete systems in SystemContext dtor
   // FIXME: system ctor should take portal and context
   
