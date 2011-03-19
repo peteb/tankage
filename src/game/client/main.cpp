@@ -24,9 +24,7 @@
 
 struct client_log_consumer { 
   void operator()(tankage::tanklog::severity_t severity, const std::string &line) {
-    if (severity > tankage::tanklog::severity_info) {
 	  std::cout << line << std::endl;
-    }
   }
 };
 
