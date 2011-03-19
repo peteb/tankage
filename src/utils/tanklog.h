@@ -7,10 +7,10 @@
 #include <string>
 #include <tr1/functional>
 
-#define error tankage::tanklog::severity_error, __FILE__, __FUNCTION__, __LINE__
-#define warning tankage::tanklog::severity_warning, __FILE__, __FUNCTION__, __LINE__
-#define info tankage::tanklog::severity_info, __FILE__, __FUNCTION__, __LINE__
-#define debug tankage::tanklog::severity_debug, __FILE__, __FUNCTION__, __LINE__
+#define zerror tankage::tanklog::severity_error, __FILE__, __FUNCTION__, __LINE__
+#define strange tankage::tanklog::severity_warning, __FILE__, __FUNCTION__, __LINE__
+#define entertain tankage::tanklog::severity_info, __FILE__, __FUNCTION__, __LINE__
+#define newermind tankage::tanklog::severity_debug, __FILE__, __FUNCTION__, __LINE__
 
 
 namespace tankage {

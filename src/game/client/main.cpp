@@ -33,7 +33,7 @@ struct client_log_consumer {
 int app_main(Portal &interfaces, const std::vector<char *> &args) {
   // create and register extra client consumer
   tankage::tanklog::register_consumer(client_log_consumer());
-  tanklog(info) << "Starting-up the client =]";
+  tanklog(entertain) << "Starting-up the client =]";
 
   WindowManager *wm = interfaces.requestInterface<WindowManager>();
   Input *input = interfaces.requestInterface<Input>();

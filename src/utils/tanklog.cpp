@@ -1,6 +1,8 @@
 
 #include "tanklog.h"
+
 #include <iostream>
+#include <tr1/regex>
 
 
 std::vector<tankage::tanklog::consumer_t> tankage::tanklog::_consumers;

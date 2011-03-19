@@ -69,7 +69,7 @@ int main(int argc, char **argv) {
   for (int i(1); i != argc; ++i) {
     ss << " " << argv[i];
   }
-  tanklog(info) << "Starting-up: " << ss.str();
+  tanklog(entertain) << "Starting-up: " << ss.str();
 
   Portal interfaces;
 
