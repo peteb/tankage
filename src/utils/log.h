@@ -14,7 +14,6 @@
 
 
 namespace tankage {
-
 class log {
 public:
   enum severity_t {
