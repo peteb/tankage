@@ -2,7 +2,6 @@
 #include "tanklog.h"
 
 #include <iostream>
-#include <tr1/regex>
 
 
 std::vector<tankage::tanklog::consumer_t> tankage::tanklog::_consumers;
@@ -26,8 +25,12 @@ tankage::tanklog::tanklog(severity_t severity, const char* file, const char* fun
   default:
     severity_name = "??";
   }
-  // FIXME kaspars: need to strip file name from it's full path
-  _stream << "(" << severity_name << " " << function << ":" << line << ")> "; 
+  // FIXME kaspars: Fix this for Windows later
+  std::string file_name = file ? file : "";
+  size_t pos = file_name.find_last_of("/"); 
+  file_name = file_name.substr(pos+1);
+  _stream << "(" << severity_name << " " << file_name << ":" 
+    << function << ":" << line << ")> "; 
 } // log
 
 tankage::tanklog::~tanklog() {
