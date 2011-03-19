@@ -15,7 +15,7 @@ TEST(utils_unittest, test_logging) {
   // create and register consumer
   tankage::tanklog::register_consumer(my_log_consumer());
   // do any logging afterwards
-  tanklog(error) << "bad error occurred";
+  tanklog(zerror) << "bad error occurred";
   EXPECT_NE(std::string::npos, my_log_consumer::stream.str().find("bad error"));
   my_log_consumer::stream.str("");
 } // test_logging
