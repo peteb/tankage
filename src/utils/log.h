@@ -15,7 +15,8 @@
 
 namespace tankage {
 
-struct log {
+class log {
+public:
   enum severity_t {
     severity_error,
     severity_warning,
