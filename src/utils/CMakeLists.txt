@@ -7,7 +7,7 @@ add_library(utils
   mat.cpp
   rect.cpp
   color.cpp
-  log.cpp
+  tanklog.cpp
 )
 
 if (HAVE_BOOST)

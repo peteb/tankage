@@ -1,12 +1,11 @@
 
-#include "log.h"
+#include "tanklog.h"
 #include <iostream>
 
-using namespace tankage;
 
-std::vector<log::log_consumer_t> log::_consumers;
+std::vector<tankage::tanklog::consumer_t> tankage::tanklog::_consumers;
 
-log::log(severity_t severity, const char* file, const char* function, int line) 
+tankage::tanklog::tanklog(severity_t severity, const char* file, const char* function, int line) 
   : _severity(severity) {
   std::string severity_name;
   switch (_severity) {
@@ -29,14 +28,14 @@ log::log(severity_t severity, const char* file, const char* function, int line)
   _stream << "(" << severity_name << " " << function << ":" << line << ")> "; 
 } // log
 
-log::~log() {
-  for (std::vector<log_consumer_t>::iterator it = _consumers.begin(); 
+tankage::tanklog::~tanklog() {
+  for (std::vector<consumer_t>::iterator it = _consumers.begin(); 
     it != _consumers.end(); ++it) {
     (*it)(_severity, _stream.str());
   }
 } // ~log
 
-void log::register_consumer(const log_consumer_t &consumer) {
+void tankage::tanklog::register_consumer(const consumer_t &consumer) {
   _consumers.push_back(consumer); 
 } // register_consumer 
 

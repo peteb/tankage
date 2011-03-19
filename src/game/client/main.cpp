@@ -15,7 +15,7 @@
 #include <game/common/players.h>
 #include <game/common/config.h>
 
-#include <utils/log.h>
+#include <utils/tanklog.h>
 
 #include <cstdlib>
 #include <iostream>
@@ -23,15 +23,17 @@
 
 
 struct client_log_consumer { 
-  void operator()(tankage::log::severity_t severity, const std::string &line) {
-	std::cout << line << std::endl;
+  void operator()(tankage::tanklog::severity_t severity, const std::string &line) {
+    if (severity > tankage::tanklog::severity_info) {
+	  std::cout << line << std::endl;
+    }
   }
 };
 
 int app_main(Portal &interfaces, const std::vector<char *> &args) {
-  // create and register consumer
-  tankage::log::register_consumer(client_log_consumer());
-  tanklog(debug) << "Starting-up the client =]";
+  // create and register extra client consumer
+  tankage::tanklog::register_consumer(client_log_consumer());
+  tanklog(info) << "Starting-up the client =]";
 
   WindowManager *wm = interfaces.requestInterface<WindowManager>();
   Input *input = interfaces.requestInterface<Input>();

@@ -5,6 +5,7 @@
  */
 
 #include <iostream>
+#include <fstream>
 #include <map>
 #include <cstdlib>
 #include "GL/glfw.h"
@@ -17,6 +18,8 @@
 #include <engine/enet/network.h>
 #include <engine/logging/logging.h>
 #include <engine/config.h>
+
+#include <utils/tanklog.h>
 
 #include <ctime>
 
@@ -39,7 +42,35 @@ int catch_app_main(Portal &portal, const std::vector<char *> &args) {
   return EXIT_FAILURE;
 }
 
+class main_log_consumer { 
+public:
+  main_log_consumer(const std::string &file = "tankage.log") : _file(file) {
+    if (char* home = getenv("HOME")) {
+      _file = std::string(home).append("/.").append(file);
+    }
+  }
+  void operator()(tankage::tanklog::severity_t severity, const std::string &line) {
+    std::fstream file(_file.c_str(), std::ios::out | std::ios::app);
+    if (file.is_open()) {
+      file << line << std::endl;
+      file.close();
+    } 
+  }
+private:
+  std::string _file;
+};
+
 int main(int argc, char **argv) {
+  // create and register main log consumer
+  tankage::tanklog::register_consumer(main_log_consumer());
+
+  std::stringstream ss;
+  ss << argv[0];
+  for (int i(1); i != argc; ++i) {
+    ss << " " << argv[i];
+  }
+  tanklog(info) << "Starting-up: " << ss.str();
+
   Portal interfaces;
 
   if (!glfwInit()) {
