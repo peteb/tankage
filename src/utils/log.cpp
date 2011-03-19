@@ -4,7 +4,7 @@
 
 using namespace tankage;
 
-std::vector<log::log_consumer*> log::_consumers;
+std::vector<log::log_consumer_t> log::_consumers;
 
 log::log(severity_t severity, const char* file, const char* function, int line) 
   : _severity(severity) {
@@ -30,13 +30,13 @@ log::log(severity_t severity, const char* file, const char* function, int line)
 } // log
 
 log::~log() {
-  for (std::vector<log_consumer*>::iterator it = _consumers.begin(); 
+  for (std::vector<log_consumer_t>::iterator it = _consumers.begin(); 
     it != _consumers.end(); ++it) {
-    (*it)->write(_severity, _stream.str());
+    (*it)(_severity, _stream.str());
   }
 } // ~log
 
-void log::register_consumer(log_consumer* consumer) {
+void log::register_consumer(const log_consumer_t &consumer) {
   _consumers.push_back(consumer); 
 } // register_consumer 
 

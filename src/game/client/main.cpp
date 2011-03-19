@@ -22,18 +22,16 @@
 #include <ctime>
 
 
-struct client_log_consumer : public tankage::log::log_consumer {
-  void write(tankage::log::severity_t severity, const std::string &line) {
+struct client_log_consumer { 
+  void operator()(tankage::log::severity_t severity, const std::string &line) {
 	std::cout << line << std::endl;
   }
 };
 
 int app_main(Portal &interfaces, const std::vector<char *> &args) {
-  // create and register log consumer 
-  client_log_consumer consumer;
-  tankage::log::register_consumer(&consumer);
-  time_t time = std::time(0);
-  tlog(debug) << "Starting-up the client " << std::asctime(localtime(&time));
+  // create and register consumer
+  tankage::log::register_consumer(client_log_consumer());
+  tanklog(debug) << "Starting-up the client =]";
 
   WindowManager *wm = interfaces.requestInterface<WindowManager>();
   Input *input = interfaces.requestInterface<Input>();

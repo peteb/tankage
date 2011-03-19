@@ -5,6 +5,7 @@
 #include <sstream>
 #include <vector>
 #include <string>
+#include <tr1/functional>
 
 #define error tankage::log::severity_error, __FILE__, __FUNCTION__, __LINE__
 #define warning tankage::log::severity_warning, __FILE__, __FUNCTION__, __LINE__
@@ -13,6 +14,7 @@
 
 
 namespace tankage {
+
 struct log {
   enum severity_t {
     severity_error,
@@ -30,20 +32,17 @@ struct log {
     return *this;
   }
 
-  struct log_consumer {
-    virtual void write(severity_t severity, const std::string &line) =0;
-    virtual ~log_consumer() {};
-  };
-  static void register_consumer(log_consumer* consumer);
+  typedef std::tr1::function<void(severity_t,const std::string&)> log_consumer_t;
+  static void register_consumer(const log_consumer_t &consumer);
 
 private:
-  static std::vector<log::log_consumer*> _consumers;
+  static std::vector<log_consumer_t> _consumers; 
   severity_t _severity;
   std::stringstream _stream;
 };
 } // !namespace
 
-typedef tankage::log tlog;
+typedef tankage::log tanklog;
 
 #endif // !UTILS_LOG_H
 
