@@ -11,7 +11,7 @@
 * DONE New game folder structure (common, client, server)
 * DONE Add "error dialog box" to window managers, for displaying errors.
 * TODO Verify that the server compiles, runs and accepts connections on PowerPC
-* TODO A directory for cached downloaded data, writable by the client
+* TODO ~/.tankage/ for config, downloaded content, log, etc.
 * DONE Add twitcurl library in 3pp and make it compilable * Logging
 ** DONE A logging interface in the engine (+ very basic stdout/stderr implementation)  
 ** DONE Implement logging level (probably some environment variable)
@@ -66,6 +66,7 @@
 * Unit tests using Gtest
 *** DONE Unittests for mat, vec, rect in utils
 *** DONE Unittest for ring_buffer
+*** TODO Unittest for packer
 * CMake support
 *** DONE CMake should create and use 'bin' and 'build' directories 
 *** TODO Investigate how-to report CMake error and get rid of gen files

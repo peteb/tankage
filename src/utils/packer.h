@@ -2,27 +2,31 @@
 #define UTILS_PACKER_H
 
 #include <vector>
+#include <string>
 
 class Packer {
-  std::vector<char> &_data;
-  
+  void * _pos;
+  void * const _end;
+
 public:
-  Packer(std::vector<char> &data);
+  Packer(void *start, void *end);
   
   void writeShort(short value);
-/*  void writeInt(int value);
+  void writeInt(int value);
   void writeString(const std::string &value);
-  void writeData(const void *data, size_t size);*/
 };
 
-/*class Unpacker {
+class Unpacker {
+  const void * _pos;
+  const void * const _end;
+  
 public:
   Unpacker(const void *data, size_t size);
   
   short readShort();
-  int readInt();
+  /*int readInt();
   std::string readString();
-  const void *readData();
-};*/
+  const void *readData();*/
+};
 
 #endif // !UTILS_PACKER_H
