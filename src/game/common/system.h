@@ -7,7 +7,8 @@ public:
   SystemContext();
 
   enum SystemId {
-    SYSTEM_ACTORS = 0,
+    SYSTEM_CONFIG = 0,
+    SYSTEM_ACTORS,
     SYSTEM_BACKGROUND,
     SYSTEM_CONTROL,
     SYSTEM_TEXTURE_LOADER,
@@ -16,7 +17,6 @@ public:
     SYSTEM_GAMESERVER,
     SYSTEM_GAMECLIENT,
     SYSTEM_PLAYERS,
-    SYSTEM_CONFIG,
     SYSTEM_PEER,
     SYSTEM_MAX
   };

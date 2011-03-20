@@ -32,7 +32,7 @@ int app_main(Portal &interfaces, const std::vector<char *> &args) {
   Config *config = systems.registerSystem<Config>();
   GameClient *gameclient = systems.registerSystem<GameClient>();
   Actors *actors = systems.registerSystem<Actors>();
-  Players *players = systems.registerSystem<Players>();
+  systems.registerSystem<Players>();
   Control *control = systems.registerSystem<Control>();
   Projectiles *projectiles = systems.registerSystem<Projectiles>();
   Background *background = systems.registerSystem<Background>();
