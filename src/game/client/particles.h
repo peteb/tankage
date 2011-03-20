@@ -34,6 +34,11 @@ private:
 class Particles : public System {
 public:
   void init(const class Portal &modules);
+  
+  static SystemContext::SystemId id() {
+    return SystemContext::SYSTEM_PARTICLES;
+  }
+  
   void render();
   ParticleGroup *group(class Texture *texture);
   

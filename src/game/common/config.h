@@ -50,6 +50,10 @@ public:
   Config(const std::string &path = "");
   ~Config();
 
+  static SystemContext::SystemId id() {
+    return SystemContext::SYSTEM_CONFIG;
+  }
+  
   void init(const class Portal &modules);
   void start();
   

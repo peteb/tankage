@@ -3,6 +3,8 @@
 #include <game/common/projectile.h>
 #include <game/common/actors.h>
 #include <game/common/texture_loader.h>
+#include <game/common/peer.h>
+
 #include <game/client/particles.h>
 
 #include <engine/window_manager.h>
@@ -33,6 +35,8 @@ Projectiles::~Projectiles() {
 void Projectiles::init(const class Portal &interfaces) {
   wm = interfaces.requestInterface<WindowManager>();
   gfx = interfaces.requestInterface<Graphics>();
+  context->system<Peer>()->registerSystem(this);
+
   TextureLoader *textures = context->textureLoader();
   
   bulletTexture = textures->texture("bullet.png");

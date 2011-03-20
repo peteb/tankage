@@ -38,7 +38,8 @@ Control::Control()
 void Control::init(const class Portal &interfaces) {
   input = interfaces.requestInterface<Input>();
   wm = interfaces.requestInterface<WindowManager>();
-  
+  context->system<Peer>()->registerSystem(this);
+
   Config *config = context->system<Config>(SystemContext::SYSTEM_CONFIG);
   config->registerVariable("control", "key_up", &control_keyUp);
   config->registerVariable("control", "key_down", &control_keyDown);

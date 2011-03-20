@@ -6,8 +6,9 @@ class SystemContext {
 public:
   SystemContext();
 
-  enum {
-    SYSTEM_ACTORS = 0,
+  enum SystemId {
+    SYSTEM_CONFIG = 0,
+    SYSTEM_ACTORS,
     SYSTEM_BACKGROUND,
     SYSTEM_CONTROL,
     SYSTEM_TEXTURE_LOADER,
@@ -16,7 +17,7 @@ public:
     SYSTEM_GAMESERVER,
     SYSTEM_GAMECLIENT,
     SYSTEM_PLAYERS,
-    SYSTEM_CONFIG,
+    SYSTEM_PEER,
     SYSTEM_MAX
   };
   
@@ -28,7 +29,23 @@ public:
   T *system(unsigned id) const {
     return reinterpret_cast<T *>(resolveSystem(id));
   }
+
+  template<typename T>
+  T *system() const {
+    return reinterpret_cast<T *>(resolveSystem(T::id()));
+  }
   
+  template<typename T>
+  T *registerSystem() {
+    T *sys = new T;
+    SystemId id = T::id();
+    set(id, sys);
+    if (id == SYSTEM_GAMESERVER || id == SYSTEM_GAMECLIENT) {
+      set(SYSTEM_PEER, sys);
+    }
+    return sys;
+  }
+    
   void init(class Portal &modules);
   void start();
   

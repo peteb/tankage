@@ -41,6 +41,7 @@ void GameServer::init(const class Portal &interfaces) {
 }
 
 void GameServer::start() {
+  std::cout << "starting server at " << *server_host << std::endl;
   _host = _net->startHost(*server_host, 32, 2);  
 }
 
@@ -77,10 +78,6 @@ void GameServer::tick(double dt) {
   _time += dt;
 }
 
-
-void GameServer::registerSystem(class ReplicatedSystem *system) {
-  _systems.push_back(system);
-}
 
 void GameServer::onConnect(Client *client) {
   _log->write(Logging::DEBUG, "new client: %s ! :DD", 

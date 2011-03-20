@@ -98,16 +98,12 @@ void GameClient::disconnectGently() {
   _client = NULL;
 }
 
-void GameClient::registerSystem(class ReplicatedSystem *system) {
-  _systems.push_back(system);
-}
-
 double GameClient::localTime() const {
   return _time;
 }
 
 bool GameClient::predictLocal() const {
-  return _predict_local;
+  return *client_predict;
 }
 
 void GameClient::onConnect() {

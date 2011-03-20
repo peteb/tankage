@@ -67,7 +67,6 @@ void Config::registerVariable(const char *subtree,
     variable->assign(_node.getNode(subtree).getProperty(name));
   }
   catch (...) {
-      
   }
   
   std::string varid = std::string(subtree) + "." + std::string(name);
@@ -98,25 +97,14 @@ std::string Config::property(const std::string &system,
 void Config::updateProperty(const std::string &system, 
                             const std::string &name, 
                             const std::string &value) {
-  // don't allow to update non-existing attributes
-  PropertyNode *sysnode;
-  try {
-    sysnode = &_node.getNode(system);    
-  }
-  catch (...) {
-    _node.addNode(PropertyNode(system));
-    sysnode = &_node.getNode(system);
-  }
 
-  sysnode->addProperty(Property(name, value));    
   
-
-  /*std::multimap<std::string, ConfigConsumer*>::iterator it;
-  for (it = _consumers.begin(); it != _consumers.end(); ++it) {
-    if (it->first == system) {
-      it->second->updateConfig(name, value);
-    }
-  } */// for 
+  ConsumerMap::iterator iter = _consumers.find(system + "." + name);
+  if (iter == _consumers.end()) {
+    throw std::runtime_error("unknown variable: '" + system + "." + name + "'");
+  }
+  
+  iter->second->assign(value);
 } // updateProperty 
 
 
@@ -137,18 +125,8 @@ void Config::parse(const std::vector<char *> &args) {
     if (system.empty() || name.empty() || value.empty())
       throw std::runtime_error("invalid argument: " + arg);    
     
-    ConsumerMap::iterator iter = _consumers.find(system + "." + name);
-    if (iter == _consumers.end()) {
-      throw std::runtime_error("unknown variable: '" + system + "." + name + "'");
-    }
-    
-    iter->second->assign(value);
-    //updateProperty(system, name, value);
+    updateProperty(system, name, value);
   } // for
 } // updateProperties
 
-//void Config::registerConsumer(const std::string &system, 
-//										  ConfigConsumer* consumer) {
-//  _consumers.insert(std::pair<std::string,ConfigConsumer*>(system, consumer));
-//} // registerConsumer
-//
+
