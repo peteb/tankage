@@ -15,10 +15,24 @@
 #include <game/common/players.h>
 #include <game/common/config.h>
 
+#include <utils/log.h>
+
 #include <cstdlib>
 #include <iostream>
+#include <ctime>
+
+
+struct ClientLogConsumer { 
+  void operator()(Log::Severity severity, const std::string &line) {
+	  std::cout << line << std::endl;
+  }
+};
 
 int app_main(Portal &interfaces, const std::vector<char *> &args) {
+  // create and register extra client consumer
+  Log::registerConsumer(ClientLogConsumer());
+  Log(INFO) << "Starting-up the client =]";
+
   WindowManager *wm = interfaces.requestInterface<WindowManager>();
   Input *input = interfaces.requestInterface<Input>();
   Graphics *gfx = interfaces.requestInterface<Graphics>();

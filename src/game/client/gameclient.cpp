@@ -7,7 +7,8 @@
 #include <engine/portal.h>
 #include <engine/network.h>
 #include <engine/packet.h>
-#include <engine/logging.h>
+
+#include <utils/log.h>
 
 #include <iostream>
 #include <cassert>
@@ -32,7 +33,6 @@ GameClient::~GameClient() {
 
 void GameClient::init(const Portal &interfaces) {
   _net = interfaces.requestInterface<Network>();
-  _log = interfaces.requestInterface<Logging>();
 
   Config *config = context->system<Config>(SystemContext::SYSTEM_CONFIG);
   config->registerVariable("client", "host", &client_host);
@@ -41,7 +41,7 @@ void GameClient::init(const Portal &interfaces) {
 
 void GameClient::start() {
   _state = GameClient::STATE_DISCONNECTED;
-  _log->write(Logging::DEBUG, "Connecting to host: %s", client_host->c_str());
+  Log(INFO) << "Connecting to the host: " << client_host->c_str();
   _client = _net->connect(*client_host, 2);  
 }
 
@@ -108,7 +108,7 @@ bool GameClient::predictLocal() const {
 
 void GameClient::onConnect() {
   _time = 0.0f;
-  _log->write(Logging::DEBUG, "*** connected!");
+  Log(INFO) << "*** connected!"; 
 
   // send the identification packet
   NetIdentifyMsg msg;
@@ -119,7 +119,7 @@ void GameClient::onConnect() {
 }
 
 void GameClient::onDisconnect() {
-  _log->write(Logging::DEBUG, "disconnected");
+  Log(INFO) << "disconnected";
 }
 
 void GameClient::onReceive(Packet *packet) {
@@ -127,8 +127,7 @@ void GameClient::onReceive(Packet *packet) {
   static int packetCount = 0;
   if (packetCount++ > 10) {
     packetCount = 0;
-    _log->write(Logging::DEBUG, "rtt: %u", 
-      packet->sender()->stats(Client::STAT_RTT));
+    Log(DEBUG) << "rtt: " << packet->sender()->stats(Client::STAT_RTT);
   }
   
   size_t size = packet->size();
@@ -151,8 +150,8 @@ void GameClient::onReceive(Packet *packet) {
 }
 
 void GameClient::onError(const NetErrorMsg *error, Packet *packet) {
-  _log->write(Logging::DEBUG, "Received error from server: %s, code: %u", 
-    error->desc, error->error_code);
+  Log(DEBUG) << "Received error from server: " << error->desc 
+    << ", code: " << error->error_code;
   disconnectGently();
 }
 

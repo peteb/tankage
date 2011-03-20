@@ -8,6 +8,7 @@ add_library(utils
   rect.cpp
   color.cpp
   packer.cpp
+  log.cpp
 )
 
 if (HAVE_BOOST)
