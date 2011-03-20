@@ -16,14 +16,14 @@
 
 #include <cstdlib>
 #include <memory>
-
+#include <utils/packer.h>
+#include <iostream>
 
 int app_main(Portal &interfaces, const std::vector<char *> &args) {
   WindowManager *wm = interfaces.requestInterface<WindowManager>();
   Graphics *gfx = interfaces.requestInterface<Graphics>();
   
   wm->createWindow(800, 600);
-
   
   SystemContext systems;
   

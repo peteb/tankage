@@ -3,6 +3,8 @@
 #include <arpa/inet.h>
 #include <cassert>
 
+// FIXME: the asserts here should probably set a badstate or throw exception
+
 namespace {
 template<typename T>
 void *WriteType(void *pos, void *end, const T &val) {
@@ -28,11 +30,11 @@ Packer::Packer(void *start, void *end)
 }
 
 void Packer::writeShort(short value) {
-  WriteType(_pos, _end, htons(value));
+  _pos = WriteType(_pos, _end, htons(value));
 }
 
 void Packer::writeInt(int value) {
-  WriteType(_pos, _end, htonl(value));
+  _pos = WriteType(_pos, _end, htonl(value));
 }
 
 void Packer::writeString(const std::string &value) {
@@ -45,14 +47,14 @@ void Packer::writeString(const std::string &value) {
 }
 
 
-Unpacker::Unpacker(const void *data, size_t size) 
+Unpacker::Unpacker(const void *data, const void *end) 
   : _pos(data)
-  , _end(reinterpret_cast<const char *>(data) + size)
+  , _end(end)
 {
 }
 
 short Unpacker::readShort() {
   short ret;
   _pos = ReadType(_pos, _end, ret);
-  return ret;
+  return ntohs(ret);
 }

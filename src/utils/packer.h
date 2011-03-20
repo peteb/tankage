@@ -21,7 +21,7 @@ class Unpacker {
   const void * const _end;
   
 public:
-  Unpacker(const void *data, size_t size);
+  Unpacker(const void *data, const void *end);
   
   short readShort();
   /*int readInt();
