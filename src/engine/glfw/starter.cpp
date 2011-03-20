@@ -16,10 +16,9 @@
 #include <engine/opengl/graphics.h>
 #include <engine/devil/image_loader.h>
 #include <engine/enet/network.h>
-#include <engine/logging/logging.h>
 #include <engine/config.h>
 
-#include <utils/tanklog.h>
+#include <utils/log.h>
 
 #include <ctime>
 
@@ -42,14 +41,14 @@ int catch_app_main(Portal &portal, const std::vector<char *> &args) {
   return EXIT_FAILURE;
 }
 
-class main_log_consumer { 
+class MainLogConsumer { 
 public:
-  main_log_consumer(const std::string &file = "tankage.log") : _file(file) {
+  MainLogConsumer(const std::string &file = "tankage.log") : _file(file) {
     if (char* home = getenv("HOME")) {
       _file = std::string(home).append("/.").append(file);
     }
   }
-  void operator()(tankage::tanklog::severity_t severity, const std::string &line) {
+  void operator()(Log::Severity severity, const std::string &line) {
     std::fstream file(_file.c_str(), std::ios::out | std::ios::app);
     if (file.is_open()) {
       file << line << std::endl;
@@ -62,14 +61,14 @@ private:
 
 int main(int argc, char **argv) {
   // create and register main log consumer
-  tankage::tanklog::register_consumer(main_log_consumer());
+  Log::registerConsumer(MainLogConsumer());
 
   std::stringstream ss;
   ss << argv[0];
   for (int i(1); i != argc; ++i) {
     ss << " " << argv[i];
   }
-  tanklog(entertain) << "Starting-up: " << ss.str();
+  Log(INFO) << "Starting-up: " << ss.str();
 
   Portal interfaces;
 
@@ -84,16 +83,8 @@ int main(int argc, char **argv) {
   interfaces.registerInterface<OpenGl::Graphics>();
   interfaces.registerInterface<DevIl::ImageLoader>();
   interfaces.registerInterface<Enet::Network>();
-  interfaces.registerInterface<Log::Logging>();
 
-  Logging *log = interfaces.requestInterface<Logging>();
-  log->write(Logging::DEBUG, "glfw: initialized");
-  //std::cout << "glfw: initialized" << std::endl;
-
-  // uncomment this to test Twitter
-  //time_t time = std::time(0);
-  //log->write(Logging::TWEET, "Starting Snail-Wail at %s", 
-	//std::asctime(localtime(&time)));
+  std::cout << "glfw: initialized" << std::endl;
 
   std::vector<char *> args(argv, argv + argc);
   

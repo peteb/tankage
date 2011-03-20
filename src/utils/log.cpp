@@ -1,25 +1,25 @@
 
-#include "tanklog.h"
+#include "log.h"
 
 #include <iostream>
 
 
-std::vector<tankage::tanklog::consumer_t> tankage::tanklog::_consumers;
+std::vector<Log::Consumer> Log::_consumers;
 
-tankage::tanklog::tanklog(severity_t severity, const char* file, const char* function, int line) 
+Log::Log(Severity severity, const char* file, const char* function, int line) 
   : _severity(severity) {
   std::string severity_name;
   switch (_severity) {
-  case severity_error:
+  case SEVERITY_ERROR:
     severity_name = "error";
     break;
-  case severity_warning:
+  case SEVERITY_WARNING:
     severity_name = "warning";
     break;
-  case severity_info:
+  case SEVERITY_INFO:
     severity_name = "info";
     break;
-  case severity_debug:
+  case SEVERITY_DEBUG:
     severity_name = "debug";
     break;
   default:
@@ -33,14 +33,14 @@ tankage::tanklog::tanklog(severity_t severity, const char* file, const char* fun
     << function << ":" << line << ")> "; 
 } // log
 
-tankage::tanklog::~tanklog() {
-  for (std::vector<consumer_t>::iterator it = _consumers.begin(); 
+Log::~Log() {
+  for (std::vector<Consumer>::iterator it = _consumers.begin(); 
     it != _consumers.end(); ++it) {
     (*it)(_severity, _stream.str());
   }
 } // ~log
 
-void tankage::tanklog::register_consumer(const consumer_t &consumer) {
+void Log::registerConsumer(const Consumer &consumer) {
   _consumers.push_back(consumer); 
 } // register_consumer 
 
