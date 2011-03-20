@@ -24,9 +24,8 @@ public:
   Unpacker(const void *data, const void *end);
   
   short readShort();
-  /*int readInt();
+  int readInt();
   std::string readString();
-  const void *readData();*/
 };
 
 #endif // !UTILS_PACKER_H

@@ -2,6 +2,7 @@
 
 #include <arpa/inet.h>
 #include <cassert>
+#include <limits>
 
 // FIXME: the asserts here should probably set a badstate or throw exception
 
@@ -38,8 +39,9 @@ void Packer::writeInt(int value) {
 }
 
 void Packer::writeString(const std::string &value) {
-  const size_t strsize = value.size();
-  writeInt(strsize);
+  assert(value.size() < std::numeric_limits<unsigned short>::max() && "too big string");
+  const unsigned short strsize = value.size();
+  writeShort(strsize);
   char *data = reinterpret_cast<char *>(_pos);
   assert(data + strsize <= _end && "not enough room for string");
   strncpy(data, value.c_str(), strsize);
@@ -58,3 +60,18 @@ short Unpacker::readShort() {
   _pos = ReadType(_pos, _end, ret);
   return ntohs(ret);
 }
+
+int Unpacker::readInt() {
+  int ret;
+  _pos = ReadType(_pos, _end, ret);
+  return ntohl(ret);
+}
+
+std::string Unpacker::readString() {
+  const unsigned short strsize = readInt();
+  const char *data = reinterpret_cast<const char *>(_pos);
+  assert(data + strsize <= _end && "not enough room for string");
+  _pos = data + strsize;
+  return std::string(data, strsize);
+}
+
