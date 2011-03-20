@@ -34,7 +34,7 @@ GameServer::~GameServer() {
 
 void GameServer::init(const class Portal &interfaces) {
   _net = interfaces.requestInterface<Network>();
-  _log = interfaces.requestInterface<Logging>();
+  //_log = interfaces.requestInterface<Logging>();
   
   Config *config = context->system<Config>(SystemContext::SYSTEM_CONFIG);
   config->registerVariable("server", "host", &server_host);
@@ -80,11 +80,11 @@ void GameServer::tick(double dt) {
 
 
 void GameServer::onConnect(Client *client) {
-  _log->write(Logging::DEBUG, "new client: %s ! :DD", 
-    client->address().c_str());    
+  //_log->write(Logging::DEBUG, "new client: %s ! :DD", 
+    //client->address().c_str());    
   if (_sessions.find(client) != _sessions.end()) {
     // The client already exists, weird..
-    _log->write(Logging::DEBUG, "client already exists!");
+    //_log->write(Logging::DEBUG, "client already exists!");
     // Fixme: throw exception, disconnect the connection
     return;
   }
@@ -94,7 +94,7 @@ void GameServer::onConnect(Client *client) {
 }
 
 void GameServer::onDisconnect(Client *client) {
-  _log->write(Logging::DEBUG, "client disconnected :(");
+  //_log->write(Logging::DEBUG, "client disconnected :(");
 
   // Remove any client connection metadata
   SessionMap::iterator iter = _sessions.find(client);
@@ -160,8 +160,8 @@ void GameServer::onIdent(const NetIdentifyMsg *data, Packet *packet) {
   ident.client_version = ntohs(data->client_version);
   ident.net_version = ntohs(data->net_version);
   
-  _log->write(Logging::DEBUG, "net: received ident for net %u", 
-    ident.net_version);
+  //_log->write(Logging::DEBUG, "net: received ident for net %u", 
+    //ident.net_version);
 
   Client *client = packet->sender();
   ClientSession *clientSession = session(client);
