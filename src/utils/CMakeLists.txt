@@ -7,6 +7,7 @@ add_library(utils
   mat.cpp
   rect.cpp
   color.cpp
+  packer.cpp
 )
 
 if (HAVE_BOOST)
