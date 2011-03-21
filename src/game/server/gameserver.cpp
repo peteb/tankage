@@ -12,6 +12,7 @@
 #include <engine/network.h>
 #include <engine/portal.h>
 #include <engine/logging.h>
+#include <engine/window_manager.h>
 
 #include <iostream>
 #include <cassert>
@@ -20,12 +21,14 @@
 #include <algorithm>
 
 Variable<std::string> server_host("0.0.0.0:12345");
+Variable<double> server_tickrate(20.0);
 
 GameServer::GameServer() 
   : _host(0)
   , _log(0) 
 {  
   _time = 0.0;
+  _lasttick = 0.0;
 }
 
 GameServer::~GameServer() {
@@ -34,10 +37,13 @@ GameServer::~GameServer() {
 
 void GameServer::init(const class Portal &interfaces) {
   _net = interfaces.requestInterface<Network>();
-  //_log = interfaces.requestInterface<Logging>();
+  _wm = interfaces.requestInterface<WindowManager>();
   
   Config *config = context->system<Config>(SystemContext::SYSTEM_CONFIG);
   config->registerVariable("server", "host", &server_host);
+  config->registerVariable("server", "tickrate", &server_tickrate);
+  
+  _lasttick = _wm->timeSeconds();
 }
 
 void GameServer::start() {
@@ -60,6 +66,12 @@ void GameServer::update() {
   while (Packet *packet = _host->pendingPacket()) {
     onReceive(packet);
     delete packet;
+  }
+  
+  double now = _wm->timeSeconds();
+  if (now - _lasttick >= 1.0 / *server_tickrate) {
+    tick(now - _lasttick);
+    _lasttick = now;
   }
 }
 

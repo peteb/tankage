@@ -62,6 +62,7 @@ void Actors::init(const class Portal &interfaces) {
 }
 
 void Actors::start() {
+
 }
 
 Tank *Actors::createActor() {

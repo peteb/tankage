@@ -52,10 +52,6 @@ int app_main(Portal &interfaces, const std::vector<char *> &args) {
   Background *background = systems.registerSystem<Background>();
   systems.registerSystem<Particles>();
   systems.registerSystem<TextureLoader>();
-
-  // FIXME: requestSystem, use it everywhere
-  // FIXME: delete systems in SystemContext dtor
-  // FIXME: system ctor should take portal and context
   
   systems.init(interfaces);
   config->parse(args);
