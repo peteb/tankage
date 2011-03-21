@@ -41,6 +41,21 @@ int app_main(Portal &interfaces, const std::vector<char *> &args) {
   
   double lastTick = wm->timeSeconds();
   
+  /*
+    TODO:
+      * new config should be saved
+      * move tickrate and such down some levels
+      * unittest packer
+      * think about how removing objects will be handled (code and net)
+        * hint the client that the object is removed (send ACTORS_REMOVED packet or similar)
+        * client can remove object if not updated within a set time
+        * if a hint was wrong (started to receive updates), recreate the object
+      * start using packer instead of structs
+      * start using new log
+      * 
+   
+   */
+  
   while (1) {
     double thisTime = wm->timeSeconds();
     
@@ -54,7 +69,7 @@ int app_main(Portal &interfaces, const std::vector<char *> &args) {
     projectiles->update();
     projectiles->render();
     
-    if (thisTime - lastTick >= 1.0/20.0) { // Tickrate
+    if (thisTime - lastTick >= 1.0/20.0) { // Tickrate FIXME: this should be done at a lower level
       server->tick(thisTime - lastTick);
       lastTick = thisTime;
     }
