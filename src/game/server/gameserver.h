@@ -17,13 +17,13 @@ public:
   GameServer();
   ~GameServer();
   
+  void run();
   void init(const class Portal &interfaces);
   void start();
   
-  void update();
-  void tick(double dt);
   class ClientSession *session(class Client *client) const;
-  double localTime() const;
+  unsigned int gameTick() const;
+  double tickSpeed() const;
   
 private:
   typedef std::map<class Client *, class ClientSession *> SessionMap;
@@ -31,6 +31,7 @@ private:
   void onConnect(class Client *client);
   void onDisconnect(class Client *client);
   void onReceive(class Packet *packet);
+  void updateNet(int timeout = 0);
   
   // net protocol
   void onIdent(const struct NetIdentifyMsg *ident, class Packet *packet);
@@ -40,8 +41,7 @@ private:
   class Logging *_log;
   class Network *_net;
   class WindowManager *_wm;
-  double _time;
-  double _lasttick;
+  unsigned int _tick;
 };
 
 

@@ -2,13 +2,13 @@
 #define GAME_ACTORS_H
 
 #include <game/common/system.h>
-#include <game/common/replicated_system.h>
+#include <game/common/system.h>
 #include <game/common/tank.h>
 
 #include <utils/vec.h>
 #include <vector>
 
-class Actors : public ReplicatedSystem {
+class Actors : public System {
 public:
   static SystemContext::SystemId id() {
     return SystemContext::SYSTEM_ACTORS;
@@ -23,8 +23,8 @@ public:
   void render();
 
   // Replicated system
-  void onTick(class Client *client);
-  void onReceive(NetPacketType type, const class Packet &packet);
+  void onTick();
+  void onReceive(NetPacketType type, const class Unpacker &msg);
   
   // Misc  
   Tank *tank(ActorId id) const;

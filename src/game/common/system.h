@@ -95,6 +95,8 @@ public:
 
   virtual void init(const class Portal &modules) =0;
   virtual void start() {}
+  virtual void tick() {}
+  virtual void render() {}
   
   friend class SystemContext;
 protected:

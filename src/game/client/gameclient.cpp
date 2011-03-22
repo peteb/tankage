@@ -9,12 +9,10 @@
 #include <engine/packet.h>
 
 #include <utils/log.h>
+#include <utils/packer.h>
 
-#include <iostream>
 #include <cassert>
-#include <sstream>
-#include <algorithm>
-#include <arpa/inet.h>
+#include <iostream>
 
 Variable<std::string> client_host("iostream.cc:12345");
 Variable<bool> client_predict(true);
@@ -34,49 +32,40 @@ GameClient::~GameClient() {
 void GameClient::init(const Portal &interfaces) {
   _net = interfaces.requestInterface<Network>();
 
-  Config *config = context->system<Config>(SystemContext::SYSTEM_CONFIG);
+  Config *config = context->system<Config>();
   config->registerVariable("client", "host", &client_host);
   config->registerVariable("client", "predict", &client_predict);
 }
 
 void GameClient::start() {
   _state = GameClient::STATE_DISCONNECTED;
-  Log(INFO) << "Connecting to the host: " << client_host->c_str();
+  Log(INFO) << "connecting to host " << *client_host << "...";
   _client = _net->connect(*client_host, 2);  
 }
 
 void GameClient::update() {
-  if (!_client) return;
+  if (!_client) 
+    return;
 
+  updateNet();
+}
+
+void GameClient::updateNet() {
   _client->update();
-
-  const bool connectedNow = _client->isConnected();
-  if (_state == STATE_DISCONNECTED && connectedNow) {
+  
+  const bool connected = _client->isConnected();
+  if (_state == STATE_DISCONNECTED && connected) {
     _state = STATE_CONNECTED;
     onConnect();
   }
-  else if (_state >= STATE_CONNECTED && !connectedNow) {
+  else if (_state >= STATE_CONNECTED && !connected) {
     _state = STATE_DISCONNECTED;
     onDisconnect();
   }
-
+  
   if (Packet *packet = _client->pendingPacket()) {
     onReceive(packet);
     delete packet;
-  }
-
-}
-
-void GameClient::tick(double dt) {
-  
-  for (size_t i = 0; i < _systems.size(); ++i) {
-    if (_systems[i]->flags & ReplicatedSystem::CLIENT_TICK) {
-      _systems[i]->onTick(_client);
-    }
-  }
-
-  if (_state == STATE_CONNECTED) {
-    _time += dt;
   }
   
 }
@@ -107,15 +96,16 @@ bool GameClient::predictLocal() const {
 }
 
 void GameClient::onConnect() {
+  Log(INFO) << "connected!"; 
+
   _time = 0.0f;
-  Log(INFO) << "*** connected!"; 
 
   // send the identification packet
-  NetIdentifyMsg msg;
+  /*NetIdentifyMsg msg;
   msg.type = NET_IDENTIFY;
   msg.client_version = htons(100);
   msg.net_version = htons(NET_VERSION);
-  _client->send(&msg, sizeof(msg), Client::PACKET_RELIABLE, NET_CHANNEL_STATE);
+  _client->send(&msg, sizeof(msg), Client::PACKET_RELIABLE, NET_CHANNEL_STATE);*/
 }
 
 void GameClient::onDisconnect() {
@@ -130,7 +120,10 @@ void GameClient::onReceive(Packet *packet) {
     Log(DEBUG) << "rtt: " << packet->sender()->stats(Client::STAT_RTT);
   }
   
-  size_t size = packet->size();
+  Unpacker msg(packet->data(), (const char *)packet->data() + packet->size());
+  std::cout << "DATA TYPE: " << msg.readShort() << std::endl;
+  
+  /*size_t size = packet->size();
   const void *data = packet->data();
   assert(size >= sizeof(NetPacketType) && "received a too small packet");
 
@@ -146,12 +139,14 @@ void GameClient::onReceive(Packet *packet) {
     if (_systems[i]->flags & ReplicatedSystem::CLIENT_RECEIVE) {
       _systems[i]->onReceive(*type, *packet);
     }
-  }
+  }*/
 }
 
 void GameClient::onError(const NetErrorMsg *error, Packet *packet) {
-  Log(DEBUG) << "Received error from server: " << error->desc 
-    << ", code: " << error->error_code;
+  Log(DEBUG) << "received error from server: " 
+             << error->desc << ", code: " 
+             << error->error_code;
+  
   disconnectGently();
 }
 

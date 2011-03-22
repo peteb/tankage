@@ -41,11 +41,32 @@ int app_main(Portal &interfaces, const std::vector<char *> &args) {
   wm->createWindow(800, 600);
   
   SystemContext systems;
-  
   // Register the subsystems
   Config *config = systems.registerSystem<Config>();
   GameClient *gameclient = systems.registerSystem<GameClient>();
-  Actors *actors = systems.registerSystem<Actors>();
+  
+  systems.init(interfaces);
+  config->parse(args);
+  systems.start();
+  
+  bool running = true;
+  const int escape = input->keycode("escape");
+  
+  while (running) {
+    const rect wndSize = wm->size();
+    gfx->setViewport(wndSize);
+    gfx->setOrtho(wndSize);
+    
+    gameclient->update();
+    wm->swapBuffers();
+    
+    running = !input->keyPressed(escape) &&
+      wm->windowState(WindowManager::OPENED);
+  }
+  
+  gameclient->disconnectGently();
+  
+  /*Actors *actors = systems.registerSystem<Actors>();
   systems.registerSystem<Players>();
   Control *control = systems.registerSystem<Control>();
   Projectiles *projectiles = systems.registerSystem<Projectiles>();
@@ -71,7 +92,6 @@ int app_main(Portal &interfaces, const std::vector<char *> &args) {
     background->render();
     gameclient->update();
 
-    gameclient->tick(thisTime - lastTick);
     lastTick = thisTime;
     
     //   particles.render();
@@ -85,8 +105,8 @@ int app_main(Portal &interfaces, const std::vector<char *> &args) {
       wm->windowState(WindowManager::OPENED);
   }
 
-
   gameclient->disconnectGently();
+   */
 
   return EXIT_SUCCESS;
 }

@@ -76,7 +76,8 @@ void Projectiles::render() {
   }
 }
 
-void Projectiles::onTick(Client *client) {
+void Projectiles::onTick() {
+#if 0
   size_t packetSize = sizeof(NetProjectilesSnapMsg) +
     sizeof(NetProjectileSnapshot) * projectiles.size();
 
@@ -89,6 +90,7 @@ void Projectiles::onTick(Client *client) {
   }
 
   client->send(msg, packetSize, 0 /*Client::PACKET_UNSEQUENCED*/, NET_CHANNEL_ABS);
+#endif
 }
 
 void Projectiles::onReceive(NetPacketType type, const Packet &packet) {

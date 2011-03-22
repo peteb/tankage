@@ -30,7 +30,7 @@ public:
                        float dir,
                        ActorId shooterId);
 
-  void onTick(class Client *client);
+  void onTick();
   void onReceive(NetPacketType type, const class Packet &packet);
   
 private:  

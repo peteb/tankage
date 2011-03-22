@@ -25,7 +25,7 @@ public:
   /**
    * Called each server tick.
    */
-  virtual void onTick(class Client *client) =0;
+  virtual void onTick() =0;
 
   /**
    * A message has been received, broadcasted to all registered subsystems

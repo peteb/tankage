@@ -41,7 +41,7 @@ public:
 private:  
   void reloadKeycodes();
   
-  void onTick(class Client *client);
+  void onTick();
   PlayerInput currentState() const;
   
   class WindowManager *wm;

@@ -25,7 +25,6 @@ public:
   void start();
   void update();
   void disconnectGently();
-  void tick(double dt);
   double localTime() const;
 
   bool predictLocal() const;
@@ -35,6 +34,8 @@ private:
   void onDisconnect();
   void onReceive(class Packet *packet);
 
+  void updateNet();
+  
   // net protocol
   void onError(const struct NetErrorMsg *error, class Packet *packet);
   void onSystemUpdate(const struct NetSystemMsg *msg, class Packet *packet);

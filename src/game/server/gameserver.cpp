@@ -13,6 +13,7 @@
 #include <engine/portal.h>
 #include <engine/window_manager.h>
 
+#include <utils/packer.h>
 #include <utils/log.h>
 
 #include <iostream>
@@ -28,8 +29,7 @@ GameServer::GameServer()
   : _host(0)
   , _log(0) 
 {  
-  _time = 0.0;
-  _lasttick = 0.0;
+  _tick = 0;
 }
 
 GameServer::~GameServer() {
@@ -43,8 +43,6 @@ void GameServer::init(const class Portal &interfaces) {
   Config *config = context->system<Config>(SystemContext::SYSTEM_CONFIG);
   config->registerVariable("server", "host", &server_host);
   config->registerVariable("server", "tickrate", &server_tickrate);
-  
-  _lasttick = _wm->timeSeconds();
 }
 
 void GameServer::start() {
@@ -52,19 +50,34 @@ void GameServer::start() {
   _host = _net->startHost(*server_host, 32, 2);  
 }
 
-void GameServer::update() {
-  const double now = _wm->timeSeconds();
-  const double dt = now - _lasttick;
-  const double interval = 1.0 / *server_tickrate;
+void GameServer::run() {
+  double lasttick = _wm->timeSeconds();
   
-  int timeout = static_cast<int>(std::max(interval - dt, 0.0) * 1000.0);
+  while (true) {
+    double dt = _wm->timeSeconds() - lasttick;
+    double interval = tickSpeed();
+    int timeout = static_cast<int>(std::max(interval - dt, 0.0) * 1000.0);
     
+    updateNet(timeout);
+    
+    if (dt >= interval) {
+      context->actors()->onTick();
+      lasttick += interval;
+      _tick++;
+    }
+
+  }
+
+}
+
+void GameServer::updateNet(int timeout) {
   _host->update(timeout);
   
+  // get all the action
   while (Client *client = _host->connectingClient()) {
     onConnect(client);
   }
-    
+  
   while (Client *client = _host->disconnectingClient()) {
     onDisconnect(client);
     delete client;
@@ -73,37 +86,22 @@ void GameServer::update() {
   while (Packet *packet = _host->pendingPacket()) {
     onReceive(packet);
     delete packet;
-  }
-  
-  if (dt >= interval) {
-    tick(interval);
-    _lasttick += interval;
-  }
+  }  
 }
 
-void GameServer::tick(double dt) {
-
-  for (size_t i = 0; i < _systems.size(); ++i) {
-    for (SessionMap::iterator it = _sessions.begin(), e = _sessions.end();
-         it != e; ++it) {
-
-      if (_systems[i]->flags & ReplicatedSystem::SERVER_TICK) {
-        _systems[i]->onTick(it->second->client);
-      }
-    }
-  }
-
-  _time += dt;
+unsigned int GameServer::gameTick() const {
+  return _tick;
 }
 
+double GameServer::tickSpeed() const {
+  return 1.0 / *server_tickrate;
+}
 
 void GameServer::onConnect(Client *client) {
-  //_log->write(Logging::DEBUG, "new client: %s ! :DD", 
-    //client->address().c_str());    
+  Log(INFO) << "got connection from " << client->address();
+  
   if (_sessions.find(client) != _sessions.end()) {
-    // The client already exists, weird..
-    //_log->write(Logging::DEBUG, "client already exists!");
-    // Fixme: throw exception, disconnect the connection
+    // FIXME:  disconnect the connection
     return;
   }
   
@@ -112,7 +110,7 @@ void GameServer::onConnect(Client *client) {
 }
 
 void GameServer::onDisconnect(Client *client) {
-  //_log->write(Logging::DEBUG, "client disconnected :(");
+  Log(INFO) << "disconnected: " << client->address();
 
   // Remove any client connection metadata
   SessionMap::iterator iter = _sessions.find(client);
@@ -123,7 +121,14 @@ void GameServer::onDisconnect(Client *client) {
 }
 
 void GameServer::onReceive(Packet *packet) {
-  size_t size = packet->size();
+  Unpacker msg(packet->data(), (const unsigned char *)packet->data() + packet->size());
+  short type = msg.readShort();
+  
+  if (type == 1) { // INPUT
+                   //context->control()->onRecvInput(msg);
+  }
+  
+  /*size_t size = packet->size();
   const void *data = packet->data();
 
   if (size < sizeof(NetPacketType)) {
@@ -168,7 +173,7 @@ void GameServer::onReceive(Packet *packet) {
       
     client->disconnect();
   }
-  
+  */
 }
 
 
@@ -199,11 +204,12 @@ void GameServer::onIdent(const NetIdentifyMsg *data, Packet *packet) {
   }
   
   // Forward the ident request to all subsystems
-  for (size_t i = 0; i < _systems.size(); ++i) {
+  /*for (size_t i = 0; i < _systems.size(); ++i) {
     if (_systems[i]->flags & ReplicatedSystem::SERVER_RECEIVE) {
       _systems[i]->onReceive(ident.type, *packet);
     }
-  }
+  }*/
+  //context->actors()->onReceive(ident.type, *packet);
   
   clientSession->state = ClientSession::STATE_IDENTIFIED;
 
@@ -212,14 +218,11 @@ void GameServer::onIdent(const NetIdentifyMsg *data, Packet *packet) {
   clientSession->player = player->id();
   
   // Broadcast onIdent to all subsystems
-  for (size_t i = 0; i < _systems.size(); ++i) {
+  /*for (size_t i = 0; i < _systems.size(); ++i) {
     _systems[i]->onIdent(client);
-  }
+  }*/
 }
 
-double GameServer::localTime() const {
-  return _time;
-}
 
 ClientSession *GameServer::session(Client *client) const {
   SessionMap::const_iterator iter = _sessions.find(client);

@@ -29,11 +29,11 @@ int app_main(Portal &interfaces, const std::vector<char *> &args) {
   Config *config = systems.registerSystem<Config>();
   GameServer *server = systems.registerSystem<GameServer>();
   Actors *actors = systems.registerSystem<Actors>();
-  Players *players = systems.registerSystem<Players>();
-  Control *control = systems.registerSystem<Control>();
-  Projectiles *projectiles = systems.registerSystem<Projectiles>();
-  systems.registerSystem<Particles>();
-  systems.registerSystem<TextureLoader>();
+ // Players *players = systems.registerSystem<Players>();
+ // Control *control = systems.registerSystem<Control>();
+ // Projectiles *projectiles = systems.registerSystem<Projectiles>();
+ // systems.registerSystem<Particles>();
+ // systems.registerSystem<TextureLoader>();
   
   systems.init(interfaces);
   config->parse(args);
@@ -42,7 +42,6 @@ int app_main(Portal &interfaces, const std::vector<char *> &args) {
   /*
     TODO:
       * new config should be saved
-      * move tickrate and such down some levels
       * unittest packer
       * think about how removing objects will be handled (code and net)
         * hint the client that the object is removed (send ACTORS_REMOVED packet or similar)
@@ -53,24 +52,13 @@ int app_main(Portal &interfaces, const std::vector<char *> &args) {
       * 
    
    */
+  const rect wndSize = wm->size();
+  gfx->setViewport(wndSize);
+  gfx->setOrtho(wndSize);
+  wm->swapBuffers(); 
   
-  while (1) {
-    double thisTime = wm->timeSeconds();
+  server->run();
     
-    const rect wndSize = wm->size();
-    gfx->setViewport(wndSize);
-    gfx->setOrtho(wndSize);
-
-    
-    server->update();
-    actors->render();
-    projectiles->update();
-    projectiles->render();
-    
-    
-    wm->swapBuffers(); 
-  }
-  
   return EXIT_SUCCESS;
 }
 

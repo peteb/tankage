@@ -20,6 +20,7 @@
 #include <engine/packet.h>
 #include <engine/network.h>
 
+#include <utils/packer.h>
 #include <utils/rect.h>
 #include <utils/value.h>
 #include <utils/color.h>
@@ -32,9 +33,7 @@
 #include <memory>
 #include <cmath>
 
-Actors::Actors()
-  : ReplicatedSystem(SERVER_TICK|CLIENT_RECEIVE)
-{
+Actors::Actors() {
   lastId = 0;
   gameTime = 0.0;
 }
@@ -47,7 +46,7 @@ Actors::~Actors() {
 void Actors::init(const class Portal &interfaces) {
   graphics = interfaces.requestInterface<Graphics>();
   wm = interfaces.requestInterface<WindowManager>();
-  context->system<Peer>()->registerSystem(this);
+//  context->system<Peer>()->registerSystem(this);
 
   
   ImageLoader *imgLoader = interfaces.requestInterface<ImageLoader>();
@@ -106,8 +105,20 @@ void Actors::render() {
   }  
 }
 
+// FIX THIS CRAP. GAMESERVER::entities
+/*void Actors::snapshot(SnapshotMsg &msg) {
+  Packer hej = msg.createSnap(ACTOR);
+}*/
 
-void Actors::onTick(class Client *client) {  
+void Actors::onTick() {  
+/*  for (size_t i = 0; i < context->gameserver()->numClients(); ++i) {
+    Client *client = context->gameservers()->client(i);
+    
+    for (size_t a = 0; a < tanks.size(); ++a) {
+      tanks[a]->snapshot(client);
+    }
+  }*/
+#if 0
   ClientSession *session = context->gameserver()->session(client);
   if (!session) {
     // No session? Huh.
@@ -143,6 +154,7 @@ void Actors::onTick(class Client *client) {
   std::cout << "sending snap" << std::endl;
 
   client->send(msg, packetSize, 0 /*Client::PACKET_UNSEQUENCED*/, NET_CHANNEL_ABS);
+#endif
 }
 
 
@@ -191,9 +203,9 @@ TankState Actors::rebaseHistory(double time, const TankState &newState, Tank *ta
   return ret;
 }
 
-void Actors::onReceive(NetPacketType type, const Packet &packet) {
+void Actors::onReceive(NetPacketType type, const Unpacker &msg) {
   if (type == NET_TANKS_UPDATE) {
-    const NetTanksSnapMsg *msg =
+    /*const NetTanksSnapMsg *msg =
       static_cast<const NetTanksSnapMsg *>(packet.data());
 
     ActorId localActor = context->players()->localActor();
@@ -243,7 +255,7 @@ void Actors::onReceive(NetPacketType type, const Packet &packet) {
           tankEntry->assign(msg->snaps[i]);
         }
       }
-    }
+    }*/
 
     
   }

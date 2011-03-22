@@ -102,7 +102,8 @@ PlayerInput Control::currentState() const {
   return ret;
 }
 
-void Control::onTick(Client *client) {
+void Control::onTick() {
+#if 0
   double thisTick = context->gameclient()->localTime();
   if (thisTick - lastTick < 1.0/10.0) {
     return;
@@ -142,6 +143,7 @@ void Control::onTick(Client *client) {
     
   std::cout << "sending" << std::endl;
   client->send(&msg, sizeof(NetPlayerInput), 0, NET_CHANNEL_STATE);
+#endif
 }
 
 void Control::onReceive(NetPacketType type, const Packet &packet) {
@@ -181,7 +183,7 @@ void Control::onReceive(NetPacketType type, const Packet &packet) {
     
     PlayerInput state;
     state.time = msg->time;
-    state.rxtime = context->gameserver()->localTime();
+    state.rxtime = 0.0; //context->gameserver()->localTime();
     state.buttons = msg->state;
     state.aim_x = ntohs(msg->target_x) - 32768;
     state.aim_y = ntohs(msg->target_y) - 32768;
