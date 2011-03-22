@@ -3,6 +3,7 @@
 #include <arpa/inet.h>
 #include <cassert>
 #include <limits>
+#include <cstring>
 
 // FIXME: the asserts here should probably set a badstate or throw exception
 

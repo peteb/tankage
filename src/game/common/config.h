@@ -19,6 +19,7 @@ class VariableBase {
 public:
   virtual ~VariableBase() {}
   virtual void assign(const std::string &value) =0;
+  virtual std::string value() const =0;
 };
 
 template<typename VarT>
@@ -39,6 +40,11 @@ public:
     if (!(ss >> _value)) {
       throw std::runtime_error("Failed to convert '" + value + "'");
     }
+  }
+  std::string value() const {
+    std::stringstream ss;
+    ss << _value;
+    return ss.str();
   }
   
 private:
@@ -73,7 +79,8 @@ private:
   //void registerConsumer(const std::string &system, ConfigConsumer* consumer);
 
 private:
-  typedef std::map<std::string, VariableBase *> ConsumerMap;
+  typedef std::pair<std::string, std::string> StringPair;
+  typedef std::map<StringPair, VariableBase *> ConsumerMap;
   std::string _path;
   PropertyNode _node;
   ConsumerMap _consumers;

@@ -44,3 +44,8 @@ void Log::registerConsumer(const Consumer &consumer) {
   _consumers.push_back(consumer); 
 } // register_consumer 
 
+void Log::DefaultLogConsumer::operator()(Log::Severity severity, 
+  const std::string &line) {
+  std::cout << line << std::endl;
+}
+

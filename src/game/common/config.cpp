@@ -2,12 +2,15 @@
 #include <ptrcfg/propertytreeparser.h>
 #include <ptrcfg/propertytreeprinter.h>
 
+#include <utils/log.h>
+
 #include <sstream>
 #include <fstream>
 #include <iostream>
 #include <cstdlib>
 
 void Config::init(const class Portal &modules) {
+  Log(DEBUG) << "Init config system"; 
   if (_path.empty()) {
     char *home = getenv("HOME");
     if (home) {
@@ -25,7 +28,7 @@ void Config::init(const class Portal &modules) {
     file.close();
   } else {
     // initial start-up, file is not created, yet
-    std::cout << "DE failed to read config file: " << _path << std::endl;
+    Log(WARNING) << "Failed to read config file " << _path;
   }
 
   _node = PropertyNode::MergeTrees(_node, parser.parse(buffer.str()));
@@ -42,8 +45,19 @@ Config::Config(const std::string &path)
 } // Config
 
 Config::~Config() {
-  // FIXME: before we quit, loop through all consumers and get their values
-  
+  ConsumerMap::iterator it = _consumers.begin();
+  for (; it != _consumers.end(); ++it) {
+    //Log(DEBUG) << "Storing variable " << it->first.first << "." 
+      //<< it->first.second << "=" << it->second->value();
+    try {
+      _node.getNode(it->first.first);
+    } catch (...) {
+      _node.addNode(PropertyNode(it->first.first));
+    }
+    _node.getNode(it->first.first).addProperty(
+      Property(it->first.second, it->second->value()));
+  } 
+
   std::stringstream buffer;
   PropertyTreePrinter printer(buffer);
   printer.print(_node); 
@@ -52,9 +66,10 @@ Config::~Config() {
   if (file.is_open()) {
     file << buffer.str();
     file.close();
+    Log(DEBUG) << "Config written to file " << _path;
   } else {
     // don't bother, probably no permissions, keep using defaults
-    std::cout << "DE failed to write config file: " << _path << std::endl;
+    Log(WARNING) << "Failed to write config file " << _path;
   }
 } // ~Config
 
@@ -69,11 +84,13 @@ void Config::registerVariable(const char *subtree,
   catch (...) {
   }
   
-  std::string varid = std::string(subtree) + "." + std::string(name);
-  if (_consumers.find(subtree) != _consumers.end()) {
-    throw std::runtime_error(std::string("variable '") + varid + "' already set");
+  StringPair varid = StringPair(subtree, name);
+  if (_consumers.find(varid) != _consumers.end()) {
+	throw std::runtime_error(std::string("variable '") + 
+      subtree + "." + name + "' already set");
   }
-  
+  //Log(DEBUG) << "Registering variable " << varid.first << "."
+    //<< varid.second << "=" << variable->value();
   _consumers[varid] = variable;
 }
 
@@ -99,7 +116,8 @@ void Config::updateProperty(const std::string &system,
                             const std::string &value) {
 
   
-  ConsumerMap::iterator iter = _consumers.find(system + "." + name);
+  //ConsumerMap::iterator iter = _consumers.find(system + "." + name);
+  ConsumerMap::iterator iter = _consumers.find(StringPair(system, name));
   if (iter == _consumers.end()) {
     throw std::runtime_error("unknown variable: '" + system + "." + name + "'");
   }

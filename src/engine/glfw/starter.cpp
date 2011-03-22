@@ -41,27 +41,9 @@ int catch_app_main(Portal &portal, const std::vector<char *> &args) {
   return EXIT_FAILURE;
 }
 
-class MainLogConsumer { 
-public:
-  MainLogConsumer(const std::string &file = "tankage.log") : _file(file) {
-    if (char* home = getenv("HOME")) {
-      _file = std::string(home).append("/.").append(file);
-    }
-  }
-  void operator()(Log::Severity severity, const std::string &line) {
-    std::fstream file(_file.c_str(), std::ios::out | std::ios::app);
-    if (file.is_open()) {
-      file << line << std::endl;
-      file.close();
-    } 
-  }
-private:
-  std::string _file;
-};
-
 int main(int argc, char **argv) {
-  // create and register main log consumer
-  Log::registerConsumer(MainLogConsumer());
+  // create and register default log consumer
+  Log::registerConsumer(Log::DefaultLogConsumer());
 
   std::stringstream ss;
   ss << argv[0];
