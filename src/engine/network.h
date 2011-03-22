@@ -36,7 +36,7 @@ public:
    * connection/disconnection events.
    * Will also send any unsent packets.
    */
-  virtual void update() =0;
+  virtual void update(unsigned int timeout = 0) =0;
   virtual class Client *connectingClient() =0;
   virtual class Client *disconnectingClient() =0;
   virtual class Packet *pendingPacket() =0;

@@ -116,6 +116,9 @@ public:
     ENetEvent event;
     if (enet_host_service(_host, &event, 0) > 0) {
       switch (event.type) {
+      case ENET_EVENT_TYPE_NONE:
+        break;
+          
       case ENET_EVENT_TYPE_CONNECT:
         _connected = true;        
         break;
@@ -226,10 +229,10 @@ public:
   {}
   
 
-  void update() {
+  void update(unsigned int timeout) {
     ENetEvent event;
     // Fixme: configurable timeout here
-    if (enet_host_service(_host, &event, 0) > 0) {
+    if (enet_host_service(_host, &event, timeout) > 0) {
       switch (event.type) {
       case ENET_EVENT_TYPE_CONNECT:
       {
@@ -261,6 +264,9 @@ public:
         break;
       }
       
+
+      case ENET_EVENT_TYPE_NONE:
+        break;
       }
     }
 
