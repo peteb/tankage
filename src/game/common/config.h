@@ -79,7 +79,8 @@ private:
   //void registerConsumer(const std::string &system, ConfigConsumer* consumer);
 
 private:
-  typedef std::map<std::pair<std::string,std::string>, VariableBase *> ConsumerMap;
+  typedef std::pair<std::string, std::string> StringPair;
+  typedef std::map<StringPair, VariableBase *> ConsumerMap;
   std::string _path;
   PropertyNode _node;
   ConsumerMap _consumers;
