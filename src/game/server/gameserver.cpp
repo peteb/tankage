@@ -52,6 +52,9 @@ void GameServer::start() {
 }
 
 void GameServer::update() {
+  const double now = _wm->timeSeconds();
+  const double dt = now - _lasttick;
+  
   _host->update(); // Fixme: timeout should maybe be the time until next update
   
   while (Client *client = _host->connectingClient()) {
@@ -68,10 +71,10 @@ void GameServer::update() {
     delete packet;
   }
   
-  double now = _wm->timeSeconds();
-  if (now - _lasttick >= 1.0 / *server_tickrate) {
-    tick(now - _lasttick);
-    _lasttick = now;
+  const double interval = 1.0 / *server_tickrate;
+  if (dt >= interval) {
+    tick(interval);
+    _lasttick += dt;
   }
 }
 
