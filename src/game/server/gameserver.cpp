@@ -11,8 +11,9 @@
 #include <engine/packet.h>
 #include <engine/network.h>
 #include <engine/portal.h>
-#include <engine/logging.h>
 #include <engine/window_manager.h>
+
+#include <utils/log.h>
 
 #include <iostream>
 #include <cassert>
@@ -47,7 +48,7 @@ void GameServer::init(const class Portal &interfaces) {
 }
 
 void GameServer::start() {
-  std::cout << "starting server at " << *server_host << std::endl;
+  Log(INFO) << "starting server at " << *server_host;
   _host = _net->startHost(*server_host, 32, 2);  
 }
 
