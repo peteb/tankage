@@ -2,12 +2,15 @@
 #include <ptrcfg/propertytreeparser.h>
 #include <ptrcfg/propertytreeprinter.h>
 
+#include <utils/log.h>
+
 #include <sstream>
 #include <fstream>
 #include <iostream>
 #include <cstdlib>
 
 void Config::init(const class Portal &modules) {
+  Log(DEBUG) << "Init config system"; 
   if (_path.empty()) {
     char *home = getenv("HOME");
     if (home) {
@@ -42,8 +45,13 @@ Config::Config(const std::string &path)
 } // Config
 
 Config::~Config() {
-  // FIXME: before we quit, loop through all consumers and get their values
-  
+  ConsumerMap::iterator it = _consumers.begin();
+  for (; it != _consumers.end(); ++it) {
+    //std::string system = it->first.substr(it->first.find(".")); 
+    //std::cout << system << std::endl;
+    //std::cout << it->second->value() << std::endl; 
+  } 
+
   std::stringstream buffer;
   PropertyTreePrinter printer(buffer);
   printer.print(_node); 
@@ -70,11 +78,11 @@ void Config::registerVariable(const char *subtree,
   }
   
   std::string varid = std::string(subtree) + "." + std::string(name);
-  if (_consumers.find(subtree) != _consumers.end()) {
-    throw std::runtime_error(std::string("variable '") + varid + "' already set");
-  }
+  //if (_consumers.find(subtree) != _consumers.end()) {
+    //throw std::runtime_error(std::string("variable '") + varid + "' already set");
+  //}
   
-  _consumers[varid] = variable;
+  _consumers[std::pair<std::string,std::string>(subtree, name)] = variable;
 }
 
 
@@ -99,7 +107,8 @@ void Config::updateProperty(const std::string &system,
                             const std::string &value) {
 
   
-  ConsumerMap::iterator iter = _consumers.find(system + "." + name);
+  //ConsumerMap::iterator iter = _consumers.find(system + "." + name);
+  ConsumerMap::iterator iter = _consumers.find(std::pair<std::string,std::string>(system, name));
   if (iter == _consumers.end()) {
     throw std::runtime_error("unknown variable: '" + system + "." + name + "'");
   }

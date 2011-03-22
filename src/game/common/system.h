@@ -5,6 +5,7 @@
 class SystemContext {
 public:
   SystemContext();
+  ~SystemContext();
 
   enum SystemId {
     SYSTEM_CONFIG = 0,

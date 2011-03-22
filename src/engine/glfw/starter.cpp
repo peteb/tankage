@@ -51,7 +51,8 @@ public:
   void operator()(Log::Severity severity, const std::string &line) {
     std::fstream file(_file.c_str(), std::ios::out | std::ios::app);
     if (file.is_open()) {
-      file << line << std::endl;
+      //file << line << std::endl;
+      std::cout << line << std::endl;
       file.close();
     } 
   }

@@ -10,6 +10,14 @@ SystemContext::SystemContext() {
   std::fill(systems, systems + SYSTEM_MAX, (System *)0);
 }
 
+SystemContext::~SystemContext() {
+  // FIXME kaspars: this seg fault
+  //for (size_t i(0); i != SYSTEM_MAX; ++i) {
+    //delete systems[i];
+  //}  
+  delete systems[0];
+}
+
 void SystemContext::set(unsigned id, System *system) {
   if (systems[id])
     throw std::runtime_error("system already set");
