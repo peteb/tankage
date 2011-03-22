@@ -5,6 +5,7 @@
 #include <sstream>
 #include <vector>
 #include <string>
+#include <iostream>
 #include <tr1/functional>
 
 // could probably use __PRETTY_FUNCTION__ on gcc, but maybe we show too much info to the outsider
@@ -34,6 +35,12 @@ public:
 
   typedef std::tr1::function<void(Severity,const std::string&)> Consumer;
   static void registerConsumer(const Consumer &consumer);
+
+  struct DefaultLogConsumer { 
+    void operator()(Log::Severity severity, const std::string &line) {
+      std::cout << line << std::endl;
+    } 
+  };
 
 private:
   static std::vector<Consumer> _consumers; 
