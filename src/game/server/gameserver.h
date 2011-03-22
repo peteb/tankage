@@ -39,7 +39,9 @@ private:
   class Host *_host;
   class Logging *_log;
   class Network *_net;
+  class WindowManager *_wm;
   double _time;
+  double _lasttick;
 };
 
 

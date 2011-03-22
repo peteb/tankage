@@ -39,8 +39,6 @@ int app_main(Portal &interfaces, const std::vector<char *> &args) {
   config->parse(args);
   systems.start();
   
-  double lastTick = wm->timeSeconds();
-  
   /*
     TODO:
       * new config should be saved
@@ -69,10 +67,6 @@ int app_main(Portal &interfaces, const std::vector<char *> &args) {
     projectiles->update();
     projectiles->render();
     
-    if (thisTime - lastTick >= 1.0/20.0) { // Tickrate FIXME: this should be done at a lower level
-      server->tick(thisTime - lastTick);
-      lastTick = thisTime;
-    }
     
     wm->swapBuffers(); 
   }

@@ -11,7 +11,9 @@
 #include <engine/packet.h>
 #include <engine/network.h>
 #include <engine/portal.h>
-#include <engine/logging.h>
+#include <engine/window_manager.h>
+
+#include <utils/log.h>
 
 #include <iostream>
 #include <cassert>
@@ -20,12 +22,14 @@
 #include <algorithm>
 
 Variable<std::string> server_host("0.0.0.0:12345");
+Variable<double> server_tickrate(20.0);
 
 GameServer::GameServer() 
   : _host(0)
   , _log(0) 
 {  
   _time = 0.0;
+  _lasttick = 0.0;
 }
 
 GameServer::~GameServer() {
@@ -34,19 +38,28 @@ GameServer::~GameServer() {
 
 void GameServer::init(const class Portal &interfaces) {
   _net = interfaces.requestInterface<Network>();
-  //_log = interfaces.requestInterface<Logging>();
+  _wm = interfaces.requestInterface<WindowManager>();
   
   Config *config = context->system<Config>(SystemContext::SYSTEM_CONFIG);
   config->registerVariable("server", "host", &server_host);
+  config->registerVariable("server", "tickrate", &server_tickrate);
+  
+  _lasttick = _wm->timeSeconds();
 }
 
 void GameServer::start() {
-  std::cout << "starting server at " << *server_host << std::endl;
+  Log(INFO) << "starting server at " << *server_host;
   _host = _net->startHost(*server_host, 32, 2);  
 }
 
 void GameServer::update() {
-  _host->update(); // Fixme: timeout should maybe be the time until next update
+  const double now = _wm->timeSeconds();
+  const double dt = now - _lasttick;
+  const double interval = 1.0 / *server_tickrate;
+  
+  int timeout = static_cast<int>(std::max(interval - dt, 0.0) * 1000.0);
+    
+  _host->update(timeout);
   
   while (Client *client = _host->connectingClient()) {
     onConnect(client);
@@ -60,6 +73,11 @@ void GameServer::update() {
   while (Packet *packet = _host->pendingPacket()) {
     onReceive(packet);
     delete packet;
+  }
+  
+  if (dt >= interval) {
+    tick(interval);
+    _lasttick += interval;
   }
 }
 
