@@ -1,6 +1,5 @@
 #include <game/client/gameclient.h>
 #include <game/common/net_protocol.h>
-#include <game/common/replicated_system.h>
 #include <game/common/config.h>
 
 #include <engine/portal.h>
@@ -20,8 +19,23 @@
 Variable<std::string> client_host("iostream.cc:12345");
 Variable<bool> client_predict(true);
 
-GameClient::GameClient() : _client(0), _tankrenderer(this) {
+void client_RegisterVariables(Config &config) {
+  config.registerVariable("client", "host", &client_host);
+  config.registerVariable("client", "predict", &client_predict);
+}
+
+GameClient::GameClient(class Portal &services) 
+  : _client(0)
+  , _tankrenderer(this, services)
+{
   _time = 0.0f;
+  
+  _net = services.requestInterface<Network>();
+  _gfx = services.requestInterface<Graphics>();
+
+  _state = GameClient::STATE_DISCONNECTED;
+  Log(INFO) << "connecting to host " << *client_host << "...";
+  _client = _net->connect(*client_host, 2);  
   
   /*
    test code...
@@ -56,23 +70,6 @@ GameClient::~GameClient() {
     delete _client;
   }
   
-}
-
-void GameClient::init(const Portal &interfaces) {
-  _net = interfaces.requestInterface<Network>();
-  _gfx = interfaces.requestInterface<Graphics>();
-  
-  Config *config = context->system<Config>();
-  config->registerVariable("client", "host", &client_host);
-  config->registerVariable("client", "predict", &client_predict);
-  
-  _tankrenderer.init(interfaces, context);
-}
-
-void GameClient::start() {
-  _state = GameClient::STATE_DISCONNECTED;
-  Log(INFO) << "connecting to host " << *client_host << "...";
-  _client = _net->connect(*client_host, 2);  
 }
 
 void GameClient::update() {
@@ -123,25 +120,18 @@ void GameClient::disconnectGently() {
   _client = NULL;
 }
 
-double GameClient::localTime() const {
+/*double GameClient::localTime() const {
   return _time;
 }
 
 bool GameClient::predictLocal() const {
   return *client_predict;
-}
+}*/
 
 void GameClient::onConnect() {
   Log(INFO) << "connected!"; 
 
   _time = 0.0f;
-
-  // send the identification packet
-  /*NetIdentifyMsg msg;
-  msg.type = NET_IDENTIFY;
-  msg.client_version = htons(100);
-  msg.net_version = htons(NET_VERSION);
-  _client->send(&msg, sizeof(msg), Client::PACKET_RELIABLE, NET_CHANNEL_STATE);*/
 }
 
 void GameClient::onDisconnect() {
@@ -178,24 +168,6 @@ void GameClient::onReceive(Packet *packet) {
     _tankrenderer.addSnapshot(tanks_snapshot);
   }
   
-  
-  /*size_t size = packet->size();
-  const void *data = packet->data();
-  assert(size >= sizeof(NetPacketType) && "received a too small packet");
-
-  const NetPacketType *type = static_cast<const NetPacketType *>(data);
-  switch (*type) {
-  case NET_ERROR:
-    assert(size >= sizeof(NetErrorMsg) && "packet too small for error");
-    onError(static_cast<const NetErrorMsg *>(data), packet);
-    break;
-  }
-
-  for (size_t i = 0; i < _systems.size(); ++i) {
-    if (_systems[i]->flags & ReplicatedSystem::CLIENT_RECEIVE) {
-      _systems[i]->onReceive(*type, *packet);
-    }
-  }*/
 }
 
 void GameClient::onError(const NetErrorMsg *error, Packet *packet) {

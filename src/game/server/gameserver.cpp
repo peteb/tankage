@@ -4,7 +4,6 @@
 
 #include <game/common/net_protocol.h>
 #include <game/common/net_error.h>
-#include <game/common/replicated_system.h>
 #include <game/common/config.h>
 
 #include <engine/packet.h>
@@ -24,29 +23,26 @@
 Variable<std::string> server_host("0.0.0.0:12345");
 Variable<double> server_tickrate(20.0);
 
-GameServer::GameServer() 
+void server_RegisterVariables(class Config &config) {
+  config.registerVariable("server", "host", &server_host);
+  config.registerVariable("server", "tickrate", &server_tickrate);  
+}
+
+GameServer::GameServer(const Portal &services) 
   : _host(0)
   , _log(0) 
 {  
+  _net = services.requestInterface<Network>();
+  _wm = services.requestInterface<WindowManager>();
+  
   _tick = 0;
+
+  Log(INFO) << "starting server at " << *server_host;
+  _host = _net->startHost(*server_host, 32, 2);  
 }
 
 GameServer::~GameServer() {
   delete _host;
-}
-
-void GameServer::init(const class Portal &interfaces) {
-  _net = interfaces.requestInterface<Network>();
-  _wm = interfaces.requestInterface<WindowManager>();
-  
-  Config *config = context->system<Config>(SystemContext::SYSTEM_CONFIG);
-  config->registerVariable("server", "host", &server_host);
-  config->registerVariable("server", "tickrate", &server_tickrate);
-}
-
-void GameServer::start() {
-  Log(INFO) << "starting server at " << *server_host;
-  _host = _net->startHost(*server_host, 32, 2);  
 }
 
 void GameServer::run() {

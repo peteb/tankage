@@ -13,15 +13,10 @@
 #include <cstring>
 #include <cassert>
 
-Players::Players() {
+Players::Players(const Portal &interfaces) {
   _localPlayer = 0;
   _lastId = 0;
 }
-
-void Players::init(const Portal &interfaces) {
-  //context->system<Peer>()->registerSystem(this);
-}
-
 
 void Players::onTick(Client *client) {
 
@@ -51,7 +46,7 @@ void Players::onReceive(NetPacketType type, const Packet &packet) {
 void Players::onIdent(Client *client) {
   assert(_players.size() < 255 && "too many players");
 
-  PlayerId playerId = context->gameserver()->session(client)->player;
+  PlayerId playerId = 0; //context->gameserver()->session(client)->player;
   
   size_t packetSize = sizeof(NetArenaParticipantsMsg) +
     sizeof(NetArenaParticipant) * _players.size();

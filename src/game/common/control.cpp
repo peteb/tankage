@@ -24,27 +24,25 @@ Variable<std::string> control_keyLeft("A");
 Variable<std::string> control_keyRight("D");
 Variable<std::string> control_keyShoot("mouse1");
 
+void control_RegisterVariables(class Config &config) {
+  config.registerVariable("control", "key_up", &control_keyUp);
+  config.registerVariable("control", "key_down", &control_keyDown);
+  config.registerVariable("control", "key_left", &control_keyLeft);
+  config.registerVariable("control", "key_right", &control_keyRight);
+  config.registerVariable("control", "key_shoot", &control_keyShoot);    
+}
 
 Control::Control()
-  : ReplicatedSystem(CLIENT_TICK|SERVER_RECEIVE)
-  , moves(300)
+  : moves(300)
 {
   state.buttons = -1;
   state.aim_x = 0;
   state.aim_y = 0;
 }
 
-void Control::init(const class Portal &interfaces) {
+Control::Control(const Portal &interfaces) {
   input = interfaces.requestInterface< ::Input>();
   wm = interfaces.requestInterface<WindowManager>();
-  context->system<Peer>()->registerSystem(this);
-
-  Config *config = context->system<Config>(SystemContext::SYSTEM_CONFIG);
-  config->registerVariable("control", "key_up", &control_keyUp);
-  config->registerVariable("control", "key_down", &control_keyDown);
-  config->registerVariable("control", "key_left", &control_keyLeft);
-  config->registerVariable("control", "key_right", &control_keyRight);
-  config->registerVariable("control", "key_shoot", &control_keyShoot);  
 }
 
 void Control::start() {

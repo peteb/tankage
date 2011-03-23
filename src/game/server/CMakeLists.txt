@@ -6,7 +6,6 @@ include_directories(${PROJECT_ROOT_DIR}
 
 add_executable(tankage-server
   # common stuff
-  ${GAME_ROOT_DIR}/common/system.cpp
   ${GAME_ROOT_DIR}/common/texture_loader.cpp
   ${GAME_ROOT_DIR}/common/players.cpp
   ${GAME_ROOT_DIR}/common/net_error.cpp

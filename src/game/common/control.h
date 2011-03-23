@@ -1,16 +1,12 @@
 #ifndef GAME_CONTROL_H
 #define GAME_CONTROL_H
 
-#include <game/common/system.h>
-
 class Input;
 
-class Control : public System {
-public:
-  static SystemContext::SystemId id() {
-    return SystemContext::SYSTEM_CONTROL;
-  }  
-  
+void control_RegisterVariables(class Config &config);
+
+class Control {
+public:  
   struct Input {
     unsigned char buttons;
     
@@ -22,9 +18,8 @@ public:
     };
   };
 
-  Control();
-  
-  void init(const class Portal &interfaces);
+  Control(const class Portal &interfaces);
+
   void start();
 };
 

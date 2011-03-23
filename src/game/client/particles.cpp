@@ -7,7 +7,7 @@
 #include <algorithm>
 #include <utility>
 
-void Particles::init(const Portal &modules) {
+Particles::Particles(const Portal &modules) {
   gfx = modules.requestInterface<Graphics>();
   wm = modules.requestInterface<WindowManager>();
   

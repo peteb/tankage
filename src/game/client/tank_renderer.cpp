@@ -5,15 +5,10 @@
 #include <engine/portal.h>
 #include <engine/graphics.h>
 
-TankRenderer::TankRenderer(class GameClient *client)
+TankRenderer::TankRenderer(class GameClient *client, class Portal &services)
   : _client(client)
 {
-  
-}
-
-void TankRenderer::init(const Portal &interfaces, const class SystemContext *context) {
-  _context = context;
-  _gfx = interfaces.requestInterface<Graphics>();
+  _gfx = services.requestInterface<Graphics>();
 }
 
 void TankRenderer::addSnapshot(const Snapshot<Tank::State> &snapshot) {

@@ -7,7 +7,7 @@
 
 #include <memory>
 
-void TextureLoader::init(const class Portal &interfaces) {
+TextureLoader::TextureLoader(const class Portal &interfaces) {
   gfx = interfaces.requestInterface<Graphics>();
   imgLoader = interfaces.requestInterface<ImageLoader>();
 }

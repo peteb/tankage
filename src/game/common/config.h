@@ -2,7 +2,6 @@
 #define ENGINE_CFG_CFG_H
 
 #include <game/common/config.h>
-#include <game/common/system.h>
 
 #include <engine/config.h>
 #include <utils/singleton.h>
@@ -51,17 +50,10 @@ private:
   VarT _value;
 };
 
-class Config : public System { 
+class Config { 
 public:
-  Config(const std::string &path = "");
+  Config(const class Portal &services);
   ~Config();
-
-  static SystemContext::SystemId id() {
-    return SystemContext::SYSTEM_CONFIG;
-  }
-  
-  void init(const class Portal &modules);
-  void start();
   
   void registerVariable(const char *subtree,
                         const char *name,

@@ -1,7 +1,6 @@
 #ifndef GAME_PARTICLES_H
 #define GAME_PARTICLES_H
 
-#include <game/common/system.h>
 #include <utils/vec.h>
 #include <utils/color.h>
 #include <vector>
@@ -31,14 +30,10 @@ private:
   ParticleList particles;
 };
 
-class Particles : public System {
+class Particles {
 public:
-  void init(const class Portal &modules);
-  
-  static SystemContext::SystemId id() {
-    return SystemContext::SYSTEM_PARTICLES;
-  }
-  
+  Particles(const class Portal &modules);
+    
   void render();
   ParticleGroup *group(class Texture *texture);
   

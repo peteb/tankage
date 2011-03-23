@@ -6,10 +6,9 @@
 
 class TankRenderer {
 public:
-  TankRenderer(class GameClient *client);
-  void render();
-  
-  void init(const class Portal &interfaces, const class SystemContext *context);
+  TankRenderer(class GameClient *client, class Portal &services);
+
+  void render();  
   void addSnapshot(const Snapshot<Tank::State> &snapshot);
   
 private:

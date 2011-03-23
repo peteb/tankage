@@ -9,7 +9,11 @@
 #include <iostream>
 #include <cstdlib>
 
-void Config::init(const class Portal &modules) {
+
+Config::Config(const class Portal &services) 
+  : _path("") // this should be determined here
+  , _node("root")
+{
   Log(DEBUG) << "Init config system"; 
   if (_path.empty()) {
     char *home = getenv("HOME");
@@ -30,18 +34,8 @@ void Config::init(const class Portal &modules) {
     // initial start-up, file is not created, yet
     Log(WARNING) << "Failed to read config file " << _path;
   }
-
-  _node = PropertyNode::MergeTrees(_node, parser.parse(buffer.str()));
-}
-
-void Config::start() {
   
-}
-
-Config::Config(const std::string &path) 
-  : _path(path)
-  , _node("root")
-{
+  _node = PropertyNode::MergeTrees(_node, parser.parse(buffer.str()));  
 } // Config
 
 Config::~Config() {

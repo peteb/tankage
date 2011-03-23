@@ -1,7 +1,6 @@
 #ifndef GAME_COMMON_PLAYERS_H
 #define GAME_COMMON_PLAYERS_H
 
-#include <game/common/replicated_system.h>
 #include <game/common/net_protocol.h>
 #include <vector>
 
@@ -22,14 +21,9 @@ private:
   int _actor;
 };
 
-class Players : public ReplicatedSystem {
+class Players {
 public:
-  static SystemContext::SystemId id() {
-    return SystemContext::SYSTEM_PLAYERS;
-  }
-
-  Players();
-  void init(const class Portal &interfaces);
+  Players(const class Portal &interfaces);
 
   void onTick(class Client *client);
   void onReceive(NetPacketType type, const class Packet &packet);

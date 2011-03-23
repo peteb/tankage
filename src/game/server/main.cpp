@@ -4,7 +4,6 @@
 #include <engine/graphics.h>
 
 #include <game/server/gameserver.h>
-#include <game/common/system.h>
 #include <game/common/players.h>
 //#include <game/common/control.h>
 //#include <game/common/projectiles.h>
@@ -21,22 +20,12 @@ int app_main(Portal &interfaces, const std::vector<char *> &args) {
   
   wm->createWindow(800, 600);
   
-  SystemContext systems;
+  Config config(interfaces);
+  server_RegisterVariables(config);
+  config.parse(args); // read and set variables from cmdline
   
-  // Register the subsystems
-  Config *config = systems.registerSystem<Config>();
-  GameServer *server = systems.registerSystem<GameServer>();
- // Actors *actors = systems.registerSystem<Actors>();
- // Players *players = systems.registerSystem<Players>();
- // Control *control = systems.registerSystem<Control>();
- // Projectiles *projectiles = systems.registerSystem<Projectiles>();
- // systems.registerSystem<Particles>();
- // systems.registerSystem<TextureLoader>();
-  
-  systems.init(interfaces);
-  config->parse(args);
-  systems.start();
-  
+  GameServer server(interfaces);
+
   /*
     TODO:
       * new config should be saved
@@ -55,7 +44,7 @@ int app_main(Portal &interfaces, const std::vector<char *> &args) {
   gfx->setOrtho(wndSize);
   wm->swapBuffers(); 
   
-  server->run();
+  server.run();
     
   return EXIT_SUCCESS;
 }

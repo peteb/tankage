@@ -1,27 +1,21 @@
 #ifndef GAME_GAMESERVER_H
 #define GAME_GAMESERVER_H
 
-#include <game/common/system.h>
 #include <game/common/net_protocol.h>
 #include <game/server/entity.h>
 
 #include <vector>
 #include <map>
 
+void server_RegisterVariables(class Config &config);
 
-class GameServer : public System {
+class GameServer {
 public:
-  static SystemContext::SystemId id() {
-    return SystemContext::SYSTEM_GAMESERVER;
-  }
-  
-  GameServer();
+  GameServer(const class Portal &services);
   ~GameServer();
   
   void run();
-  void init(const class Portal &interfaces);
-  void start();
-  
+
   class ClientSession *session(class Client *client) const;
   unsigned int gameTick() const;
   double tickDuration() const;

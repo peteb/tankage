@@ -4,14 +4,15 @@
 #include <engine/graphics.h>
 #include <engine/network.h>
 
+#include <game/client/tank_renderer.h>
 #include <game/client/particles.h>
 #include <game/client/gameclient.h>
 //#include <game/common/control.h>
-#include <game/common/system.h>
 //#include <game/common/projectiles.h>
 #include <game/common/texture_loader.h>
 #include <game/common/players.h>
 #include <game/common/config.h>
+#include <game/common/control.h>
 
 #include <utils/log.h>
 
@@ -28,14 +29,12 @@ int app_main(Portal &interfaces, const std::vector<char *> &args) {
   
   wm->createWindow(800, 600);
   
-  SystemContext systems;
-  // Register the subsystems
-  Config *config = systems.registerSystem<Config>();
-  GameClient *gameclient = systems.registerSystem<GameClient>();
+  Config config(interfaces);
+  client_RegisterVariables(config);
+  //control_RegisterVariables(config);
+  config.parse(args); // read and set variables from cmdline
   
-  systems.init(interfaces);
-  config->parse(args);
-  systems.start();
+  GameClient client(interfaces);
   
   bool running = true;
   const int escape = input->keycode("escape");
@@ -45,14 +44,14 @@ int app_main(Portal &interfaces, const std::vector<char *> &args) {
     gfx->setViewport(wndSize);
     gfx->setOrtho(wndSize);
     
-    gameclient->update();
+    client.update();
     wm->swapBuffers();
     
     running = !input->keyPressed(escape) &&
       wm->windowState(WindowManager::OPENED);
   }
   
-  gameclient->disconnectGently();
+  client.disconnectGently();
   
   /*Actors *actors = systems.registerSystem<Actors>();
   systems.registerSystem<Players>();
