@@ -31,7 +31,7 @@ int app_main(Portal &interfaces, const std::vector<char *> &args) {
   
   Config config(interfaces);
   client_RegisterVariables(config);
-  //control_RegisterVariables(config);
+  control_RegisterVariables(config);
   config.parse(args); // read and set variables from cmdline
   
   GameClient client(interfaces);
@@ -52,48 +52,6 @@ int app_main(Portal &interfaces, const std::vector<char *> &args) {
   }
   
   client.disconnectGently();
-  
-  /*Actors *actors = systems.registerSystem<Actors>();
-  systems.registerSystem<Players>();
-  Control *control = systems.registerSystem<Control>();
-  Projectiles *projectiles = systems.registerSystem<Projectiles>();
-  Background *background = systems.registerSystem<Background>();
-  systems.registerSystem<Particles>();
-  systems.registerSystem<TextureLoader>();
-  
-  systems.init(interfaces);
-  config->parse(args);
-  systems.start();
-  
-  double lastTick = wm->timeSeconds();
-  bool running = true;
-  const int escape = input->keycode("escape");
-  
-  while (running) {
-    double thisTime = wm->timeSeconds();
-    const rect wndSize = wm->size();
-    gfx->setViewport(wndSize);
-    gfx->setOrtho(wndSize);
-
-    control->update();
-    background->render();
-    gameclient->update();
-
-    lastTick = thisTime;
-    
-    //   particles.render();
-    actors->render();
-    projectiles->update();
-    projectiles->render();
-    
-    wm->swapBuffers();
-
-    running = !input->keyPressed(escape) &&
-      wm->windowState(WindowManager::OPENED);
-  }
-
-  gameclient->disconnectGently();
-   */
 
   return EXIT_SUCCESS;
 }

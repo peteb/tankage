@@ -32,61 +32,46 @@ void control_RegisterVariables(class Config &config) {
   config.registerVariable("control", "key_shoot", &control_keyShoot);    
 }
 
-Control::Control()
-  : moves(300)
-{
-  state.buttons = -1;
-  state.aim_x = 0;
-  state.aim_y = 0;
-}
-
 Control::Control(const Portal &interfaces) {
-  input = interfaces.requestInterface< ::Input>();
-  wm = interfaces.requestInterface<WindowManager>();
-}
+  _input = interfaces.requestInterface< ::Input>();
+  _wm = interfaces.requestInterface<WindowManager>();
 
-void Control::start() {
   reloadKeycodes();
-  if (!context->isServer()) {
-    lastTick = context->gameclient()->localTime();    
-  }
 }
 
 void Control::reloadKeycodes() {
-  keyUp = input->keycode(*control_keyUp);
-  keyDown = input->keycode(*control_keyDown);
-  keyLeft = input->keycode(*control_keyLeft);
-  keyRight = input->keycode(*control_keyRight);
-  keyShoot = input->keycode(*control_keyShoot);
+  keyUp = _input->keycode(*control_keyUp);
+  keyDown = _input->keycode(*control_keyDown);
+  keyLeft = _input->keycode(*control_keyLeft);
+  keyRight = _input->keycode(*control_keyRight);
+  keyShoot = _input->keycode(*control_keyShoot);
 }
 
+/* <--- begin input state ---> */
 Control::Input &Control::Input::write(class Packer &msg) {
-  
+  msg.writeShort(buttons); // fixme: writeByte
   return *this;
 }
 
 Control::Input &Control::Input::read(class Unpacker &msg) {
-  
+  buttons = msg.readShort();
   return *this;
 }
+/* <--- end input state ---> */
 
 
-void Control::update() {
-
-}
-
-PlayerInput Control::currentState() const {
-  PlayerInput ret;
+Control::Input Control::currentInput() const {
+  Input ret;
   ret.buttons = 0;
-  ret.aim_x = 0;
+/*  ret.aim_x = 0;
   ret.aim_y = 0;
-  
-  struct {PlayerInput::Buttons state; int keycode; } stateMap[] = {
-    {PlayerInput::STATE_MOVE_UP, keyUp},
-    {PlayerInput::STATE_MOVE_DOWN, keyDown},
-    {PlayerInput::STATE_TURN_RIGHT, keyRight},
-    {PlayerInput::STATE_TURN_LEFT, keyLeft},
-    {PlayerInput::STATE_SHOOTING, keyShoot}};
+  */
+  struct {Input::Commands state; int keycode; } stateMap[] = {
+    {Input::FORWARD, keyUp}/*,
+    {Input::STATE_MOVE_DOWN, keyDown},
+    {Input::STATE_TURN_RIGHT, keyRight},
+    {Input::STATE_TURN_LEFT, keyLeft},
+    {Input::STATE_SHOOTING, keyShoot}*/};
 
   /*
     SHOOTING is not really a move. It should not have an impact on
@@ -98,19 +83,19 @@ PlayerInput Control::currentState() const {
   // Map keycodes to bits
   for (size_t i = 0; i < 5; ++i) {
     const int keycode = stateMap[i].keycode;
-    const PlayerInput::Buttons state = stateMap[i].state;
+    const Input::Commands state = stateMap[i].state;
       
-    if (input->keyPressed(keycode)) {
+    if (_input->keyPressed(keycode)) {
       ret.buttons |= state;
     }
   }
     
-  input->mousePos(ret.aim_x, ret.aim_y);
+  //input->mousePos(ret.aim_x, ret.aim_y);
 
   return ret;
 }
 
-void Control::onTick() {
+/*void Control::onTick() {
 #if 0
   double thisTick = context->gameclient()->localTime();
   if (thisTick - lastTick < 1.0/10.0) {
@@ -228,3 +213,4 @@ Control::MoveRange Control::history(float time) {
 void Control::removeHistory(const MoveBuffer::iterator &first) {
   moves.erase(moves.begin(), first);
 }
+*/

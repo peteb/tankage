@@ -13,14 +13,26 @@ public:
     Control::Input &write(class Packer &msg);
     Control::Input &read(class Unpacker &msg);
 
-    enum {
+    enum Commands {
       FORWARD = 0x01
     };
   };
 
   Control(const class Portal &interfaces);
 
-  void start();
+  Input currentInput() const;
+  
+private:
+  void reloadKeycodes();
+  
+  class WindowManager *_wm;
+  class ::Input *_input;
+  
+  int keyUp;
+  int keyDown;
+  int keyLeft;
+  int keyRight;
+  int keyShoot;
 };
 
 #endif // !GAME_CONTROL_H

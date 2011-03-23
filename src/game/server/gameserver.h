@@ -35,8 +35,8 @@ private:
   
   std::vector<Entity *> _entities;
   SessionMap _sessions;
+  
   class Host *_host;
-  class Logging *_log;
   class Network *_net;
   class WindowManager *_wm;
   unsigned int _tick;
