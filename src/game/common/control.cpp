@@ -1,7 +1,5 @@
 #include <netinet/in.h>
 #include <game/common/control.h>
-#include <game/common/actors.h>
-#include <game/common/tank.h>
 #include <game/common/players.h>
 #include <game/common/config.h>
 
@@ -15,6 +13,7 @@
 #include <engine/network.h>
 
 #include <utils/vec.h>
+#include <utils/packer.h>
 
 #include <arpa/inet.h>
 #include <iostream>
@@ -36,7 +35,7 @@ Control::Control()
 }
 
 void Control::init(const class Portal &interfaces) {
-  input = interfaces.requestInterface<Input>();
+  input = interfaces.requestInterface< ::Input>();
   wm = interfaces.requestInterface<WindowManager>();
   context->system<Peer>()->registerSystem(this);
 
@@ -62,6 +61,17 @@ void Control::reloadKeycodes() {
   keyRight = input->keycode(*control_keyRight);
   keyShoot = input->keycode(*control_keyShoot);
 }
+
+Control::Input &Control::Input::write(class Packer &msg) {
+  
+  return *this;
+}
+
+Control::Input &Control::Input::read(class Unpacker &msg) {
+  
+  return *this;
+}
+
 
 void Control::update() {
 

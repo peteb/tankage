@@ -1,7 +1,6 @@
 #include <game/client/gameclient.h>
 #include <game/common/net_protocol.h>
 #include <game/common/replicated_system.h>
-#include <game/common/actors.h>
 #include <game/common/config.h>
 
 #include <engine/portal.h>
@@ -14,11 +13,37 @@
 #include <cassert>
 #include <iostream>
 
+#include <game/client/snapshot.h>
+#include <game/server/tank.h>
+
 Variable<std::string> client_host("iostream.cc:12345");
 Variable<bool> client_predict(true);
 
-GameClient::GameClient() : _client(0) {
+GameClient::GameClient() : _client(0), _tankrenderer(this) {
   _time = 0.0f;
+  
+  char buffer[1024];
+  Packer packer(buffer, buffer + 1024);
+  
+  Tank::State state;
+  state.id = 1337;
+  state.pos = vec2(12.0f, 33.0f);
+  state.base_dir = 90.0f;
+  state.write(packer);
+  
+  Tank::State new_state;
+  Unpacker msg(buffer, buffer + 1024);
+  new_state.read(msg);
+  std::cout << "id: " << new_state.id << " pos: " << std::string(new_state.pos) << " dir: " << state.base_dir << std::endl;
+  
+  Snapshot<Tank::State> snapshot(100);
+  Unpacker msg2(buffer, buffer + 1024);
+  snapshot.push_back(msg2);
+  
+  Snapshot<Tank::State>::const_iterator it = snapshot.find(137);
+  if (it != snapshot.end()) {
+    std::cout << "Found! " << std::string(it->pos) << std::endl;
+  }
 }
 
 GameClient::~GameClient() {
@@ -35,6 +60,8 @@ void GameClient::init(const Portal &interfaces) {
   Config *config = context->system<Config>();
   config->registerVariable("client", "host", &client_host);
   config->registerVariable("client", "predict", &client_predict);
+  
+  _tankrenderer.init(interfaces, context);
 }
 
 void GameClient::start() {
@@ -48,6 +75,7 @@ void GameClient::update() {
     return;
 
   updateNet();
+  _tankrenderer.render();
 }
 
 void GameClient::updateNet() {
@@ -121,7 +149,35 @@ void GameClient::onReceive(Packet *packet) {
   }
   
   Unpacker msg(packet->data(), (const char *)packet->data() + packet->size());
-  std::cout << "DATA TYPE: " << msg.readShort() << std::endl;
+  short msgtype = msg.readShort();
+  if (msgtype == NET_SNAPSHOT) {
+   // _prevtick = _lasttick;
+   // _prevsnap = _lastsnap;
+    
+    //_lasttick = msg.readInt();
+    // _lastsnap.clear();
+    unsigned short snaptype;
+    
+    // FIXME: client, update as fast as possible, output the ticks etc
+    //        then render!
+    
+    do {
+      snaptype = msg.readShort();
+      
+     /* if (snaptype == 1) {
+        std::cout << "got snaptype tank" << std::endl;
+        TankState state;
+        state.actor = msg.readInt();
+        state.pos.x = static_cast<float>(msg.readShort()) / 10.0f;
+        state.pos.y = static_cast<float>(msg.readShort()) / 10.0f;
+        state.base_dir = static_cast<float>(msg.readShort()) / 65536.0f * 360.0f;
+        state.turret_dir = static_cast<float>(msg.readShort()) / 65536.0f * 360.0f;
+        state.shooting = msg.readShort();
+        _lastsnap.push_back(state);
+      }*/
+    } while (snaptype != 0);
+  }
+  
   
   /*size_t size = packet->size();
   const void *data = packet->data();

@@ -7,25 +7,23 @@ include_directories(${PROJECT_ROOT_DIR}
 add_executable(tankage-server
   # common stuff
   ${GAME_ROOT_DIR}/common/system.cpp
-  ${GAME_ROOT_DIR}/common/actors.cpp
-  ${GAME_ROOT_DIR}/common/tank.cpp
-  ${GAME_ROOT_DIR}/common/projectiles.cpp
-  ${GAME_ROOT_DIR}/common/projectile.cpp
   ${GAME_ROOT_DIR}/common/texture_loader.cpp
   ${GAME_ROOT_DIR}/common/players.cpp
   ${GAME_ROOT_DIR}/common/net_error.cpp
-  ${GAME_ROOT_DIR}/common/control.cpp
+  #${GAME_ROOT_DIR}/common/control.cpp
   ${GAME_ROOT_DIR}/common/config.cpp
-  ${GAME_ROOT_DIR}/common/peer.cpp
   
   # bad stuff (shouldn't be needed)
   ${GAME_ROOT_DIR}/client/particles.cpp
   ${GAME_ROOT_DIR}/client/gameclient.cpp
+  ${GAME_ROOT_DIR}/client/tank_renderer.cpp
 
   # server specific
   main.cpp
   gameserver.cpp
   client_session.cpp
+  tank.cpp
+  
 )
 
 target_link_libraries(tankage-server

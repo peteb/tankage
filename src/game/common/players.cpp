@@ -19,7 +19,7 @@ Players::Players() {
 }
 
 void Players::init(const Portal &interfaces) {
-  context->system<Peer>()->registerSystem(this);
+  //context->system<Peer>()->registerSystem(this);
 }
 
 
@@ -85,13 +85,13 @@ PlayerId Players::localPlayer() const {
   return _localPlayer;
 }
 
-Player *Players::createPlayer(ActorId actor) {
+Player *Players::createPlayer(int actor) {
   Player *newPlayer = new Player(++_lastId, actor);
   _players.push_back(newPlayer);
   return newPlayer;
 }
 
-ActorId Players::localActor() const {
+int Players::localActor() const {
   Player *local = player(localPlayer());
   if (local) {
     return local->actor();
@@ -106,7 +106,7 @@ void Players::updatePlayer(const NetArenaParticipant &net_pant) {
   Player *playerEntry = player(playerId);
   if (!playerEntry) {
     std::cout << "NEW PLAYER: " << playerId << std::endl;
-    const ActorId actorId = ntohs(net_pant.actor);
+    const int actorId = ntohs(net_pant.actor);
     playerEntry = new Player(playerId, actorId);
     _players.push_back(playerEntry);
   }
@@ -117,7 +117,7 @@ void Players::updatePlayer(const NetArenaParticipant &net_pant) {
 
 
 
-Player::Player(PlayerId id, ActorId actor)
+Player::Player(PlayerId id, int actor)
   : _id(id)
   , _actor(actor)
 {
@@ -127,7 +127,7 @@ PlayerId Player::id() const {
   return _id;
 }
 
-ActorId Player::actor() const {
+int Player::actor() const {
   return _actor;
 }
 

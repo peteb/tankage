@@ -6,10 +6,13 @@
 
 class Packer {
   void * _pos;
+  void * _start;
   void * const _end;
 
 public:
   Packer(void *start, void *end);
+  
+  size_t size() const;
   
   void writeShort(short value);
   void writeInt(int value);

@@ -1,11 +1,10 @@
 #include <game/server/gameserver.h>
 #include <game/server/client_session.h>
+#include <game/server/tank.h>
 
 #include <game/common/net_protocol.h>
 #include <game/common/net_error.h>
 #include <game/common/replicated_system.h>
-#include <game/common/actors.h>
-#include <game/common/tank.h>
 #include <game/common/config.h>
 
 #include <engine/packet.h>
@@ -61,13 +60,33 @@ void GameServer::run() {
     updateNet(timeout);
     
     if (dt >= interval) {
-      context->actors()->onTick();
+      onTick();
       lasttick += interval;
       _tick++;
     }
 
   }
 
+}
+
+void GameServer::onTick() {
+  SessionMap::iterator it = _sessions.begin();
+  SessionMap::iterator it_end = _sessions.end();
+
+  char buffer[1024];
+  Packer msg(buffer, buffer + 1024);
+  msg.writeShort(NET_SNAPSHOT);
+  msg.writeInt(gameTick());
+  
+  for (; it != it_end; ++it) {
+    // collect data from entities
+    for (size_t i = 0; i < _entities.size(); ++i) {
+      _entities[i]->snap(msg, it->second);
+    }
+
+    msg.writeShort(0);
+    it->second->client->send(buffer, std::max(msg.size(), msg.size()), 0, NET_CHANNEL_ABS);    
+  }  
 }
 
 void GameServer::updateNet(int timeout) {
@@ -107,6 +126,7 @@ void GameServer::onConnect(Client *client) {
   
   ClientSession *session = new ClientSession(client);
   _sessions.insert(std::make_pair(client, session));
+  spawnTank();
 }
 
 void GameServer::onDisconnect(Client *client) {
@@ -213,9 +233,13 @@ void GameServer::onIdent(const NetIdentifyMsg *data, Packet *packet) {
   
   clientSession->state = ClientSession::STATE_IDENTIFIED;
 
-  Tank *tank = context->actors()->createActor();
-  Player *player = context->players()->createPlayer(tank->id());
-  clientSession->player = player->id();
+  
+  // FIXME: ******************
+  //Tank *tank = context->actors()->createActor();
+  //Player *player = context->players()->createPlayer(tank->id());
+  //clientSession->player = player->id();
+  // FIXME: ******************
+
   
   // Broadcast onIdent to all subsystems
   /*for (size_t i = 0; i < _systems.size(); ++i) {
@@ -231,4 +255,10 @@ ClientSession *GameServer::session(Client *client) const {
   }
 
   return iter->second;
+}
+
+Tank *GameServer::spawnTank() {
+  Tank *newTank = new Tank;
+  _entities.push_back(newTank);
+  return newTank;
 }

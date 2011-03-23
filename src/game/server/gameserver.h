@@ -3,12 +3,13 @@
 
 #include <game/common/system.h>
 #include <game/common/net_protocol.h>
-#include <game/common/peer.h>
+#include <game/server/entity.h>
+
 #include <vector>
 #include <map>
 
 
-class GameServer : public Peer {
+class GameServer : public System {
 public:
   static SystemContext::SystemId id() {
     return SystemContext::SYSTEM_GAMESERVER;
@@ -32,10 +33,13 @@ private:
   void onDisconnect(class Client *client);
   void onReceive(class Packet *packet);
   void updateNet(int timeout = 0);
+  void onTick();
+  class Tank *spawnTank();
   
   // net protocol
   void onIdent(const struct NetIdentifyMsg *ident, class Packet *packet);
   
+  std::vector<Entity *> _entities;
   SessionMap _sessions;
   class Host *_host;
   class Logging *_log;

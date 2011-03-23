@@ -2,7 +2,6 @@
 #define GAME_COMMON_PLAYERS_H
 
 #include <game/common/replicated_system.h>
-#include <game/common/actors.h>
 #include <game/common/net_protocol.h>
 #include <vector>
 
@@ -10,17 +9,17 @@ typedef int PlayerId;
 
 class Player {
 public:
-  Player(PlayerId id, ActorId actor);
+  Player(PlayerId id, int actor);
   
   PlayerId id() const;
-  ActorId actor() const;
+  int actor() const;
 
   void participant(NetArenaParticipant &pant) const;
   void update(const NetArenaParticipant &pant);
   
 private:
   PlayerId _id;
-  ActorId _actor;
+  int _actor;
 };
 
 class Players : public ReplicatedSystem {
@@ -37,8 +36,8 @@ public:
   void onIdent(class Client *client);
   Player *player(PlayerId id) const;
   PlayerId localPlayer() const;
-  Player *createPlayer(ActorId actor);
-  ActorId localActor() const;
+  Player *createPlayer(int actor);
+  int localActor() const;
   
 private:
   void updatePlayer(const NetArenaParticipant &participant);

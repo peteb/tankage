@@ -3,10 +3,12 @@
 
 #include <game/common/system.h>
 #include <game/common/net_protocol.h>
-#include <game/common/peer.h>
+
+#include <game/client/tank_renderer.h>
+
 #include <vector>
 
-class GameClient : public Peer {
+class GameClient : public System {
 public:
   static SystemContext::SystemId id() {
     return SystemContext::SYSTEM_GAMECLIENT;
@@ -40,6 +42,9 @@ private:
   void onError(const struct NetErrorMsg *error, class Packet *packet);
   void onSystemUpdate(const struct NetSystemMsg *msg, class Packet *packet);
   
+  friend class TankRenderer;
+  
+  
   class Logging *_log;
   class Network *_net;
   class Client *_client;
@@ -47,6 +52,8 @@ private:
 
   bool _predict_local;
   double _time;
+  
+  TankRenderer _tankrenderer;
 };
 
 

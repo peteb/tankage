@@ -2,7 +2,7 @@
 #define GAME_ITEMS_H
 
 #include <game/common/replicated_system.h>
-#include <game/common/actors.h>
+#include <game/server/actors.h>
 
 #include <utils/vec.h>
 #include <vector>

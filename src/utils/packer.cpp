@@ -27,6 +27,7 @@ const void *ReadType(const void *pos, const void *end, T &val) {
 
 Packer::Packer(void *start, void *end) 
   : _pos(start)
+  , _start(start)
   , _end(end)
 {
 }
@@ -49,6 +50,9 @@ void Packer::writeString(const std::string &value) {
   _pos = data + strsize;
 }
 
+size_t Packer::size() const {
+  return static_cast<const char *>(_pos) - static_cast<const char *>(_start);
+}
 
 Unpacker::Unpacker(const void *data, const void *end) 
   : _pos(data)

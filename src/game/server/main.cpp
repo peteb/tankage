@@ -5,11 +5,9 @@
 
 #include <game/server/gameserver.h>
 #include <game/common/system.h>
-#include <game/common/actors.h>
 #include <game/common/players.h>
-#include <game/common/tank.h>
-#include <game/common/control.h>
-#include <game/common/projectiles.h>
+//#include <game/common/control.h>
+//#include <game/common/projectiles.h>
 #include <game/common/texture_loader.h>
 #include <game/common/config.h>
 #include <game/client/particles.h>
@@ -28,7 +26,7 @@ int app_main(Portal &interfaces, const std::vector<char *> &args) {
   // Register the subsystems
   Config *config = systems.registerSystem<Config>();
   GameServer *server = systems.registerSystem<GameServer>();
-  Actors *actors = systems.registerSystem<Actors>();
+ // Actors *actors = systems.registerSystem<Actors>();
  // Players *players = systems.registerSystem<Players>();
  // Control *control = systems.registerSystem<Control>();
  // Projectiles *projectiles = systems.registerSystem<Projectiles>();
