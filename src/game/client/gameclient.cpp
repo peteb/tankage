@@ -6,6 +6,7 @@
 #include <engine/portal.h>
 #include <engine/network.h>
 #include <engine/packet.h>
+#include <engine/graphics.h>
 
 #include <utils/log.h>
 #include <utils/packer.h>
@@ -22,7 +23,10 @@ Variable<bool> client_predict(true);
 GameClient::GameClient() : _client(0), _tankrenderer(this) {
   _time = 0.0f;
   
-  char buffer[1024];
+  /*
+   test code...
+   
+   char buffer[1024];
   Packer packer(buffer, buffer + 1024);
   
   Tank::State state;
@@ -43,7 +47,7 @@ GameClient::GameClient() : _client(0), _tankrenderer(this) {
   Snapshot<Tank::State>::const_iterator it = snapshot.find(137);
   if (it != snapshot.end()) {
     std::cout << "Found! " << std::string(it->pos) << std::endl;
-  }
+  }*/
 }
 
 GameClient::~GameClient() {
@@ -56,7 +60,8 @@ GameClient::~GameClient() {
 
 void GameClient::init(const Portal &interfaces) {
   _net = interfaces.requestInterface<Network>();
-
+  _gfx = interfaces.requestInterface<Graphics>();
+  
   Config *config = context->system<Config>();
   config->registerVariable("client", "host", &client_host);
   config->registerVariable("client", "predict", &client_predict);
@@ -75,6 +80,9 @@ void GameClient::update() {
     return;
 
   updateNet();
+  
+  const color4 desertColor(0.957f, 0.917f, 0.682f, 1.0f);
+  _gfx->clear(desertColor);
   _tankrenderer.render();
 }
 
@@ -151,11 +159,9 @@ void GameClient::onReceive(Packet *packet) {
   Unpacker msg(packet->data(), (const char *)packet->data() + packet->size());
   short msgtype = msg.readShort();
   if (msgtype == NET_SNAPSHOT) {
-   // _prevtick = _lasttick;
-   // _prevsnap = _lastsnap;
+    int snap_tick = msg.readInt();
+    Snapshot<Tank::State> tanks_snapshot(snap_tick);
     
-    //_lasttick = msg.readInt();
-    // _lastsnap.clear();
     unsigned short snaptype;
     
     // FIXME: client, update as fast as possible, output the ticks etc
@@ -164,18 +170,12 @@ void GameClient::onReceive(Packet *packet) {
     do {
       snaptype = msg.readShort();
       
-     /* if (snaptype == 1) {
-        std::cout << "got snaptype tank" << std::endl;
-        TankState state;
-        state.actor = msg.readInt();
-        state.pos.x = static_cast<float>(msg.readShort()) / 10.0f;
-        state.pos.y = static_cast<float>(msg.readShort()) / 10.0f;
-        state.base_dir = static_cast<float>(msg.readShort()) / 65536.0f * 360.0f;
-        state.turret_dir = static_cast<float>(msg.readShort()) / 65536.0f * 360.0f;
-        state.shooting = msg.readShort();
-        _lastsnap.push_back(state);
-      }*/
+      if (snaptype == 1) {
+        tanks_snapshot.push(msg);
+      }
     } while (snaptype != 0);
+    
+    _tankrenderer.addSnapshot(tanks_snapshot);
   }
   
   

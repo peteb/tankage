@@ -18,7 +18,6 @@ add_executable(tankage
   ${GAME_ROOT_DIR}/server/tank.cpp
 
   # client specific
-  background.cpp
   main.cpp
   gameclient.cpp
   tank_renderer.cpp

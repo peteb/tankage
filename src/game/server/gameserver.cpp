@@ -54,7 +54,7 @@ void GameServer::run() {
   
   while (true) {
     double dt = _wm->timeSeconds() - lasttick;
-    double interval = tickSpeed();
+    double interval = tickDuration();
     int timeout = static_cast<int>(std::max(interval - dt, 0.0) * 1000.0);
     
     updateNet(timeout);
@@ -70,15 +70,19 @@ void GameServer::run() {
 }
 
 void GameServer::onTick() {
-  SessionMap::iterator it = _sessions.begin();
-  SessionMap::iterator it_end = _sessions.end();
-
   char buffer[1024];
   Packer msg(buffer, buffer + 1024);
   msg.writeShort(NET_SNAPSHOT);
   msg.writeInt(gameTick());
+
+  for (size_t i = 0; i < _entities.size(); ++i) {
+    _entities[i]->tick();
+  }
   
-  for (; it != it_end; ++it) {
+  // FIXME: if any entities have made it into the removal list, remove them here!
+  
+  SessionMap::iterator it = _sessions.begin(), it_e = _sessions.end();
+  for (; it != it_e; ++it) {
     // collect data from entities
     for (size_t i = 0; i < _entities.size(); ++i) {
       _entities[i]->snap(msg, it->second);
@@ -112,7 +116,7 @@ unsigned int GameServer::gameTick() const {
   return _tick;
 }
 
-double GameServer::tickSpeed() const {
+double GameServer::tickDuration() const {
   return 1.0 / *server_tickrate;
 }
 
@@ -258,7 +262,10 @@ ClientSession *GameServer::session(Client *client) const {
 }
 
 Tank *GameServer::spawnTank() {
-  Tank *newTank = new Tank;
-  _entities.push_back(newTank);
-  return newTank;
+  Tank *tank = new Tank(this);
+  Tank::State initial;
+  initial.pos = vec2(400.0f, 300.0f);
+  tank->assign(initial);
+  _entities.push_back(tank);
+  return tank;
 }

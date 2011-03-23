@@ -4,7 +4,6 @@
 #include <engine/graphics.h>
 #include <engine/network.h>
 
-#include <game/client/background.h>
 #include <game/client/particles.h>
 #include <game/client/gameclient.h>
 //#include <game/common/control.h>

@@ -48,6 +48,8 @@ private:
   class Logging *_log;
   class Network *_net;
   class Client *_client;
+  class Graphics *_gfx;
+  
   ClientState _state;
 
   bool _predict_local;

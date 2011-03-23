@@ -24,7 +24,7 @@ public:
   
   class ClientSession *session(class Client *client) const;
   unsigned int gameTick() const;
-  double tickSpeed() const;
+  double tickDuration() const;
   
 private:
   typedef std::map<class Client *, class ClientSession *> SessionMap;
