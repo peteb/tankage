@@ -37,13 +37,14 @@ public:
 private:
   class GameServer *_gameserver;
   State _state;
+  Control::Input _lastinput;
 };
 
 
 
 inline Tank::State lerp(const Tank::State &begin, 
                         const Tank::State &end, 
-                        float amount) {
+                        double amount) {
   Tank::State ret;
   ret.id = begin.id;
   ret.pos = ::lerp(begin.pos, end.pos, amount);

@@ -23,6 +23,7 @@ public:
   void start();
   void update();
   void disconnectGently();
+  double deltaTime() const;
   
 private:
   void sendInput();
@@ -46,6 +47,7 @@ private:
 
   double _last_update;
   double _input_time;
+  double _since_snap;
   
   TankRenderer _tankrenderer;
   Control _control;

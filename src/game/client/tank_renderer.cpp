@@ -16,10 +16,20 @@ void TankRenderer::addSnapshot(const Snapshot<Tank::State> &snapshot) {
   current = snapshot;
 }
 
-void TankRenderer::render() {
+void TankRenderer::render() {  
   TankSnapshot::const_iterator it = current.begin(), it_e = current.end();
   for (; it != it_e; ++it) {
-    renderTank(*it);
+    TankSnapshot::const_iterator it_prev = prev.find(it->id);
+    Tank::State state;
+    if (it_prev != prev.end()) {
+      state = lerp(*it_prev, *it, _client->deltaTime());
+    }
+    else {
+      // it just started existing!
+      state = *it;
+    }
+
+    renderTank(state);
   }
 }
 

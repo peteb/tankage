@@ -35,6 +35,7 @@ GameClient::GameClient(class Portal &services)
   
   _last_update = _wm->timeSeconds();
   _input_time = 0.0;
+  _since_snap = 0.0;
   
   _state = GameClient::STATE_DISCONNECTED;
   Log(INFO) << "connecting to host " << *client_host << "...";
@@ -83,6 +84,8 @@ void GameClient::update() {
   double dt = now - _last_update;
   _last_update = now;
   _input_time -= dt;
+  
+  _since_snap += dt;
   
   if (_input_time <= 0.0) {
     sendInput();
@@ -150,6 +153,10 @@ void GameClient::onDisconnect() {
   Log(INFO) << "disconnected";
 }
 
+double GameClient::deltaTime() const {
+  return _since_snap / (1.0 / 20.0);
+}
+
 void GameClient::onReceive(Packet *packet) {
   // Fixme: this code looks suspiciously similar to gameserver::onReceive..
   static int packetCount = 0;
@@ -175,6 +182,7 @@ void GameClient::onReceive(Packet *packet) {
     } while (snaptype != 0);
     
     _tankrenderer.addSnapshot(tanks_snapshot);
+    _since_snap = 0.0;
   }
   
 }

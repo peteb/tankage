@@ -31,8 +31,10 @@ void Tank::State::advance(const Control::Input &input, double duration) {
 }
 
 void Tank::State::integrate(const Control::Input &input, double dt) {
-  if (input.buttons & Control::Input::FORWARD) 
-    pos.x += dt * 20.0;
+  if (input.buttons & Control::Input::FORWARD) {
+
+    pos.x += dt * 200.0;
+  }
 }
 /* <--- end tank state ---> */
 
@@ -57,11 +59,9 @@ void Tank::snap(Packer &msg, const class ClientSession *client) {
 }
 
 void Tank::tick() {
-  // this is where we need the input
-  double time = _gameserver->gameTick() * _gameserver->tickDuration();
-  _state.pos = vec2(400.0f, 300.0f) + vec2::FromDegrees(time * 90.0) * 200.0f;
+  _state.advance(_lastinput, _gameserver->tickDuration());
 }
 
 void Tank::recvInput(const Control::Input &input) {
-
+  _lastinput = input;
 }
