@@ -31,10 +31,17 @@ void Tank::State::advance(const Control::Input &input, double duration) {
 }
 
 void Tank::State::integrate(const Control::Input &input, double dt) {
-  if (input.buttons & Control::Input::FORWARD) {
+  vec2 forward = vec2::FromDegrees(base_dir);
+  
+  if (input.buttons & Control::Input::FORWARD)
+    pos += forward * dt * 120.0;
+  if (input.buttons & Control::Input::BACKWARD)
+    pos += forward * dt * -120.0;
+  if (input.buttons & Control::Input::TURN_RIGHT)
+    base_dir += dt * 45.0;
+  if (input.buttons & Control::Input::TURN_LEFT)
+    base_dir += dt * -45.0;
 
-    pos.x += dt * 200.0;
-  }
 }
 /* <--- end tank state ---> */
 

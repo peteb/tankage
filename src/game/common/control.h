@@ -14,7 +14,10 @@ public:
     Control::Input &read(class Unpacker &msg);
 
     enum Commands {
-      FORWARD = 0x01
+      FORWARD =     0x01,
+      BACKWARD =    0x02,
+      TURN_RIGHT =  0x04,
+      TURN_LEFT =   0x08
     };
   };
 

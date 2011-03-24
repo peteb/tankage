@@ -24,6 +24,7 @@ public:
   void update();
   void disconnectGently();
   double deltaTime() const;
+  bool lerpRemote() const;
   
 private:
   void sendInput();

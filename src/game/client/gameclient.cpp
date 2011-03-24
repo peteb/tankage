@@ -19,10 +19,12 @@
 
 Variable<std::string> client_host("iostream.cc:12345");
 Variable<bool> client_predict(true);
+Variable<bool> client_lerpRemote(true);
 
 void client_RegisterVariables(Config &config) {
   config.registerVariable("client", "host", &client_host);
   config.registerVariable("client", "predict", &client_predict);
+  config.registerVariable("client", "lerp_remote", &client_lerpRemote);
 }
 
 GameClient::GameClient(class Portal &services) 
@@ -155,6 +157,10 @@ void GameClient::onDisconnect() {
 
 double GameClient::deltaTime() const {
   return _since_snap / (1.0 / 20.0);
+}
+
+bool GameClient::lerpRemote() const {
+  return *client_lerpRemote;
 }
 
 void GameClient::onReceive(Packet *packet) {
