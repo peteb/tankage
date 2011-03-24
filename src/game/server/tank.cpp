@@ -57,6 +57,11 @@ void Tank::snap(Packer &msg, const class ClientSession *client) {
 }
 
 void Tank::tick() {
+  // this is where we need the input
   double time = _gameserver->gameTick() * _gameserver->tickDuration();
   _state.pos = vec2(400.0f, 300.0f) + vec2::FromDegrees(time * 90.0) * 200.0f;
+}
+
+void Tank::recvInput(const Control::Input &input) {
+
 }

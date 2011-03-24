@@ -19,6 +19,7 @@ public:
   class ClientSession *session(class Client *client) const;
   unsigned int gameTick() const;
   double tickDuration() const;
+  Entity *entity(int id) const;
   
 private:
   typedef std::map<class Client *, class ClientSession *> SessionMap;
@@ -40,6 +41,7 @@ private:
   class Network *_net;
   class WindowManager *_wm;
   unsigned int _tick;
+  unsigned int _last_entity;
 };
 
 

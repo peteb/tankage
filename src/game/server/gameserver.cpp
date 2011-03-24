@@ -33,7 +33,8 @@ GameServer::GameServer(const Portal &services) {
   _wm = services.requestInterface<WindowManager>();
   
   _tick = 0;
-
+  _last_entity = 0;
+  
   Log(INFO) << "starting server at " << *server_host;
   _host = _net->startHost(*server_host, 32, 2);  
 }
@@ -123,7 +124,8 @@ void GameServer::onConnect(Client *client) {
   
   ClientSession *session = new ClientSession(client);
   _sessions.insert(std::make_pair(client, session));
-  spawnTank();
+  Tank *tank = spawnTank();
+  session->tankid = tank->id();
 }
 
 void GameServer::onDisconnect(Client *client) {
@@ -141,109 +143,19 @@ void GameServer::onReceive(Packet *packet) {
   Unpacker msg(packet->data(), (const unsigned char *)packet->data() + packet->size());
   short type = msg.readShort();
   
-  if (type == 1) { // INPUT
-                   //context->control()->onRecvInput(msg);
-  }
-  
-  /*size_t size = packet->size();
-  const void *data = packet->data();
-
-  if (size < sizeof(NetPacketType)) {
-    return;
-  }
-
-  Client *client = packet->sender();
-  ClientSession *clientSession = session(client);
-  
-  try {
-    const NetPacketType *type = static_cast<const NetPacketType *>(data);
-    if (*type == NET_IDENTIFY) {
-      assert(size >= sizeof(NetIdentifyMsg) && "packet too small for ident");
-      onIdent(static_cast<const NetIdentifyMsg *>(data), packet);
-    }
-    else {
-      // Some sanity checks first
-      if (!clientSession) {
-        // kinda strange, it should already be connected here
-        throw NetError(NET_NOT_CONNECTED, "please connect first");
-      }
-      
-      if (clientSession->state != ClientSession::STATE_IDENTIFIED) {
-        throw NetError(NET_ALREADY_IDENTIFIED, "please identify first");
-      }
-      
-      // Then call onReceive on the subsystems
-      for (size_t i = 0; i < _systems.size(); ++i) {
-        if (_systems[i]->flags & ReplicatedSystem::SERVER_RECEIVE) {
-          _systems[i]->onReceive(*type, *packet);
-        }
-      }
-    }
+  if (type == NET_PLAYER_INPUT) { // INPUT
+    ClientSession *sess = session(packet->sender());
+    if (!sess)
+      return;
     
-  }
-  catch (const NetError &netError) {
-    // Any failures will terminate the session
-    NetErrorMsg msg;
-    netError.fill(msg);
-    client->send(&msg, sizeof(NetErrorMsg),
-                 Client::PACKET_RELIABLE, NET_CHANNEL_STATE);
-      
-    client->disconnect();
-  }
-  */
-}
-
-
-void GameServer::onIdent(const NetIdentifyMsg *data, Packet *packet) {
-  NetIdentifyMsg ident;
-  ident.type = data->type;
-  ident.client_version = ntohs(data->client_version);
-  ident.net_version = ntohs(data->net_version);
-  
-  //_log->write(Logging::DEBUG, "net: received ident for net %u", 
-    //ident.net_version);
-
-  Client *client = packet->sender();
-  ClientSession *clientSession = session(client);
-
-  // Some sanity checks first
-  if (!clientSession) {
-    // kinda strange, it should already be connected here
-    throw NetError(NET_NOT_CONNECTED, "please connect before issuing ident");
-  }
-  
-  if (clientSession->state != 0) {
-    throw NetError(NET_ALREADY_IDENTIFIED, "you are already identified");
-  }
-  
-  if (ident.net_version != NET_VERSION) {
-    throw NetError(NET_IDENT_WRONG_VERSION, "wrong network version");
-  }
-  
-  // Forward the ident request to all subsystems
-  /*for (size_t i = 0; i < _systems.size(); ++i) {
-    if (_systems[i]->flags & ReplicatedSystem::SERVER_RECEIVE) {
-      _systems[i]->onReceive(ident.type, *packet);
+    Tank *tank = static_cast<Tank *>(entity(sess->tankid));
+    if (tank) {
+      Control::Input input;
+      input.read(msg);
+      tank->recvInput(input);
     }
-  }*/
-  //context->actors()->onReceive(ident.type, *packet);
-  
-  clientSession->state = ClientSession::STATE_IDENTIFIED;
-
-  
-  // FIXME: ******************
-  //Tank *tank = context->actors()->createActor();
-  //Player *player = context->players()->createPlayer(tank->id());
-  //clientSession->player = player->id();
-  // FIXME: ******************
-
-  
-  // Broadcast onIdent to all subsystems
-  /*for (size_t i = 0; i < _systems.size(); ++i) {
-    _systems[i]->onIdent(client);
-  }*/
+  }
 }
-
 
 ClientSession *GameServer::session(Client *client) const {
   SessionMap::const_iterator iter = _sessions.find(client);
@@ -257,8 +169,18 @@ ClientSession *GameServer::session(Client *client) const {
 Tank *GameServer::spawnTank() {
   Tank *tank = new Tank(this);
   Tank::State initial;
+  initial.id = ++_last_entity;
   initial.pos = vec2(400.0f, 300.0f);
   tank->assign(initial);
   _entities.push_back(tank);
   return tank;
+}
+
+Entity *GameServer::entity(int id) const {
+  for (size_t i = 0; i < _entities.size(); ++i) {
+    if (_entities[i]->id() == id)
+      return _entities[i];
+  }
+  
+  return NULL;
 }

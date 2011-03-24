@@ -28,9 +28,11 @@ public:
   
   void snap(class Packer &msg, const class ClientSession *client);
   void tick();
+  void recvInput(const Control::Input &input);
   
   const State &state() const;
   void assign(const State &state);
+  int id() const {return _state.id; }
   
 private:
   class GameServer *_gameserver;

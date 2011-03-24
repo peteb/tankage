@@ -2,7 +2,7 @@
 #define GAME_CLIENT_GAMECLIENT_H
 
 #include <game/common/net_protocol.h>
-
+#include <game/common/control.h>
 #include <game/client/tank_renderer.h>
 
 #include <vector>
@@ -25,6 +25,8 @@ public:
   void disconnectGently();
   
 private:
+  void sendInput();
+  
   void onConnect();
   void onDisconnect();
   void onReceive(class Packet *packet);
@@ -38,12 +40,15 @@ private:
   class Network *_net;
   class Client *_client;
   class Graphics *_gfx;
+  class WindowManager *_wm;
   
   ClientState _state;
 
-  double _time;
+  double _last_update;
+  double _input_time;
   
   TankRenderer _tankrenderer;
+  Control _control;
 };
 
 

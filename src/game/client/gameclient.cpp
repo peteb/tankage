@@ -6,6 +6,7 @@
 #include <engine/network.h>
 #include <engine/packet.h>
 #include <engine/graphics.h>
+#include <engine/window_manager.h>
 
 #include <utils/log.h>
 #include <utils/packer.h>
@@ -25,14 +26,16 @@ void client_RegisterVariables(Config &config) {
 }
 
 GameClient::GameClient(class Portal &services) 
-  : _client(0)
-  , _tankrenderer(this, services)
+  : _tankrenderer(this, services)
+  , _control(services)
 {
-  _time = 0.0f;
-  
   _net = services.requestInterface<Network>();
   _gfx = services.requestInterface<Graphics>();
-
+  _wm = services.requestInterface<WindowManager>();
+  
+  _last_update = _wm->timeSeconds();
+  _input_time = 0.0;
+  
   _state = GameClient::STATE_DISCONNECTED;
   Log(INFO) << "connecting to host " << *client_host << "...";
   _client = _net->connect(*client_host, 2);  
@@ -76,6 +79,16 @@ void GameClient::update() {
   if (!_client) 
     return;
 
+  double now = _wm->timeSeconds();
+  double dt = now - _last_update;
+  _last_update = now;
+  _input_time -= dt;
+  
+  if (_input_time <= 0.0) {
+    sendInput();
+    _input_time = 1.0/10.0;
+  }
+  
   updateNet();
   
   const color4 desertColor(0.957f, 0.917f, 0.682f, 1.0f);
@@ -103,16 +116,25 @@ void GameClient::updateNet() {
   
 }
 
-void GameClient::disconnectGently() {
-  if (!_client) {
-    return;
-  }
+void GameClient::sendInput() {
+  const size_t BUFSZ = 256;
+  char buffer[BUFSZ];
+  
+  Packer msg(buffer, buffer + BUFSZ);
+  msg.writeShort(NET_PLAYER_INPUT);
+  _control.currentInput().write(msg);
+  _client->send(buffer, msg.size(), 0, NET_CHANNEL_STATE);
+}
 
+void GameClient::disconnectGently() {
+  if (!_client)
+    return;
+  
   _state = STATE_DISCONNECTED;
   
   // let the client down gently
   _client->disconnect();
-  while (_client->isConnected()) {
+  while (_client->isConnected()) { // a bit dangerous...
     _client->update();
   }
   
@@ -120,18 +142,8 @@ void GameClient::disconnectGently() {
   _client = NULL;
 }
 
-/*double GameClient::localTime() const {
-  return _time;
-}
-
-bool GameClient::predictLocal() const {
-  return *client_predict;
-}*/
-
 void GameClient::onConnect() {
   Log(INFO) << "connected!"; 
-
-  _time = 0.0f;
 }
 
 void GameClient::onDisconnect() {
@@ -153,9 +165,6 @@ void GameClient::onReceive(Packet *packet) {
     Snapshot<Tank::State> tanks_snapshot(snap_tick);
     
     unsigned short snaptype;
-    
-    // FIXME: client, update as fast as possible, output the ticks etc
-    //        then render!
     
     do {
       snaptype = msg.readShort();

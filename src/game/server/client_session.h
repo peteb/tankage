@@ -14,7 +14,7 @@ public:
 
   int state;
   Client * const client;
-  PlayerId player;
+  int tankid;
 };
 
 #endif // !GAME_SERVER_CLIENT_SESSION_H
