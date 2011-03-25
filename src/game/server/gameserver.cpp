@@ -21,7 +21,7 @@
 #include <algorithm>
 
 Variable<std::string> server_host("0.0.0.0:12345");
-Variable<double> server_tickrate(20.0);
+Variable<double> server_tickrate(10.0);
 
 void server_RegisterVariables(class Config &config) {
   config.registerVariable("server", "host", &server_host);

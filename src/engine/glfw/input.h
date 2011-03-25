@@ -22,12 +22,10 @@ public:
 private:
   enum {
     KEY_STATE_PRESSED  = 0x01,
-    KEY_STATE_RELEASED = 0x02,
-    KEY_STATE_BEING_PRESSED = 0x04
+    KEY_STATE_RELEASED = 0x02
   };
     
-  typedef unsigned char KeyState;
-  typedef std::vector<std::pair<int, KeyState> > KeyStateMap;
+  typedef std::vector<std::pair<int, unsigned char> > KeyStateMap;
   typedef std::pair<KeyStateMap::iterator, KeyStateMap::iterator> KeyStateRange;
   
   KeyStateMap keyStates;

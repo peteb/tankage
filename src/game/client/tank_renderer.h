@@ -17,7 +17,6 @@ private:
   void renderTank(const Tank::State &state);
   
   class GameClient *_client;
-  const class SystemContext *_context;
   class Graphics *_gfx;
 
   TankSnapshot prev;

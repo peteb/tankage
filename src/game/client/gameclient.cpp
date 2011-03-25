@@ -84,16 +84,10 @@ void GameClient::update() {
 
   double now = _wm->timeSeconds();
   double dt = now - _last_update;
-  _last_update = now;
-  _input_time -= dt;
-  
+  _last_update = now;  
   _since_snap += dt;
-  
-  if (_input_time <= 0.0) {
-    sendInput();
-    _input_time = 1.0/10.0;
-  }
-  
+
+  sendInput();
   updateNet();
   
   const color4 desertColor(0.957f, 0.917f, 0.682f, 1.0f);
@@ -124,11 +118,20 @@ void GameClient::updateNet() {
 void GameClient::sendInput() {
   const size_t BUFSZ = 256;
   char buffer[BUFSZ];
+
+  double now = _wm->timeSeconds(); // FIXME: better time handling
+  Control::Input new_input = _control.currentInput();
   
-  Packer msg(buffer, buffer + BUFSZ);
-  msg.writeShort(NET_PLAYER_INPUT);
-  _control.currentInput().write(msg);
-  _client->send(buffer, msg.size(), 0, NET_CHANNEL_STATE);
+  if (new_input.buttons != _sent_input.buttons || now - _input_time >= 1.0/10.0) {
+    Packer msg(buffer, buffer + BUFSZ);
+    msg.writeShort(NET_PLAYER_INPUT);
+    new_input.write(msg);
+    _client->send(buffer, msg.size(), 0, NET_CHANNEL_STATE);
+    
+    _sent_input = new_input;
+    _input_time = now;
+  }
+  
 }
 
 void GameClient::disconnectGently() {
@@ -156,7 +159,7 @@ void GameClient::onDisconnect() {
 }
 
 double GameClient::deltaTime() const {
-  return _since_snap / (1.0 / 20.0);
+  return _since_snap / (1.0 / 10.0);  // FIXME: send tickrate over network
 }
 
 bool GameClient::lerpRemote() const {
@@ -164,7 +167,6 @@ bool GameClient::lerpRemote() const {
 }
 
 void GameClient::onReceive(Packet *packet) {
-  // Fixme: this code looks suspiciously similar to gameserver::onReceive..
   static int packetCount = 0;
   if (packetCount++ > 10) {
     packetCount = 0;

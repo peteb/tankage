@@ -17,12 +17,15 @@ void TankRenderer::addSnapshot(const Snapshot<Tank::State> &snapshot) {
 }
 
 void TankRenderer::render() {  
+  // Note: there's also another case where a tank can dissappear and then appear again
+  //       in the snapshots; when they go out of the visible area
+  
   TankSnapshot::const_iterator it = current.begin(), it_e = current.end();
   for (; it != it_e; ++it) {
     TankSnapshot::const_iterator it_prev = prev.find(it->id);
     Tank::State state;
     if (it_prev != prev.end() && _client->lerpRemote()) {
-      state = lerp(*it_prev, *it, _client->deltaTime());
+      state = lerp(*it_prev, *it, _client->deltaTime()); // FIXME: lerping base_dir is bad
     }
     else {
       // it just started existing! or remote entity smoothing is turned off

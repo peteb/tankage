@@ -21,7 +21,7 @@ bool Glfw::Input::keyPressed(int key) {
     return false;
   }
 
-  return keyRange.first->second & KEY_STATE_BEING_PRESSED;
+  return keyRange.first->second & KEY_STATE_PRESSED;
 }
 
 int Glfw::Input::keycode(const std::string &key) {
@@ -51,20 +51,18 @@ void Glfw::Input::onKeyStateChange(int key, int state) {
   KeyStateRange stateElements = findKeyStates(key);
 
   if (stateElements.first != stateElements.second) {
-    KeyState &foundState = stateElements.first->second;
-    foundState |= (state ? KEY_STATE_PRESSED : KEY_STATE_RELEASED);
-
+    unsigned char &foundState = stateElements.first->second;
+  
     if (state) {
-      foundState |= KEY_STATE_BEING_PRESSED;
+      foundState = KEY_STATE_PRESSED;
     }
     else {
-      foundState &= ~KEY_STATE_BEING_PRESSED;
+      foundState |= KEY_STATE_RELEASED;
     }
   }
   else {
     // This key has not received state updates earlier, add it.
-    KeyState initialState = (state ? KEY_STATE_PRESSED | KEY_STATE_BEING_PRESSED
-                             : KEY_STATE_RELEASED);
+    unsigned char initialState = (state ? KEY_STATE_PRESSED : 0);
     
     keyStates.insert(stateElements.first, std::make_pair(key, initialState));
     std::sort(keyStates.begin(), keyStates.end(), key_cmp());
@@ -78,8 +76,12 @@ bool Glfw::Input::keyWasPressed(int key) {
     return false;
   }
 
-  const bool wasPressed = keyRange.first->second & KEY_STATE_PRESSED;
-  keyRange.first->second &= ~KEY_STATE_PRESSED;
+  unsigned char &state = keyRange.first->second;
+  const bool wasPressed = state & KEY_STATE_PRESSED;
+
+  if (state & KEY_STATE_RELEASED)
+    state = 0;
+
   return wasPressed;
 }
 

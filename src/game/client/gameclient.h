@@ -50,6 +50,7 @@ private:
   double _input_time;
   double _since_snap;
   
+  Control::Input _sent_input;
   TankRenderer _tankrenderer;
   Control _control;
 };

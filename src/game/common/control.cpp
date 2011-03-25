@@ -85,7 +85,7 @@ Control::Input Control::currentInput() const {
     const int keycode = stateMap[i].keycode;
     const Input::Commands state = stateMap[i].state;
       
-    if (_input->keyPressed(keycode)) {
+    if (_input->keyWasPressed(keycode)) {
       ret.buttons |= state;
     }
   }
