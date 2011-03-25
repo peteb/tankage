@@ -19,7 +19,8 @@ public:
   class ClientSession *session(class Client *client) const;
   unsigned int gameTick() const;
   double tickDuration() const;
-  Entity *entity(int id) const;
+  Entity *entity(int eid) const;
+  void destroyEntity(int eid);
   
 private:
   typedef std::map<class Client *, class ClientSession *> SessionMap;
@@ -30,11 +31,14 @@ private:
   void updateNet(int timeout = 0);
   void onTick();
   class Tank *spawnTank();
+  void destroyZombies();
   
   // net protocol
   void onIdent(const struct NetIdentifyMsg *ident, class Packet *packet);
   
   std::vector<Entity *> _entities;
+  std::vector<int> _zombie_entities;
+  
   SessionMap _sessions;
   
   class Host *_host;

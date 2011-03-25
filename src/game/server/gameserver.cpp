@@ -64,19 +64,22 @@ void GameServer::run() {
 }
 
 void GameServer::onTick() {
-  char buffer[1024];
-  Packer msg(buffer, buffer + 1024);
-  msg.writeShort(NET_SNAPSHOT);
-  msg.writeInt(gameTick());
+  char buffer[4096];
+
+  destroyZombies(); // updateNet might call onDisconnect which might destroyEntity
 
   for (size_t i = 0; i < _entities.size(); ++i) {
     _entities[i]->tick();
   }
   
-  // FIXME: if any entities have made it into the removal list, remove them here!
+  destroyZombies(); // ticks might destroyEntity
   
   SessionMap::iterator it = _sessions.begin(), it_e = _sessions.end();
   for (; it != it_e; ++it) {
+    Packer msg(buffer, buffer + 4096);
+    msg.writeShort(NET_SNAPSHOT);
+    msg.writeInt(gameTick());
+
     // collect data from entities
     for (size_t i = 0; i < _entities.size(); ++i) {
       _entities[i]->snap(msg, it->second);
@@ -134,6 +137,7 @@ void GameServer::onDisconnect(Client *client) {
   // Remove any client connection metadata
   SessionMap::iterator iter = _sessions.find(client);
   if (iter != _sessions.end()) {
+    destroyEntity(iter->second->tankid);
     delete iter->second;
     _sessions.erase(iter);
   }
@@ -177,11 +181,31 @@ Tank *GameServer::spawnTank() {
   return tank;
 }
 
-Entity *GameServer::entity(int id) const {
+Entity *GameServer::entity(int eid) const {
   for (size_t i = 0; i < _entities.size(); ++i) {
-    if (_entities[i]->id() == id)
+    if (_entities[i]->id() == eid)
       return _entities[i];
   }
   
   return NULL;
+}
+
+void GameServer::destroyEntity(int eid) {
+  _zombie_entities.push_back(eid);
+}
+
+void GameServer::destroyZombies() {
+  if (_zombie_entities.empty())
+    return;
+  
+  // FIXME: optimize this!
+  
+  std::vector<Entity *>::iterator iter = _entities.begin();
+  while (iter != _entities.end()) {
+    if (std::find(_zombie_entities.begin(), _zombie_entities.end(), (*iter)->id())
+        != _zombie_entities.end())
+      iter = _entities.erase(iter);
+    else
+      ++iter;
+  }
 }
