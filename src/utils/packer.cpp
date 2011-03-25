@@ -32,6 +32,10 @@ Packer::Packer(void *start, void *end)
 {
 }
 
+void Packer::writeByte(char value) {
+  _pos = WriteType(_pos, _end, value);
+}
+
 void Packer::writeShort(short value) {
   _pos = WriteType(_pos, _end, htons(value));
 }
@@ -58,6 +62,12 @@ Unpacker::Unpacker(const void *data, const void *end)
   : _pos(data)
   , _end(end)
 {
+}
+
+char Unpacker::readByte() {
+  char ret;
+  _pos = ReadType(_pos, _end, ret);
+  return ret;
 }
 
 short Unpacker::readShort() {
