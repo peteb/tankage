@@ -125,6 +125,8 @@ void GameServer::onConnect(Client *client) {
     return;
   }
   
+  sendServerInfo(client);
+  
   ClientSession *session = new ClientSession(client);
   _sessions.insert(std::make_pair(client, session));
   Tank *tank = spawnTank();
@@ -208,4 +210,13 @@ void GameServer::destroyZombies() {
     else
       ++iter;
   }
+}
+
+void GameServer::sendServerInfo(Client *receiver) {
+  char buffer[1024];
+  Packer msg(buffer, buffer + 1024);
+  msg.writeShort(NET_SERVER_INFO);
+  msg.writeShort(*server_tickrate * 10.0);
+  
+  receiver->send(buffer, 1024, Client::PACKET_RELIABLE, NET_CHANNEL_STATE);
 }

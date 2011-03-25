@@ -49,6 +49,7 @@ private:
   double _last_update;
   double _input_time;
   double _since_snap;
+  double _net_tickrate;
   
   Control::Input _sent_input;
   TankRenderer _tankrenderer;

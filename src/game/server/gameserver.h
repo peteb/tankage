@@ -32,6 +32,7 @@ private:
   void onTick();
   class Tank *spawnTank();
   void destroyZombies();
+  void sendServerInfo(class Client *receiver);
   
   // net protocol
   void onIdent(const struct NetIdentifyMsg *ident, class Packet *packet);
