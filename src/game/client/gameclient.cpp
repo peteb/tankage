@@ -136,7 +136,7 @@ void GameClient::onDisconnect() {
 }
 
 double GameClient::deltaTime() const {
-  return _since_snap / (1.0 / _net_tickrate);  // FIXME: send tickrate over network
+  return _since_snap / (1.0 / _net_tickrate);
 }
 
 bool GameClient::lerpRemote() const {

@@ -6,6 +6,12 @@
 #include <utils/vec.h>
 #include <utils/algorithm.h>
 
+inline double wrap(double value, double lower, double upper) { // FIXME: util.
+  double distance = upper - lower;
+  double times = floor((value - lower) / distance);
+  return value - (times * distance);
+}
+
 class Tank : public Entity {
 public:
   /* <--- begin shared state code ---> */
@@ -48,7 +54,8 @@ inline Tank::State lerp(const Tank::State &begin,
   Tank::State ret;
   ret.id = begin.id;
   ret.pos = ::lerp(begin.pos, end.pos, amount);
-  ret.base_dir = ::lerp(begin.base_dir, end.base_dir, amount);
+  float smallest_angle = wrap(end.base_dir - begin.base_dir, -180.0, 180.0);
+  ret.base_dir = ::lerp(begin.base_dir, begin.base_dir + smallest_angle, amount);
 
   return ret;
 }
