@@ -18,6 +18,7 @@ public:
   struct State {
     int id;
     vec2 pos;
+    vec2 lin_vel;
     float base_dir;
 
     void advance(const Control::Input &input, double duration);
@@ -29,6 +30,7 @@ public:
     void integrate(const Control::Input &input, double dt);
   };
   /* <--- end shared state code ---> */
+  
   
   Tank(class GameServer *gameserver);
   
@@ -56,7 +58,8 @@ inline Tank::State lerp(const Tank::State &begin,
   ret.pos = ::lerp(begin.pos, end.pos, amount);
   float smallest_angle = wrap(end.base_dir - begin.base_dir, -180.0, 180.0);
   ret.base_dir = ::lerp(begin.base_dir, begin.base_dir + smallest_angle, amount);
-
+  ret.lin_vel = end.lin_vel; // just snap derivates
+  
   return ret;
 }
 

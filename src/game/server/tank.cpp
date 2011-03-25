@@ -7,6 +7,8 @@ Tank::State &Tank::State::write(Packer &msg) {
   msg.writeInt(id);
   msg.writeShort(pos.x * 10.0f);
   msg.writeShort(pos.y * 10.0f);
+  msg.writeShort(lin_vel.x * 100.0f);
+  msg.writeShort(lin_vel.y * 100.0f);
   msg.writeShort(base_dir / 360.0f * 65536.0f);
   return *this;
 }
@@ -15,12 +17,14 @@ Tank::State &Tank::State::read(class Unpacker &msg) {
   id = msg.readInt();
   pos.x = static_cast<float>(msg.readShort()) / 10.0f;
   pos.y = static_cast<float>(msg.readShort()) / 10.0f;
+  lin_vel.x = static_cast<float>(msg.readShort()) / 100.0f;
+  lin_vel.y = static_cast<float>(msg.readShort()) / 100.0f;
   base_dir = static_cast<float>(msg.readShort()) / 65536.0f * 360.0f;
   return *this;
 }
 
 void Tank::State::advance(const Control::Input &input, double duration) {
-  const double DELTA_TIME = 1.0/40.0;
+  const double DELTA_TIME = 1.0/40.0; // FIXME: this can be tweaked, a lot here can
   
   for (; duration >= DELTA_TIME; duration -= DELTA_TIME) {
     integrate(input, DELTA_TIME);
@@ -34,14 +38,16 @@ void Tank::State::integrate(const Control::Input &input, double dt) {
   vec2 forward = vec2::FromDegrees(base_dir);
   
   if (input.buttons & Control::Input::FORWARD)
-    pos += forward * dt * 120.0;
+    lin_vel += forward * dt * 120.0;
   if (input.buttons & Control::Input::BACKWARD)
-    pos += forward * dt * -120.0;
+    lin_vel += forward * dt * -120.0;
+
   if (input.buttons & Control::Input::TURN_RIGHT)
     base_dir += dt * 45.0;
   if (input.buttons & Control::Input::TURN_LEFT)
     base_dir += dt * -45.0;
 
+  pos += lin_vel * dt;
 }
 /* <--- end tank state ---> */
 

@@ -178,6 +178,8 @@ Tank *GameServer::spawnTank() {
   initial.id = ++_last_entity;
   initial.pos = vec2(400.0f, 300.0f);
   initial.base_dir = 0.0f;
+  initial.lin_vel = vec2::Zero();
+  
   tank->assign(initial);
   _entities.push_back(tank);
   return tank;
