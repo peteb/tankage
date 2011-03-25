@@ -73,7 +73,7 @@ int Unpacker::readInt() {
 }
 
 std::string Unpacker::readString() {
-  const unsigned short strsize = readInt();
+  const unsigned short strsize = readShort();
   const char *data = reinterpret_cast<const char *>(_pos);
   assert(data + strsize <= _end && "not enough room for string");
   _pos = data + strsize;

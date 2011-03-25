@@ -1,5 +1,4 @@
-
-#include "log.h"
+#include <utils/log.h>
 #include <gtest/gtest.h>
 
 struct MyLogConsumer { 
