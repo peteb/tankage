@@ -14,6 +14,7 @@ public:
   
   size_t size() const;
   
+  void writeByte(char value);
   void writeShort(short value);
   void writeInt(int value);
   void writeString(const std::string &value);
@@ -26,6 +27,7 @@ class Unpacker {
 public:
   Unpacker(const void *data, const void *end);
   
+  char readByte();
   short readShort();
   int readInt();
   std::string readString();
