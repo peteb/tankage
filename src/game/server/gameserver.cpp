@@ -65,7 +65,6 @@ void GameServer::run() {
 
 void GameServer::onTick() {
   char buffer[4096];
-
   destroyZombies(); // updateNet might call onDisconnect which might destroyEntity
 
   for (size_t i = 0; i < _entities.size(); ++i) {
@@ -85,9 +84,23 @@ void GameServer::onTick() {
       _entities[i]->snap(msg, it->second);
     }
 
+    // and add unreliable events
+    _events.snap(msg, it->second);
     msg.writeShort(0);
-    it->second->client->send(buffer, std::max(msg.size(), msg.size()), 0, NET_CHANNEL_ABS);    
+    
+    it->second->client->send(buffer, msg.size(), 0, NET_CHANNEL_ABS);  
+    
+    // send reliable events
+    msg.reset();
+    _events.writeReliable(msg, it->second);
+
+    if (msg.size() > 0) {
+      msg.writeShort(0);
+      it->second->client->send(buffer, msg.size(), 0, NET_CHANNEL_STATE);      
+    }
   }  
+  
+  _events.removeSnapped();
 }
 
 void GameServer::updateNet(int timeout) {
@@ -165,7 +178,7 @@ void GameServer::onReceive(Packet *packet) {
     std::string name = msg.readString();
     Log(INFO) << "client " << sess->tankid << " renamed to '" << name << "'";
     sess->name = name;
-    // _events->createPlayerJoined(sess->tankid, name);
+    _events.createPlayerJoined(sess->tankid, name);
     
   }
 }

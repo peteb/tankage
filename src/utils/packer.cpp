@@ -32,6 +32,13 @@ Packer::Packer(void *start, void *end)
 {
 }
 
+Packer::Packer(const Packer &other) 
+  : _pos(other._pos)
+  , _start(other._pos)
+  , _end(other._end)
+{  
+}
+
 void Packer::writeByte(char value) {
   _pos = WriteType(_pos, _end, value);
 }
@@ -54,8 +61,22 @@ void Packer::writeString(const std::string &value) {
   _pos = data + strsize;
 }
 
+void Packer::writeData(const Packer &packer) {
+  assert(static_cast<char *>(_pos) + packer.size() < _end && "not enough room for data");
+  memcpy(_pos, packer._start, packer.size());
+  _pos = static_cast<char *>(_pos) + packer.size();
+}
+
 size_t Packer::size() const {
   return static_cast<const char *>(_pos) - static_cast<const char *>(_start);
+}
+
+void Packer::advance(size_t amount) {
+  _pos = static_cast<char *>(_pos) + amount;
+}
+
+void Packer::reset() {
+  _pos = _start;
 }
 
 Unpacker::Unpacker(const void *data, const void *end) 

@@ -3,6 +3,7 @@
 
 #include <game/common/net_protocol.h>
 #include <game/server/entity.h>
+#include <game/server/events.h>
 
 #include <vector>
 #include <map>
@@ -41,6 +42,7 @@ private:
   std::vector<int> _zombie_entities;
   
   SessionMap _sessions;
+  Events _events;
   
   class Host *_host;
   class Network *_net;

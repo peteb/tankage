@@ -36,12 +36,9 @@ private:
   void onConnect();
   void onDisconnect();
   void onReceive(class Packet *packet);
-
-  void updateNet();
+  void onEvent(short event, class Unpacker &msg);
   
-  // net protocol
-  void onError(const struct NetErrorMsg *error, class Packet *packet);
-  void onSystemUpdate(const struct NetSystemMsg *msg, class Packet *packet);
+  void updateNet();
   
   class Network *_net;
   class Client *_client;

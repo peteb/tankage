@@ -175,24 +175,32 @@ void GameClient::onReceive(Packet *packet) {
       if (snaptype == 1) {
         tanks_snapshot.push(msg);
       }
+      else if (snaptype != 0) {
+        onEvent(snaptype, msg);
+      }
     } while (snaptype != 0);
     
     _tankrenderer.addSnapshot(tanks_snapshot);
     _since_snap = 0.0;
   }
-  else if (msgtype == NET_SERVER_INFO) {
-    _net_tickrate = static_cast<double>(msg.readShort()) / 10.0;
-    Log(INFO) << "server_info tickrate: " << _net_tickrate;
+  else {
+    onEvent(msgtype, msg);
   }
   
 }
 
-void GameClient::onError(const NetErrorMsg *error, Packet *packet) {
-  Log(DEBUG) << "received error from server: " 
-             << error->desc << ", code: " 
-             << error->error_code;
-  
-  disconnectGently();
+void GameClient::onEvent(short event, class Unpacker &msg) {
+  Log(INFO) << "received event " << event;
+
+  if (event == NET_SERVER_INFO) {
+    _net_tickrate = static_cast<double>(msg.readShort()) / 10.0;
+    Log(INFO) << "server_info tickrate: " << _net_tickrate;
+  }
+  else if (event == NET_PLAYER_JOINED) {
+    int tankid = msg.readInt();
+    std::string name = msg.readString();
+    Log(INFO) << "player '" << name << "' joined as " << tankid;
+  }
 }
 
 TextureLoader &GameClient::textureLoader() {
