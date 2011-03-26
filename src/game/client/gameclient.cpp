@@ -29,6 +29,7 @@ void client_RegisterVariables(Config &config) {
 
 GameClient::GameClient(class Portal &services) 
   : _texloader(services)
+  , _textrenderer(services, _texloader)
   , _tankrenderer(this, services)
   , _control(services)
 {

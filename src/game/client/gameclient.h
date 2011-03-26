@@ -1,9 +1,10 @@
 #ifndef GAME_CLIENT_GAMECLIENT_H
 #define GAME_CLIENT_GAMECLIENT_H
 
+#include <game/client/tank_renderer.h>
+#include <game/client/text_renderer.h>
 #include <game/common/net_protocol.h>
 #include <game/common/control.h>
-#include <game/client/tank_renderer.h>
 #include <game/common/texture_loader.h>
 #include <vector>
 
@@ -55,6 +56,7 @@ private:
   
   Control::Input _sent_input;
   TextureLoader _texloader;
+  TextRenderer _textrenderer;
   TankRenderer _tankrenderer;
   Control _control;
 };

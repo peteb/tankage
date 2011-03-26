@@ -20,6 +20,7 @@ add_executable(tankage
   main.cpp
   gameclient.cpp
   tank_renderer.cpp
+  text_renderer.cpp
   )
   
 target_link_libraries(tankage

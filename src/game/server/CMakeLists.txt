@@ -16,6 +16,7 @@ add_executable(tankage-server
   ${GAME_ROOT_DIR}/client/particles.cpp
   ${GAME_ROOT_DIR}/client/gameclient.cpp
   ${GAME_ROOT_DIR}/client/tank_renderer.cpp
+  ${GAME_ROOT_DIR}/client/text_renderer.cpp
 
   # server specific
   main.cpp
