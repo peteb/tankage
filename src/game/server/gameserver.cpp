@@ -174,12 +174,28 @@ void GameServer::onReceive(Packet *packet) {
       tank->recvInput(input);
     }
   }
-  else if (type == NET_CLIENT_INFO) {
+  else if (type == NET_CLIENT_INFO) { // should we use this for updating name??
     std::string name = msg.readString();
-    Log(INFO) << "client " << sess->tankid << " renamed to '" << name << "'";
+    Log(INFO) << "client " << sess->tankid << " joined as '" << name << "'";
     sess->name = name;
-    _events.createPlayerJoined(sess->tankid, name);
+    _events.createPlayerJoined(sess->tankid, name); // FIXME: CLIENT_INFO should probably be an update. join is a special case of INFO when a client hasn't received an INFO before
     
+    const int BUFSZ = 256;
+    char buffer[BUFSZ];
+    
+    SessionMap::iterator it = _sessions.begin(), it_e = _sessions.end();
+    for (; it != it_e; ++it) {
+      if (it->second->client == packet->sender())
+        continue;
+      
+      Packer reply_msg(buffer, buffer + BUFSZ);
+      reply_msg.writeShort(NET_PLAYER_INFO);
+      reply_msg.writeInt(it->second->tankid);
+      reply_msg.writeString(it->second->name);
+      // FIXME: this is one "packet" per player.. maybe we should batch
+      packet->sender()->send(buffer, reply_msg.size(), Client::PACKET_RELIABLE, NET_CHANNEL_STATE);     
+    }
+
   }
 }
 

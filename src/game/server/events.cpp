@@ -83,13 +83,6 @@ void Events::removeSnapped() {
   }
 }
 
-void Events::createPlayerJoined(int tankid, const std::string &name) {
-  // unreliable goes into snapshot, reliable goes in own packet
-  Event *event = spawnGlobalEvent(NET_PLAYER_JOINED, 0);
-  event->params.writeInt(tankid);
-  event->params.writeString(name);
-}
-
 // FIXME: some kind of EventBuilder perhaps, that adds the event in dtor, to make
 //        it exception safe
 
@@ -104,3 +97,15 @@ Event *Events::spawnGlobalEvent(short type, unsigned flags) {
   _events.push_back(event);
   return event;
 }
+
+
+
+void Events::createPlayerJoined(int tankid, const std::string &name) {
+  // unreliable goes into snapshot, reliable goes in own packet
+  Event *event = spawnGlobalEvent(NET_PLAYER_INFO, 0);
+  event->params.writeInt(tankid);
+  event->params.writeString(name);
+}
+
+
+

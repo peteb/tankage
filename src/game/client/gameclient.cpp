@@ -171,7 +171,7 @@ void GameClient::onReceive(Packet *packet) {
     do {
       snaptype = msg.readShort();
       
-      if (snaptype == 1) {
+      if (snaptype == 1) { // FIXME: better numbers...
         tanks_snapshot.push(msg);
       }
       else if (snaptype != 0) {
@@ -195,10 +195,10 @@ void GameClient::onEvent(short event, class Unpacker &msg) {
     _net_tickrate = static_cast<double>(msg.readShort()) / 10.0;
     Log(INFO) << "server_info tickrate: " << _net_tickrate;
   }
-  else if (event == NET_PLAYER_JOINED) {
+  else if (event == NET_PLAYER_INFO) {
     int tankid = msg.readInt();
     std::string name = msg.readString();
-    Log(INFO) << "player '" << name << "' joined as " << tankid;
+    Log(INFO) << "entity " << tankid << " is playing as '" << name << "'";
     
     TankInfo *info = tankInfo(tankid);
     if (!info) {

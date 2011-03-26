@@ -50,9 +50,6 @@ void TankRenderer::renderTank(const Tank::State &state) {
   _gfx->drawQuad(rect(state.pos, 16, 16), state.turret_dir);
   
   TankInfo *info = _client->tankInfo(state.id);
-  std::string tank_label = "tankie";
-  if (info)
-    tank_label = info->name;
-  
+  std::string tank_label = (info ? info->name : "tankie");
   _client->textRenderer().renderText(tank_label, vec2(state.pos.x, state.pos.y + 28.0f));
 }
