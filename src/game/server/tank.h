@@ -21,6 +21,7 @@ public:
     vec2 lin_vel;
     float base_dir;
     float rot_vel;
+    float turret_dir;
     
     void advance(const Control::Input &input, double duration);
 
@@ -60,6 +61,9 @@ inline Tank::State lerp(const Tank::State &begin,
   float smallest_angle = wrap(end.base_dir - begin.base_dir, -180.0, 180.0);
   ret.base_dir = ::lerp(begin.base_dir, begin.base_dir + smallest_angle, amount);
   ret.lin_vel = end.lin_vel; // just snap derivates
+  
+  smallest_angle = wrap(end.turret_dir - begin.turret_dir, -180.0, 180.0);
+  ret.turret_dir = ::lerp(begin.turret_dir, begin.turret_dir + smallest_angle, amount);
   
   return ret;
 }

@@ -9,6 +9,8 @@ class Control {
 public:  
   struct Input {
     unsigned char buttons;
+    int aim_x;
+    int aim_y;
     
     Control::Input &write(class Packer &msg);
     Control::Input &read(class Unpacker &msg);

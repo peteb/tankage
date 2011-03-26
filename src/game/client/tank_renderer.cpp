@@ -47,6 +47,6 @@ void TankRenderer::renderTank(const Tank::State &state) {
   _gfx->drawQuad(rect(state.pos, 16, 16), state.base_dir);
 
   _gfx->setTexture(_tank_turret);
-  _gfx->drawQuad(rect(state.pos, 16, 16), state.base_dir);
+  _gfx->drawQuad(rect(state.pos, 16, 16), state.turret_dir);
   
 }

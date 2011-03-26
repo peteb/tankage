@@ -49,12 +49,18 @@ void Control::reloadKeycodes() {
 
 /* <--- begin input state ---> */
 Control::Input &Control::Input::write(class Packer &msg) {
-  msg.writeShort(buttons); // fixme: writeByte
+  msg.writeByte(buttons); // fixme: writeByte
+  msg.writeShort(aim_x);
+  msg.writeShort(aim_y);
+  
   return *this;
 }
 
 Control::Input &Control::Input::read(class Unpacker &msg) {
-  buttons = msg.readShort();
+  buttons = msg.readByte();
+  aim_x = msg.readShort();
+  aim_y = msg.readShort();
+  
   return *this;
 }
 /* <--- end input state ---> */
@@ -63,22 +69,13 @@ Control::Input &Control::Input::read(class Unpacker &msg) {
 Control::Input Control::currentInput() const {
   Input ret;
   ret.buttons = 0;
-/*  ret.aim_x = 0;
-  ret.aim_y = 0;
-  */
+
   struct {Input::Commands state; int keycode; } stateMap[] = {
     {Input::FORWARD, keyUp},
     {Input::BACKWARD, keyDown},
     {Input::TURN_RIGHT, keyRight},
     {Input::TURN_LEFT, keyLeft}/*,
     {Input::STATE_SHOOTING, keyShoot}*/};
-
-  /*
-    SHOOTING is not really a move. It should not have an impact on
-    prediction.
-    Also, don't create projectiles on client. Only work on server data.
-    
-   */
   
   // Map keycodes to bits
   for (size_t i = 0; i < 5; ++i) {
@@ -90,7 +87,7 @@ Control::Input Control::currentInput() const {
     }
   }
     
-  //input->mousePos(ret.aim_x, ret.aim_y);
+  _input->mousePos(ret.aim_x, ret.aim_y);
 
   return ret;
 }
