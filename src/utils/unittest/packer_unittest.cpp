@@ -1,7 +1,8 @@
+
 #include <utils/packer.h>
 #include <gtest/gtest.h>
 
-TEST(PackerTest, TestBasicPackUnpack) {
+TEST(PackerTest, TestPackUnpack) {
   char buffer[512]; // very fast buffer allocated on stack =]
 
   Packer packer(buffer, buffer + 512);
