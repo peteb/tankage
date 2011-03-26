@@ -1,7 +1,7 @@
 #ifndef GAME_SERVER_CLIENT_SESSION_H
 #define GAME_SERVER_CLIENT_SESSION_H
 
-#include <game/common/players.h> // for PlayerId..
+#include <string>
 
 class ClientSession {
 public:
@@ -15,6 +15,7 @@ public:
   int state;
   Client * const client;
   int tankid;
+  std::string name;
 };
 
 #endif // !GAME_SERVER_CLIENT_SESSION_H

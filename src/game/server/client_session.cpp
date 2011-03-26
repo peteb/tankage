@@ -3,6 +3,7 @@
 ClientSession::ClientSession(class Client *client)
   : client(client)
 {
+  name = "Some guy";
   state = 0;
 }
 

@@ -18,11 +18,13 @@
 #include <game/server/tank.h>
 
 Variable<std::string> client_host("iostream.cc:12345");
+Variable<std::string> client_name("Some guy");
 Variable<bool> client_predict(true);
 Variable<bool> client_lerpRemote(true);
 
 void client_RegisterVariables(Config &config) {
   config.registerVariable("client", "host", &client_host);
+  config.registerVariable("client", "name", &client_name);
   config.registerVariable("client", "predict", &client_predict);
   config.registerVariable("client", "lerp_remote", &client_lerpRemote);
 }
@@ -98,14 +100,14 @@ void GameClient::sendInput() {
   const size_t BUFSZ = 256;
   char buffer[BUFSZ];
 
-  double now = _wm->timeSeconds(); // FIXME: better time handling
+  double now = _wm->timeSeconds();
   Control::Input new_input = _control.currentInput();
   
   if (new_input.buttons != _sent_input.buttons || now - _input_time >= 1.0/10.0) {
     Packer msg(buffer, buffer + BUFSZ);
     msg.writeShort(NET_PLAYER_INPUT);
     new_input.write(msg);
-    _client->send(buffer, msg.size(), 0, NET_CHANNEL_STATE);
+    _client->send(buffer, msg.size(), 0, NET_CHANNEL_ABS);
     
     _sent_input = new_input;
     _input_time = now;
@@ -130,7 +132,13 @@ void GameClient::disconnectGently() {
 }
 
 void GameClient::onConnect() {
-  Log(INFO) << "connected!"; 
+  Log(INFO) << "connected!";
+  
+  char buffer[1024];
+  Packer msg(buffer, buffer + 1024);
+  msg.writeShort(NET_CLIENT_INFO);
+  msg.writeString(*client_name);
+  _client->send(buffer, msg.size(), Client::PACKET_RELIABLE, NET_CHANNEL_STATE);
 }
 
 void GameClient::onDisconnect() {

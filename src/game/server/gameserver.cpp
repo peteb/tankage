@@ -148,18 +148,25 @@ void GameServer::onDisconnect(Client *client) {
 void GameServer::onReceive(Packet *packet) {
   Unpacker msg(packet->data(), (const unsigned char *)packet->data() + packet->size());
   short type = msg.readShort();
+
+  ClientSession *sess = session(packet->sender());
+  if (!sess)
+    return;
   
-  if (type == NET_PLAYER_INPUT) { // INPUT
-    ClientSession *sess = session(packet->sender());
-    if (!sess)
-      return;
-    
+  if (type == NET_PLAYER_INPUT) {
     Tank *tank = static_cast<Tank *>(entity(sess->tankid));
     if (tank) {
       Control::Input input;
       input.read(msg);
       tank->recvInput(input);
     }
+  }
+  else if (type == NET_CLIENT_INFO) {
+    std::string name = msg.readString();
+    Log(INFO) << "client " << sess->tankid << " renamed to '" << name << "'";
+    sess->name = name;
+    // _events->createPlayerJoined(sess->tankid, name);
+    
   }
 }
 
