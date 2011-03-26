@@ -20,7 +20,8 @@ public:
     vec2 pos;
     vec2 lin_vel;
     float base_dir;
-
+    float rot_vel;
+    
     void advance(const Control::Input &input, double duration);
 
     State &write(class Packer &msg);
