@@ -1,7 +1,7 @@
 #include "tank_renderer.h"
 #include <game/server/tank.h>
-#include <iostream>
 #include <game/client/gameclient.h>
+#include <game/client/tank_info.h>
 #include <engine/portal.h>
 #include <engine/graphics.h>
 
@@ -49,5 +49,10 @@ void TankRenderer::renderTank(const Tank::State &state) {
   _gfx->setTexture(_tank_turret);
   _gfx->drawQuad(rect(state.pos, 16, 16), state.turret_dir);
   
-  _client->textRenderer().renderText("tank!", vec2(state.pos.x, state.pos.y + 28.0f));
+  TankInfo *info = _client->tankInfo(state.id);
+  std::string tank_label = "tankie";
+  if (info)
+    tank_label = info->name;
+  
+  _client->textRenderer().renderText(tank_label, vec2(state.pos.x, state.pos.y + 28.0f));
 }

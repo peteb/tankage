@@ -1,4 +1,7 @@
 #include <game/client/gameclient.h>
+#include <game/client/tank_info.h>
+#include <game/client/snapshot.h>
+#include <game/server/tank.h> // needed for tank::state
 #include <game/common/net_protocol.h>
 #include <game/common/config.h>
 
@@ -14,8 +17,6 @@
 #include <cassert>
 #include <iostream>
 
-#include <game/client/snapshot.h>
-#include <game/server/tank.h>
 
 Variable<std::string> client_host("iostream.cc:12345");
 Variable<std::string> client_name("Some guy");
@@ -92,8 +93,6 @@ void GameClient::updateNet() {
     _state = STATE_DISCONNECTED;
     onDisconnect();
   }
-  
-  
 }
 
 void GameClient::sendInput() {
@@ -200,6 +199,14 @@ void GameClient::onEvent(short event, class Unpacker &msg) {
     int tankid = msg.readInt();
     std::string name = msg.readString();
     Log(INFO) << "player '" << name << "' joined as " << tankid;
+    
+    TankInfo *info = tankInfo(tankid);
+    if (!info) {
+      info = new TankInfo;
+      _tanks[tankid] = info;
+    }
+    
+    info->name = name;
   }
 }
 
@@ -209,4 +216,12 @@ TextureLoader &GameClient::textureLoader() {
 
 TextRenderer &GameClient::textRenderer() {
   return _textrenderer;
+}
+
+TankInfo *GameClient::tankInfo(int eid) {
+  std::map<int, TankInfo *>::iterator it = _tanks.find(eid);
+  if (it == _tanks.end())
+    return NULL;
+  
+  return it->second;
 }

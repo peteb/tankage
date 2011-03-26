@@ -7,6 +7,7 @@
 #include <game/common/control.h>
 #include <game/common/texture_loader.h>
 #include <vector>
+#include <map>
 
 void client_RegisterVariables(class Config &config);
 
@@ -27,6 +28,7 @@ public:
   double deltaTime() const;
   bool lerpRemote() const;
   
+  class TankInfo *tankInfo(int eid);
   TextureLoader &textureLoader();
   TextRenderer &textRenderer();
   
@@ -57,6 +59,8 @@ private:
   TextRenderer _textrenderer;
   TankRenderer _tankrenderer;
   Control _control;
+  
+  std::map<int, class TankInfo *> _tanks;
 };
 
 

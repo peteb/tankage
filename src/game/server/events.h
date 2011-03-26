@@ -13,6 +13,9 @@ public:
   void writeReliable(class Packer &msg, class ClientSession *client);
   
 private:
+  class Event *spawnLocalEvent(short type, const class vec2 &pos, unsigned flags);
+  class Event *spawnGlobalEvent(short type, unsigned flags);
+
   std::vector<class Event *> _events;
   std::vector<class Event *> _rel_events;
 };

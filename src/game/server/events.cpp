@@ -6,34 +6,56 @@
 
 class Event {
 public:
-  Event(short type, const vec2 &pos)
-    : type(type)
-    , pos(pos)
-    , params(param_buffer, param_buffer + BUFSZ)
+  Event(short type)
+    : params(param_buffer, param_buffer + BUFSZ)
+    , _type(type)
   {
     snapped = false;
   }
-  
-  short type;
+
+  virtual void snap(Packer &msg, ClientSession *client) {
+    msg.writeShort(_type);
+    msg.writeData(params);    
+  }
+
   bool snapped;
-  vec2 pos;
+
   Packer params;
   static const size_t BUFSZ = 32;
   char param_buffer[BUFSZ];
+
+private:
+  short _type;
+};
+
+class LocalEvent : public Event {
+public:
+  LocalEvent(short type, const vec2 &pos)
+    : Event(type)
+    , _pos(pos)
+  {
+  }
+  
+  void snap(Packer &msg, ClientSession *client) {
+    if (true) { // FIXME:  check whether client is interested
+      Event::snap(msg, client);
+    }
+  }
+  
+private:
+  vec2 _pos;
 };
 
 void Events::snap(Packer &msg, class ClientSession *client) {
   for (size_t i = 0; i < _events.size(); ++i) {
-    msg.writeShort(_events[i]->type);
-    msg.writeData(_events[i]->params);
+    _events[i]->snap(msg, client);
     _events[i]->snapped = true;
   }
 }
 
 void Events::writeReliable(Packer &msg, class ClientSession *client) {
   for (size_t i = 0; i < _rel_events.size(); ++i) {
-    msg.writeShort(_rel_events[i]->type);
-    msg.writeData(_rel_events[i]->params);
+    _rel_events[i]->snap(msg, client);
     _rel_events[i]->snapped = true;
   }  
 }
@@ -63,9 +85,22 @@ void Events::removeSnapped() {
 
 void Events::createPlayerJoined(int tankid, const std::string &name) {
   // unreliable goes into snapshot, reliable goes in own packet
-  
-  Event *event = new Event(NET_PLAYER_JOINED, vec2(0.0f, 0.0f));
+  Event *event = spawnGlobalEvent(NET_PLAYER_JOINED, 0);
   event->params.writeInt(tankid);
   event->params.writeString(name);
+}
+
+// FIXME: some kind of EventBuilder perhaps, that adds the event in dtor, to make
+//        it exception safe
+
+Event *Events::spawnLocalEvent(short type, const class vec2 &pos, unsigned flags) {
+  Event *event = new LocalEvent(type, pos);  
   _events.push_back(event);
+  return event;
+}
+
+Event *Events::spawnGlobalEvent(short type, unsigned flags) {
+  Event *event = new Event(type);  
+  _events.push_back(event);
+  return event;
 }
