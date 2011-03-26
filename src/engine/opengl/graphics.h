@@ -15,6 +15,7 @@ public:
   void drawQuad(const class rect &quad, float dir);
   void drawQuad(const class rect &quad, const class rect &source);
   void drawQuads(const std::vector<rect> &quads);
+  void drawQuads(unsigned components, unsigned vertices, float *coord, float *tc);
   
   void drawLinestrip(const std::vector<vec2> &lines);
   

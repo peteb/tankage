@@ -24,6 +24,8 @@ public:
   virtual void drawQuad(const class rect &quad, float dir) =0;
   virtual void drawQuad(const class rect &quad, const class rect &source) =0;
   virtual void drawQuads(const std::vector<rect> &quads) =0;
+  virtual void drawQuads(unsigned components, unsigned vertices, float *coord, float *tc) =0;
+  
   virtual void drawLinestrip(const std::vector<vec2> &lines) =0;
   
   virtual void drawCircle(const class vec2 &pos, float radius, float tess) =0;

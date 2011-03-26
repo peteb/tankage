@@ -28,6 +28,7 @@ public:
   bool lerpRemote() const;
   
   TextureLoader &textureLoader();
+  TextRenderer &textRenderer();
   
 private:
   void sendInput();

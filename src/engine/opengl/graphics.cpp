@@ -3,23 +3,51 @@
 #include <engine/texture.h>
 #include <engine/image.h>
 #include <utils/color.h>
+#include <utils/rect.h>
 #include <stdexcept>
+#include <cassert>
 
 namespace {
 class OpenGlTexture : public Texture {
 public:
-  OpenGlTexture(GLuint id) : _id(id) {}
+  OpenGlTexture(GLuint id, const rect &size) 
+    : _id(id)
+    , _size(size)
+  {
+    _linfilter = true;
+  }
+  
   ~OpenGlTexture() {
     glBindTexture(GL_TEXTURE_2D, 0); // make sure it's not the active texture
     glDeleteTextures(1, &_id);
   }
 
   void bind() {
+    GLenum min_filter = GL_LINEAR;
+    GLenum mag_filter = GL_LINEAR;
+
+    if (!_linfilter) {
+      min_filter = GL_NEAREST;
+      mag_filter = GL_NEAREST;
+    }
+    
     glBindTexture(GL_TEXTURE_2D, _id);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, min_filter);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, mag_filter);
   }
 
+  rect size() const {
+    return _size;
+  }
+  
+  void setFiltering(bool smooth) { // FIXME: enumeration makes more sense here
+    _linfilter = smooth;
+  }
+  
 private:
   GLuint _id;
+  rect _size;
+  bool _linfilter;
 };
 }
 
@@ -79,10 +107,7 @@ class Texture *OpenGl::Graphics::createTexture(Image *image) {
                image->data()
                );
   
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-  
-  return new OpenGlTexture(texId);
+  return new OpenGlTexture(texId, image->size());
 }
 
 void OpenGl::Graphics::drawQuad(const rect &quad, float dir) {
@@ -150,6 +175,32 @@ void OpenGl::Graphics::drawQuads(const std::vector<rect> &quads) {
     glVertex2f(min.x, max.y);
     
   }
+  glEnd();
+}
+
+// FIXME: remove old ugly drawQuads
+
+void OpenGl::Graphics::drawQuads(unsigned components, 
+                                 unsigned vertices, 
+                                 float *coord, float *tc) 
+{
+  assert(components == 2 && "only support for 2d vertices");
+  
+  // FIXME: also optimize this
+  // NOTE: this one doesn't support angle. I guess that makes sense.
+  glEnable(GL_COLOR_MATERIAL);
+  glBegin(GL_QUADS);
+  
+  for (size_t i = 0; i < vertices; ++i) {
+    float x = *(coord++);
+    float y = *(coord++);
+    float u = *(tc++);
+    float v = *(tc++);
+    
+    glTexCoord2f(u, v);
+    glVertex2f(x, y);
+  }
+  
   glEnd();
 }
 

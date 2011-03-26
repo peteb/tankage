@@ -190,3 +190,7 @@ void GameClient::onError(const NetErrorMsg *error, Packet *packet) {
 TextureLoader &GameClient::textureLoader() {
   return _texloader;
 }
+
+TextRenderer &GameClient::textRenderer() {
+  return _textrenderer;
+}
