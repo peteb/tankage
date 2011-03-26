@@ -37,7 +37,10 @@ public:
   static void registerConsumer(const Consumer &consumer);
 
   struct DefaultLogConsumer { 
+    DefaultLogConsumer();
     void operator()(Log::Severity severity, const std::string &line); 
+  private:
+    Severity _level;
   };
 
 private:

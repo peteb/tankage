@@ -2,6 +2,7 @@
 #include "log.h"
 
 #include <iostream>
+#include <cstdlib>
 
 
 std::vector<Log::Consumer> Log::_consumers;
@@ -44,8 +45,17 @@ void Log::registerConsumer(const Consumer &consumer) {
   _consumers.push_back(consumer); 
 } // register_consumer 
 
+Log::DefaultLogConsumer::DefaultLogConsumer() : _level(SEVERITY_DEBUG) {
+    char *level = getenv("TANKAGE_LOGGING_LEVEL");
+    if (level) {
+      _level = static_cast<Severity>(std::atoi(level)); 
+    }
+}
+
 void Log::DefaultLogConsumer::operator()(Log::Severity severity, 
   const std::string &line) {
-  std::cout << line << std::endl;
+  if (_level > severity) {
+    std::cout << line << std::endl;
+  }
 }
 
