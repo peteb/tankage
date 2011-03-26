@@ -18,7 +18,8 @@ private:
   
   class GameClient *_client;
   class Graphics *_gfx;
-
+  class Texture *_tank_base;
+  
   TankSnapshot prev;
   TankSnapshot current;
 };

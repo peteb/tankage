@@ -5,10 +5,11 @@
 #include <engine/portal.h>
 #include <engine/graphics.h>
 
-TankRenderer::TankRenderer(class GameClient *client, class Portal &services)
+TankRenderer::TankRenderer(GameClient *client, class Portal &services)
   : _client(client)
 {
   _gfx = services.requestInterface<Graphics>();
+  _tank_base = client->textureLoader().texture("tank_base.png");
 }
 
 void TankRenderer::addSnapshot(const Snapshot<Tank::State> &snapshot) {
@@ -37,8 +38,10 @@ void TankRenderer::render() {
 }
 
 void TankRenderer::renderTank(const Tank::State &state) {
-  _gfx->setColor(color4(0.0f, 0.0f, 1.0f, 1.0f));
-  _gfx->disableTextures();
+  _gfx->setColor(color4::White());
+  _gfx->enableTextures();
+  _gfx->setTexture(_tank_base);
+  _gfx->setBlend(Graphics::BLEND_ALPHA);
   _gfx->drawQuad(rect(state.pos, 16, 16), state.base_dir);
   
 }

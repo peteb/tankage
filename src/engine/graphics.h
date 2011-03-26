@@ -29,6 +29,7 @@ public:
   virtual void drawCircle(const class vec2 &pos, float radius, float tess) =0;
   virtual void setOrtho(const class rect &size) =0;
   virtual void setViewport(const class rect &size) =0;
+  virtual void setTexture(class Texture *texture) =0;
   virtual void enableTextures() =0;
   virtual void disableTextures() =0;
   virtual void setBlend(BlendMode mode) =0;

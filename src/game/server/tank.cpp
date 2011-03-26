@@ -50,12 +50,13 @@ void Tank::State::integrate(const Control::Input &input, double dt) {
   lin_vel = normalized(lin_vel);
   lin_vel *= clamp(mag, 0.0, 100.0); // maximum speed
   
+  double multiplier = length(lin_vel) / 100.0;
   if (input.buttons & Control::Input::TURN_RIGHT) {
-    rot_vel += dt * 300.0;
+    rot_vel += dt * (300.0 - (clamp(300.0 * multiplier - 50.0, 0.0, 300.0)));
     lin_vel *= 0.95;
   }
   else if (input.buttons & Control::Input::TURN_LEFT) {
-    rot_vel += dt * -300.0;
+    rot_vel += dt * -(300.0 - (clamp(300.0 * multiplier - 50.0, 0.0, 300.0)));
     lin_vel *= 0.95;
   }
   else

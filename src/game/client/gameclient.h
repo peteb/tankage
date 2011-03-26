@@ -4,7 +4,7 @@
 #include <game/common/net_protocol.h>
 #include <game/common/control.h>
 #include <game/client/tank_renderer.h>
-
+#include <game/common/texture_loader.h>
 #include <vector>
 
 void client_RegisterVariables(class Config &config);
@@ -25,6 +25,8 @@ public:
   void disconnectGently();
   double deltaTime() const;
   bool lerpRemote() const;
+  
+  TextureLoader &textureLoader();
   
 private:
   void sendInput();
@@ -52,6 +54,7 @@ private:
   double _net_tickrate;
   
   Control::Input _sent_input;
+  TextureLoader _texloader;
   TankRenderer _tankrenderer;
   Control _control;
 };

@@ -213,6 +213,10 @@ void OpenGl::Graphics::setViewport(const class rect &size) {
     );
 }
 
+void OpenGl::Graphics::setTexture(Texture *texture) {
+  texture->bind();
+}
+
 void OpenGl::Graphics::setBlend(BlendMode mode) {
   switch (mode) {
   case Graphics::BLEND_NONE:

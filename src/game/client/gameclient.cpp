@@ -28,7 +28,8 @@ void client_RegisterVariables(Config &config) {
 }
 
 GameClient::GameClient(class Portal &services) 
-  : _tankrenderer(this, services)
+  : _texloader(services)
+  , _tankrenderer(this, services)
   , _control(services)
 {
   _net = services.requestInterface<Network>();
@@ -185,3 +186,6 @@ void GameClient::onError(const NetErrorMsg *error, Packet *packet) {
   disconnectGently();
 }
 
+TextureLoader &GameClient::textureLoader() {
+  return _texloader;
+}
