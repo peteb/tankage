@@ -13,3 +13,6 @@ cscope.out
 _CPack_Packages
 install_manifest.txt
 *.deb
+*vcxproj*
+*~
+*.sln
