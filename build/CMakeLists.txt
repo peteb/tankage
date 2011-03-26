@@ -1,7 +1,7 @@
 # -*- mode: cmake -*-
 
 cmake_minimum_required (VERSION 2.4)
-project (SnailWail)
+project (tankage)
 
 include (CheckIncludeFileCXX)
 include (CheckCXXSourceCompiles)
