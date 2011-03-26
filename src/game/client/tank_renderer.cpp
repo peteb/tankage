@@ -10,6 +10,7 @@ TankRenderer::TankRenderer(GameClient *client, class Portal &services)
 {
   _gfx = services.requestInterface<Graphics>();
   _tank_base = client->textureLoader().texture("tank_base.png");
+  _tank_turret = client->textureLoader().texture("tank_turret.png");
 }
 
 void TankRenderer::addSnapshot(const Snapshot<Tank::State> &snapshot) {
@@ -40,8 +41,12 @@ void TankRenderer::render() {
 void TankRenderer::renderTank(const Tank::State &state) {
   _gfx->setColor(color4::White());
   _gfx->enableTextures();
-  _gfx->setTexture(_tank_base);
   _gfx->setBlend(Graphics::BLEND_ALPHA);
+
+  _gfx->setTexture(_tank_base);
+  _gfx->drawQuad(rect(state.pos, 16, 16), state.base_dir);
+
+  _gfx->setTexture(_tank_turret);
   _gfx->drawQuad(rect(state.pos, 16, 16), state.base_dir);
   
 }
