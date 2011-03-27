@@ -35,6 +35,10 @@ void TankRenderer::render() {
     }
 
     renderTank(state);
+    
+    if (state.id == _client->localPlayer()) {
+      _client->setFocus(state.pos);
+    }
   }
 }
 

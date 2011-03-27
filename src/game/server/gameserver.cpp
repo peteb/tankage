@@ -142,12 +142,13 @@ void GameServer::onConnect(Client *client) {
     return;
   }
   
-  sendServerInfo(client);
   
   ClientSession *session = new ClientSession(client);
   _sessions.insert(std::make_pair(client, session));
   Tank *tank = spawnTank();
   session->tankid = tank->id();
+
+  sendServerInfo(client);
 }
 
 void GameServer::onDisconnect(Client *client) {
@@ -219,6 +220,7 @@ void GameServer::sendServerInfo(Client *receiver) {
   Packer msg(buffer, buffer + 1024);
   msg.writeShort(NET_SERVER_INFO);
   msg.writeShort(*server_tickrate * 10.0);
+  msg.writeInt(session(receiver)->tankid);
   
   receiver->send(buffer, 1024, Client::PACKET_RELIABLE, NET_CHANNEL_STATE);
 }
@@ -228,7 +230,7 @@ Tank *GameServer::spawnTank() {
   Tank *tank = new Tank(this);
   Tank::State initial;
   initial.id = ++_last_entity;
-  initial.pos = vec2(400.0f, 300.0f);
+  initial.pos = vec2::FromDegrees(float(_last_entity * 90)) * 40.0f;
   initial.base_dir = 0.0f;
   initial.lin_vel = vec2::Zero();
   initial.rot_vel = 0.0f;

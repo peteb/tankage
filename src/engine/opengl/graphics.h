@@ -21,6 +21,7 @@ public:
   
   void drawCircle(const class vec2 &pos, float radius, float tess);
   
+  void setTransform(const class vec2 &translation);
   void setOrtho(const class rect &size);
   void setViewport(const class rect &size);
   void setBlend(BlendMode mode);

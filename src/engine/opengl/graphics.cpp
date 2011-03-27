@@ -55,7 +55,6 @@ void OpenGl::Graphics::clear(const color4 &clearColor) {
   glClearColor(clearColor.r, clearColor.g, clearColor.b, clearColor.a);
   glClear(GL_COLOR_BUFFER_BIT);
 }
-#include <iostream>
 
 class Texture *OpenGl::Graphics::createTexture(Image *image) {
   GLenum format, type;
@@ -112,8 +111,8 @@ class Texture *OpenGl::Graphics::createTexture(Image *image) {
 }
 
 void OpenGl::Graphics::drawQuad(const rect &quad, float dir) {
-  glLoadIdentity();
-
+  // FIXME: this should be deprecated
+  glPushMatrix();
   glTranslatef(quad.origin.x, quad.origin.y, 0.0f);
   glRotatef(dir, 0.0f, 0.0f, 1.0f);
   //glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
@@ -133,7 +132,7 @@ void OpenGl::Graphics::drawQuad(const rect &quad, float dir) {
   glTexCoord2f(0.0f, 1.0f);
   glVertex2f(-quad.halfSize.x + 0.5, quad.halfSize.y + 0.5);
   glEnd();
-
+  glPopMatrix();
 }
 
 void OpenGl::Graphics::drawQuad(const class rect &quad, const class rect &source) {
@@ -193,7 +192,7 @@ void OpenGl::Graphics::drawQuads(unsigned components,
                                  float *coord, float *tc) 
 {
   assert(components == 2 && "only support for 2d vertices");
-  glLoadIdentity();
+  //glLoadIdentity();
   
   // FIXME: also optimize this
   // NOTE: this one doesn't support angle. I guess that makes sense.
@@ -241,6 +240,12 @@ void OpenGl::Graphics::drawCircle(const vec2 &pos,
   glEnd();
 }
 
+void OpenGl::Graphics::setTransform(const class vec2 &translation) {
+  glMatrixMode(GL_MODELVIEW);
+  glLoadIdentity();
+  glTranslatef(translation.x, translation.y, 0.0f);
+}
+
 void OpenGl::Graphics::setOrtho(const rect &size) {
   glMatrixMode(GL_PROJECTION);
   glLoadIdentity();
@@ -248,7 +253,7 @@ void OpenGl::Graphics::setOrtho(const rect &size) {
   const float scaleX = 1.0f / size.halfSize.x;
   const float scaleY = -1.0f / size.halfSize.y;
   
-  glTranslatef(-1.0f, 1.0f, 0.0f);
+//  glTranslatef(-0.5f, 0.5f, 0.0f);
   glScalef(scaleX, scaleY, 1.0f);
   glTranslatef(0.5f, 0.5f, 0.0f);
   

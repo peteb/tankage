@@ -88,7 +88,9 @@ Control::Input Control::currentInput() const {
   }
     
   _input->mousePos(ret.aim_x, ret.aim_y);
-
+  ret.aim_x -= 400; // FIXME: should probably get these values somewhere
+  ret.aim_y -= 300;
+  
   return ret;
 }
 

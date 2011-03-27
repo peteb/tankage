@@ -23,12 +23,14 @@ Variable<std::string> client_host("iostream.cc:12345");
 Variable<std::string> client_name("Some guy");
 Variable<bool> client_predict(true);
 Variable<bool> client_lerpRemote(true);
+Variable<bool> client_centerCam(true);
 
 void client_RegisterVariables(Config &config) {
   config.registerVariable("client", "host", &client_host);
   config.registerVariable("client", "name", &client_name);
   config.registerVariable("client", "predict", &client_predict);
   config.registerVariable("client", "lerp_remote", &client_lerpRemote);
+  config.registerVariable("client", "center_cam", &client_centerCam);
 }
 
 GameClient::GameClient(class Portal &services) 
@@ -46,6 +48,8 @@ GameClient::GameClient(class Portal &services)
   _input_time = 0.0;
   _since_snap = 0.0;
   _net_tickrate = 10.0; // default, but should be updated by server_info
+  _view = vec2(0.0f, 0.0f);
+  _local_player = -1;
   
   _state = GameClient::STATE_DISCONNECTED;
   Log(INFO) << "connecting to host " << *client_host << "...";
@@ -69,8 +73,14 @@ void GameClient::update() {
   _last_update = now;  
   _since_snap += dt;
 
+  if (*client_centerCam)
+    _gfx->setTransform(-_view);
+  else
+    _gfx->setTransform(vec2(0.0f, 0.0f));
+  
   sendInput();
   updateNet();
+  
   
   const color4 desertColor(0.957f, 0.917f, 0.682f, 1.0f);
   _gfx->clear(desertColor);
@@ -108,6 +118,8 @@ void GameClient::sendInput() {
   if (new_input.buttons != _sent_input.buttons || now - _input_time >= 1.0/10.0) {
     Packer msg(buffer, buffer + BUFSZ);
     msg.writeShort(NET_PLAYER_INPUT);
+    new_input.aim_x += _view.x;
+    new_input.aim_y += _view.y;
     new_input.write(msg);
     _client->send(buffer, msg.size(), 0, NET_CHANNEL_ABS);
     
@@ -211,7 +223,10 @@ void GameClient::onEvent(short event, class Unpacker &msg) {
 
   if (event == NET_SERVER_INFO) {
     _net_tickrate = static_cast<double>(msg.readShort()) / 10.0;
+    _local_player = msg.readInt();
     Log(INFO) << "server_info tickrate: " << _net_tickrate;
+    Log(INFO) << "server_info player: " << _local_player;
+    
   }
   else if (event == NET_PLAYER_INFO) {
     int tankid = msg.readInt();
@@ -240,6 +255,16 @@ TankInfo *GameClient::tankInfo(int eid) {
   std::map<int, TankInfo *>::iterator it = _tanks.find(eid);
   if (it == _tanks.end())
     return NULL;
-  
+
   return it->second;
+}
+
+int GameClient::localPlayer() const {
+  return _local_player;
+}
+
+void GameClient::setFocus(const vec2 &pos) {
+  // FIXME: pull this out into Camera class when more functionality is added
+  if (*client_centerCam)
+    _view = pos;
 }

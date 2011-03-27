@@ -30,6 +30,8 @@ public:
   double sinceSnap() const;
   double tickDuration() const;
   bool lerpRemote() const;
+  int localPlayer() const;
+  void setFocus(const vec2 &pos);
   
   class TankInfo *tankInfo(int eid);
   TextureLoader &textureLoader();
@@ -56,6 +58,8 @@ private:
   double _input_time;
   double _since_snap;
   double _net_tickrate;
+  vec2 _view;
+  int _local_player;
   
   Control::Input _sent_input;
   TextureLoader _texloader;
