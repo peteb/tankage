@@ -32,7 +32,8 @@ void client_RegisterVariables(Config &config) {
 
 GameClient::GameClient(class Portal &services) 
   : _texloader(services)
-  , _textrenderer(services, _texloader)
+  , _textrenderer(services, _texloader) // NOTE: can probably be done similar to below, ->textureLoader()..
+  , _bulletrenderer(this, services)
   , _tankrenderer(this, services)
   , _control(services)
 {
@@ -73,6 +74,7 @@ void GameClient::update() {
   const color4 desertColor(0.957f, 0.917f, 0.682f, 1.0f);
   _gfx->clear(desertColor);
   _tankrenderer.render();
+  _bulletrenderer.render();
 }
 
 void GameClient::updateNet() {

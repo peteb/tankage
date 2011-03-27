@@ -3,6 +3,7 @@
 
 #include <game/client/tank_renderer.h>
 #include <game/client/text_renderer.h>
+#include <game/client/bullet_renderer.h>
 #include <game/common/net_protocol.h>
 #include <game/common/control.h>
 #include <game/common/texture_loader.h>
@@ -57,6 +58,7 @@ private:
   Control::Input _sent_input;
   TextureLoader _texloader;
   TextRenderer _textrenderer;
+  BulletRenderer _bulletrenderer;
   TankRenderer _tankrenderer;
   Control _control;
   

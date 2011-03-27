@@ -24,6 +24,7 @@ add_executable(tankage
   tank_renderer.cpp
   text_renderer.cpp
   tank_info.cpp
+  bullet_renderer.cpp
   )
   
 target_link_libraries(tankage
