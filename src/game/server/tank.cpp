@@ -93,6 +93,7 @@ Tank::Tank(class GameServer *gameserver)
   , _gameserver(gameserver)
 {
   _reload_time = 0.0;
+  _health = 100;
 }
 
 const Tank::State &Tank::state() const {
@@ -112,7 +113,7 @@ void Tank::snap(Packer &msg, const class ClientSession *client) {
 void Tank::tick() {
   double input_dt = _gameserver->tickDuration() / std::max<int>(_lastinput.size(), 1);
   for (size_t i = 0; i < _lastinput.size(); ++i) {
-    if (_reload_time >= 0.0)
+    if (_reload_time > 0.0)
       _reload_time -= input_dt;
     else if (_lastinput[i].buttons & Control::Input::SHOOT)
       shoot();
@@ -138,4 +139,9 @@ void Tank::shoot() {
 void Tank::takeDamage(const vec2 &at, int amount) {
   vec2 diff = normalized(_state.pos - at) * radius();
   _state.lin_vel += diff * 10.0f;
+  _health -= amount;
+  
+  if (_health <= 0) {
+    _gameserver->destroyEntity(id());
+  }
 }

@@ -50,6 +50,7 @@ private:
   void shoot();
   
   double _reload_time;
+  int _health;
   
   class GameServer *_gameserver;
   State _state;

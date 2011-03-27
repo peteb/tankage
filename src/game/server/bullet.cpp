@@ -33,7 +33,7 @@ vec2 Bullet::State::positionAt(int tick, double ofs, double tick_duration) const
   return start_pos + vec2::FromDegrees(dir) * start_ofs * 800.0;
 }
 /* <--- end bullet state ---> */
-#include <iostream>
+
 Bullet::Bullet(class GameServer *gameserver, int shooter) 
   : Entity(0.0f)
   , _gameserver(gameserver)
@@ -56,9 +56,9 @@ void Bullet::tick() {
   
   Tank *x_tank = _gameserver->intersectingTank(last_pos, current_pos, 0.0f, _shooter);
   if (x_tank) {
-    x_tank->takeDamage(last_pos, 20);
+    x_tank->takeDamage(last_pos, 5);
     _alive_time = 0.0;
-    _state.max_lerp = (length(last_pos - x_tank->state().pos) - 16.0f) / 800.0;
+    _state.max_lerp = (length(last_pos - x_tank->state().pos) - 16.0f) / 800.0; // FIXME: don't hardcode velocity
   }
   else {
     _state.max_lerp = 10.0f;
