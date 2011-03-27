@@ -14,6 +14,7 @@ public:
     vec2 start_pos;
     unsigned int start_tick;
     float dir;
+    float max_lerp;
     
     vec2 positionAt(int tick, double ofs, double tick_duration) const;
     

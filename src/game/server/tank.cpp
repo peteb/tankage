@@ -134,3 +134,8 @@ void Tank::shoot() {
                            _state.turret_dir, id());
   _reload_time = 0.05;
 }
+
+void Tank::takeDamage(const vec2 &at, int amount) {
+  vec2 diff = normalized(_state.pos - at) * radius();
+  _state.lin_vel += diff * 10.0f;
+}

@@ -40,6 +40,7 @@ public:
   void snap(class Packer &msg, const class ClientSession *client);
   void tick();
   void recvInput(const Control::Input &input);
+  void takeDamage(const vec2 &at, int amount);
   
   const State &state() const;
   void assign(const State &state);

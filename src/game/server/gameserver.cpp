@@ -74,7 +74,6 @@ void GameServer::onTick() {
     _bullets[i]->tick();
   
   
-  destroyZombies(); // ticks might destroyEntity
   
   SessionMap::iterator it = _sessions.begin(), it_e = _sessions.end();
   for (; it != it_e; ++it) {
@@ -103,6 +102,7 @@ void GameServer::onTick() {
       it->second->client->send(buffer, msg.size(), 0, NET_CHANNEL_STATE);      
     }
   }  
+  destroyZombies(); // ticks might destroyEntity
   
   _events.removeSnapped();
 }
@@ -244,6 +244,7 @@ Entity *GameServer::spawnBullet(const vec2 &pos, double dir, int shooter) {
   initial.start_pos = pos;
   initial.start_tick = gameTick();
   initial.dir = dir;
+  initial.max_lerp = 10.0f;
   bullet->assign(initial);
   _bullets.push_back(bullet);
   
