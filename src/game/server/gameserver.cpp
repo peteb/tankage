@@ -68,9 +68,11 @@ void GameServer::onTick() {
   char buffer[4096];
   destroyZombies(); // updateNet might call onDisconnect which might destroyEntity
 
-  for (size_t i = 0; i < _entities.size(); ++i) {
-    _entities[i]->tick();
-  }
+  for (size_t i = 0; i < _tanks.size(); ++i)
+    _tanks[i]->tick();
+  for (size_t i = 0; i < _bullets.size(); ++i)
+    _bullets[i]->tick();
+  
   
   destroyZombies(); // ticks might destroyEntity
   
@@ -81,9 +83,10 @@ void GameServer::onTick() {
     msg.writeInt(gameTick());
 
     // collect data from entities
-    for (size_t i = 0; i < _entities.size(); ++i) {
-      _entities[i]->snap(msg, it->second);
-    }
+    for (size_t i = 0; i < _tanks.size(); ++i)
+      _tanks[i]->snap(msg, it->second);    
+    for (size_t i = 0; i < _bullets.size(); ++i)
+      _bullets[i]->snap(msg, it->second);
 
     // and add unreliable events
     _events.snap(msg, it->second);
@@ -220,7 +223,7 @@ Tank *GameServer::spawnTank() {
   initial.turret_dir = 0.0f;
   
   tank->assign(initial);
-  _entities.push_back(tank);
+  _tanks.push_back(tank);
   return tank;
 }
 
@@ -232,15 +235,20 @@ Entity *GameServer::spawnBullet(const vec2 &pos, double dir, int shooter) {
   initial.start_tick = gameTick();
   initial.dir = dir;
   bullet->assign(initial);
-  _entities.push_back(bullet);
+  _bullets.push_back(bullet);
   
   return bullet;
 }
 
 Entity *GameServer::entity(int eid) const {
-  for (size_t i = 0; i < _entities.size(); ++i) {
-    if (_entities[i]->id() == eid)
-      return _entities[i];
+  for (size_t i = 0; i < _tanks.size(); ++i) {
+    if (_tanks[i]->id() == eid)
+      return _tanks[i];
+  }
+
+  for (size_t i = 0; i < _bullets.size(); ++i) {
+    if (_bullets[i]->id() == eid)
+      return _bullets[i];
   }
   
   return NULL;
@@ -255,15 +263,29 @@ void GameServer::destroyZombies() {
     return;
   
   // FIXME: optimize this!
-  
-  std::vector<Entity *>::iterator iter = _entities.begin();
-  while (iter != _entities.end()) {
-    if (std::find(_zombie_entities.begin(), _zombie_entities.end(), (*iter)->id())
-        != _zombie_entities.end())
-      iter = _entities.erase(iter);
-    else
-      ++iter;
+
+  {
+    std::vector<Tank *>::iterator iter = _tanks.begin();
+    while (iter != _tanks.end()) {
+      if (std::find(_zombie_entities.begin(), _zombie_entities.end(), (*iter)->id())
+          != _zombie_entities.end())
+        iter = _tanks.erase(iter);
+      else
+        ++iter;
+    }
   }
+
+  {
+    std::vector<Bullet *>::iterator iter = _bullets.begin();
+    while (iter != _bullets.end()) {
+      if (std::find(_zombie_entities.begin(), _zombie_entities.end(), (*iter)->id())
+          != _zombie_entities.end())
+        iter = _bullets.erase(iter);
+      else
+        ++iter;
+    }
+  }
+  
 }
 
 void GameServer::sendServerInfo(Client *receiver) {

@@ -23,7 +23,7 @@ public:
   Entity *entity(int eid) const;
   void destroyEntity(int eid);
   Entity *spawnBullet(const vec2 &pos, double dir, int shooter);
-  
+//  Entity *intersectingEntity(
 private:
   typedef std::map<class Client *, class ClientSession *> SessionMap;
   
@@ -39,7 +39,8 @@ private:
   // net protocol
   void onIdent(const struct NetIdentifyMsg *ident, class Packet *packet);
   
-  std::vector<Entity *> _entities;
+  std::vector<class Tank *> _tanks;
+  std::vector<class Bullet *> _bullets;
   std::vector<int> _zombie_entities;
   
   SessionMap _sessions;

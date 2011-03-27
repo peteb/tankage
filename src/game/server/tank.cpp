@@ -76,9 +76,9 @@ void Tank::State::integrate(const Control::Input &input, double dt) {
   double aim_dir_shortest = wrap(aim_dir - turret_dir, -180.0, 180.0);
   
   if (aim_dir_shortest > 0.1)
-    turret_dir += dt * 100.0;
+    turret_dir += dt * 200.0;
   else if (aim_dir_shortest < -0.1)
-    turret_dir -= dt * 100.0;
+    turret_dir -= dt * 200.0;
   else
     turret_dir = aim_dir;
   
