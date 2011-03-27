@@ -1,5 +1,6 @@
 #include "bullet.h"
 
+#include <game/server/client_session.h>
 #include <game/server/gameserver.h>
 #include <game/server/tank.h>
 #include <utils/packer.h>
@@ -42,7 +43,17 @@ Bullet::Bullet(class GameServer *gameserver, int shooter)
   _alive_time = 1.5;
 }
 
-void Bullet::snap(class Packer &msg, const class ClientSession *client) {
+void Bullet::snap(class Packer &msg, const ClientSession *client) {
+  if (Entity *tank = _gameserver->entity(client->tankid)) {
+    vec2 bullet_pos = _state.positionAt(_gameserver->gameTick(), 0.0, _gameserver->tickDuration());
+    const vec2 &tank_pos = tank->position();
+    
+    if (fabs(bullet_pos.x - tank_pos.x) > 1000.0f)
+      return;
+    if (fabs(bullet_pos.y - tank_pos.y) > 1000.0f)
+      return;
+  }
+  
   msg.writeShort(2); // 2 = bullet
   _state.write(msg);
 }
