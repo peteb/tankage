@@ -23,6 +23,10 @@ public:
     return it;
   }
   
+  int tick() {
+    return _tick;
+  }
+  
 private:
   container_type _snaps;
   int _tick;

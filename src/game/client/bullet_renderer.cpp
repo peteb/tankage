@@ -9,7 +9,7 @@ BulletRenderer::BulletRenderer(GameClient *client, Portal &services)
 {
   _gfx = services.requestInterface<Graphics>();
   _bullet_texture = _client->textureLoader().texture("ptr_bullet.png");
-  _bullet_texture->setFiltering(false);
+  _bullet_texture->setFiltering(true);
 }
 
 void BulletRenderer::render() {
@@ -22,7 +22,7 @@ void BulletRenderer::render() {
   
   for (; it != it_e; ++it) {
     const Bullet::State &state = *it;
-    vec2 pos = state.positionAt(0.0f);
+    vec2 pos = state.positionAt(_current.tick(), _client->sinceSnap(), _client->tickDuration());
     pos.x = round(pos.x);
     pos.y = round(pos.y);
     _gfx->drawQuad(rect(pos, 4, 4), state.dir);
@@ -30,6 +30,5 @@ void BulletRenderer::render() {
 }
 
 void BulletRenderer::addSnapshot(const Snapshot<Bullet::State> &snapshot) {
-  //prev = current;
   _current = snapshot;
 }

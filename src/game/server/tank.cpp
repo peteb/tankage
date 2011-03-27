@@ -127,6 +127,7 @@ void Tank::recvInput(const Control::Input &input) {
 }
 
 void Tank::shoot() {
-  _gameserver->spawnBullet(_state.pos, _state.turret_dir, id());
+  _gameserver->spawnBullet(_state.pos + vec2::FromDegrees(_state.turret_dir) * 16.0f, 
+                           _state.turret_dir, id());
   _reload_time = 0.5;
 }

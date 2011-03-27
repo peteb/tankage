@@ -148,11 +148,22 @@ void GameClient::onDisconnect() {
 }
 
 double GameClient::deltaTime() const {
+  // 0.0 = at time of snapshot
+  // 1.0 = when next snapshot should be here
+  
   return _since_snap / (1.0 / _net_tickrate);
+}
+
+double GameClient::sinceSnap() const {
+  return _since_snap;
 }
 
 bool GameClient::lerpRemote() const {
   return *client_lerpRemote;
+}
+
+double GameClient::tickDuration() const {
+  return 1.0/_net_tickrate;
 }
 
 void GameClient::onReceive(Packet *packet) {

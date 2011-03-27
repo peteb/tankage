@@ -27,6 +27,8 @@ public:
   void update();
   void disconnectGently();
   double deltaTime() const;
+  double sinceSnap() const;
+  double tickDuration() const;
   bool lerpRemote() const;
   
   class TankInfo *tankInfo(int eid);

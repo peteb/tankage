@@ -15,7 +15,7 @@ public:
     int start_tick;
     float dir;
     
-    vec2 positionAt(double time_ofs) const;
+    vec2 positionAt(int tick, double ofs, double tick_duration) const;
     
     State &write(class Packer &msg);
     State &read(class Unpacker &msg);
