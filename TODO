@@ -110,4 +110,14 @@
 ** TODO Fix a proper icon for the OS X bundle   
 * Linux support
 ** TODO Add the icon for Linux as well 
+* DevSession 2011-03-28
+** TODO Agree and finalize the log interface, check compatibility with Windows
+** TODO What package do we use, what is standard install way?
+** TODO Where to install files, Program Files? OpenGL library handling?
+** TODO HOME directory for configuration files for Windows?
+** TODO Deadline, this week? Next Monday? I can't contribute much this week, though :(
+** TODO Installation instruction for people? Time to use Wiki?
+** TODO Is there server available for running all the time?
+** TODO How about people opinion? Should we advertise people to write tracker items?
+** TODO List with items that must be done before first release? 
 
