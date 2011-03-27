@@ -73,11 +73,12 @@ void Tank::State::integrate(const Control::Input &input, double dt) {
   vec2 aim_diff = vec2(input.aim_x, input.aim_y) - pos;
   double aim_dir = atan2(aim_diff.y, aim_diff.x) / M_PI * 180.0;
   double aim_dir_shortest = wrap(aim_dir - turret_dir, -180.0, 180.0);
+  double min_diff = std::min(dt * 200.0, fabs(aim_dir_shortest));
   
   if (aim_dir_shortest > 0.1)
-    turret_dir += dt * 200.0;
+    turret_dir += min_diff;
   else if (aim_dir_shortest < -0.1)
-    turret_dir -= dt * 200.0;
+    turret_dir -= min_diff;
   else
     turret_dir = aim_dir;
   
@@ -88,7 +89,7 @@ void Tank::State::integrate(const Control::Input &input, double dt) {
 /* <--- end tank state ---> */
 
 Tank::Tank(class GameServer *gameserver)
-  : Entity(32.0f)
+  : Entity(16.0f)
   , _gameserver(gameserver)
 {
   _reload_time = 0.0;
@@ -131,5 +132,5 @@ void Tank::recvInput(const Control::Input &input) {
 void Tank::shoot() {
   _gameserver->spawnBullet(_state.pos + vec2::FromDegrees(_state.turret_dir) * 16.0f, 
                            _state.turret_dir, id());
-  _reload_time = 0.5;
+  _reload_time = 0.05;
 }
