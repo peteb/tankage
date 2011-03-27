@@ -212,6 +212,16 @@ ClientSession *GameServer::session(Client *client) const {
   return iter->second;
 }
 
+void GameServer::sendServerInfo(Client *receiver) {
+  char buffer[1024];
+  Packer msg(buffer, buffer + 1024);
+  msg.writeShort(NET_SERVER_INFO);
+  msg.writeShort(*server_tickrate * 10.0);
+  
+  receiver->send(buffer, 1024, Client::PACKET_RELIABLE, NET_CHANNEL_STATE);
+}
+
+
 Tank *GameServer::spawnTank() {
   Tank *tank = new Tank(this);
   Tank::State initial;
@@ -288,11 +298,16 @@ void GameServer::destroyZombies() {
   
 }
 
-void GameServer::sendServerInfo(Client *receiver) {
-  char buffer[1024];
-  Packer msg(buffer, buffer + 1024);
-  msg.writeShort(NET_SERVER_INFO);
-  msg.writeShort(*server_tickrate * 10.0);
+Tank *GameServer::intersectingTank(const vec2 &start, const vec2 &end, float radius, int ignore) {
+  for (size_t i = 0; i < _tanks.size(); ++i) {
+    Tank *tank = _tanks[i];
+    if (tank->id() != ignore) {
+      vec2 closest = closest_point(start, end, tank->state().pos);
+      if (length(tank->state().pos - closest) <= (tank->radius() + radius)) {
+        return tank;
+      }
+    }
+  }
   
-  receiver->send(buffer, 1024, Client::PACKET_RELIABLE, NET_CHANNEL_STATE);
+  return NULL;
 }

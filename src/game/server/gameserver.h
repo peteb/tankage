@@ -23,7 +23,8 @@ public:
   Entity *entity(int eid) const;
   void destroyEntity(int eid);
   Entity *spawnBullet(const vec2 &pos, double dir, int shooter);
-//  Entity *intersectingEntity(
+  class Tank *intersectingTank(const vec2 &start, const vec2 &end, float radius, int ignore);
+  
 private:
   typedef std::map<class Client *, class ClientSession *> SessionMap;
   

@@ -32,7 +32,8 @@ vec2 Bullet::State::positionAt(int tick, double ofs, double tick_duration) const
 /* <--- end bullet state ---> */
 
 Bullet::Bullet(class GameServer *gameserver, int shooter) 
-  : _gameserver(gameserver)
+  : Entity(0.0f)
+  , _gameserver(gameserver)
   , _shooter(shooter)
 {
   _alive_time = 1.5;
@@ -44,6 +45,16 @@ void Bullet::snap(class Packer &msg, const class ClientSession *client) {
 }
 
 void Bullet::tick() {
+  if (_state.start_tick >= _gameserver->gameTick())
+    return;
+  
+  vec2 last_pos = _state.positionAt(_gameserver->gameTick() - 1, 0.0, _gameserver->tickDuration());
+  vec2 current_pos = _state.positionAt(_gameserver->gameTick(), 0.0, _gameserver->tickDuration());
+  
+  Tank *x_tank = _gameserver->intersectingTank(last_pos, current_pos, 0.0f, _shooter);
+  if (x_tank) {
+    _alive_time = 0.0;
+  }
   _alive_time -= _gameserver->tickDuration();
   
   if (_alive_time <= 0.0) {

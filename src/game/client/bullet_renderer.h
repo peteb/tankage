@@ -15,6 +15,7 @@ private:
   typedef Snapshot<Bullet::State> BulletSnapshot;
   
   BulletSnapshot _current;
+  BulletSnapshot _last;
   
   class GameClient *_client;
   class Graphics *_gfx;

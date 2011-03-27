@@ -12,7 +12,7 @@ public:
   struct State {
     int id;
     vec2 start_pos;
-    int start_tick;
+    unsigned int start_tick;
     float dir;
     
     vec2 positionAt(int tick, double ofs, double tick_duration) const;

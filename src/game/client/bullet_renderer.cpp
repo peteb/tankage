@@ -13,22 +13,25 @@ BulletRenderer::BulletRenderer(GameClient *client, Portal &services)
 }
 
 void BulletRenderer::render() {
-  BulletSnapshot::const_iterator it = _current.begin(), it_e = _current.end();
-  
   _gfx->setColor(color4::White());
   _gfx->enableTextures();
   _gfx->setBlend(Graphics::BLEND_ALPHA);
   _gfx->setTexture(_bullet_texture);
+
+  BulletSnapshot::const_iterator it = _last.begin(), it_e = _last.end();
   
   for (; it != it_e; ++it) {
     const Bullet::State &state = *it;
-    vec2 pos = state.positionAt(_current.tick(), _client->sinceSnap(), _client->tickDuration());
-    pos.x = round(pos.x);
-    pos.y = round(pos.y);
-    _gfx->drawQuad(rect(pos, 4, 4), state.dir);
+    if (_current.find(state.id) != _current.end()) {
+      vec2 pos = state.positionAt(_last.tick(), _client->sinceSnap(), _client->tickDuration());
+      pos.x = round(pos.x);
+      pos.y = round(pos.y);
+      _gfx->drawQuad(rect(pos, 4, 4), state.dir);
+    }
   }  
 }
 
 void BulletRenderer::addSnapshot(const Snapshot<Bullet::State> &snapshot) {
+  _last = _current;
   _current = snapshot;
 }
