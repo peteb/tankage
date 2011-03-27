@@ -241,11 +241,12 @@ Tank *GameServer::spawnTank() {
   return tank;
 }
 
-Entity *GameServer::spawnBullet(const vec2 &pos, double dir, int shooter) {
+Entity *GameServer::spawnBullet(const vec2 &pos, const vec2 &vel, double dir, int shooter) {
   Bullet *bullet = new Bullet(this, shooter);
   Bullet::State initial;
   initial.id = ++_last_entity;
   initial.start_pos = pos;
+  initial.start_vel = vel;
   initial.start_tick = gameTick();
   initial.dir = dir;
   initial.max_lerp = 10.0f;

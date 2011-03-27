@@ -11,6 +11,8 @@ Bullet::State &Bullet::State::write(Packer &msg) {
   msg.writeInt(id);
   msg.writeShort(start_pos.x * 10.0f);
   msg.writeShort(start_pos.y * 10.0f);
+  msg.writeShort(start_vel.x * 1000.0f); // FIXME: start_vel is not used, remove?
+  msg.writeShort(start_vel.y * 1000.0f);
   msg.writeInt(start_tick);
   msg.writeShort(dir / 360.0f * 65536.0f);
   msg.writeShort(max_lerp * 1000.0f);
@@ -22,6 +24,8 @@ Bullet::State &Bullet::State::read(class Unpacker &msg) {
   id = msg.readInt();
   start_pos.x = static_cast<float>(msg.readShort()) / 10.0f;
   start_pos.y = static_cast<float>(msg.readShort()) / 10.0f;
+  start_vel.x = static_cast<float>(msg.readShort()) / 1000.0f;
+  start_vel.y = static_cast<float>(msg.readShort()) / 1000.0f;
   start_tick = msg.readInt();
   dir = static_cast<float>(msg.readShort()) / 65536.0f * 360.0f;
   max_lerp = static_cast<float>(msg.readShort()) / 1000.0f;

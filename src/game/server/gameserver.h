@@ -22,7 +22,7 @@ public:
   double tickDuration() const;
   Entity *entity(int eid) const;
   void destroyEntity(int eid);
-  Entity *spawnBullet(const vec2 &pos, double dir, int shooter);
+  Entity *spawnBullet(const vec2 &pos, const vec2 &vel, double dir, int shooter);
   class Tank *intersectingTank(const vec2 &start, const vec2 &end, float radius, int ignore);
   
 private:

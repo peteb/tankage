@@ -12,6 +12,7 @@ public:
   struct State {
     int id;
     vec2 start_pos;
+    vec2 start_vel;
     unsigned int start_tick;
     float dir;
     float max_lerp;
