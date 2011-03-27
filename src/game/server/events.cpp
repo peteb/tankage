@@ -88,13 +88,22 @@ void Events::removeSnapped() {
 
 Event *Events::spawnLocalEvent(short type, const class vec2 &pos, unsigned flags) {
   Event *event = new LocalEvent(type, pos);  
-  _events.push_back(event);
+  
+  if (flags & EVENT_UNRELIABLE)
+    _rel_events.push_back(event);
+  else
+    _events.push_back(event);
+  
   return event;
 }
 
 Event *Events::spawnGlobalEvent(short type, unsigned flags) {
   Event *event = new Event(type);  
-  _events.push_back(event);
+  if (flags & EVENT_UNRELIABLE)
+    _rel_events.push_back(event);
+  else
+    _events.push_back(event);
+
   return event;
 }
 
@@ -107,5 +116,10 @@ void Events::createPlayerJoined(int tankid, const std::string &name) {
   event->params.writeString(name);
 }
 
-
-
+void Events::spawnTankHit(int tankid, int shooter, const class vec2 &pos) {
+  Event *event = spawnLocalEvent(NET_TANK_HIT, pos, EVENT_UNRELIABLE);
+  event->params.writeShort(pos.x);
+  event->params.writeShort(pos.y);
+  event->params.writeInt(tankid);
+  event->params.writeInt(shooter);
+}

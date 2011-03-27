@@ -317,3 +317,7 @@ Tank *GameServer::intersectingTank(const vec2 &start, const vec2 &end, float rad
   
   return NULL;
 }
+
+Events &GameServer::events() {
+  return _events;
+}

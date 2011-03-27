@@ -8,11 +8,17 @@
 class Events {
 public:
   void snap(class Packer &msg, class ClientSession *client);  
-  void createPlayerJoined(int tankid, const std::string &name);
   void removeSnapped();
   void writeReliable(class Packer &msg, class ClientSession *client);
+
+  void createPlayerJoined(int tankid, const std::string &name);
+  void spawnTankHit(int tankid, int shooter, const class vec2 &pos);
   
 private:
+  enum {
+    EVENT_UNRELIABLE = 0x0001
+  };
+  
   class Event *spawnLocalEvent(short type, const class vec2 &pos, unsigned flags);
   class Event *spawnGlobalEvent(short type, unsigned flags);
 

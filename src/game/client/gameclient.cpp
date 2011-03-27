@@ -241,6 +241,18 @@ void GameClient::onEvent(short event, class Unpacker &msg) {
     
     info->name = name;
   }
+  else if (event == NET_TANK_HIT) {
+    vec2 pos;
+    pos.x = msg.readShort();
+    pos.y = msg.readShort();
+    int tankid = msg.readInt();
+    int shooter = msg.readInt();
+    
+    Log(DEBUG) << "tank " << tankid << " hit at " << std::string(pos) << " by " << shooter;
+
+    if (shooter == localPlayer())
+      system("afplay ../data/hit.wav &");
+  }
 }
 
 TextureLoader &GameClient::textureLoader() {
