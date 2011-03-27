@@ -18,12 +18,17 @@ void BulletRenderer::render() {
   _gfx->setBlend(Graphics::BLEND_ALPHA);
   _gfx->setTexture(_bullet_texture);
 
-  BulletSnapshot::const_iterator it = _current.begin(), it_e = _current.end();
+  BulletSnapshot::const_iterator it = _last.begin(), it_e = _last.end();
   
   for (; it != it_e; ++it) {
     const Bullet::State &state = *it;
-    if (/*_current.find(state.id) != _current.end() &&*/ state.max_lerp >= _client->sinceSnap()) {
-      vec2 pos = state.positionAt(_current.tick(), _client->sinceSnap(), _client->tickDuration());
+    Snapshot<Bullet::State>::const_iterator current = _current.find(state.id);
+    
+    if (current != _current.end()) {
+      if (_client->sinceSnap() > current->max_lerp)
+        continue;
+      
+      vec2 pos = state.positionAt(_last.tick(), _client->sinceSnap(), _client->tickDuration());
       pos.x = round(pos.x);
       pos.y = round(pos.y);
       _gfx->drawQuad(rect(pos, 4, 4), state.dir);

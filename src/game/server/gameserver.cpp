@@ -170,6 +170,8 @@ void GameServer::onReceive(Packet *packet) {
   if (!sess)
     return;
   
+  // TODO sometime: send snapshots at different intervals. players at 15, bullets at 5, etc.
+  
   if (type == NET_PLAYER_INPUT) {
     Tank *tank = static_cast<Tank *>(entity(sess->tankid));
     if (tank) {

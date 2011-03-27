@@ -48,11 +48,11 @@ void Bullet::snap(class Packer &msg, const class ClientSession *client) {
 }
 
 void Bullet::tick() {
-  if (_state.start_tick >= _gameserver->gameTick())
+  if (_state.start_tick > _gameserver->gameTick())
     return;
   
-  vec2 last_pos = _state.positionAt(_gameserver->gameTick(), 0.0, _gameserver->tickDuration());
-  vec2 current_pos = _state.positionAt(_gameserver->gameTick() + 1, 0.0, _gameserver->tickDuration());
+  vec2 last_pos = _state.positionAt(_gameserver->gameTick() - 1, 0.0, _gameserver->tickDuration());
+  vec2 current_pos = _state.positionAt(_gameserver->gameTick(), 0.0, _gameserver->tickDuration());
   
   Tank *x_tank = _gameserver->intersectingTank(last_pos, current_pos, 0.0f, _shooter);
   if (x_tank) {
