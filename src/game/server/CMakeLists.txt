@@ -25,6 +25,7 @@ add_executable(tankage-server
   client_session.cpp
   tank.cpp
   events.cpp
+  bullet.cpp
 )
 
 target_link_libraries(tankage-server

@@ -46,6 +46,10 @@ public:
   int id() const {return _state.id; }
   
 private:
+  void shoot();
+  
+  double _reload_time;
+  
   class GameServer *_gameserver;
   State _state;
   std::vector<Control::Input> _lastinput;

@@ -22,6 +22,7 @@ public:
   double tickDuration() const;
   Entity *entity(int eid) const;
   void destroyEntity(int eid);
+  Entity *spawnBullet(const vec2 &pos, double dir, int shooter);
   
 private:
   typedef std::map<class Client *, class ClientSession *> SessionMap;

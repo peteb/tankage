@@ -1,6 +1,7 @@
 #include <game/server/gameserver.h>
 #include <game/server/client_session.h>
 #include <game/server/tank.h>
+#include <game/server/bullet.h>
 
 #include <game/common/net_protocol.h>
 #include <game/common/net_error.h>
@@ -221,6 +222,18 @@ Tank *GameServer::spawnTank() {
   tank->assign(initial);
   _entities.push_back(tank);
   return tank;
+}
+
+Entity *GameServer::spawnBullet(const vec2 &pos, double dir, int shooter) {
+  Bullet *bullet = new Bullet(this, shooter);
+  Bullet::State initial;
+  initial.id = ++_last_entity;
+  initial.start_pos = pos;
+  initial.start_tick = gameTick();
+  bullet->assign(initial);
+  _entities.push_back(bullet);
+  
+  return bullet;
 }
 
 Entity *GameServer::entity(int eid) const {

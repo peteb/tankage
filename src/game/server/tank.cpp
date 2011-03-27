@@ -85,17 +85,13 @@ void Tank::State::integrate(const Control::Input &input, double dt) {
   turret_dir += rot_vel * dt;
   pos += lin_vel * dt;
   base_dir += rot_vel * dt;
-  
-  if (input.buttons & Control::Input::SHOOT) {
-
-  }
 }
 /* <--- end tank state ---> */
 
 Tank::Tank(class GameServer *gameserver)
   : _gameserver(gameserver)
 {
-  
+  _reload_time = 0.0;
 }
 
 const Tank::State &Tank::state() const {
@@ -115,6 +111,11 @@ void Tank::snap(Packer &msg, const class ClientSession *client) {
 void Tank::tick() {
   double input_dt = _gameserver->tickDuration() / _lastinput.size();
   for (size_t i = 0; i < _lastinput.size(); ++i) {
+    if (_reload_time >= 0.0)
+      _reload_time -= input_dt;
+    else if (_lastinput[i].buttons & Control::Input::SHOOT)
+      shoot();
+    
     _state.advance(_lastinput[i], input_dt);    
   }
   
@@ -123,4 +124,9 @@ void Tank::tick() {
 
 void Tank::recvInput(const Control::Input &input) {
   _lastinput.push_back(input);
+}
+
+void Tank::shoot() {
+  _gameserver->spawnBullet(_state.pos, _state.turret_dir, id());
+  _reload_time = 0.5;
 }
