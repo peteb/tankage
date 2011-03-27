@@ -38,7 +38,6 @@ void Tank::State::advance(const Control::Input &input, double duration) {
   // integrate any leftovers
   integrate(input, duration);
 }
-#include <iostream>
 
 void Tank::State::integrate(const Control::Input &input, double dt) {
   vec2 forward = vec2::FromDegrees(base_dir);
@@ -89,7 +88,8 @@ void Tank::State::integrate(const Control::Input &input, double dt) {
 /* <--- end tank state ---> */
 
 Tank::Tank(class GameServer *gameserver)
-  : _gameserver(gameserver)
+  : Entity(32.0f)
+  , _gameserver(gameserver)
 {
   _reload_time = 0.0;
 }
@@ -109,7 +109,7 @@ void Tank::snap(Packer &msg, const class ClientSession *client) {
 }
 
 void Tank::tick() {
-  double input_dt = _gameserver->tickDuration() / _lastinput.size();
+  double input_dt = _gameserver->tickDuration() / std::max<int>(_lastinput.size(), 1);
   for (size_t i = 0; i < _lastinput.size(); ++i) {
     if (_reload_time >= 0.0)
       _reload_time -= input_dt;
@@ -119,7 +119,9 @@ void Tank::tick() {
     _state.advance(_lastinput[i], input_dt);    
   }
   
-  _lastinput.erase(_lastinput.begin(), _lastinput.rbegin().base());
+  if (!_lastinput.empty()) {
+    _lastinput.erase(_lastinput.begin(), _lastinput.begin() + (_lastinput.size() - 1));    
+  }
 }
 
 void Tank::recvInput(const Control::Input &input) {
