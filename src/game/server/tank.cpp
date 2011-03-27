@@ -38,6 +38,7 @@ void Tank::State::advance(const Control::Input &input, double duration) {
   // integrate any leftovers
   integrate(input, duration);
 }
+#include <iostream>
 
 void Tank::State::integrate(const Control::Input &input, double dt) {
   vec2 forward = vec2::FromDegrees(base_dir);
@@ -84,6 +85,10 @@ void Tank::State::integrate(const Control::Input &input, double dt) {
   turret_dir += rot_vel * dt;
   pos += lin_vel * dt;
   base_dir += rot_vel * dt;
+  
+  if (input.buttons & Control::Input::SHOOT) {
+
+  }
 }
 /* <--- end tank state ---> */
 
@@ -108,9 +113,14 @@ void Tank::snap(Packer &msg, const class ClientSession *client) {
 }
 
 void Tank::tick() {
-  _state.advance(_lastinput, _gameserver->tickDuration());
+  double input_dt = _gameserver->tickDuration() / _lastinput.size();
+  for (size_t i = 0; i < _lastinput.size(); ++i) {
+    _state.advance(_lastinput[i], input_dt);    
+  }
+  
+  _lastinput.erase(_lastinput.begin(), _lastinput.rbegin().base());
 }
 
 void Tank::recvInput(const Control::Input &input) {
-  _lastinput = input;
+  _lastinput.push_back(input);
 }

@@ -5,6 +5,7 @@
 #include <game/common/control.h>
 #include <utils/vec.h>
 #include <utils/algorithm.h>
+#include <vector>
 
 inline double wrap(double value, double lower, double upper) { // FIXME: util.
   double distance = upper - lower;
@@ -47,7 +48,7 @@ public:
 private:
   class GameServer *_gameserver;
   State _state;
-  Control::Input _lastinput;
+  std::vector<Control::Input> _lastinput;
 };
 
 

@@ -74,8 +74,8 @@ Control::Input Control::currentInput() const {
     {Input::FORWARD, keyUp},
     {Input::BACKWARD, keyDown},
     {Input::TURN_RIGHT, keyRight},
-    {Input::TURN_LEFT, keyLeft}/*,
-    {Input::STATE_SHOOTING, keyShoot}*/};
+    {Input::TURN_LEFT, keyLeft},
+    {Input::SHOOT, keyShoot}};
   
   // Map keycodes to bits
   for (size_t i = 0; i < 5; ++i) {
