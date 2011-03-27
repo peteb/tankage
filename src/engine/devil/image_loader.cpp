@@ -68,7 +68,7 @@ public:
     ilBindImage(_id);
     ILuint width = ilGetInteger(IL_IMAGE_WIDTH);
     ILuint height = ilGetInteger(IL_IMAGE_HEIGHT);
-
+    
     return rect(width, height);
   }
 

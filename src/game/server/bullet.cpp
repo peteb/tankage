@@ -25,8 +25,8 @@ Bullet::State &Bullet::State::read(class Unpacker &msg) {
   return *this;
 }
 
-vec2 Bullet::State::positionAt(double time_ofs) {
-  return vec2(0.0f, 0.0f);
+vec2 Bullet::State::positionAt(double time_ofs) const {
+  return start_pos;
 }
 /* <--- end bullet state ---> */
 

@@ -230,6 +230,7 @@ Entity *GameServer::spawnBullet(const vec2 &pos, double dir, int shooter) {
   initial.id = ++_last_entity;
   initial.start_pos = pos;
   initial.start_tick = gameTick();
+  initial.dir = dir;
   bullet->assign(initial);
   _entities.push_back(bullet);
   
