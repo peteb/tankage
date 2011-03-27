@@ -2,6 +2,7 @@
 #include <game/client/tank_info.h>
 #include <game/client/snapshot.h>
 #include <game/server/tank.h> // needed for tank::state
+#include <game/server/bullet.h>
 #include <game/common/net_protocol.h>
 #include <game/common/config.h>
 
@@ -167,21 +168,25 @@ void GameClient::onReceive(Packet *packet) {
   if (msgtype == NET_SNAPSHOT) {
     int snap_tick = msg.readInt();
     Snapshot<Tank::State> tanks_snapshot(snap_tick);
+    Snapshot<Bullet::State> bullets_snapshot(snap_tick);
     
-    unsigned short snaptype;
-    
-    do {
-      snaptype = msg.readShort();
-      
-      if (snaptype == 1) { // FIXME: better numbers...
+    while (short snaptype = msg.readShort()) {
+      switch (snaptype) {
+      case 1: // FIXME: remove magical numbers
         tanks_snapshot.push(msg);
-      }
-      else if (snaptype != 0) {
+        break;
+          
+      case 2:
+        bullets_snapshot.push(msg);
+        break;
+        
+      default:
         onEvent(snaptype, msg);
       }
-    } while (snaptype != 0);
+    }
     
     _tankrenderer.addSnapshot(tanks_snapshot);
+    _bulletrenderer.addSnapshot(bullets_snapshot);
     _since_snap = 0.0;
   }
   else {
