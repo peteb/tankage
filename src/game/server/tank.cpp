@@ -112,14 +112,18 @@ void Tank::snap(Packer &msg, const class ClientSession *client) {
 
 void Tank::tick() {
   double input_dt = _gameserver->tickDuration() / std::max<int>(_lastinput.size(), 1);
+  bool do_shoot = false;
   for (size_t i = 0; i < _lastinput.size(); ++i) {
-    if (_reload_time > 0.0)
-      _reload_time -= input_dt;
-    else if (_lastinput[i].buttons & Control::Input::SHOOT)
-      shoot();
-    
     _state.advance(_lastinput[i], input_dt);    
+
+    if (_lastinput[i].buttons & Control::Input::SHOOT)
+      do_shoot = true;
   }
+
+  if (_reload_time > 0.0)
+    _reload_time -= _gameserver->tickDuration();
+  else if (do_shoot)
+    shoot();
   
   if (!_lastinput.empty()) {
     _lastinput.erase(_lastinput.begin(), _lastinput.begin() + (_lastinput.size() - 1));    
@@ -133,7 +137,7 @@ void Tank::recvInput(const Control::Input &input) {
 void Tank::shoot() {
   _gameserver->spawnBullet(_state.pos + vec2::FromDegrees(_state.turret_dir) * 16.0f, 
                            _state.turret_dir, id());
-  _reload_time = 0.05;
+  _reload_time = 0.1;
 }
 
 void Tank::takeDamage(const vec2 &at, int amount) {
