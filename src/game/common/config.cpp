@@ -32,7 +32,7 @@ Config::Config(const class Portal &services)
     file.close();
   } else {
     // initial start-up, file is not created, yet
-    Log(WARNING) << "Failed to read config file " << _path;
+    Log(DEBUG) << "Failed to read config file " << _path;
   }
   
   _node = PropertyNode::MergeTrees(_node, parser.parse(buffer.str()));  
@@ -63,7 +63,7 @@ Config::~Config() {
     Log(DEBUG) << "Config written to file " << _path;
   } else {
     // don't bother, probably no permissions, keep using defaults
-    Log(WARNING) << "Failed to write config file " << _path;
+    Log(DEBUG) << "Failed to write config file " << _path;
   }
 } // ~Config
 

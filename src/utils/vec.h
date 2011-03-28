@@ -11,6 +11,11 @@
 #include <cmath>
 #include <utils/value.h>
 
+/* QUESTION kaspars: Move to some common header file maybe? */
+#ifndef M_PI
+#define M_PI 3.14159265358979323846
+#endif
+
 /// A two-dimensional vector.
 class vec2 {
 public:

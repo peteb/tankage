@@ -16,3 +16,8 @@ install_manifest.txt
 *vcxproj*
 *~
 *.sln
+Win32
+ipch
+*.opensdf
+*.sdf
+*.suo
