@@ -8,7 +8,6 @@ SET(ENGINE_SOURCE
   opengl/graphics.cpp
   devil/image_loader.cpp
   enet/network.cpp
-  logging/logging.cpp
   )
 
 
@@ -45,11 +44,11 @@ include_directories(
    ${IL_INCLUDE_DIR}
    ${OPENGL_INCLUDE_DIR}
    ${PROJECT_ROOT_DIR}/3pp 
+   ${PROJECT_ROOT_DIR}/3pp/include
 )
 
 target_link_libraries(engine
-  utils
-  twitcurl
+  utils 
   enet
   ${GLFW_LIBRARY} 
   ${Cocoa_LIBRARIES}

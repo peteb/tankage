@@ -26,7 +26,9 @@ add_executable(tankage-server
 )
 
 target_link_libraries(tankage-server
-	engine
-   ptrcfg
+  engine
+  ptrcfg
+  ws2_32.lib
+  winmm.lib
 )
 

@@ -25,6 +25,8 @@ add_executable(tankage
 target_link_libraries(tankage
   engine
   ptrcfg
+  ws2_32.lib
+  winmm.lib
   )
 
 INSTALL(TARGETS tankage DESTINATION bin)

@@ -1,9 +1,17 @@
 #include <utils/packer.h>
 
-#include <arpa/inet.h>
 #include <cassert>
 #include <limits>
 #include <cstring>
+
+/* Maybe fix this into the CMake? */
+#ifdef _WIN32
+#include <WinSock2.h>
+#else 
+#include <arpa/inet.h>
+#endif
+
+#undef max // some better way to get rid of this one?
 
 // FIXME: the asserts here should probably set a badstate or throw exception
 

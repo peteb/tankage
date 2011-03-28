@@ -8,6 +8,10 @@
 #include <sstream>
 #include <cmath>
 
+#ifndef M_PI
+#define M_PI 3.14159265358979323846
+#endif
+
 vec2 vec2::Zero() {
   static vec2 zero(0.0f, 0.0f);
   return zero;
