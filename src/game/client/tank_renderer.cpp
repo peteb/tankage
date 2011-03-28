@@ -27,7 +27,7 @@ void TankRenderer::render() {
     TankSnapshot::const_iterator it_prev = prev.find(it->id);
     Tank::State state;
     if (it_prev != prev.end() && _client->lerpRemote()) {
-      state = lerp(*it_prev, *it, _client->deltaTime()); // FIXME: lerping base_dir is bad
+      state = lerp(*it_prev, *it, _client->deltaTime());
     }
     else {
       // it just started existing! or remote entity smoothing is turned off
@@ -35,6 +35,10 @@ void TankRenderer::render() {
     }
 
     renderTank(state);
+    
+    if (state.id == _client->localPlayer()) {
+      _client->setFocus(state.pos);
+    }
   }
 }
 

@@ -22,6 +22,9 @@ public:
   double tickDuration() const;
   Entity *entity(int eid) const;
   void destroyEntity(int eid);
+  Entity *spawnBullet(const vec2 &pos, const vec2 &vel, double dir, int shooter);
+  class Tank *intersectingTank(const vec2 &start, const vec2 &end, float radius, int ignore);
+  Events &events();
   
 private:
   typedef std::map<class Client *, class ClientSession *> SessionMap;
@@ -38,7 +41,8 @@ private:
   // net protocol
   void onIdent(const struct NetIdentifyMsg *ident, class Packet *packet);
   
-  std::vector<Entity *> _entities;
+  std::vector<class Tank *> _tanks;
+  std::vector<class Bullet *> _bullets;
   std::vector<int> _zombie_entities;
   
   SessionMap _sessions;

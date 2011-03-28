@@ -79,8 +79,9 @@ bool Glfw::Input::keyWasPressed(int key) {
   unsigned char &state = keyRange.first->second;
   const bool wasPressed = state & KEY_STATE_PRESSED;
 
-  if (state & KEY_STATE_RELEASED)
-    state = 0;
+  if (state & KEY_STATE_RELEASED) {
+    state = 0;    
+  }
 
   return wasPressed;
 }

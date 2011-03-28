@@ -93,7 +93,7 @@ class Texture *OpenGl::Graphics::createTexture(Image *image) {
   default:
     throw std::runtime_error("opengl: unsupported image data type");
   }
-
+  
   glEnable(GL_TEXTURE_2D);
   glGenTextures(1, &texId);
   glBindTexture(GL_TEXTURE_2D, texId);
@@ -101,7 +101,7 @@ class Texture *OpenGl::Graphics::createTexture(Image *image) {
                image->bytesPerPixel(),
                image->size().width(),
                image->size().height(),
-               1,
+               0,
                format,
                type,
                image->data()
@@ -111,28 +111,33 @@ class Texture *OpenGl::Graphics::createTexture(Image *image) {
 }
 
 void OpenGl::Graphics::drawQuad(const rect &quad, float dir) {
+  // FIXME: this should be deprecated
+  glPushMatrix();
   glTranslatef(quad.origin.x, quad.origin.y, 0.0f);
   glRotatef(dir, 0.0f, 0.0f, 1.0f);
+  //glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
+  //glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
   
   glEnable(GL_COLOR_MATERIAL);
   glBegin(GL_QUADS);
   glTexCoord2f(0.0f, 0.0f);
-  glVertex2f(-quad.halfSize.x, -quad.halfSize.y);
+  glVertex2f(-quad.halfSize.x + 0.5, -quad.halfSize.y + 0.5);
 
   glTexCoord2f(1.0f, 0.0f);
-  glVertex2f(quad.halfSize.x, -quad.halfSize.y);
+  glVertex2f(quad.halfSize.x + 0.5, -quad.halfSize.y + 0.5);
 
   glTexCoord2f(1.0f, 1.0f);
-  glVertex2f(quad.halfSize.x, quad.halfSize.y);
+  glVertex2f(quad.halfSize.x + 0.5, quad.halfSize.y + 0.5);
 
   glTexCoord2f(0.0f, 1.0f);
-  glVertex2f(-quad.halfSize.x, quad.halfSize.y);
+  glVertex2f(-quad.halfSize.x + 0.5, quad.halfSize.y + 0.5);
   glEnd();
-
-  glLoadIdentity();
+  glPopMatrix();
 }
 
 void OpenGl::Graphics::drawQuad(const class rect &quad, const class rect &source) {
+  glLoadIdentity();
+  
   vec2 min, max;
   vec2 tex_min, tex_max;
   
@@ -156,6 +161,8 @@ void OpenGl::Graphics::drawQuad(const class rect &quad, const class rect &source
 }
 
 void OpenGl::Graphics::drawQuads(const std::vector<rect> &quads) {
+  glLoadIdentity();
+
   glBegin(GL_QUADS);
   for (size_t i = 0; i < quads.size(); ++i) {
     vec2 min, max;
@@ -185,6 +192,7 @@ void OpenGl::Graphics::drawQuads(unsigned components,
                                  float *coord, float *tc) 
 {
   assert(components == 2 && "only support for 2d vertices");
+  //glLoadIdentity();
   
   // FIXME: also optimize this
   // NOTE: this one doesn't support angle. I guess that makes sense.
@@ -192,8 +200,8 @@ void OpenGl::Graphics::drawQuads(unsigned components,
   glBegin(GL_QUADS);
   
   for (size_t i = 0; i < vertices; ++i) {
-    float x = *(coord++);
-    float y = *(coord++);
+    float x = *(coord++) + 0.5;
+    float y = *(coord++) + 0.5;
     float u = *(tc++);
     float v = *(tc++);
     
@@ -232,6 +240,12 @@ void OpenGl::Graphics::drawCircle(const vec2 &pos,
   glEnd();
 }
 
+void OpenGl::Graphics::setTransform(const class vec2 &translation) {
+  glMatrixMode(GL_MODELVIEW);
+  glLoadIdentity();
+  glTranslatef(translation.x, translation.y, 0.0f);
+}
+
 void OpenGl::Graphics::setOrtho(const rect &size) {
   glMatrixMode(GL_PROJECTION);
   glLoadIdentity();
@@ -239,7 +253,7 @@ void OpenGl::Graphics::setOrtho(const rect &size) {
   const float scaleX = 1.0f / size.halfSize.x;
   const float scaleY = -1.0f / size.halfSize.y;
   
-  glTranslatef(-1.0f, 1.0f, 0.0f);
+//  glTranslatef(-0.5f, 0.5f, 0.0f);
   glScalef(scaleX, scaleY, 1.0f);
   glTranslatef(0.5f, 0.5f, 0.0f);
   

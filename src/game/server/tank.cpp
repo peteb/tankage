@@ -73,11 +73,12 @@ void Tank::State::integrate(const Control::Input &input, double dt) {
   vec2 aim_diff = vec2(input.aim_x, input.aim_y) - pos;
   double aim_dir = atan2(aim_diff.y, aim_diff.x) / M_PI * 180.0;
   double aim_dir_shortest = wrap(aim_dir - turret_dir, -180.0, 180.0);
+  double min_diff = std::min(dt * 200.0, fabs(aim_dir_shortest));
   
   if (aim_dir_shortest > 0.1)
-    turret_dir += dt * 100.0;
+    turret_dir += min_diff;
   else if (aim_dir_shortest < -0.1)
-    turret_dir -= dt * 100.0;
+    turret_dir -= min_diff;
   else
     turret_dir = aim_dir;
   
@@ -88,9 +89,11 @@ void Tank::State::integrate(const Control::Input &input, double dt) {
 /* <--- end tank state ---> */
 
 Tank::Tank(class GameServer *gameserver)
-  : _gameserver(gameserver)
+  : Entity(16.0f)
+  , _gameserver(gameserver)
 {
-  
+  _reload_time = 0.0;
+  _health = 100;
 }
 
 const Tank::State &Tank::state() const {
@@ -108,9 +111,42 @@ void Tank::snap(Packer &msg, const class ClientSession *client) {
 }
 
 void Tank::tick() {
-  _state.advance(_lastinput, _gameserver->tickDuration());
+  double input_dt = _gameserver->tickDuration() / std::max<int>(_lastinput.size(), 1);
+  bool do_shoot = false;
+  for (size_t i = 0; i < _lastinput.size(); ++i) {
+    _state.advance(_lastinput[i], input_dt);    
+
+    if (_lastinput[i].buttons & Control::Input::SHOOT)
+      do_shoot = true;
+  }
+
+  if (_reload_time > 0.0)
+    _reload_time -= _gameserver->tickDuration();
+  else if (do_shoot)
+    shoot();
+  
+  if (!_lastinput.empty()) {
+    _lastinput.erase(_lastinput.begin(), _lastinput.begin() + (_lastinput.size() - 1));    
+  }
 }
 
 void Tank::recvInput(const Control::Input &input) {
-  _lastinput = input;
+  _lastinput.push_back(input);
+}
+
+void Tank::shoot() {
+  _gameserver->spawnBullet(_state.pos + vec2::FromDegrees(_state.turret_dir) * 16.0f, 
+                           _state.lin_vel,
+                           _state.turret_dir, id());
+  _reload_time = 0.1;
+}
+
+void Tank::takeDamage(const vec2 &at, int amount) {
+  vec2 diff = normalized(_state.pos - at) * radius();
+  _state.lin_vel += diff * 10.0f;
+  _health -= amount;
+  
+  if (_health <= 0) {
+    _gameserver->destroyEntity(id());
+  }
 }

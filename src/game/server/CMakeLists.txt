@@ -18,6 +18,7 @@ add_executable(tankage-server
   ${GAME_ROOT_DIR}/client/tank_renderer.cpp
   ${GAME_ROOT_DIR}/client/text_renderer.cpp
   ${GAME_ROOT_DIR}/client/tank_info.cpp
+  ${GAME_ROOT_DIR}/client/bullet_renderer.cpp
 
   # server specific
   main.cpp
@@ -25,6 +26,7 @@ add_executable(tankage-server
   client_session.cpp
   tank.cpp
   events.cpp
+  bullet.cpp
 )
 
 target_link_libraries(tankage-server

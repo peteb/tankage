@@ -1,6 +1,7 @@
 #include <game/server/gameserver.h>
 #include <game/server/client_session.h>
 #include <game/server/tank.h>
+#include <game/server/bullet.h>
 
 #include <game/common/net_protocol.h>
 #include <game/common/net_error.h>
@@ -67,11 +68,12 @@ void GameServer::onTick() {
   char buffer[4096];
   destroyZombies(); // updateNet might call onDisconnect which might destroyEntity
 
-  for (size_t i = 0; i < _entities.size(); ++i) {
-    _entities[i]->tick();
-  }
+  for (size_t i = 0; i < _tanks.size(); ++i)
+    _tanks[i]->tick();
+  for (size_t i = 0; i < _bullets.size(); ++i)
+    _bullets[i]->tick();
   
-  destroyZombies(); // ticks might destroyEntity
+  
   
   SessionMap::iterator it = _sessions.begin(), it_e = _sessions.end();
   for (; it != it_e; ++it) {
@@ -80,9 +82,10 @@ void GameServer::onTick() {
     msg.writeInt(gameTick());
 
     // collect data from entities
-    for (size_t i = 0; i < _entities.size(); ++i) {
-      _entities[i]->snap(msg, it->second);
-    }
+    for (size_t i = 0; i < _tanks.size(); ++i)
+      _tanks[i]->snap(msg, it->second);    
+    for (size_t i = 0; i < _bullets.size(); ++i)
+      _bullets[i]->snap(msg, it->second);
 
     // and add unreliable events
     _events.snap(msg, it->second);
@@ -99,6 +102,7 @@ void GameServer::onTick() {
       it->second->client->send(buffer, msg.size(), 0, NET_CHANNEL_STATE);      
     }
   }  
+  destroyZombies(); // ticks might destroyEntity
   
   _events.removeSnapped();
 }
@@ -138,12 +142,13 @@ void GameServer::onConnect(Client *client) {
     return;
   }
   
-  sendServerInfo(client);
   
   ClientSession *session = new ClientSession(client);
   _sessions.insert(std::make_pair(client, session));
   Tank *tank = spawnTank();
   session->tankid = tank->id();
+
+  sendServerInfo(client);
 }
 
 void GameServer::onDisconnect(Client *client) {
@@ -165,6 +170,8 @@ void GameServer::onReceive(Packet *packet) {
   ClientSession *sess = session(packet->sender());
   if (!sess)
     return;
+  
+  // TODO sometime: send snapshots at different intervals. players at 15, bullets at 5, etc.
   
   if (type == NET_PLAYER_INPUT) {
     Tank *tank = static_cast<Tank *>(entity(sess->tankid));
@@ -208,25 +215,56 @@ ClientSession *GameServer::session(Client *client) const {
   return iter->second;
 }
 
+void GameServer::sendServerInfo(Client *receiver) {
+  char buffer[1024];
+  Packer msg(buffer, buffer + 1024);
+  msg.writeShort(NET_SERVER_INFO);
+  msg.writeShort(*server_tickrate * 10.0);
+  msg.writeInt(session(receiver)->tankid);
+  
+  receiver->send(buffer, 1024, Client::PACKET_RELIABLE, NET_CHANNEL_STATE);
+}
+
+
 Tank *GameServer::spawnTank() {
   Tank *tank = new Tank(this);
   Tank::State initial;
   initial.id = ++_last_entity;
-  initial.pos = vec2(400.0f, 300.0f);
+  initial.pos = vec2::FromDegrees(float(_last_entity * 90)) * 40.0f;
   initial.base_dir = 0.0f;
   initial.lin_vel = vec2::Zero();
   initial.rot_vel = 0.0f;
   initial.turret_dir = 0.0f;
   
   tank->assign(initial);
-  _entities.push_back(tank);
+  _tanks.push_back(tank);
   return tank;
 }
 
+Entity *GameServer::spawnBullet(const vec2 &pos, const vec2 &vel, double dir, int shooter) {
+  Bullet *bullet = new Bullet(this, shooter);
+  Bullet::State initial;
+  initial.id = ++_last_entity;
+  initial.start_pos = pos;
+  initial.start_vel = vel;
+  initial.start_tick = gameTick();
+  initial.dir = dir;
+  initial.max_lerp = 10.0f;
+  bullet->assign(initial);
+  _bullets.push_back(bullet);
+  
+  return bullet;
+}
+
 Entity *GameServer::entity(int eid) const {
-  for (size_t i = 0; i < _entities.size(); ++i) {
-    if (_entities[i]->id() == eid)
-      return _entities[i];
+  for (size_t i = 0; i < _tanks.size(); ++i) {
+    if (_tanks[i]->id() == eid)
+      return _tanks[i];
+  }
+
+  for (size_t i = 0; i < _bullets.size(); ++i) {
+    if (_bullets[i]->id() == eid)
+      return _bullets[i];
   }
   
   return NULL;
@@ -241,22 +279,45 @@ void GameServer::destroyZombies() {
     return;
   
   // FIXME: optimize this!
-  
-  std::vector<Entity *>::iterator iter = _entities.begin();
-  while (iter != _entities.end()) {
-    if (std::find(_zombie_entities.begin(), _zombie_entities.end(), (*iter)->id())
-        != _zombie_entities.end())
-      iter = _entities.erase(iter);
-    else
-      ++iter;
+
+  {
+    std::vector<Tank *>::iterator iter = _tanks.begin();
+    while (iter != _tanks.end()) {
+      if (std::find(_zombie_entities.begin(), _zombie_entities.end(), (*iter)->id())
+          != _zombie_entities.end())
+        iter = _tanks.erase(iter);
+      else
+        ++iter;
+    }
   }
+
+  {
+    std::vector<Bullet *>::iterator iter = _bullets.begin();
+    while (iter != _bullets.end()) {
+      if (std::find(_zombie_entities.begin(), _zombie_entities.end(), (*iter)->id())
+          != _zombie_entities.end())
+        iter = _bullets.erase(iter);
+      else
+        ++iter;
+    }
+  }
+  
 }
 
-void GameServer::sendServerInfo(Client *receiver) {
-  char buffer[1024];
-  Packer msg(buffer, buffer + 1024);
-  msg.writeShort(NET_SERVER_INFO);
-  msg.writeShort(*server_tickrate * 10.0);
+Tank *GameServer::intersectingTank(const vec2 &start, const vec2 &end, float radius, int ignore) {
+  for (size_t i = 0; i < _tanks.size(); ++i) {
+    Tank *tank = _tanks[i];
+    if (tank->id() != ignore) {
+      vec2 closest = closest_point(start, end, tank->state().pos);
+      if (length(tank->state().pos - closest) <= (tank->radius() + radius)) {
+        return tank;
+      }
+    }
+  }
   
-  receiver->send(buffer, 1024, Client::PACKET_RELIABLE, NET_CHANNEL_STATE);
+  return NULL;
+}
+
+Events &GameServer::events() {
+  return _events;
 }

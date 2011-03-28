@@ -5,6 +5,7 @@
 #include <game/common/control.h>
 #include <utils/vec.h>
 #include <utils/algorithm.h>
+#include <vector>
 
 inline double wrap(double value, double lower, double upper) { // FIXME: util.
   double distance = upper - lower;
@@ -39,15 +40,22 @@ public:
   void snap(class Packer &msg, const class ClientSession *client);
   void tick();
   void recvInput(const Control::Input &input);
+  void takeDamage(const vec2 &at, int amount);
+  vec2 position() const {return _state.pos; }
   
   const State &state() const;
   void assign(const State &state);
   int id() const {return _state.id; }
   
 private:
+  void shoot();
+  
+  double _reload_time;
+  int _health;
+  
   class GameServer *_gameserver;
   State _state;
-  Control::Input _lastinput;
+  std::vector<Control::Input> _lastinput;
 };
 
 
