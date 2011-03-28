@@ -5,6 +5,7 @@
 #include <game/common/control.h>
 #include <utils/vec.h>
 #include <utils/algorithm.h>
+#include <vector>
 
 inline double wrap(double value, double lower, double upper) { // FIXME: util.
   double distance = upper - lower;
@@ -21,6 +22,7 @@ public:
     vec2 lin_vel;
     float base_dir;
     float rot_vel;
+    float turret_dir;
     
     void advance(const Control::Input &input, double duration);
 
@@ -38,15 +40,22 @@ public:
   void snap(class Packer &msg, const class ClientSession *client);
   void tick();
   void recvInput(const Control::Input &input);
+  void takeDamage(const vec2 &at, int amount);
+  vec2 position() const {return _state.pos; }
   
   const State &state() const;
   void assign(const State &state);
   int id() const {return _state.id; }
   
 private:
+  void shoot();
+  
+  double _reload_time;
+  int _health;
+  
   class GameServer *_gameserver;
   State _state;
-  Control::Input _lastinput;
+  std::vector<Control::Input> _lastinput;
 };
 
 
@@ -60,6 +69,9 @@ inline Tank::State lerp(const Tank::State &begin,
   float smallest_angle = wrap(end.base_dir - begin.base_dir, -180.0, 180.0);
   ret.base_dir = ::lerp(begin.base_dir, begin.base_dir + smallest_angle, amount);
   ret.lin_vel = end.lin_vel; // just snap derivates
+  
+  smallest_angle = wrap(end.turret_dir - begin.turret_dir, -180.0, 180.0);
+  ret.turret_dir = ::lerp(begin.turret_dir, begin.turret_dir + smallest_angle, amount);
   
   return ret;
 }

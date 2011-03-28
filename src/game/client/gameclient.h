@@ -1,11 +1,14 @@
 #ifndef GAME_CLIENT_GAMECLIENT_H
 #define GAME_CLIENT_GAMECLIENT_H
 
+#include <game/client/tank_renderer.h>
+#include <game/client/text_renderer.h>
+#include <game/client/bullet_renderer.h>
 #include <game/common/net_protocol.h>
 #include <game/common/control.h>
-#include <game/client/tank_renderer.h>
-
+#include <game/common/texture_loader.h>
 #include <vector>
+#include <map>
 
 void client_RegisterVariables(class Config &config);
 
@@ -24,7 +27,15 @@ public:
   void update();
   void disconnectGently();
   double deltaTime() const;
+  double sinceSnap() const;
+  double tickDuration() const;
   bool lerpRemote() const;
+  int localPlayer() const;
+  void setFocus(const vec2 &pos);
+  
+  class TankInfo *tankInfo(int eid);
+  TextureLoader &textureLoader();
+  TextRenderer &textRenderer();
   
 private:
   void sendInput();
@@ -32,12 +43,9 @@ private:
   void onConnect();
   void onDisconnect();
   void onReceive(class Packet *packet);
-
-  void updateNet();
+  void onEvent(short event, class Unpacker &msg);
   
-  // net protocol
-  void onError(const struct NetErrorMsg *error, class Packet *packet);
-  void onSystemUpdate(const struct NetSystemMsg *msg, class Packet *packet);
+  void updateNet();
   
   class Network *_net;
   class Client *_client;
@@ -50,10 +58,17 @@ private:
   double _input_time;
   double _since_snap;
   double _net_tickrate;
+  vec2 _view;
+  int _local_player;
   
   Control::Input _sent_input;
+  TextureLoader _texloader;
+  TextRenderer _textrenderer;
+  BulletRenderer _bulletrenderer;
   TankRenderer _tankrenderer;
   Control _control;
+  
+  std::map<int, class TankInfo *> _tanks;
 };
 
 

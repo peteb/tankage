@@ -9,6 +9,8 @@ class Control {
 public:  
   struct Input {
     unsigned char buttons;
+    int aim_x;
+    int aim_y;
     
     Control::Input &write(class Packer &msg);
     Control::Input &read(class Unpacker &msg);
@@ -17,7 +19,8 @@ public:
       FORWARD =     0x01,
       BACKWARD =    0x02,
       TURN_RIGHT =  0x04,
-      TURN_LEFT =   0x08
+      TURN_LEFT =   0x08,
+      SHOOT =       0x10
     };
   };
 

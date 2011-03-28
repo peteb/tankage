@@ -11,13 +11,17 @@ class Packer {
 
 public:
   Packer(void *start, void *end);
+  Packer(const Packer &other);
   
   size_t size() const;
+  void advance(size_t amount);
+  void reset();
   
   void writeByte(char value);
   void writeShort(short value);
   void writeInt(int value);
-  void writeString(const std::string &value);
+  void writeString(const std::string &value);  
+  void writeData(const Packer &packer);
 };
 
 class Unpacker {

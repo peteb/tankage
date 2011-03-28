@@ -15,11 +15,16 @@ add_executable(tankage
   ${GAME_ROOT_DIR}/server/gameserver.cpp  # shouldn't be used, but is needed for linking
   ${GAME_ROOT_DIR}/server/client_session.cpp
   ${GAME_ROOT_DIR}/server/tank.cpp
+  ${GAME_ROOT_DIR}/server/events.cpp
+  ${GAME_ROOT_DIR}/server/bullet.cpp
 
   # client specific
   main.cpp
   gameclient.cpp
   tank_renderer.cpp
+  text_renderer.cpp
+  tank_info.cpp
+  bullet_renderer.cpp
   )
   
 target_link_libraries(tankage

@@ -23,7 +23,7 @@ const int MAX_PARTICIPANT_NAME = 32;
 /**
  * Enumeration over the different packet types
  */
-enum {
+enum {  
   NET_IDENTIFY = 1,      //< NetIdentifyMsg
   NET_ERROR = 2,         //< NetErrorMsg
   NET_ARENA_PARTICIPANTS = 3,
@@ -31,6 +31,9 @@ enum {
   NET_PROJECTILES_UPDATE = 5,
   NET_PLAYER_INPUT = 6,
   NET_SERVER_INFO = 7,
+  NET_CLIENT_INFO = 8,
+  NET_PLAYER_INFO = 9,
+  NET_TANK_HIT = 10,
   NET_SNAPSHOT
 };
 
