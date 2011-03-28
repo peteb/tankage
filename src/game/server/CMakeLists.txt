@@ -30,7 +30,7 @@ add_executable(tankage-server
 )
  
 if (WIN32) 
-  set(EXTRA_WINDOWS_LIBS "ws2_32.lib winmm.lib")
+  set(EXTRA_WINDOWS_LIBS "ws2_32.lib; winmm.lib")
 endif (WIN32)
 
 target_link_libraries(tankage-server
