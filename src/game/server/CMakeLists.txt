@@ -28,11 +28,14 @@ add_executable(tankage-server
   events.cpp
   bullet.cpp
 )
+ 
+if (WIN32) 
+  set(EXTRA_WINDOWS_LIBS "ws2_32.lib winmm.lib")
+endif (WIN32)
 
 target_link_libraries(tankage-server
   engine
   ptrcfg
-  ws2_32.lib
-  winmm.lib
+  ${EXTRA_WINDOWS_LIBS}
 )
 
