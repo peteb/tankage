@@ -27,7 +27,7 @@ void ClientMap::render() {
       char tile_val = _data[y*32+x];
 
       if (tile_val)
-        _gfx->setColor(color4(0.32, 0.44f, 0.23f, 1.0f));
+        _gfx->setColor(color4(0.42, 0.54f, 0.33f, 1.0f));
       else
         _gfx->setColor(color4(0.7, 0.7f, 0.7f, 1.0f));
         

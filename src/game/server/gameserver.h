@@ -26,6 +26,7 @@ public:
   Entity *spawnBullet(const vec2 &pos, const vec2 &vel, double dir, int shooter);
   class Tank *intersectingTank(const vec2 &start, const vec2 &end, float radius, int ignore);
   Events &events();
+  Map &map();
   
 private:
   typedef std::map<class Client *, class ClientSession *> SessionMap;

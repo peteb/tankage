@@ -329,3 +329,7 @@ Tank *GameServer::intersectingTank(const vec2 &start, const vec2 &end, float rad
 Events &GameServer::events() {
   return _events;
 }
+
+Map &GameServer::map() {
+  return _map;
+}

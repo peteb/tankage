@@ -138,7 +138,7 @@ void Tank::shoot() {
   _gameserver->spawnBullet(_state.pos + vec2::FromDegrees(_state.turret_dir) * 16.0f, 
                            _state.lin_vel,
                            _state.turret_dir, id());
-  _reload_time = 0.1;
+  _reload_time = 0.5;
 }
 
 void Tank::takeDamage(const vec2 &at, int amount) {

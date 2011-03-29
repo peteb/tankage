@@ -6,6 +6,8 @@ public:
   Map();
   void snap(class Packer &msg, class ClientSession *client);
   
+  bool intersectSolid(const class vec2 &start, const class vec2 &end, float radius);
+  
 private:
   char _data[32 * 32];
 };
