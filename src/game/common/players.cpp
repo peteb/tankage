@@ -1,17 +1,22 @@
 #include <string.h>
-#include <netinet/in.h>
+
 #include <game/common/players.h>
 #include <game/server/gameserver.h>
 #include <game/server/client_session.h>
 #include <engine/network.h>
 #include <engine/portal.h>
 
-#include <arpa/inet.h>
-
 #include <iostream>
 #include <cstdlib>
 #include <cstring>
 #include <cassert>
+
+#ifdef _WIN32
+#include <WinSock2.h>
+#else 
+#include <arpa/inet.h>
+#include <netinet/in.h>
+#endif
 
 Players::Players(const Portal &interfaces) {
   _localPlayer = 0;

@@ -11,12 +11,12 @@ Log::Log(Severity severity, const char* file, const char* function, int line)
   : _severity(severity) {
   std::string severity_name;
   switch (_severity) {
-  case SEVERITY_ERROR:
-    severity_name = "error";
-    break;
-  case SEVERITY_WARNING:
-    severity_name = "warning";
-    break;
+//  case SEVERITY_ERROR:
+//    severity_name = "error";
+//    break;
+//  case SEVERITY_WARNING:
+//    severity_name = "warning";
+//    break;
   case SEVERITY_INFO:
     severity_name = "info";
     break;

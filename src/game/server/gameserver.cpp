@@ -17,7 +17,6 @@
 
 #include <iostream>
 #include <cassert>
-#include <arpa/inet.h>
 #include <cstring>
 #include <algorithm>
 

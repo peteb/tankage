@@ -1,4 +1,3 @@
-#include <netinet/in.h>
 #include <game/common/control.h>
 #include <game/common/players.h>
 #include <game/common/config.h>
@@ -15,7 +14,6 @@
 #include <utils/vec.h>
 #include <utils/packer.h>
 
-#include <arpa/inet.h>
 #include <iostream>
 
 Variable<std::string> control_keyUp("W");

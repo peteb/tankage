@@ -26,11 +26,16 @@ add_executable(tankage
   tank_info.cpp
   bullet_renderer.cpp
   )
-  
+ 
+if (WIN32) 
+  set(EXTRA_WINDOWS_LIBS "ws2_32.lib; winmm.lib")
+endif (WIN32)
+
 target_link_libraries(tankage
   engine
   ptrcfg
-  )
+  ${EXTRA_WINDOWS_LIBS}
+)
 
 INSTALL(TARGETS tankage DESTINATION bin)
 

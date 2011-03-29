@@ -13,3 +13,11 @@ cscope.out
 _CPack_Packages
 install_manifest.txt
 *.deb
+*vcxproj*
+*~
+*.sln
+Win32
+ipch
+*.opensdf
+*.sdf
+*.suo

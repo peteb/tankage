@@ -3,6 +3,7 @@
 #include <engine/portal.h>
 #include <engine/graphics.h>
 #include <engine/texture.h>
+#include <math.h>
 
 BulletRenderer::BulletRenderer(GameClient *client, Portal &services)
   : _client(client)
@@ -29,8 +30,8 @@ void BulletRenderer::render() {
         continue;
       
       vec2 pos = state.positionAt(_last.tick(), _client->sinceSnap(), _client->tickDuration());
-      pos.x = round(pos.x);
-      pos.y = round(pos.y);
+      pos.x = floor(pos.x);
+      pos.y = floor(pos.y);
       _gfx->drawQuad(rect(pos, 4, 4), state.dir);
     }
   }  

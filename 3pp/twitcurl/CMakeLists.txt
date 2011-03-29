@@ -1,4 +1,8 @@
 
+include_directories(
+  ${PROJECT_ROOT_DIR}/3pp/include
+)
+
 add_library(twitcurl
   base64.cpp
   HMAC_SHA1.cpp
