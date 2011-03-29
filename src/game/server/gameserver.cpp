@@ -28,7 +28,9 @@ void server_RegisterVariables(class Config &config) {
   config.registerVariable("server", "tickrate", &server_tickrate);  
 }
 
-GameServer::GameServer(const Portal &services) {  
+GameServer::GameServer(const Portal &services) 
+  : _map(this)
+{  
   _net = services.requestInterface<Network>();
   _wm = services.requestInterface<WindowManager>();
   

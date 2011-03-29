@@ -13,6 +13,7 @@ public:
 
   void createPlayerJoined(int tankid, const std::string &name);
   void spawnTankHit(int tankid, int shooter, const class vec2 &pos);
+  void spawnTileUpdate(int x, int y, char state, const class vec2 &pos);
   
 private:
   enum {

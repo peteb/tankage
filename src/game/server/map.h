@@ -5,7 +5,7 @@
 
 class Map {
 public:
-  Map();
+  Map(class GameServer *gameserver);
   void snap(class Packer &msg, class ClientSession *client);
   
   bool intersectSolid(const class vec2 &start, const class vec2 &end, float radius, vec2 &point, std::pair<int, int> &hit_tile);
@@ -13,6 +13,7 @@ public:
   
 private:
   char _data[32 * 32];
+  class GameServer *_gameserver;
 };
 
 #endif // !GAME_SERVER_MAP_H

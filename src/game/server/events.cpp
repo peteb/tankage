@@ -123,3 +123,10 @@ void Events::spawnTankHit(int tankid, int shooter, const class vec2 &pos) {
   event->params.writeInt(tankid);
   event->params.writeInt(shooter);
 }
+
+void Events::spawnTileUpdate(int x, int y, char state, const class vec2 &pos) {
+  Event *event = spawnLocalEvent(NET_TILE_UPDATE, pos, 0);
+  event->params.writeShort(x);
+  event->params.writeShort(y);
+  event->params.writeByte(state);
+}

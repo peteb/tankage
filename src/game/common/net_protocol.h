@@ -36,6 +36,7 @@ enum {
   NET_TANK_HIT = 10,
   NET_SNAPSHOT,
   NET_MAPCHUNK,
+  NET_TILE_UPDATE,
 };
 
 enum NetChannels {

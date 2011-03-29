@@ -258,6 +258,12 @@ void GameClient::onEvent(short event, class Unpacker &msg) {
 //    if (shooter == localPlayer())
 //      system("afplay ../data/hit.wav &");
   }
+  else if (event == NET_TILE_UPDATE) {
+    int x = msg.readShort();
+    int y = msg.readShort();
+    char state = msg.readByte();
+    _map.setTile(std::make_pair(x, y), state);
+  }
 }
 
 TextureLoader &GameClient::textureLoader() {

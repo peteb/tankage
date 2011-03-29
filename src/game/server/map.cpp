@@ -1,5 +1,6 @@
 #include "map.h"
 #include <game/server/client_session.h>
+#include <game/server/gameserver.h>
 #include <game/common/net_protocol.h>
 #include <utils/packer.h>
 #include <utils/log.h>
@@ -8,7 +9,9 @@
 #include <algorithm>
 #include <utility>
 
-Map::Map() {
+Map::Map(GameServer *gameserver) 
+  : _gameserver(gameserver)
+{
   std::fill(_data, _data + 32*32, 0);
   for (int y = 0; y < 32; ++y) {
     for (int x = 0; x < 32; ++x) {
@@ -76,4 +79,6 @@ bool Map::intersectSolid(const vec2 &start, const vec2 &end, float radius, vec2 
 
 void Map::damageTile(const std::pair<int, int> &tile) {
   _data[tile.second * 32 + tile.first] = 1;
+  _gameserver->events().spawnTileUpdate(tile.first, tile.second, 1, 
+                                        vec2((tile.first - 16) * 32, (tile.second - 16) * 32));
 }
