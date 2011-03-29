@@ -16,6 +16,7 @@ public:
   Client * const client;
   int tankid;
   std::string name;
+  bool sent_map;
 };
 
 #endif // !GAME_SERVER_CLIENT_SESSION_H

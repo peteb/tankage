@@ -70,9 +70,13 @@ void Packer::writeString(const std::string &value) {
 }
 
 void Packer::writeData(const Packer &packer) {
-  assert(static_cast<char *>(_pos) + packer.size() < _end && "not enough room for data");
-  memcpy(_pos, packer._start, packer.size());
-  _pos = static_cast<char *>(_pos) + packer.size();
+  writeData(packer._start, packer.size());
+}
+
+void Packer::writeData(const void *data, size_t size) {
+  assert(static_cast<char *>(_pos) + size < _end && "not enough room for data");
+  memcpy(_pos, data, size);
+  _pos = static_cast<char *>(_pos) + size;  
 }
 
 size_t Packer::size() const {

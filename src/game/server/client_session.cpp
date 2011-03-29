@@ -5,5 +5,6 @@ ClientSession::ClientSession(class Client *client)
 {
   name = "Some guy";
   state = 0;
+  sent_map = false;
 }
 

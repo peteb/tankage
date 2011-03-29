@@ -86,7 +86,7 @@ void GameServer::onTick() {
     for (size_t i = 0; i < _bullets.size(); ++i)
       _bullets[i]->snap(msg, it->second);
 
-    // and add unreliable events
+    // and add unreliable events to snapshot packet
     _events.snap(msg, it->second);
     msg.writeShort(0);
     
@@ -98,9 +98,18 @@ void GameServer::onTick() {
 
     if (msg.size() > 0) {
       msg.writeShort(0);
-      it->second->client->send(buffer, msg.size(), 0, NET_CHANNEL_STATE);      
+      it->second->client->send(buffer, msg.size(), Client::PACKET_RELIABLE, NET_CHANNEL_STATE);      
     }
+    
+    // send map updates in own packet
+    msg.reset();
+    _map.snap(msg, it->second);
+
+    if (msg.size() > 0) {
+      it->second->client->send(buffer, msg.size(), Client::PACKET_RELIABLE, NET_CHANNEL_STATE);      
+    }    
   }  
+  
   destroyZombies(); // ticks might destroyEntity
   
   _events.removeSnapped();

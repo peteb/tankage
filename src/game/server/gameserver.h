@@ -4,6 +4,7 @@
 #include <game/common/net_protocol.h>
 #include <game/server/entity.h>
 #include <game/server/events.h>
+#include <game/server/map.h>
 
 #include <vector>
 #include <map>
@@ -47,6 +48,7 @@ private:
   
   SessionMap _sessions;
   Events _events;
+  Map _map;
   
   class Host *_host;
   class Network *_net;

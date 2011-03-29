@@ -212,6 +212,9 @@ void GameClient::onReceive(Packet *packet) {
     _bulletrenderer.addSnapshot(bullets_snapshot);
     _since_snap = 0.0;
   }
+  else if (msgtype == NET_MAPCHUNK) {
+    _map.addChunk(msg);
+  }
   else {
     onEvent(msgtype, msg);
   }
@@ -250,8 +253,8 @@ void GameClient::onEvent(short event, class Unpacker &msg) {
     
     Log(DEBUG) << "tank " << tankid << " hit at " << std::string(pos) << " by " << shooter;
 
-    if (shooter == localPlayer())
-      system("afplay ../data/hit.wav &");
+//    if (shooter == localPlayer())
+//      system("afplay ../data/hit.wav &");
   }
 }
 

@@ -17,6 +17,7 @@ add_executable(tankage
   ${GAME_ROOT_DIR}/server/tank.cpp
   ${GAME_ROOT_DIR}/server/events.cpp
   ${GAME_ROOT_DIR}/server/bullet.cpp
+  ${GAME_ROOT_DIR}/server/map.cpp
 
   # client specific
   main.cpp
@@ -25,6 +26,7 @@ add_executable(tankage
   text_renderer.cpp
   tank_info.cpp
   bullet_renderer.cpp
+  map.cpp
   )
  
 if (WIN32) 

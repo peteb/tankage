@@ -4,6 +4,7 @@
 #include <game/client/tank_renderer.h>
 #include <game/client/text_renderer.h>
 #include <game/client/bullet_renderer.h>
+#include <game/client/map.h>
 #include <game/common/net_protocol.h>
 #include <game/common/control.h>
 #include <game/common/texture_loader.h>
@@ -67,6 +68,7 @@ private:
   BulletRenderer _bulletrenderer;
   TankRenderer _tankrenderer;
   Control _control;
+  ClientMap _map;
   
   std::map<int, class TankInfo *> _tanks;
 };

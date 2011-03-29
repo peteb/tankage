@@ -17,35 +17,20 @@
 ** DONE Implement logging level (probably some environment variable)
 ** TODO Update std::cout to use log interface
 ** DONE Implement AUDIT or TWITTER LogType
-* "Sprint" planning
-** 2011-02-20: "Tanks Communicate"
-*** DoD: driving around on server together with other tanks and shooting
-*** DONE Connect to server, get a tank
-*** DONE Replicate tanks over server
-*** DONE Replicate user input to server
-*** DONE Replicate projectiles
-*** DONE Client prediction
-*** TODO Shooting    
-*** TODO Items should be removed (bullets, tanks, players)    
-** --: "Tanks are Dangerous..."
-*** DoD: kill other tanks, collide with terrain and other tanks
-** --: "... and Powerful!"
-*** DoD: destroy terrain
-** --: "It matters what I do"
-*** DoD: tanks and terrain drop score, store score permanently on server
-** --: "And whom I play with"
-*** DoD: team games can be scripted
+* TODO Remove old netcode
+* Map support
+** Fix graphics for solid/not solid tiles  
 * Network
-** TODO Replicate tanks
-** TODO Add some more replicated systems, bullets/projectiles
-** TODO Replicate player input to the server
-** TODO Player events (player was hurt, player picked up item, player died)
+** DONE Replicate tanks
+** DONE Add some more replicated systems, bullets/projectiles
+** DONE Replicate player input to the server
+** DONE Player events (player was hurt, player picked up item, player died)
 * Configuration Management
 ** DONE Add Peter's configuration library and fix CMake 
 ** DONE Basic stuff, read from file, get, add and update properties
 ** DONE Support for CM consumers, triggered when properties are updated
 ** Each system can expose variables which the administrator can configure (during runtime and before)
-** TODO Integrate CM in the game
+** DONE Integrate CM in the game
 ** DONE Move CM to the engine
 ** TODO Add support for configuring over the network
 ** DONE Support to override cfg via command line arguments
@@ -66,7 +51,7 @@
 * Unit tests using Gtest
 *** DONE Unittests for mat, vec, rect in utils
 *** DONE Unittest for ring_buffer
-*** TODO Unittest for packer
+*** DONE Unittest for packer
 * CMake support
 *** DONE CMake should create and use 'bin' and 'build' directories 
 *** TODO Investigate how-to report CMake error and get rid of gen files
@@ -91,6 +76,7 @@
     Windows.cmake, MacOSX.cmake, Android.cmake, etc. Only for the engine and
     should specify which files to compile with (and which external libraries)
 *** DONE Add CMake module to find cURL library
+*** TODO Remove separate cmakelists for server/client (unify)    
 * Android support
 *** TODO CMake
 *** TODO Window Manager support
@@ -110,14 +96,4 @@
 ** TODO Fix a proper icon for the OS X bundle   
 * Linux support
 ** TODO Add the icon for Linux as well 
-* DevSession 2011-03-28
-** TODO Agree and finalize the log interface, check compatibility with Windows
-** TODO What package do we use, what is standard install way?
-** TODO Where to install files, Program Files? OpenGL library handling?
-** TODO HOME directory for configuration files for Windows?
-** TODO Deadline, this week? Next Monday? I can't contribute much this week, though :(
-** TODO Installation instruction for people? Time to use Wiki?
-** TODO Is there server available for running all the time?
-** TODO How about people opinion? Should we advertise people to write tracker items?
-** TODO List with items that must be done before first release? 
 

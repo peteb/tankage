@@ -34,7 +34,8 @@ enum {
   NET_CLIENT_INFO = 8,
   NET_PLAYER_INFO = 9,
   NET_TANK_HIT = 10,
-  NET_SNAPSHOT
+  NET_SNAPSHOT,
+  NET_MAPCHUNK,
 };
 
 enum NetChannels {

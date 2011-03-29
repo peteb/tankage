@@ -22,6 +22,7 @@ public:
   void writeInt(int value);
   void writeString(const std::string &value);  
   void writeData(const Packer &packer);
+  void writeData(const void *data, size_t size);
 };
 
 class Unpacker {
