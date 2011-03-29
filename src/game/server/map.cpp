@@ -46,7 +46,7 @@ std::pair<int, int> VecTile(const vec2 &pos) {
   return std::make_pair(tile_x, tile_y);
 }
 
-bool Map::intersectSolid(const vec2 &start, const vec2 &end, float radius, vec2 &point) {  
+bool Map::intersectSolid(const vec2 &start, const vec2 &end, float radius, vec2 &point, std::pair<int, int> &hit_tile) {  
   vec2 start_ofs = start + vec2(16.0f * 32.0f, 16.0f * 32.0f);
   vec2 end_ofs = end + vec2(16.0f * 32.0f, 16.0f * 32.0f);
   double dt = 1.0 / length(end_ofs - start_ofs);
@@ -54,6 +54,8 @@ bool Map::intersectSolid(const vec2 &start, const vec2 &end, float radius, vec2 
   vec2 last_lerp = start_ofs;
   
   // FIXME: break this up at least, so we don't lerp each iteration
+  // FIXME: this function should really be improved.
+  // FIXME: also, support radius...
   
   while (pos <= 1.0) {
     vec2 lerp_pos = lerp(start_ofs, end_ofs, pos);
@@ -61,6 +63,7 @@ bool Map::intersectSolid(const vec2 &start, const vec2 &end, float radius, vec2 
 
     if (_data[tile.second * 32 + tile.first] == 0) {
       point = last_lerp - vec2(16.0f * 32.0f, 16.0f * 32.0f);
+      hit_tile = tile;
       return true;
     }
     
@@ -69,4 +72,8 @@ bool Map::intersectSolid(const vec2 &start, const vec2 &end, float radius, vec2 
   }
   
   return false;
+}
+
+void Map::damageTile(const std::pair<int, int> &tile) {
+  _data[tile.second * 32 + tile.first] = 1;
 }

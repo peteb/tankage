@@ -84,9 +84,11 @@ void Bullet::tick() {
   }
 
   vec2 hit_pos;
-  if (_gameserver->map().intersectSolid(last_pos, current_pos, 0.0f, hit_pos)) {
+  std::pair<int, int> tile;
+  if (_gameserver->map().intersectSolid(last_pos, current_pos, 0.0f, hit_pos, tile)) {
     _alive_time = 0.0;
     _state.max_lerp = length(hit_pos - last_pos) / 800.0;
+    _gameserver->map().damageTile(tile);
   }
   
   _alive_time -= _gameserver->tickDuration();
