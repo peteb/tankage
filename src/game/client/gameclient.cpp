@@ -39,6 +39,7 @@ GameClient::GameClient(class Portal &services)
   , _bulletrenderer(this, services)
   , _tankrenderer(this, services)
   , _control(services)
+  , _map(services)
 {
   _net = services.requestInterface<Network>();
   _gfx = services.requestInterface<Graphics>();
@@ -84,6 +85,7 @@ void GameClient::update() {
   
   const color4 desertColor(0.957f, 0.917f, 0.682f, 1.0f);
   _gfx->clear(desertColor);
+  _map.render();
   _tankrenderer.render();
   _bulletrenderer.render();
 }

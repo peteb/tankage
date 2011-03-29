@@ -36,6 +36,7 @@ public:
   short readShort();
   int readInt();
   std::string readString();
+  const void *readData(size_t size);
 };
 
 #endif // !UTILS_PACKER_H

@@ -123,3 +123,10 @@ std::string Unpacker::readString() {
   return std::string(data, strsize);
 }
 
+const void *Unpacker::readData(size_t size) {
+  const char *data = reinterpret_cast<const char *>(_pos);
+  assert(data + size <= _end && "not enough room for data");
+  _pos = data + size;
+  return data;
+}
+
