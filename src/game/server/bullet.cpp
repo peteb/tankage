@@ -83,9 +83,10 @@ void Bullet::tick() {
     _state.max_lerp = (length(last_pos - x_tank->state().pos) - 16.0f) / 800.0; // FIXME: don't hardcode velocity
   }
 
-  if (_gameserver->map().intersectSolid(last_pos, current_pos, 0.0f)) {
+  vec2 hit_pos;
+  if (_gameserver->map().intersectSolid(last_pos, current_pos, 0.0f, hit_pos)) {
     _alive_time = 0.0;
-    _state.max_lerp = 0.0f;
+    _state.max_lerp = length(hit_pos - last_pos) / 800.0;
   }
   
   _alive_time -= _gameserver->tickDuration();

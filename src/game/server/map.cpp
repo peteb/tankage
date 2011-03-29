@@ -4,6 +4,7 @@
 #include <utils/packer.h>
 #include <utils/log.h>
 #include <utils/vec.h>
+#include <utils/algorithm.h>
 #include <algorithm>
 #include <utility>
 
@@ -36,21 +37,36 @@ void Map::snap(Packer &msg, ClientSession *client) {
 }
 
 std::pair<int, int> VecTile(const vec2 &pos) {
-  return std::make_pair(0, 0);
-}
-
-bool Map::intersectSolid(const vec2 &start, const vec2 &end, float radius) {
-  vec2 ofs = start + vec2(16.0f * 32.0f, 16.0f * 32.0f);
+  vec2 ofs = pos;
   int tile_x = ofs.x / 32.0f;
   int tile_y = ofs.y / 32.0f;
   
-  tile_x = clamp(tile_x, 0, 32);
-  tile_y = clamp(tile_y, 0, 32);
+  tile_x = clamp(tile_x + 1, 0, 32);
+  tile_y = clamp(tile_y + 1, 0, 32);
+  return std::make_pair(tile_x, tile_y);
+}
+
+bool Map::intersectSolid(const vec2 &start, const vec2 &end, float radius, vec2 &point) {  
+  vec2 start_ofs = start + vec2(16.0f * 32.0f, 16.0f * 32.0f);
+  vec2 end_ofs = end + vec2(16.0f * 32.0f, 16.0f * 32.0f);
+  double dt = 1.0 / length(end_ofs - start_ofs);
+  double pos = 0.0;
+  vec2 last_lerp = start_ofs;
   
-  Log(DEBUG) << tile_x << " - " << tile_y << "(" << std::string(start) << ")";
+  // FIXME: break this up at least, so we don't lerp each iteration
   
-  if (_data[tile_y * 32 + tile_x] == 0)
-    return true;
+  while (pos <= 1.0) {
+    vec2 lerp_pos = lerp(start_ofs, end_ofs, pos);
+    std::pair<int, int> tile = VecTile(lerp_pos);
+
+    if (_data[tile.second * 32 + tile.first] == 0) {
+      point = last_lerp - vec2(16.0f * 32.0f, 16.0f * 32.0f);
+      return true;
+    }
+    
+    last_lerp = lerp_pos;
+    pos += dt;
+  }
   
   return false;
 }
