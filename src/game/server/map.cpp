@@ -58,7 +58,8 @@ bool Map::intersectSolid(const vec2 &start, const vec2 &end, float radius, vec2 
   
   // FIXME: break this up at least, so we don't lerp each iteration
   // FIXME: this function should really be improved.
-  // FIXME: also, support radius...
+  // FIXME: also, support radius... <--- functional. important
+  // FIXME: return Map::Collision
   
   while (pos <= 1.0) {
     vec2 lerp_pos = lerp(start_ofs, end_ofs, pos);
