@@ -27,4 +27,4 @@ The development progress can be followed on the blog, [http://blog.iostream.cc](
   
 Architecture
 -------------
-![Architecture](https://github.com/peteb/tankage/blob/master/architecture.png)   
+![Architecture](http://iostream.cc/~peter/dump/architecture.png)   
