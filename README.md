@@ -25,6 +25,6 @@ Progress/blog
 The development progress can be followed on the blog, [http://blog.iostream.cc](http://blog.iostream.cc)
 
   
-
-
-   
+Architecture
+-------------
+![Architecture](http://iostream.cc/~peter/dump/architecture.png)   
