@@ -1,5 +1,4 @@
 #include <game/common/control.h>
-#include <game/common/players.h>
 #include <game/common/config.h>
 
 #include <game/server/client_session.h>
@@ -13,8 +12,6 @@
 
 #include <utils/vec.h>
 #include <utils/packer.h>
-
-#include <iostream>
 
 Variable<std::string> control_keyUp("W");
 Variable<std::string> control_keyDown("S");

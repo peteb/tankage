@@ -17,7 +17,8 @@
 ** DONE Implement logging level (probably some environment variable)
 ** TODO Update std::cout to use log interface
 ** DONE Implement AUDIT or TWITTER LogType
-* TODO Remove old netcode
+* DONE Remove old netcode
+* TODO Rename Engine -> Platform  
 * Map support
 ** Fix graphics for solid/not solid tiles  
 * Network

@@ -9,7 +9,7 @@
 
 #include <string>
 #include <cmath>
-#include <utils/value.h>
+#include <utils/algorithm.h>
 
 /* QUESTION kaspars: Move to some common header file maybe? */
 #ifndef M_PI
@@ -63,8 +63,8 @@ inline vec2 closest_point(const vec2 &start, const vec2 &end, const vec2 &pos) {
   return ab * clamp(t, 0.0f, 1.0f) + start;
 }
 
-inline float degrees(const vec2 &v) {
-  return atan2(v.y, v.x) / M_PI * 180.0f;
+inline double degrees(const vec2 &v) {
+  return atan2(v.y, v.x) / M_PI * 180.0;
 }
 
 inline float length(const vec2 &v) {
@@ -84,6 +84,5 @@ inline vec2 normalized(const vec2 &v) {
 
 // TODO: research if it's possible to autogenerate x, y, z etc names over
 // elements[3]
-// TODO: define rough release outline, maybe draw some fancy graphics
 
 #endif /* end of include guard: VEC2_H_8BJJJ5TN */

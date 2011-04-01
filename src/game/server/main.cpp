@@ -1,18 +1,9 @@
 #include <engine/portal.h>
-#include <engine/network.h>
 #include <engine/window_manager.h>
 #include <engine/graphics.h>
 
 #include <game/server/gameserver.h>
-#include <game/common/players.h>
-//#include <game/common/control.h>
-//#include <game/common/projectiles.h>
-#include <game/common/texture_loader.h>
 #include <game/common/config.h>
-#include <game/client/particles.h>
-
-#include <cstdlib>
-#include <memory>
 
 int app_main(Portal &interfaces, const std::vector<char *> &args) {
   WindowManager *wm = interfaces.requestInterface<WindowManager>();

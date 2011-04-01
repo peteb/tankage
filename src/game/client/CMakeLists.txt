@@ -8,8 +8,6 @@ add_executable(tankage
   # common stuff
   ${GAME_ROOT_DIR}/common/control.cpp
   ${GAME_ROOT_DIR}/common/texture_loader.cpp
-  ${GAME_ROOT_DIR}/common/players.cpp
-  ${GAME_ROOT_DIR}/common/net_error.cpp
   ${GAME_ROOT_DIR}/common/config.cpp
 
   ${GAME_ROOT_DIR}/server/gameserver.cpp  # shouldn't be used, but is needed for linking

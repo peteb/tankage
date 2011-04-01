@@ -4,7 +4,6 @@
 #include <game/server/bullet.h>
 
 #include <game/common/net_protocol.h>
-#include <game/common/net_error.h>
 #include <game/common/config.h>
 
 #include <engine/packet.h>
@@ -15,7 +14,6 @@
 #include <utils/packer.h>
 #include <utils/log.h>
 
-#include <iostream>
 #include <cassert>
 #include <cstring>
 #include <algorithm>
