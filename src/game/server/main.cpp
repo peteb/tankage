@@ -6,10 +6,10 @@
 #include <game/common/config.h>
 
 int app_main(Portal &interfaces, const std::vector<char *> &args) {
-  WindowManager *wm = interfaces.requestInterface<WindowManager>();
-  Graphics *gfx = interfaces.requestInterface<Graphics>();
+  //WindowManager *wm = interfaces.requestInterface<WindowManager>();
+  //Graphics *gfx = interfaces.requestInterface<Graphics>();
   
-  wm->createWindow(800, 600);
+  //wm->createWindow(800, 600);
   
   Config config(interfaces);
   server_RegisterVariables(config);
@@ -30,10 +30,10 @@ int app_main(Portal &interfaces, const std::vector<char *> &args) {
       * 
    
    */
-  const rect wndSize = wm->size();
-  gfx->setViewport(wndSize);
-  gfx->setOrtho(wndSize);
-  wm->swapBuffers(); 
+  //const rect wndSize = wm->size();
+  //gfx->setViewport(wndSize);
+  //gfx->setOrtho(wndSize);
+  //wm->swapBuffers(); 
   
   server.run();
     
