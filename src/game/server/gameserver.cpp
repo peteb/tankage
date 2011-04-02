@@ -48,9 +48,9 @@ void GameServer::run() {
   while (true) {
     
     updateNet(1);
-    
+   	usleep(100 * 1000); 
       onTick();
-
+	_tick++;
   }
 
 }
