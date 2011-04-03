@@ -74,6 +74,8 @@ void GameClient::update() {
   _last_update = now;  
   _since_snap += dt;
 
+  // FIXME: get the local tank here, and set the transform based on that!
+  //        also remove setFocus
   if (*client_centerCam)
     _gfx->setTransform(-_view);
   else
