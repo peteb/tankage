@@ -54,7 +54,8 @@ int main(int argc, char **argv) {
 
   Portal interfaces;
 
-  if (!glfwInit()) {
+  if (!glfwInit()) { // FIXME: move this to the modules
+        // pretty hard though. someone needs to define the symbol.
     std::cerr << "glfw: failed to initialize" << std::endl;
     return EXIT_FAILURE;
   }
