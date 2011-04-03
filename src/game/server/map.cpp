@@ -85,7 +85,7 @@ void Map::damageTile(const std::pair<int, int> &tile) {
 }
 
 char Map::at(int x, int y) const {
-  x = clamp(x, -16, 16);
-  y = clamp(y, -16, 16);
+  x = clamp(x, -16, 15);
+  y = clamp(y, -16, 15);
   return _data[(x + 16) * 32 + (y + 16)];
 }
