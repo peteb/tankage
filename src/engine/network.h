@@ -85,6 +85,7 @@ public:
   virtual Host *startHost(const std::string &host,
                           size_t maxClients, size_t channels) =0;
   virtual Client *connect(const std::string &host, size_t channels) =0;
+  virtual unsigned long time() =0;
 };
 
 

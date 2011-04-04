@@ -45,13 +45,20 @@ GameServer::~GameServer() {
 }
 
 void GameServer::run() {
+  unsigned long last_tick = _net->time();
   
   while (true) {
+    double dt = _net->time() - last_tick;
+    double interval = tickDuration() * 1000.0;
+    int timeout = static_cast<int>(std::max(interval - dt, 0.0));
     
-    updateNet(1);
-   	usleep(100 * 1000); 
+    updateNet(timeout);
+    
+    if (dt >= interval) {
       onTick();
-	_tick++;
+      last_tick += interval;
+      ++_tick;
+    }
   }
 
 }
