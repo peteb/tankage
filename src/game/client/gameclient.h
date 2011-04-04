@@ -59,6 +59,7 @@ private:
   double _input_time;
   double _since_snap;
   double _net_tickrate;
+  double _last_ping;
   vec2 _view;
   int _local_player;
   

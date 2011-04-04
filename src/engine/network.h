@@ -74,6 +74,7 @@ public:
   virtual std::string address() const =0;
   virtual void flush() =0;
   virtual unsigned stats(Statistic field) =0;
+  virtual void ping() =0;
   
 };
 
