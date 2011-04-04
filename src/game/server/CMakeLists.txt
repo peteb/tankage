@@ -2,7 +2,6 @@
 
 include_directories(${PROJECT_ROOT_DIR}
   ${PROJECT_ROOT_DIR}/3pp   
-  ${BOX2D_INCLUDE_DIR}
 )
 
 add_executable(tankage-server
@@ -38,6 +37,5 @@ target_link_libraries(tankage-server
   engine
   ptrcfg
   ${EXTRA_WINDOWS_LIBS}
-  ${BOX2D_LIBRARY}
 )
 
