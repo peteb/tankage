@@ -123,7 +123,7 @@ void GameClient::sendInput() {
     new_input.aim_x += _view.x;
     new_input.aim_y += _view.y;
     new_input.write(msg);
-    _client->send(buffer, msg.size(), 0, NET_CHANNEL_ABS);
+    _client->send(buffer, msg.size(), Client::PACKET_UNSEQUENCED, NET_CHANNEL_ABS);
     
     _sent_input = new_input;
     _input_time = now;
