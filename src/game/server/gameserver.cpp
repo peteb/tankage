@@ -90,7 +90,7 @@ void GameServer::onTick() {
     _events.snap(msg, it->second);
     msg.writeShort(0);
     
-    it->second->client->send(buffer, msg.size(), 0, NET_CHANNEL_ABS);  
+    it->second->client->send(buffer, msg.size(), Client::PACKET_UNSEQUENCED, NET_CHANNEL_ABS);  
     
     // send reliable events
     msg.reset();
