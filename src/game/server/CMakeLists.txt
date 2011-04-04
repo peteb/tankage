@@ -28,7 +28,6 @@ add_executable(tankage-server
   events.cpp
   bullet.cpp
   map.cpp
-  world.cpp
 )
  
 if (WIN32) 

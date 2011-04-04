@@ -5,7 +5,6 @@
 #include <game/server/entity.h>
 #include <game/server/events.h>
 #include <game/server/map.h>
-#include <game/server/world.h>
 
 #include <vector>
 #include <map>
@@ -51,7 +50,6 @@ private:
   SessionMap _sessions;
   Events _events;
   Map _map;
-  World _world;
   
   class Host *_host;
   class Network *_net;

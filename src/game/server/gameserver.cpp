@@ -28,7 +28,6 @@ void server_RegisterVariables(class Config &config) {
 
 GameServer::GameServer(const Portal &services) 
   : _map(this)
-  , _world(this)
 {  
   _net = services.requestInterface<Network>();
   //_wm = services.requestInterface<WindowManager>();
@@ -72,10 +71,7 @@ void GameServer::onTick() {
   for (size_t i = 0; i < _bullets.size(); ++i)
     _bullets[i]->tick();
   
-  _world.tick();
   
-  for (size_t i = 0; i < _tanks.size(); ++i)
-    _tanks[i]->postTick();
   
   SessionMap::iterator it = _sessions.begin(), it_e = _sessions.end();
   for (; it != it_e; ++it) {
@@ -238,8 +234,7 @@ void GameServer::sendServerInfo(Client *receiver) {
 
 
 Tank *GameServer::spawnTank() {
-  b2Body *tank_body = _world.createTankBody();
-  Tank *tank = new Tank(this, tank_body);
+  Tank *tank = new Tank(this);
   Tank::State initial;
   initial.id = ++_last_entity;
   initial.pos = vec2::FromDegrees(float(_last_entity * 90)) * 40.0f;

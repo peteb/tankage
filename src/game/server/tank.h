@@ -35,11 +35,10 @@ public:
   /* <--- end shared state code ---> */
   
   
-  Tank(class GameServer *gameserver, class b2Body *body);
+  Tank(class GameServer *gameserver);
   
   void snap(class Packer &msg, const class ClientSession *client);
   void tick();
-  void postTick();
   void recvInput(const Control::Input &input);
   void takeDamage(const vec2 &at, int amount);
   vec2 position() const {return _state.pos; }
@@ -55,7 +54,6 @@ private:
   int _health;
   
   class GameServer *_gameserver;
-  class b2Body *_body;
   State _state;
   std::vector<Control::Input> _lastinput;
 };
