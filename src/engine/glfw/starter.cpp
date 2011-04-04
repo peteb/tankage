@@ -54,15 +54,15 @@ int main(int argc, char **argv) {
 
   Portal interfaces;
 
-  if (!glfwInit()) {
-    std::cerr << "glfw: failed to initialize" << std::endl;
-    return EXIT_FAILURE;
-  }
+  //if (!glfwInit()) {
+    //std::cerr << "glfw: failed to initialize" << std::endl;
+    //return EXIT_FAILURE;
+  //}
 
   std::cout << "glfw: registering interfaces..." << std::endl;
-  interfaces.registerInterface<Glfw::WindowManager>();
+  //interfaces.registerInterface<Glfw::WindowManager>();
   interfaces.registerInterface<Glfw::Input>();
-  interfaces.registerInterface<OpenGl::Graphics>();
+  //interfaces.registerInterface<OpenGl::Graphics>();
   interfaces.registerInterface<DevIl::ImageLoader>();
   interfaces.registerInterface<Enet::Network>();
 

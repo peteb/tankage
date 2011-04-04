@@ -31,7 +31,7 @@ GameServer::GameServer(const Portal &services)
   , _world(this)
 {  
   _net = services.requestInterface<Network>();
-  _wm = services.requestInterface<WindowManager>();
+  //_wm = services.requestInterface<WindowManager>();
   
   _tick = 0;
   _last_entity = 0;
@@ -45,21 +45,13 @@ GameServer::~GameServer() {
 }
 
 void GameServer::run() {
-  double lasttick = _wm->timeSeconds();
   
   while (true) {
-    double dt = _wm->timeSeconds() - lasttick;
-    double interval = tickDuration();
-    int timeout = static_cast<int>(std::max(interval - dt, 0.0) * 1000.0);
     
-    updateNet(timeout);
-    
-    if (dt >= interval) {
+    updateNet(1);
+   	usleep(100 * 1000); 
       onTick();
-      lasttick += interval;
-      _tick++;
-    }
-
+	_tick++;
   }
 
 }

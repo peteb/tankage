@@ -4,12 +4,16 @@
 
 #include <game/server/gameserver.h>
 #include <game/common/config.h>
+#include <utils/log.h>
+
+#include <unistd.h>
+
 
 int app_main(Portal &interfaces, const std::vector<char *> &args) {
-  WindowManager *wm = interfaces.requestInterface<WindowManager>();
-  Graphics *gfx = interfaces.requestInterface<Graphics>();
+  //WindowManager *wm = interfaces.requestInterface<WindowManager>();
+  //Graphics *gfx = interfaces.requestInterface<Graphics>();
   
-  wm->createWindow(800, 600);
+  //wm->createWindow(800, 600);
   
   Config config(interfaces);
   server_RegisterVariables(config);
@@ -30,13 +34,24 @@ int app_main(Portal &interfaces, const std::vector<char *> &args) {
       * 
    
    */
-  const rect wndSize = wm->size();
-  gfx->setViewport(wndSize);
-  gfx->setOrtho(wndSize);
-  wm->swapBuffers(); 
-  
-  server.run();
-    
+  //const rect wndSize = wm->size();
+  //gfx->setViewport(wndSize);
+  //gfx->setOrtho(wndSize);
+  //wm->swapBuffers(); 
+
+  // deamonize server
+  pid_t pid = fork();
+  if (pid > 0) {
+    // code executed only by parent
+    Log(INFO) << "Server successfully started on pid: " << pid;
+  } else if (pid < 0) {
+    throw std::runtime_error("failed to fork");
+  } else {
+    // code executed only by child
+    server.run();
+  }
+
+  // code executed by both parent and child
   return EXIT_SUCCESS;
 }
 
