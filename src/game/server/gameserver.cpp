@@ -52,7 +52,7 @@ void GameServer::run() {
     
     updateNet(timeout);
     
-    this_tick = _wm->timeSeconds();
+    this_tick = _net->time() / 1000.0;
     if (this_tick - last_tick >= tickDuration()) {
       onTick();
 
