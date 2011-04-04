@@ -130,11 +130,11 @@ public:
       case ENET_EVENT_TYPE_RECEIVE:
       {
         
-        /*Enet::Packet *packet =
+        Enet::Packet *packet =
           new Enet::Packet(event.packet,
                            this,
                            event.channelID);
-        _pendingPackets.push_back(packet);*/
+        _pendingPackets.push_back(packet);
         break;
       }       
 
@@ -143,18 +143,13 @@ public:
   }
   
   Packet *pendingPacket() {
-    //if (_pendingPackets.empty())
-    //  return NULL;
-    
-    enet_uint8 channel;
-    ENetPacket *pack = enet_peer_receive(_peer, &channel);
-    if (pack) {
-      return new Packet(pack, this, channel);
-    }
-    //Enet::Packet *ret = _pendingPackets.front();
-    //_pendingPackets.erase(_pendingPackets.begin());
+    if (_pendingPackets.empty())
+      return NULL;
+
+    Enet::Packet *ret = _pendingPackets.front();
+    _pendingPackets.erase(_pendingPackets.begin());
     // the ownership of the Packet is transfered to the user
-    return NULL;
+    return ret;
   }
   
   void send(const void *data, size_t size, unsigned flags, int channel) {
