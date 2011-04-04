@@ -133,18 +133,18 @@ void Tank::tick() {
     _lastinput.erase(_lastinput.begin(), _lastinput.begin() + (_lastinput.size() - 1));    
   }
   
-  _body->SetTransform(b2Vec2(_state.pos.x / 32.0f, _state.pos.y / 32.0f), _state.base_dir / 180.0f * M_PI);
+  Log(DEBUG) << "tick pos: " << _state.pos.x / 32.0f << ", " << _state.pos.y / 32.0f;
+  _body->SetTransform(b2Vec2(_state.pos.x / 32.0f, _state.pos.y / 32.0f), 0.0f);
   _body->SetLinearVelocity(b2Vec2(_state.lin_vel.x / 32.0f, _state.lin_vel.y / 32.0f));
-  _body->SetAngularVelocity(_state.rot_vel / 180.0f * M_PI);
+  _body->SetAngularVelocity(_state.rot_vel);
 }
 
 void Tank::postTick() {
   const b2Vec2 &pos = _body->GetPosition();
-  const b2Vec2 &lin_vel = _body->GetLinearVelocity();
+  Log(DEBUG) << "postTick pos: " << pos.x << ", " << pos.y;
   _state.pos.x = pos.x * 32.0f;
   _state.pos.y = pos.y * 32.0f;
-  _state.lin_vel.x = lin_vel.x * 32.0f;
-  _state.lin_vel.y = lin_vel.y * 32.0f;
+  
 }
 
 void Tank::recvInput(const Control::Input &input) {

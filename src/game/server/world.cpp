@@ -17,7 +17,7 @@ World::World(class GameServer *server)
     for (int x = -16; x < 16; ++x) {
       char tile_type = map.at(x, y);
       if (tile_type == 0) {
-        tile_shape.SetAsBox(0.5f, 0.5f, b2Vec2(x - 0.5f, y - 0.5f), 0.0f);
+        tile_shape.SetAsBox(1.0f, 1.0f, b2Vec2(x, y), 0.0f);
         
         /*b2FixtureDef fixture_def;
         fixture_def.shape = &tile_shape;
@@ -36,7 +36,7 @@ b2Body *World::createTankBody() {
   b2Body *body = _phys_world.CreateBody(&def);
   
   b2PolygonShape box;
-  box.SetAsBox(27.0f/64.0f, 25.0f/64.0f);
+  box.SetAsBox(0.8f, 0.8f);
   
 
   body->CreateFixture(&box, 1.0f);
@@ -45,9 +45,6 @@ b2Body *World::createTankBody() {
 }
 
 void World::tick() {
-  for (int i = 0; i < 6; ++i) {
-    _phys_world.Step(1.0f/60.0f, 6, 2);
-    _phys_world.ClearForces();
-    
-  }
+  _phys_world.Step(1.0f/10.0f, 6, 2);
+  _phys_world.ClearForces();
 }
