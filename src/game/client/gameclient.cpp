@@ -91,7 +91,7 @@ void GameClient::update() {
 }
 
 void GameClient::updateNet() {
-  _client->update();
+  _client->update(10);
   
   const bool connected = _client->isConnected();
 
@@ -140,7 +140,7 @@ void GameClient::disconnectGently() {
   // let the client down gently
   _client->disconnect();
   while (_client->isConnected()) { // a bit dangerous...
-    _client->update();
+    _client->update(5);
   }
   
   delete _client;
@@ -192,6 +192,8 @@ void GameClient::onReceive(Packet *packet) {
   
   if (msgtype == NET_SNAPSHOT) {
     int snap_tick = msg.readInt();
+    Log(DEBUG) << "rx snap " << snap_tick << ", since last: " << sinceSnap();
+    
     Snapshot<Tank::State> tanks_snapshot(snap_tick);
     Snapshot<Bullet::State> bullets_snapshot(snap_tick);
     
