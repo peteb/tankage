@@ -44,20 +44,22 @@ GameServer::~GameServer() {
 }
 
 void GameServer::run() {
-  unsigned long last_tick = _net->time();
+  double last_tick = _net->time() / 1000.0;
   
   while (true) {
-    double dt = _net->time() - last_tick;
-    double interval = tickDuration() * 1000.0;
-    int timeout = static_cast<int>(std::max(interval - dt, 0.0));
+    double this_tick = _net->time() / 1000.0;
+    int timeout = clamp(last_tick + tickDuration() - this_tick, tickDuration() * 0.1, 0.0) * 1000.0;
     
     updateNet(timeout);
     
-    if (dt >= interval) {
+    this_tick = _wm->timeSeconds();
+    if (this_tick - last_tick >= tickDuration()) {
       onTick();
-      last_tick += interval;
-      ++_tick;
+
+      last_tick = this_tick;
+      _tick++;
     }
+    _host->flush();
   }
 
 }
@@ -89,7 +91,7 @@ void GameServer::onTick() {
     _events.snap(msg, it->second);
     msg.writeShort(0);
     
-    it->second->client->send(buffer, msg.size(), 0, NET_CHANNEL_ABS);  
+    it->second->client->send(buffer, msg.size(), Client::PACKET_UNSEQUENCED, NET_CHANNEL_ABS);  
     
     // send reliable events
     msg.reset();
@@ -115,6 +117,7 @@ void GameServer::onTick() {
 }
 
 void GameServer::updateNet(int timeout) {
+  //Log(DEBUG) << "updating network, timeout " << timeout;
   _host->update(timeout);
   
   // get all the action
@@ -131,6 +134,8 @@ void GameServer::updateNet(int timeout) {
     onReceive(packet);
     delete packet;
   }  
+  
+  //Log(DEBUG) << "finished updating network";
 }
 
 unsigned int GameServer::gameTick() const {
