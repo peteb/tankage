@@ -112,9 +112,9 @@ public:
     enet_peer_reset(_peer);
   }
 
-  void update() {
+  void update(unsigned int timeout) {
     ENetEvent event;
-    if (enet_host_service(_host, &event, 0) > 0) {
+    if (enet_host_service(_host, &event, timeout) > 0) {
       switch (event.type) {
       case ENET_EVENT_TYPE_NONE:
         break;
@@ -270,6 +270,10 @@ public:
       }
     }
 
+  }
+  
+  void flush() {
+    enet_host_flush(_host);
   }
   
   ::Client *connectingClient() {
