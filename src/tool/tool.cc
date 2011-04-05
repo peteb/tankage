@@ -37,12 +37,11 @@ void server() {
   /* enet_address_set_host (& address, "x.x.x.x"); */
   address.host = ENET_HOST_ANY;
   /* Bind the server to port 1234. */
-  address.port = 9889;
+  address.port = 12345;
   
   server = enet_host_create (& address /* the address to bind the server host to */, 
                              32      /* allow up to 32 clients and/or outgoing connections */,
-                             2      /* allow up to 2 channels to be used, 0 and 1 */,
-                             0      /* assume any amount of incoming bandwidth */,
+                             0      /* allow up to 2 channels to be used, 0 and 1 */,
                              0      /* assume any amount of outgoing bandwidth */);
   if (!server) {
     std::cerr << "An error occurred while trying to create an ENet server host" << std::endl;
@@ -78,8 +77,7 @@ void client(const std::string &arg) {
   ENetHost * client;
   client = enet_host_create (NULL /* create a client host */,
                              1 /* only allow 1 outgoing connection */,
-                             2 /* allow up 2 channels to be used, 0 and 1 */,
-                             0 /* 56K modem with 56 Kbps downstream bandwidth */,
+                             0 /* allow up 2 channels to be used, 0 and 1 */,
                              0 /* 56K modem with 14 Kbps upstream bandwidth */);
   if (!client) {
     std::cerr << "An error occurred while trying to create an ENet client host" << std::endl;
@@ -92,10 +90,10 @@ void client(const std::string &arg) {
 
   std::string host = arg.size() ? arg : "localhost";
   enet_address_set_host (&address, host.c_str());
-  address.port = 9889;
+  address.port = 12345;
   
   /* Initiate the connection, allocating the two channels 0 and 1. */
-  peer = enet_host_connect (client, &address, 2, 0);    
+  peer = enet_host_connect (client, &address, 2);    
   
   if (!peer) {
     std::cout << "No available peers for initiating an ENet connection" << std::endl;
@@ -103,7 +101,7 @@ void client(const std::string &arg) {
   }
   
   /* Wait up to 5 seconds for the connection attempt to succeed. */
-  if (enet_host_service (client, &event, 5000) > 0 &&
+  if (enet_host_service (client, &event, 10000) > 0 &&
       event.type == ENET_EVENT_TYPE_CONNECT)
   {
     std::cout << "connection to " << host << " succeeded" << std::endl;
@@ -147,7 +145,7 @@ void client(const std::string &arg) {
       } while(enet_host_check_events(client, &event) > 0);
       
     }
-    usleep(1000);
+    usleep(100);
   }
   
   enet_host_destroy(client);
