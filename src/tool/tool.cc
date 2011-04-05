@@ -85,8 +85,8 @@ int main(int argc, char *argv[]) {
     client = enet_host_create (NULL /* create a client host */,
                 1 /* only allow 1 outgoing connection */,
                 2 /* allow up 2 channels to be used, 0 and 1 */,
-                57600 / 8 /* 56K modem with 56 Kbps downstream bandwidth */,
-                14400 / 8 /* 56K modem with 14 Kbps upstream bandwidth */);
+                0 /* 56K modem with 56 Kbps downstream bandwidth */,
+                0 /* 56K modem with 14 Kbps upstream bandwidth */);
     if (!client) {
       std::cerr << "An error occurred while trying to create an ENet client host" << std::endl;
         exit (EXIT_FAILURE);
@@ -97,7 +97,7 @@ int main(int argc, char *argv[]) {
     ENetPeer *peer;
 
     /* Connect to some.server.net:1234. */
-    enet_address_set_host (& address, "localhost");
+    enet_address_set_host (& address, "213.175.92.111");
     address.port = 9889;
 
     /* Initiate the connection, allocating the two channels 0 and 1. */
@@ -146,7 +146,7 @@ int main(int argc, char *argv[]) {
       std::cout << retVal << std::endl;
       enet_host_flush (client);
       uint64_t time =  enet_time_get();
-      if (enet_host_service (client, & event, 1000) <= 0) {
+      if (enet_host_service (client, & event, 5000) <= 0) {
         std::cout << "no answer" << std::endl;
         return EXIT_FAILURE;
       } else {
