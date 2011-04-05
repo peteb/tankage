@@ -7,17 +7,16 @@
 #include <stdio.h>
 
 int main(int argc, char *argv[]) {
-  const std::string option = argc > 1 ? argv[1] : "";
+  const std::string arg = argc > 1 ? argv[1] : "";
 
   if (enet_initialize() != 0) {
 	std::cerr << "An error occurred while initializing ENet" << std::endl;
     return EXIT_FAILURE;
   }
 
-  if (option == "server") {
+  if (arg == "server") {
     ENetAddress address;
     ENetHost *server; 
-
 
     /* Bind the server to the default localhost.     */
     /* A specific host address can be specified by   */
@@ -35,7 +34,6 @@ int main(int argc, char *argv[]) {
       std::cerr << "An error occurred while trying to create an ENet server host" << std::endl;
         exit (EXIT_FAILURE);
     }
-
 
     ENetEvent event;
     
@@ -96,12 +94,12 @@ int main(int argc, char *argv[]) {
     ENetEvent event;
     ENetPeer *peer;
 
-    /* Connect to some.server.net:1234. */
-    enet_address_set_host (& address, "213.175.92.111");
+    std::string host = arg.size() ? arg : "localhost";
+    enet_address_set_host (&address, host.c_str());
     address.port = 9889;
 
     /* Initiate the connection, allocating the two channels 0 and 1. */
-    peer = enet_host_connect (client, & address, 2, 0);    
+    peer = enet_host_connect (client, &address, 2, 0);    
     
     if (!peer) {
       std::cout << "No available peers for initiating an ENet connection" << std::endl;
@@ -109,13 +107,11 @@ int main(int argc, char *argv[]) {
     }
     
     /* Wait up to 5 seconds for the connection attempt to succeed. */
-    if (enet_host_service (client, & event, 5000) > 0 &&
+    if (enet_host_service (client, &event, 5000) > 0 &&
         event.type == ENET_EVENT_TYPE_CONNECT)
     {
-        std::cout << "Connection to some.server.net:1234 succeeded" << std::endl;
-    }
-    else
-    {
+        std::cout << "connection to " << host << " succeeded" << std::endl;
+    } else {
         /* Either the 5 seconds are up or a disconnect event was */
         /* received. Reset the peer in the event the 5 seconds   */
         /* had run out without any significant event.            */
@@ -125,36 +121,34 @@ int main(int argc, char *argv[]) {
     }
 
     for (size_t i(0); i != 1000; ++i) {
-        std::cout << "=> sending: ";
-        sleep(1);
       /* Create a reliable packet of size 7 containing "packet\0" */
       ENetPacket * packet = enet_packet_create ("packet", 
                                                 strlen ("packet") + 1, 
                                                 ENET_PACKET_FLAG_RELIABLE);
 
-      /* Extend the packet so and append the string "foo", so it now */
-      /* contains "packetfoo\0"                                      */
-      enet_packet_resize (packet, strlen ("packetfoo") + 1);
-      packet->data[0] = 'k';
-      packet->data[1] = 0;
-      //strcpy (& packet->data [strlen ("packet")], "foo");
+      // form packet
+      const char* buffer = "\"How far will you go?\"";
+      enet_packet_resize(packet, strlen(buffer) + 1);
+      for (size_t i(0); i != strlen(buffer); ++i) 
+        packet->data[i] = buffer[i];
+      packet->data[strlen(buffer)] = 0;
       
       /* Send the packet to the peer over channel id 0. */
       /* One could also broadcast the packet by         */
       /* enet_host_broadcast (host, 0, packet);         */
-      int retVal = enet_peer_send (peer, 0, packet);
-      std::cout << retVal << std::endl;
+      std::cout << "=> sending a package: ";
+      enet_peer_send (peer, 0, packet);
       enet_host_flush (client);
-      uint64_t time =  enet_time_get();
+      
+      int time =  enet_time_get();
       if (enet_host_service (client, & event, 5000) <= 0) {
-        std::cout << "no answer" << std::endl;
+        std::cout << "timed out, the net is too bad" << std::endl;
         return EXIT_FAILURE;
       } else {
-        std::cout << "got package, check rtt.." << std::endl; 
+        std::cout << "got package, rtt: " << enet_time_get() - time << std::endl; 
       }
-      std::cout << enet_time_get() - time << std::endl;
+      sleep(1);
     }
-
     enet_host_destroy(client);
   }
 
