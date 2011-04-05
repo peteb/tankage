@@ -3,6 +3,7 @@
 #include <iostream>
 #include <cstdlib>
 #include <cstdio>
+#include <string.h>
 
 int main(int argc, char *argv[]) {
   const std::string option = argc > 1 ? argv[1] : "";
@@ -38,11 +39,13 @@ int main(int argc, char *argv[]) {
     ENetEvent event;
     
     /* Wait up to 1000 milliseconds for an event. */
-    while (enet_host_service (server, & event, 1000) > 0)
+    while (enet_host_service (server, & event, 1000) >= 0)
     {
+        //std::cout << "=> check" << std::endl;
         switch (event.type)
         {
         case ENET_EVENT_TYPE_CONNECT:
+            std::cout << "New client" << std::endl;
             printf ("A new client connected from %x:%u.\n", 
                     event.peer -> address.host,
                     event.peer -> address.port);
@@ -85,6 +88,56 @@ int main(int argc, char *argv[]) {
       std::cerr << "An error occurred while trying to create an ENet client host" << std::endl;
         exit (EXIT_FAILURE);
     } 
+
+    ENetAddress address;
+    ENetEvent event;
+    ENetPeer *peer;
+
+    /* Connect to some.server.net:1234. */
+    enet_address_set_host (& address, "localhost");
+    address.port = 9889;
+
+    /* Initiate the connection, allocating the two channels 0 and 1. */
+    peer = enet_host_connect (client, & address, 2, 0);    
+    
+    if (!peer) {
+      std::cout << "No available peers for initiating an ENet connection" << std::endl;
+       exit (EXIT_FAILURE);
+    }
+    
+    /* Wait up to 5 seconds for the connection attempt to succeed. */
+    if (enet_host_service (client, & event, 5000) > 0 &&
+        event.type == ENET_EVENT_TYPE_CONNECT)
+    {
+        puts ("Connection to some.server.net:1234 succeeded.");
+    }
+    else
+    {
+        /* Either the 5 seconds are up or a disconnect event was */
+        /* received. Reset the peer in the event the 5 seconds   */
+        /* had run out without any significant event.            */
+        enet_peer_reset (peer);
+
+        puts ("Connection to some.server.net:1234 failed.");
+    }
+
+    /* Create a reliable packet of size 7 containing "packet\0" */
+    ENetPacket * packet = enet_packet_create ("packet", 
+                                              strlen ("packet") + 1, 
+                                              ENET_PACKET_FLAG_RELIABLE);
+
+    /* Extend the packet so and append the string "foo", so it now */
+    /* contains "packetfoo\0"                                      */
+    enet_packet_resize (packet, strlen ("packetfoo") + 1);
+    packet->data[0] = 'k';
+    packet->data[1] = 0;
+    //strcpy (& packet->data [strlen ("packet")], "foo");
+    
+    /* Send the packet to the peer over channel id 0. */
+    /* One could also broadcast the packet by         */
+    /* enet_host_broadcast (host, 0, packet);         */
+    enet_peer_send (peer, 0, packet);
+
     enet_host_destroy(client);
   }
 
