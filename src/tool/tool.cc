@@ -129,7 +129,7 @@ void client(const std::string &arg) {
       std::cout << "ping..." << std::endl;
       enet_peer_send (peer, 0, packet);
       since_send = 0;
-      // enet_host_flush (client);
+      enet_host_flush (client);
     }      
 
     int ret = enet_host_service(client, &event, 1);
