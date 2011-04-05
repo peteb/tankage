@@ -40,12 +40,20 @@ public:
 
   typedef std::tr1::function<void(Severity,const std::string&)> Consumer;
   static void registerConsumer(const Consumer &consumer);
+  static void clearConsumers();  
 
   struct DefaultLogConsumer { 
     DefaultLogConsumer();
     void operator()(Log::Severity severity, const std::string &line); 
   private:
     Severity _level;
+  };
+ 
+  struct ToFileConsumer {
+    ToFileConsumer(const std::string &path) : _path(path) {}
+    void operator()(Log::Severity severity, const std::string &line);
+  private:
+    std::string _path;
   };
 
 private:

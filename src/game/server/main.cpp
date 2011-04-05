@@ -10,6 +10,14 @@
 
 
 int app_main(Portal &interfaces, const std::vector<char *> &args) {
+  // set-up file logger, keep default if not daemon
+  char* home = getenv("HOME");
+  if (home && args.size() > 1 && args[1] && std::string(args[1]) == "-d") {
+    // remove default consumer and continue to log to file
+    Log::clearConsumers();
+    std::string path = std::string(home) + "/.tankage-server.conf";
+    Log::registerConsumer(Log::ToFileConsumer(path));
+  }
 
   //WindowManager *wm = interfaces.requestInterface<WindowManager>();
   //Graphics *gfx = interfaces.requestInterface<Graphics>();
