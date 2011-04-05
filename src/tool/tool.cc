@@ -41,7 +41,7 @@ void server() {
   
   server = enet_host_create (& address /* the address to bind the server host to */, 
                              32      /* allow up to 32 clients and/or outgoing connections */,
-                             2      /* allow up to 2 channels to be used, 0 and 1 */,
+                             0      /* allow up to 2 channels to be used, 0 and 1 */,
                              0      /* assume any amount of incoming bandwidth */,
                              0      /* assume any amount of outgoing bandwidth */);
   if (!server) {
@@ -78,7 +78,7 @@ void client(const std::string &arg) {
   ENetHost * client;
   client = enet_host_create (NULL /* create a client host */,
                              1 /* only allow 1 outgoing connection */,
-                             2 /* allow up 2 channels to be used, 0 and 1 */,
+                             0 /* allow up 2 channels to be used, 0 and 1 */,
                              0 /* 56K modem with 56 Kbps downstream bandwidth */,
                              0 /* 56K modem with 14 Kbps upstream bandwidth */);
   if (!client) {
