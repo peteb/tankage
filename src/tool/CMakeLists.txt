@@ -6,7 +6,7 @@ include_directories(
 add_executable(tool
   tool.cc
 )
-target_link_libraries(
+target_link_libraries(tool
   enet
 )
 
