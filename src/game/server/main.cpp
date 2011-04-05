@@ -10,6 +10,7 @@
 
 
 int app_main(Portal &interfaces, const std::vector<char *> &args) {
+
   //WindowManager *wm = interfaces.requestInterface<WindowManager>();
   //Graphics *gfx = interfaces.requestInterface<Graphics>();
   
@@ -39,19 +40,18 @@ int app_main(Portal &interfaces, const std::vector<char *> &args) {
   //gfx->setOrtho(wndSize);
   //wm->swapBuffers(); 
 
-  // deamonize server
-  pid_t pid = fork();
-  if (pid > 0) {
-    // code executed only by parent
-    Log(INFO) << "Server successfully started on pid: " << pid;
-  } else if (pid < 0) {
-    throw std::runtime_error("failed to fork");
-  } else {
-    // code executed only by child
-    server.run();
+  if (args.size() > 1 && args[1] && std::string(args[1]) == "-d") {
+    pid_t pid = fork();
+    if (pid > 0) {
+      Log(INFO) << "Server successfully started on pid: " << pid;
+      return EXIT_SUCCESS;
+    } else if (pid < 0) {
+      throw std::runtime_error("failed to fork");
+    }
   }
+  // child continues
+  server.run();
 
-  // code executed by both parent and child
   return EXIT_SUCCESS;
 }
 
