@@ -90,7 +90,7 @@ void GameServer::onTick() {
     _events.snap(msg, it->second);
     msg.writeShort(0);
     
-    it->second->client->send(buffer, msg.size(), Client::PACKET_UNSEQUENCED, NET_CHANNEL_ABS);  
+    it->second->client->send(buffer, msg.size(), 0, NET_CHANNEL_ABS);  
     
     // send reliable events
     msg.reset();
@@ -116,7 +116,6 @@ void GameServer::onTick() {
 }
 
 void GameServer::updateNet(int timeout) {
-  //Log(DEBUG) << "updating network, timeout " << timeout;
   _host->update(timeout);
   
   // get all the action
@@ -133,8 +132,6 @@ void GameServer::updateNet(int timeout) {
     onReceive(packet);
     delete packet;
   }  
-  
-  //Log(DEBUG) << "finished updating network";
 }
 
 unsigned int GameServer::gameTick() const {
