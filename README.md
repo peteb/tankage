@@ -1,5 +1,6 @@
-Tank Fightout
-=============
+The Age of Tanks
+================
+
 Compete against fellow players for rewards and advancements, maybe you'll become
 the master tank!
 With guns blazing in a fast multiplayer experience you will advance in the tank

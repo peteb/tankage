@@ -112,9 +112,9 @@ public:
     enet_peer_reset(_peer);
   }
 
-  void update() {
+  void update(unsigned int timeout) {
     ENetEvent event;
-    if (enet_host_service(_host, &event, 0) > 0) {
+    if (enet_host_service(_host, &event, timeout) > 0) {
       switch (event.type) {
       case ENET_EVENT_TYPE_NONE:
         break;
@@ -190,6 +190,10 @@ public:
     enet_host_flush(_host);
   }
 
+  void ping() {
+    enet_peer_ping(_peer);
+  }
+  
   unsigned stats(Client::Statistic field) {
     if (!_peer) {
       throw std::runtime_error("enet: no peer associated with client");
@@ -201,7 +205,7 @@ public:
       // Fixme: add more fields here! Enet supports a lot:
       // http://enet.bespin.org/struct__ENetPeer.html
     case STAT_RTT:
-      ret = _peer->roundTripTime;
+      ret = _peer->lastRoundTripTime;
       break;
       
     default:
@@ -272,6 +276,10 @@ public:
 
   }
   
+  void flush() {
+    enet_host_flush(_host);
+  }
+  
   ::Client *connectingClient() {
     if (_pendingConnect.empty())
       return NULL;
@@ -328,7 +336,6 @@ Host *Enet::Network::startHost(const std::string &hostAddr,
   // Fixme: the values below should be configurable
   ENetHost *host = enet_host_create(addr.enetAddress(),
                                     maxClients,
-                                    channels,
                                     0,
                                     0);
 
@@ -344,12 +351,12 @@ Client *Enet::Network::connect(const std::string &host, size_t channels) {
   ENetPeer *peer;
   ENetHost *client;
 
-  client = enet_host_create(NULL, 1, channels, 0, 0);
+  client = enet_host_create(NULL, channels, 0, 0);
   if (!client) {
     throw std::runtime_error("enet: failed to create host");
   }
 
-  peer = enet_host_connect(client, peerAddr.enetAddress(), channels, 0);
+  peer = enet_host_connect(client, peerAddr.enetAddress(), channels);
   if (!peer) {
     enet_host_destroy(client);
     throw std::runtime_error("enet: failed to create peer");
