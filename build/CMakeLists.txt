@@ -3,6 +3,17 @@
 cmake_minimum_required (VERSION 2.4)
 project (tankage)
 
+SET(CLIENT true)
+
+if (DEFINED SERVER)
+  UNSET(CLIENT)
+endif (DEFINED SERVER)
+
+if (DEFINED SERVER_AND_CLIENT)
+  SET(SERVER true)
+  SET(CLIENT true)
+endif (DEFINED SERVER_AND_CLIENT)
+
 include (CheckIncludeFileCXX)
 include (CheckCXXSourceCompiles)
 

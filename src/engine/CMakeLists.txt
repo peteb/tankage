@@ -1,10 +1,10 @@
 # -*- cmake -*-
 
-if (NOT DEFINED SERVER) 
+if (DEFINED CLIENT)
   find_package(glfw REQUIRED)
   find_package(OpenGL REQUIRED)
   find_package(DevIL REQUIRED)
-endif (NOT DEFINED SERVER)
+endif (DEFINED CLIENT)
 
 #find_package(PNG) # for DevIL, not necessary if the symbols are already linked into DevIL..
 #find_package(JPEG)
@@ -19,17 +19,17 @@ if (APPLE)
   SET(COCOA_ADDS cocoa/dialogs.m)
 endif (APPLE)
 
-add_library(platform_client
-  glfw/wm.cpp
-  glfw/input.cpp
-  opengl/graphics.cpp
-  devil/image_loader.cpp
-  enet/network.cpp
-  portal.cpp
-  starter_client.cpp
-  ${COCOA_ADDS}
-  )
-
+if (DEFINED CLIENT)
+  add_library(platform_client
+    glfw/wm.cpp
+    glfw/input.cpp
+    opengl/graphics.cpp
+    devil/image_loader.cpp
+    enet/network.cpp
+    portal.cpp
+    starter_client.cpp
+    ${COCOA_ADDS}
+    )
 target_link_libraries(platform_client
   utils
   enet 
@@ -38,17 +38,19 @@ target_link_libraries(platform_client
   ${OPENGL_LIBRARIES}
   ${IL_LIBRARY} 
   )
+endif (DEFINED CLIENT)
 
+if (DEFINED SERVER)
 add_library(platform_server
   enet/network.cpp
   portal.cpp
   starter_server.cpp
-)
-
+  )
 target_link_libraries(platform_server
   utils 
   enet
   )
+endif (DEFINED SERVER)
 
 include_directories(
    ${IL_INCLUDE_DIR}

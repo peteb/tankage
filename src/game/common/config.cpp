@@ -125,7 +125,6 @@ void Config::parse(const std::vector<char *> &args) {
     if (args[i] && args[i][0] == '-') {
       // MINOR kaspars: eventually it might be good to add proper
       // argument parsing, probably some centralized thing
-      Log(DEBUG) << "Skipping non config argument: " << args[i];
       continue;
     }
 
