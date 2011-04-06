@@ -1,8 +1,10 @@
 # -*- cmake -*-
 
-find_package(glfw REQUIRED)
-find_package(OpenGL REQUIRED)
-find_package(DevIL REQUIRED)
+if (NOT DEFINED SERVER) 
+  find_package(glfw REQUIRED)
+  find_package(OpenGL REQUIRED)
+  find_package(DevIL REQUIRED)
+endif (NOT DEFINED SERVER)
 
 #find_package(PNG) # for DevIL, not necessary if the symbols are already linked into DevIL..
 #find_package(JPEG)
