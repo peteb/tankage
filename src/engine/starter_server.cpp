@@ -8,13 +8,8 @@
 #include <fstream>
 #include <map>
 #include <cstdlib>
-#include "GL/glfw.h"
 
-#include <engine/glfw/wm.h>
-#include <engine/glfw/input.h>
 #include <engine/portal.h>
-#include <engine/opengl/graphics.h>
-#include <engine/devil/image_loader.h>
 #include <engine/enet/network.h>
 #include <engine/config.h>
 
@@ -34,8 +29,9 @@ int catch_app_main(Portal &portal, const std::vector<char *> &args) {
   catch (const std::exception &e) {
     std::string description = std::string("An error has occured:\n") + e.what();
     // FIXME: if DEV, don't display this; make it easy to bt in gdb
-    portal.requestInterface<Glfw::WindowManager>()->displayError(
-      "Error in application; can't continue", description.c_str());
+    //portal.requestInterface<Glfw::WindowManager>()->displayError(
+      //"Error in application; can't continue", description.c_str());
+    std::cerr << "Error in application; can't continue: " << description << std::endl;
   }
 
   return EXIT_FAILURE;
@@ -54,16 +50,7 @@ int main(int argc, char **argv) {
 
   Portal interfaces;
 
-  //if (!glfwInit()) {
-    //std::cerr << "glfw: failed to initialize" << std::endl;
-    //return EXIT_FAILURE;
-  //}
-
   std::cout << "glfw: registering interfaces..." << std::endl;
-  //interfaces.registerInterface<Glfw::WindowManager>();
-  interfaces.registerInterface<Glfw::Input>();
-  //interfaces.registerInterface<OpenGl::Graphics>();
-  interfaces.registerInterface<DevIl::ImageLoader>();
   interfaces.registerInterface<Enet::Network>();
 
   std::cout << "glfw: initialized" << std::endl;
@@ -80,5 +67,4 @@ int main(int argc, char **argv) {
   exitCode = app_main(interfaces, args);
   #endif
   
-  glfwTerminate();
 }

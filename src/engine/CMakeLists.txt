@@ -1,16 +1,11 @@
 # -*- cmake -*-
 
-SET(ENGINE_SOURCE
-  portal.cpp
-  glfw/wm.cpp
-  glfw/input.cpp
-  glfw/starter.cpp
-  opengl/graphics.cpp
-  devil/image_loader.cpp
-  enet/network.cpp
-  )
+find_package(glfw REQUIRED)
+find_package(OpenGL REQUIRED)
+find_package(DevIL REQUIRED)
 
-
+#find_package(PNG) # for DevIL, not necessary if the symbols are already linked into DevIL..
+#find_package(JPEG)
 
 if (APPLE)
   find_package(Cocoa REQUIRED)
@@ -19,26 +14,39 @@ if (APPLE)
     )
 
   SET(PLATFORM_COCOA 1)
-  
-  SET(ENGINE_SOURCE
-    ${ENGINE_SOURCE}
-    cocoa/dialogs.m
-    )
+  SET(COCOA_ADDS cocoa/dialogs.m)
 endif (APPLE)
 
+add_library(platform_client
+  glfw/wm.cpp
+  glfw/input.cpp
+  opengl/graphics.cpp
+  devil/image_loader.cpp
+  enet/network.cpp
+  portal.cpp
+  starter_client.cpp
+  ${COCOA_ADDS}
+  )
 
-add_library(engine
-  ${ENGINE_SOURCE}
+target_link_libraries(platform_client
+  utils
+  enet 
+  ${GLFW_LIBRARY} 
+  ${Cocoa_LIBRARIES}
+  ${OPENGL_LIBRARIES}
+  ${IL_LIBRARY} 
+  )
+
+add_library(platform_server
+  enet/network.cpp
+  portal.cpp
+  starter_server.cpp
 )
 
-
-
-find_package(glfw REQUIRED)
-find_package(OpenGL REQUIRED)
-find_package(DevIL REQUIRED)
-
-find_package(PNG) # for DevIL, not necessary if the symbols are already linked into DevIL..
-find_package(JPEG)
+target_link_libraries(platform_server
+  utils 
+  enet
+  )
 
 include_directories(
    ${IL_INCLUDE_DIR}
@@ -47,18 +55,5 @@ include_directories(
    ${PROJECT_ROOT_DIR}/3pp/include
 )
 
-target_link_libraries(engine
-  utils 
-  enet
-  ${GLFW_LIBRARY} 
-  ${Cocoa_LIBRARIES}
-  ${OPENGL_LIBRARIES}
-  ${IL_LIBRARY} 
-  ${PNG_LIBRARIES}
-  ${JPEG_LIBRARIES}
-  )
-
 configure_file(${PROJECT_ROOT_DIR}/src/engine/config.h.in ${PROJECT_ROOT_DIR}/src/engine/config.h)
-
-#add_subdirectory(cfg/unittest)
 

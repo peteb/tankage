@@ -32,7 +32,7 @@ if (WIN32)
 endif (WIN32)
 
 target_link_libraries(tankage
-  engine
+  platform_client
   ptrcfg
   ${EXTRA_WINDOWS_LIBS}
 )
