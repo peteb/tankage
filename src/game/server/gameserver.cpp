@@ -44,17 +44,18 @@ GameServer::~GameServer() {
 }
 
 void GameServer::run() {
-  double last_tick = _wm->timeSeconds();
+  double last_tick = _net->time() / 1000.0;
   
   while (true) {
-    double this_tick = _wm->timeSeconds();
+    double this_tick = _net->time() / 1000.0;
     int timeout = clamp(last_tick + tickDuration() - this_tick, tickDuration() * 0.1, 0.0) * 1000.0;
     
     updateNet(timeout);
     
-    this_tick = _wm->timeSeconds();
+    this_tick = _net->time() / 1000.0;
     if (this_tick - last_tick >= tickDuration()) {
       onTick();
+
       last_tick = this_tick;
       _tick++;
     }

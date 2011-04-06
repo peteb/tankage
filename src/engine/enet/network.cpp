@@ -326,8 +326,10 @@ Enet::Network::Network() {
     throw std::runtime_error("enet: failed to initialize enet");
   }
 
-  std::cout << "enet: initialized" << std::endl;
+  enet_time_set(0);
   atexit(enet_deinitialize);
+
+  std::cout << "enet: initialized" << std::endl; // FIXME: use logging
 }
 
 Host *Enet::Network::startHost(const std::string &hostAddr,
@@ -365,3 +367,6 @@ Client *Enet::Network::connect(const std::string &host, size_t channels) {
   return new Enet::Client(client, peer);
 }
 
+unsigned long Enet::Network::time() {
+   return enet_time_get();
+}
