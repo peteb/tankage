@@ -23,7 +23,7 @@ Variable<std::string> client_host("iostream.cc:12345");
 Variable<std::string> client_name("Some guy");
 Variable<bool> client_predict(true);
 Variable<bool> client_lerpRemote(true);
-Variable<bool> client_centerCam(false);
+Variable<bool> client_centerCam(true);
 
 void client_RegisterVariables(Config &config) {
   config.registerVariable("client", "host", &client_host);
