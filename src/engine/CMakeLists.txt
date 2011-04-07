@@ -4,10 +4,10 @@ if (DEFINED CLIENT)
   find_package(glfw REQUIRED)
   find_package(OpenGL REQUIRED)
   find_package(DevIL REQUIRED)
+  find_package(PNG) # for DevIL, not necessary if the symbols are already linked into DevIL..
+  find_package(JPEG)
 endif (DEFINED CLIENT)
 
-#find_package(PNG) # for DevIL, not necessary if the symbols are already linked into DevIL..
-#find_package(JPEG)
 
 if (APPLE)
   find_package(Cocoa REQUIRED)
@@ -37,6 +37,8 @@ target_link_libraries(platform_client
   ${Cocoa_LIBRARIES}
   ${OPENGL_LIBRARIES}
   ${IL_LIBRARY} 
+  ${PNG_LIBRARIES}
+  ${JPEG_LIBRARIES}
   )
 endif (DEFINED CLIENT)
 
