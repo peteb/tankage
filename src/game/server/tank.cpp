@@ -1,7 +1,10 @@
 #include "tank.h"
 #include <utils/packer.h>
+#include <utils/log.h>
 #include <game/server/gameserver.h>
 #include <cmath>
+
+#include "Box2D/Box2D.h"
 
 /* <--- begin tank state ---> */
 Tank::State &Tank::State::write(Packer &msg) {
@@ -88,9 +91,10 @@ void Tank::State::integrate(const Control::Input &input, double dt) {
 }
 /* <--- end tank state ---> */
 
-Tank::Tank(class GameServer *gameserver)
+Tank::Tank(class GameServer *gameserver, class b2Body *body)
   : Entity(16.0f)
   , _gameserver(gameserver)
+  , _body(body)
 {
   _reload_time = 0.0;
   _health = 100;
@@ -128,6 +132,19 @@ void Tank::tick() {
   if (!_lastinput.empty()) {
     _lastinput.erase(_lastinput.begin(), _lastinput.begin() + (_lastinput.size() - 1));    
   }
+  
+  Log(DEBUG) << "tick pos: " << _state.pos.x / 32.0f << ", " << _state.pos.y / 32.0f;
+  _body->SetTransform(b2Vec2(_state.pos.x / 32.0f, _state.pos.y / 32.0f), 0.0f);
+  _body->SetLinearVelocity(b2Vec2(_state.lin_vel.x / 32.0f, _state.lin_vel.y / 32.0f));
+  _body->SetAngularVelocity(_state.rot_vel);
+}
+
+void Tank::postTick() {
+  const b2Vec2 &pos = _body->GetPosition();
+  Log(DEBUG) << "postTick pos: " << pos.x << ", " << pos.y;
+  _state.pos.x = pos.x * 32.0f;
+  _state.pos.y = pos.y * 32.0f;
+  
 }
 
 void Tank::recvInput(const Control::Input &input) {

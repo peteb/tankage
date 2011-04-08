@@ -85,3 +85,9 @@ void Map::damageTile(const std::pair<int, int> &tile) {
   _gameserver->events().spawnTileUpdate(tile.first, tile.second, 1, 
                                         vec2((tile.first - 16) * 32, (tile.second - 16) * 32));
 }
+
+char Map::at(int x, int y) const {
+  x = clamp(x, -16, 16);
+  y = clamp(y, -16, 16);
+  return _data[(x + 16) * 32 + (y + 16)];
+}
