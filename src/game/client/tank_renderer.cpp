@@ -2,8 +2,8 @@
 #include <game/server/tank.h>
 #include <game/client/gameclient.h>
 #include <game/client/tank_info.h>
-#include <engine/portal.h>
-#include <engine/graphics.h>
+#include <platform/portal.h>
+#include <platform/graphics.h>
 
 TankRenderer::TankRenderer(GameClient *client, class Portal &services)
   : _client(client)

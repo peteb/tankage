@@ -1,6 +1,6 @@
 #include "map.h"
-#include <engine/portal.h>
-#include <engine/graphics.h>
+#include <platform/portal.h>
+#include <platform/graphics.h>
 #include <utils/packer.h>
 #include <utils/log.h>
 #include <algorithm>

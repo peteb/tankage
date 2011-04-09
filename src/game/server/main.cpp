@@ -1,6 +1,6 @@
-#include <engine/portal.h>
-#include <engine/window_manager.h>
-#include <engine/graphics.h>
+#include <platform/portal.h>
+#include <platform/window_manager.h>
+#include <platform/graphics.h>
 
 #include <game/server/gameserver.h>
 #include <game/common/config.h>

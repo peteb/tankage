@@ -5,10 +5,10 @@
 #include <game/server/gameserver.h>
 #include <game/client/gameclient.h>
 
-#include <engine/input.h>
-#include <engine/portal.h>
-#include <engine/window_manager.h>
-#include <engine/network.h>
+#include <platform/input.h>
+#include <platform/portal.h>
+#include <platform/window_manager.h>
+#include <platform/network.h>
 
 #include <utils/vec.h>
 #include <utils/packer.h>

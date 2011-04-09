@@ -1,9 +1,9 @@
 #include <game/common/texture_loader.h>
-#include <engine/graphics.h>
-#include <engine/image_loader.h>
-#include <engine/image.h>
-#include <engine/portal.h>
-#include <engine/config.h>
+#include <platform/graphics.h>
+#include <platform/image_loader.h>
+#include <platform/image.h>
+#include <platform/portal.h>
+#include <platform/config.h>
 
 #include <memory>
 

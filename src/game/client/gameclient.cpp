@@ -6,11 +6,11 @@
 #include <game/common/net_protocol.h>
 #include <game/common/config.h>
 
-#include <engine/portal.h>
-#include <engine/network.h>
-#include <engine/packet.h>
-#include <engine/graphics.h>
-#include <engine/window_manager.h>
+#include <platform/portal.h>
+#include <platform/network.h>
+#include <platform/packet.h>
+#include <platform/graphics.h>
+#include <platform/window_manager.h>
 
 #include <utils/log.h>
 #include <utils/packer.h>
@@ -74,6 +74,8 @@ void GameClient::update() {
   _last_update = now;  
   _since_snap += dt;
 
+  // FIXME: get the local tank here, and set the transform based on that!
+  //        also remove setFocus
   if (*client_centerCam)
     _gfx->setTransform(-_view);
   else

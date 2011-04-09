@@ -1,8 +1,8 @@
 #include "text_renderer.h"
 #include <game/common/texture_loader.h>
-#include <engine/graphics.h>
-#include <engine/portal.h>
-#include <engine/texture.h>
+#include <platform/graphics.h>
+#include <platform/portal.h>
+#include <platform/texture.h>
 #include <utils/vec.h>
 
 TextRenderer::TextRenderer(class Portal &services, class TextureLoader &texloader)
