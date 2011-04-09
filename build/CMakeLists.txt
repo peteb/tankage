@@ -87,6 +87,7 @@ include_directories ("${PROJECT_ROOT_DIR}/inc/" "${PROJECT_ROOT_DIR}/src/")
 
 find_package(GTest)
 find_package(Curl)
+find_package(Box2D REQUIRED)
 
 add_custom_target(unittest)
 

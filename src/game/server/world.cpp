@@ -1,5 +1,4 @@
 #include "world.h"
-#include "Box2d/Box2d.h"
 #include <game/server/map.h>
 #include <game/server/gameserver.h>
 
