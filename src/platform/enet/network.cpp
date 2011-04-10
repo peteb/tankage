@@ -1,12 +1,13 @@
 #include <platform/enet/network.h>
+#include <utils/key.h>
+#include <utils/log.h>
+
 #include <enet/enet.h>
 #include <sstream>
 #include <stdexcept>
 #include <cstdlib>
-#include <iostream>
 #include <vector>
 #include <utility>
-#include <utils/key.h>
 #include <algorithm>
 
 namespace {
@@ -112,9 +113,19 @@ public:
     enet_peer_reset(_peer);
   }
 
+  /**
+   * update
+   */
   void update(unsigned int timeout) {
     ENetEvent event;
-    if (enet_host_service(_host, &event, timeout) > 0) {
+    int ret = enet_host_service(_host, &event, timeout);
+    
+    if (ret < 0) {
+      Log(DEBUG) << "enet: host service returned failure";
+      return;
+    }
+    
+    while (ret > 0) {
       switch (event.type) {
       case ENET_EVENT_TYPE_NONE:
         break;
@@ -128,20 +139,24 @@ public:
         break;
 
       case ENET_EVENT_TYPE_RECEIVE:
-      {
-        
-        Enet::Packet *packet =
-          new Enet::Packet(event.packet,
-                           this,
-                           event.channelID);
-        _pendingPackets.push_back(packet);
+        _pendingPackets.push_back(new Enet::Packet(event.packet,
+                                                   this,
+                                                   event.channelID));
         break;
-      }       
-
+                                  
+      default:
+          Log(DEBUG) << "enet: received unknown event type";
       }
+    
+      // eat all standing events
+      ret = enet_host_check_events(_host, &event);
     }
+    
   }
   
+  /**
+   * pendingPacket
+   */
   Packet *pendingPacket() {
     if (_pendingPackets.empty())
       return NULL;
@@ -152,6 +167,9 @@ public:
     return ret;
   }
   
+  /**
+   * send
+   */
   void send(const void *data, size_t size, unsigned flags, int channel) {
     enet_uint32 convFlags = 0;
     if (flags & ::Client::PACKET_RELIABLE)
@@ -232,32 +250,37 @@ public:
     : _host(host)
   {}
   
-
+  /**
+   * update
+   */
   void update(unsigned int timeout) {
     ENetEvent event;
-    // Fixme: configurable timeout here
-    if (enet_host_service(_host, &event, timeout) > 0) {
+    int ret = enet_host_service(_host, &event, timeout);
+    
+    if (ret < 0) {
+      Log(DEBUG) << "enet: host service returned failure";
+      return;
+    }
+    
+    while (ret > 0) {
       switch (event.type) {
       case ENET_EVENT_TYPE_CONNECT:
-      {
-        Enet::Client *client = new Enet::Client(_host, event.peer);
+        {
+          Enet::Client *client = new Enet::Client(_host, event.peer);
 
-        event.peer->data = client;
-        _pendingConnect.push_back(client);
+          event.peer->data = client;
+          _pendingConnect.push_back(client);
+        }
         break;
-      }
       
       case ENET_EVENT_TYPE_DISCONNECT:
-      {
         if (event.peer->data) {
           _pendingDisconnect.push_back(static_cast<Client *>(event.peer->data));
           event.peer->data = NULL;
         }
         break;
-      }
-
+          
       case ENET_EVENT_TYPE_RECEIVE:
-      {
         if (event.peer->data) {
           Enet::Packet *packet =
             new Enet::Packet(event.packet,
@@ -266,20 +289,26 @@ public:
           _pendingPackets.push_back(packet);
         }
         break;
+                
+      default:
+        Log(DEBUG) << "enet: received unknown event type";
       }
       
-
-      case ENET_EVENT_TYPE_NONE:
-        break;
-      }
+      // eat all standing events
+      ret = enet_host_check_events(_host, &event);
     }
-
   }
   
+  /**
+   * flush
+   */
   void flush() {
     enet_host_flush(_host);
   }
   
+  /**
+   * connectingClient
+   */
   ::Client *connectingClient() {
     if (_pendingConnect.empty())
       return NULL;
@@ -306,7 +335,7 @@ public:
 
     ::Packet *ret = _pendingPackets.front();
     _pendingPackets.erase(_pendingPackets.begin());
-    // the ownership of the Packet is transfered to the user
+    // the ownership of the Packet is transferred to the user
     return ret;
   }
 
@@ -322,14 +351,18 @@ private:
 }
 
 Enet::Network::Network() {
+  Log(DEBUG) << "enet: initializing...";
+  
   if (enet_initialize() != 0) {
     throw std::runtime_error("enet: failed to initialize enet");
   }
 
   enet_time_set(0);
   atexit(enet_deinitialize);
+}
 
-  std::cout << "enet: initialized" << std::endl; // FIXME: use logging
+Enet::Network::~Network() {
+  Log(DEBUG) << "enet: shutting down...";
 }
 
 Host *Enet::Network::startHost(const std::string &hostAddr,
