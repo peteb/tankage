@@ -180,7 +180,6 @@ void GameServer::onReceive(Packet *packet) {
     }
 
     if (_sessions.find(client) != _sessions.end()) {
-      // FIXME:  disconnect the connection
       Log(DEBUG) << "client already has a session...?";
       sendError(client, 11, "You're already here.");
       client->disconnect();
