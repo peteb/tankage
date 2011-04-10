@@ -50,6 +50,8 @@ void install(const std::string &filename,
 void restart(const std::string &file) {
   setenv("SKIP_UPDATE", "true", 1);
   
+  // FIXME: do we have to shutdown all the services?
+  
   Log(DEBUG) << "restarting binary...";
   if (execl(file.c_str(), file.c_str(), (char *)0) == -1) {
     throw std::runtime_error("failed to restart binary using new version!");
@@ -108,7 +110,7 @@ void Curl::SelfUpdater::requestUpdate(const std::string &file,
     install(tmp_filename, file);
     Log(DEBUG) << "installed new binary";
     
-    restart(file);
+    restart(file); // FIXME: forward all args from initial invocation
   }
   else {
     curl_easy_cleanup(handle);
