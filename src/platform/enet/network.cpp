@@ -126,10 +126,7 @@ public:
     }
     
     while (ret > 0) {
-      switch (event.type) {
-      case ENET_EVENT_TYPE_NONE:
-        break;
-          
+      switch (event.type) {          
       case ENET_EVENT_TYPE_CONNECT:
         _connected = true;        
         break;
@@ -335,7 +332,7 @@ public:
 
     ::Packet *ret = _pendingPackets.front();
     _pendingPackets.erase(_pendingPackets.begin());
-    // the ownership of the Packet is transferred to the user
+    // the ownership of the Packet is transfered to the user
     return ret;
   }
 
