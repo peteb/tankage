@@ -27,7 +27,7 @@ long FileLastModified(const std::string &filename) {
     throw std::runtime_error("failed to get last modification time for '" + filename + "'");
   }
   
-  file_time = gmtime(&(file_stat.st_mtime));
+  file_time = localtime(&file_stat.st_mtime);
   return mktime(file_time);
 }
   

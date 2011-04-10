@@ -53,7 +53,7 @@ GameClient::GameClient(class Portal &services)
   _wm = services.requestInterface<WindowManager>();
 
   if (Env("SKIP_UPDATE") != "true") {
-    Log(INFO) << "updating...";
+    Log(INFO) << "checking for updates...";
     SelfUpdater *updater = services.requestInterface<SelfUpdater>();
     updater->requestUpdate("tankage", 
                            "http://iostream.cc/~peter/binaries/tankage");

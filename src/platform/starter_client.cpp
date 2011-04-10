@@ -51,16 +51,16 @@ int main(int argc, char **argv) {
   for (int i(1); i != argc; ++i) {
     ss << " " << argv[i];
   }
-  Log(INFO) << "Starting-up: " << ss.str();
+  Log(INFO) << "starting up: " << ss.str();
 
   Portal interfaces;
 
   if (!glfwInit()) {
-    std::cerr << "glfw: failed to initialize" << std::endl;
+    Log(INFO) << "glfw: failed to initialize";
     return EXIT_FAILURE;
   }
 
-  std::cout << "glfw: registering interfaces..." << std::endl;
+  Log(DEBUG) << "glfw: registering interfaces...";
   interfaces.registerInterface<Glfw::WindowManager>();
   interfaces.registerInterface<Glfw::Input>();
   interfaces.registerInterface<OpenGl::Graphics>();
@@ -68,7 +68,7 @@ int main(int argc, char **argv) {
   interfaces.registerInterface<Enet::Network>();
   interfaces.registerInterface<Curl::SelfUpdater>();
 
-  std::cout << "glfw: initialized" << std::endl;
+  Log(DEBUG) << "glfw: initialized";
 
   std::vector<char *> args(argv, argv + argc);
   
