@@ -54,6 +54,7 @@ GameClient::GameClient(class Portal &services)
   
   _state = GameClient::STATE_DISCONNECTED;
   Log(INFO) << "connecting to host " << *client_host << "...";
+  _error = "Connecting...";
   _client = _net->connect(*client_host, 2);  
 }
 
@@ -88,10 +89,14 @@ void GameClient::update() {
   _map.render();
   _tankrenderer.render();
   _bulletrenderer.render();
+  
+  if (_state != GameClient::STATE_CONNECTED)
+    _textrenderer.renderText(_error, vec2(0.0f, 0.0f), 2.0f);
+  
 }
 
 void GameClient::updateNet() {
-  _client->update(10);
+  _client->update(10); // FIXME: can we steal ms here just like this?
   
   const bool connected = _client->isConnected();
 
@@ -216,6 +221,12 @@ void GameClient::onReceive(Packet *packet) {
     _tankrenderer.addSnapshot(tanks_snapshot);
     _bulletrenderer.addSnapshot(bullets_snapshot);
     _since_snap = 0.0;
+  }
+  else if (msgtype == NET_ERROR) {
+    int code = msg.readInt();
+    std::string str = msg.readString();
+    Log(INFO) << "> " << str << " (" << code << ")";
+    _error = str;
   }
   else if (msgtype == NET_MAPCHUNK) {
     _map.addChunk(msg);

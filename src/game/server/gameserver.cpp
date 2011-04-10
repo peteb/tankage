@@ -165,6 +165,8 @@ void GameServer::onReceive(Packet *packet) {
   short type = msg.readShort();
   Client *client = packet->sender();
 
+  // FIXME: if sending error and doing disconnect, wait with disconnect so it can send it first.
+  
   // we only allow CLIENT_INFO to be received without a session.  
   if (type == NET_CLIENT_INFO) {
     std::string name = msg.readString();
@@ -262,6 +264,7 @@ void GameServer::sendError(class Client *client, int code,
   msg.writeInt(code);
   msg.writeString(str);
   client->send(buffer, msg.size(), Client::PACKET_RELIABLE, NET_CHANNEL_STATE);
+  client->flush();
 }
 
 Tank *GameServer::spawnTank() {
