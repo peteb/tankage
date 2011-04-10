@@ -74,6 +74,11 @@ ELSE(${CMAKE_BUILD_TYPE} MATCHES "DEBUG")
     SET(RESOURCE_PATH "${CMAKE_INSTALL_PREFIX}/share/tankage/data")
   ELSE(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
     SET(RESOURCE_PATH "data")    
+    
+    IF(APPLE)
+    SET(REMOTE_BINARY "osx/Tankage.app/Contents/Resources/tankage")  
+    ENDIF(APPLE)
+    
   ENDIF(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
 ENDIF(${CMAKE_BUILD_TYPE} MATCHES "DEBUG")
 

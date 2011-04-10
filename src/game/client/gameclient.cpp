@@ -52,17 +52,20 @@ GameClient::GameClient(class Portal &services)
   _gfx = services.requestInterface<Graphics>();
   _wm = services.requestInterface<WindowManager>();
 
+  #ifdef REMOTE_BINARY
   if (Env("SKIP_UPDATE") != "true") {
     Log(INFO) << "checking for updates...";
     SelfUpdater *updater = services.requestInterface<SelfUpdater>();
     updater->requestUpdate("tankage", 
-                           "http://iostream.cc/~peter/binaries/tankage");
+                           "http://iostream.cc/~peter/binaries/" REMOTE_BINARY);
   }
   else {
     Log(INFO) << "skipping update";
   }
-
-    
+  #else
+  Log(INFO) << "can't update; binary not built with a remote url";
+  #endif
+  
   _last_update = _wm->timeSeconds();
   _input_time = 0.0;
   _since_snap = 0.0;

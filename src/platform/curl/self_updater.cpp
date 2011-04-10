@@ -98,6 +98,12 @@ void Curl::SelfUpdater::requestUpdate(const std::string &file,
   curl_easy_getinfo(handle, CURLINFO_RESPONSE_CODE, &response);
   Log(DEBUG) << "curl: server responded with " << response;
   
+  if (response != 304 && response != 200) {
+    Log(DEBUG) << "curl: failed to get latest";
+    curl_easy_cleanup(handle);
+    return;
+  }
+
   if (bytes_rx != 0 && response != 304) {
     // we got a new version
     long remote_time = 0;
