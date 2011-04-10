@@ -1,8 +1,8 @@
 #include "bullet_renderer.h"
 #include <game/client/gameclient.h>
-#include <engine/portal.h>
-#include <engine/graphics.h>
-#include <engine/texture.h>
+#include <platform/portal.h>
+#include <platform/graphics.h>
+#include <platform/texture.h>
 #include <math.h>
 
 BulletRenderer::BulletRenderer(GameClient *client, Portal &services)

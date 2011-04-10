@@ -1,9 +1,9 @@
-#ifndef ENGINE_CFG_CFG_H
-#define ENGINE_CFG_CFG_H
+#ifndef PLATFORM_CFG_CFG_H
+#define PLATFORM_CFG_CFG_H
 
 #include <game/common/config.h>
 
-#include <engine/config.h>
+#include <platform/config.h>
 #include <utils/singleton.h>
 #include <ptrcfg/propertynode.h>
 

@@ -1,7 +1,7 @@
-#include <engine/portal.h>
-#include <engine/window_manager.h>
-#include <engine/input.h>
-#include <engine/graphics.h>
+#include <platform/portal.h>
+#include <platform/window_manager.h>
+#include <platform/input.h>
+#include <platform/graphics.h>
 
 #include <game/client/gameclient.h>
 #include <game/common/config.h>

@@ -6,10 +6,10 @@
 #include <game/common/net_protocol.h>
 #include <game/common/config.h>
 
-#include <engine/packet.h>
-#include <engine/network.h>
-#include <engine/portal.h>
-#include <engine/window_manager.h>
+#include <platform/packet.h>
+#include <platform/network.h>
+#include <platform/portal.h>
+#include <platform/window_manager.h>
 
 #include <utils/packer.h>
 #include <utils/log.h>

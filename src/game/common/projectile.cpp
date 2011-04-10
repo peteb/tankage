@@ -5,8 +5,8 @@
 #include <game/common/tank.h>
 #include <game/client/particles.h>
 
-#include <engine/graphics.h>
-#include <engine/texture.h>
+#include <platform/graphics.h>
+#include <platform/texture.h>
 
 #include <utils/vec.h>
 #include <utils/rect.h>
