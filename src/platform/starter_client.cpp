@@ -16,6 +16,7 @@
 #include <platform/opengl/graphics.h>
 #include <platform/devil/image_loader.h>
 #include <platform/enet/network.h>
+#include <platform/curl/self_updater.h>
 #include <platform/config.h>
 
 #include <utils/log.h>
@@ -65,6 +66,7 @@ int main(int argc, char **argv) {
   interfaces.registerInterface<OpenGl::Graphics>();
   interfaces.registerInterface<DevIl::ImageLoader>();
   interfaces.registerInterface<Enet::Network>();
+  interfaces.registerInterface<Curl::SelfUpdater>();
 
   std::cout << "glfw: initialized" << std::endl;
 
