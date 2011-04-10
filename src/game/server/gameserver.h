@@ -39,6 +39,8 @@ private:
   class Tank *spawnTank();
   void destroyZombies();
   void sendServerInfo(class Client *receiver);
+  void sendPlayers(class Client *client);
+  void sendError(class Client *client, int code, const std::string &str);
   
   // net protocol
   void onIdent(const struct NetIdentifyMsg *ident, class Packet *packet);

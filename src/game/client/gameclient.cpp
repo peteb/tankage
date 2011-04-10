@@ -154,6 +154,7 @@ void GameClient::onConnect() {
   Packer msg(buffer, buffer + 1024);
   msg.writeShort(NET_CLIENT_INFO);
   msg.writeString(*client_name);
+  msg.writeInt(NET_VERSION);
   _client->send(buffer, msg.size(), Client::PACKET_RELIABLE, NET_CHANNEL_STATE);
 }
 
