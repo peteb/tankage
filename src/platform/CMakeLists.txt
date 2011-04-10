@@ -6,7 +6,7 @@ if (DEFINED CLIENT)
   find_package(DevIL REQUIRED)
   find_package(PNG) # for DevIL, not necessary if the symbols are already linked into DevIL..
   find_package(JPEG)
-  find_package(CURL)
+  find_package(CURL REQUIRED)
 endif (DEFINED CLIENT)
 
 
@@ -41,7 +41,7 @@ target_link_libraries(platform_client
   ${IL_LIBRARY} 
   ${PNG_LIBRARIES}
   ${JPEG_LIBRARIES}
-  ${CURL_LIBRARIES}
+  ${CURL_LIBRARY}
   )
 endif (DEFINED CLIENT)
 
