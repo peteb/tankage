@@ -19,6 +19,12 @@
 #include <cassert>
 #include <iostream>
 
+namespace {
+std::string Env(const std::string &name) {
+  char *var = getenv(name.c_str());
+  return (var ? var : "");
+}
+}
 
 Variable<std::string> client_host("iostream.cc:12345");
 Variable<std::string> client_name("Some guy");
@@ -46,18 +52,17 @@ GameClient::GameClient(class Portal &services)
   _gfx = services.requestInterface<Graphics>();
   _wm = services.requestInterface<WindowManager>();
 
-  SelfUpdater *updater = services.requestInterface<SelfUpdater>();
-  UpdateResult *result = 
+  if (Env("SKIP_UPDATE") != "true") {
+    Log(INFO) << "updating...";
+    SelfUpdater *updater = services.requestInterface<SelfUpdater>();
     updater->requestUpdate("tankage", 
                            "http://iostream.cc/~peter/binaries/tankage");
-  
-  if (result->gotUpdate()) {
-    Log(INFO) << "got new update";
   }
   else {
-    Log(INFO) << "has latest version";
+    Log(INFO) << "skipping update";
   }
-  
+
+    
   _last_update = _wm->timeSeconds();
   _input_time = 0.0;
   _since_snap = 0.0;

@@ -9,23 +9,6 @@
 #include <stdexcept>
 #include <cerrno>
 
-namespace Curl {
-class UpdateResult : public ::UpdateResult {
-public:
-  bool gotUpdate() const {
-    return false;
-  }
-};
-}
-
-Curl::SelfUpdater::SelfUpdater() {
-    
-}
-
-Curl::SelfUpdater::~SelfUpdater() {
-  
-}
-
 namespace {
 int out_file;
 size_t bytes_rx;
@@ -64,13 +47,18 @@ void install(const std::string &filename,
   
 }
   
-void restart() {
+void restart(const std::string &file) {
   setenv("SKIP_UPDATE", "true", 1);
+  
+  Log(DEBUG) << "restarting binary...";
+  if (execl(file.c_str(), file.c_str(), (char *)0) == -1) {
+    throw std::runtime_error("failed to restart binary using new version!");
+  }
 }
 }
 
-::UpdateResult *Curl::SelfUpdater::requestUpdate(const std::string &file, 
-                                                 const std::string &url) {
+void Curl::SelfUpdater::requestUpdate(const std::string &file, 
+                                      const std::string &url) {
   
   long file_modified = FileLastModified(file);
   Log(DEBUG) << "'" << file << "' last modification: " << file_modified;
@@ -78,7 +66,7 @@ void restart() {
   CURL *handle = curl_easy_init();
   if (!handle) {
     Log(DEBUG) << "curl: failed to create handle";
-    return 0;
+    return;
   }
   
   // create a temp file for download
@@ -91,9 +79,9 @@ void restart() {
   // download it
   curl_easy_setopt(handle, CURLOPT_WRITEFUNCTION, WriteData);
   curl_easy_setopt(handle, CURLOPT_URL, url.c_str());
-  curl_easy_setopt(handle, CURLOPT_NOPROGRESS, 0);
+  curl_easy_setopt(handle, CURLOPT_NOPROGRESS, 1);
   curl_easy_setopt(handle, CURLOPT_FILETIME, 1);
-  //curl_easy_setopt(handle, CURLOPT_TIMECONDITION, CURL_TIMECOND_IFMODSINCE);
+  curl_easy_setopt(handle, CURLOPT_TIMECONDITION, CURL_TIMECOND_IFMODSINCE);
   curl_easy_setopt(handle, CURLOPT_TIMEVALUE, file_modified);
   
   CURLcode ret = curl_easy_perform(handle);
@@ -101,7 +89,7 @@ void restart() {
   
   if (ret != 0) {
     Log(DEBUG) << "curl: failed to perform (code: " << ret << ")";
-    return 0;
+    return;
   }
   
   long response = 0;
@@ -113,13 +101,17 @@ void restart() {
     long remote_time = 0;
     curl_easy_getinfo(handle, CURLINFO_FILETIME, &remote_time);          
     double time_diff = difftime(remote_time, file_modified);
+    curl_easy_cleanup(handle);
     Log(INFO) << "local version is " << time_diff/60.0 << " minutes old";
     
+
     install(tmp_filename, file);
     Log(DEBUG) << "installed new binary";
     
-    restart();
+    restart(file);
   }
-  
-  return new Curl::UpdateResult;
+  else {
+    curl_easy_cleanup(handle);
+    remove(tmp_filename);
+  }
 }

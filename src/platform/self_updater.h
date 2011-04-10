@@ -4,17 +4,12 @@
 #include <platform/interface.h>
 #include <string>
 
-class UpdateResult {
-public:
-  virtual bool gotUpdate() const =0;
-};
-
 class SelfUpdater : public Interface {
 public:  
   static std::string id() {return "self_updater"; }
   
-  virtual UpdateResult *requestUpdate(const std::string &file,
-                                      const std::string &url) =0;
+  virtual void requestUpdate(const std::string &file,
+                             const std::string &url) =0;
 };
 
 #endif // !PLATFORM_SELF_UPDATER_H
