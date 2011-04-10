@@ -7,7 +7,7 @@
 namespace Curl {
 class SelfUpdater : public ::SelfUpdater, public Singleton<SelfUpdater>  {
 public:
-  UpdateResult *requestUpdate(const std::string &url);
+  ::UpdateResult *requestUpdate(const std::string &file, const std::string &url);
 };
 
 }

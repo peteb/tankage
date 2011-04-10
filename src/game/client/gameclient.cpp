@@ -11,6 +11,7 @@
 #include <platform/packet.h>
 #include <platform/graphics.h>
 #include <platform/window_manager.h>
+#include <platform/self_updater.h>
 
 #include <utils/log.h>
 #include <utils/packer.h>
@@ -44,6 +45,18 @@ GameClient::GameClient(class Portal &services)
   _net = services.requestInterface<Network>();
   _gfx = services.requestInterface<Graphics>();
   _wm = services.requestInterface<WindowManager>();
+
+  SelfUpdater *updater = services.requestInterface<SelfUpdater>();
+  UpdateResult *result = 
+    updater->requestUpdate("tankage", 
+                           "http://iostream.cc/~peter/binaries/tankage");
+  
+  if (result->gotUpdate()) {
+    Log(INFO) << "got new update";
+  }
+  else {
+    Log(INFO) << "has latest version";
+  }
   
   _last_update = _wm->timeSeconds();
   _input_time = 0.0;

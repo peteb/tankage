@@ -1,5 +1,15 @@
 #include "self_updater.h"
 
-UpdateResult *Curl::SelfUpdater::requestUpdate(const std::string &url) {
-  return 0;
+namespace Curl {
+class UpdateResult : public ::UpdateResult {
+public:
+  bool gotUpdate() const {
+    return false;
+  }
+};
+}
+
+::UpdateResult *Curl::SelfUpdater::requestUpdate(const std::string &file, 
+                                                 const std::string &url) {
+  return new Curl::UpdateResult;
 }
