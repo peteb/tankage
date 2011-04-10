@@ -71,6 +71,8 @@ private:
   Control _control;
   ClientMap _map;
   
+  std::string _error;
+  
   std::map<int, class TankInfo *> _tanks;
 };
 

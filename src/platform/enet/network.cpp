@@ -187,7 +187,7 @@ public:
   }
 
   void disconnect() {
-    enet_peer_disconnect(_peer, 0);
+    enet_peer_disconnect_later(_peer, 0);
   }
 
   std::string address() const {
