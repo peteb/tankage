@@ -172,6 +172,7 @@ void GameServer::onReceive(Packet *packet) {
     
     if (cl_version != NET_VERSION) {
       Log(DEBUG) << "connecting client has wrong version";
+      sendError(client, 10, "Wrong version!");
       client->disconnect();
       return;
     }
@@ -179,6 +180,7 @@ void GameServer::onReceive(Packet *packet) {
     if (_sessions.find(client) != _sessions.end()) {
       // FIXME:  disconnect the connection
       Log(DEBUG) << "client already has a session...?";
+      sendError(client, 11, "You're already here.");
       client->disconnect();
       return;
     }
