@@ -10,9 +10,9 @@ Tank::State &Tank::State::write(Packer &msg) {
   msg.writeShort(pos.y * 10.0f);
   msg.writeShort(lin_vel.x * 100.0f);
   msg.writeShort(lin_vel.y * 100.0f);
-  msg.writeShort(base_dir / 360.0 * 65535.0);
-  msg.writeShort(rot_vel / 360.0 * 65535.0);
-  msg.writeShort(turret_dir / 360.0 * 65535.0);
+  msg.writeShort(base_dir / 360.0 * 100.0);
+  msg.writeShort(rot_vel / 360.0 * 100.0);
+  msg.writeShort(turret_dir / 360.0 * 100.0);
   return *this;
 }
 
@@ -22,9 +22,9 @@ Tank::State &Tank::State::read(class Unpacker &msg) {
   pos.y = static_cast<float>(msg.readShort()) / 10.0f;
   lin_vel.x = static_cast<float>(msg.readShort()) / 100.0f;
   lin_vel.y = static_cast<float>(msg.readShort()) / 100.0f;
-  base_dir = static_cast<float>(msg.readShort()) / 65535.0 * 360.0;
-  rot_vel = static_cast<float>(msg.readShort()) / 65535.0f * 360.0;
-  turret_dir = static_cast<float>(msg.readShort()) / 65535.0 * 360.0;
+  base_dir = static_cast<float>(msg.readShort()) / 100.0 * 360.0;
+  rot_vel = static_cast<float>(msg.readShort()) / 100.0 * 360.0;
+  turret_dir = static_cast<float>(msg.readShort()) / 100.0 * 360.0;
   return *this;
 }
 
