@@ -9,7 +9,6 @@
 #include <platform/packet.h>
 #include <platform/network.h>
 #include <platform/portal.h>
-#include <platform/window_manager.h>
 
 #include <utils/packer.h>
 #include <utils/log.h>
@@ -30,7 +29,6 @@ GameServer::GameServer(const Portal &services)
   : _map(this)
 {  
   _net = services.requestInterface<Network>();
-  //_wm = services.requestInterface<WindowManager>();
   
   _tick = 0;
   _last_entity = 0;
