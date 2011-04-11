@@ -7,6 +7,7 @@
 #include <cstdio>
 #include <stdexcept>
 #include <cerrno>
+#include <cstring>
 
 #ifdef _WIN32
 #include <io.h>
