@@ -108,14 +108,15 @@ void Curl::SelfUpdater::requestUpdate(const std::string &file,
   
   // create a temp file for download
   char tmp_filename[32];
+
 #ifdef _WIN32
   const char* fn_template = "temp.XXXXXX";
   strcpy(tmp_filename, fn_template);
   if (_mktemp_s(tmp_filename, strlen(fn_template) + 1)) {
     throw std::runtime_error("failed to create temporary filename..");
   }
-#else 
   out_filename = tmp_filename;
+#else 
   strcpy(tmp_filename, "/tmp/temp.XXXXX");
   out_file = mkstemp(tmp_filename);
 #endif
