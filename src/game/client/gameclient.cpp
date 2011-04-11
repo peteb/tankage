@@ -20,10 +20,10 @@
 
 
 Variable<std::string> client_host("tankage.iostream.cc:12345");
-Variable<std::string> client_name("Some guy");
+Variable<std::string> client_name("Master");
 Variable<bool> client_predict(true);
 Variable<bool> client_lerpRemote(true);
-Variable<bool> client_centerCam(false);
+Variable<bool> client_centerCam(true);
 
 void client_RegisterVariables(Config &config) {
   config.registerVariable("client", "host", &client_host);
@@ -173,6 +173,8 @@ double GameClient::deltaTime() const {
   
   return _since_snap / (1.0 / _net_tickrate);
 }
+
+// 0.1.9
 
 double GameClient::sinceSnap() const {
   return _since_snap;
