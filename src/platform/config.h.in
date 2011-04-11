@@ -9,5 +9,6 @@
 #cmakedefine RESOURCE_PATH "${RESOURCE_PATH}" 
 #cmakedefine PLATFORM_COCOA
 #cmakedefine DEV
+#cmakedefine REMOTE_BINARY "${REMOTE_BINARY}"  //< where to get the latest binary
 
 #endif // !CONFIG_H

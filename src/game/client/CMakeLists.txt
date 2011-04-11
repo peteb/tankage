@@ -37,5 +37,8 @@ target_link_libraries(tankage
   ${EXTRA_WINDOWS_LIBS}
 )
 
-INSTALL(TARGETS tankage DESTINATION bin)
-
+IF(APPLE)
+  INSTALL(TARGETS tankage DESTINATION .)  
+ELSE(APPLE)
+  INSTALL(TARGETS tankage DESTINATION bin)
+ENDIF(APPLE)

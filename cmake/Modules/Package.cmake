@@ -23,7 +23,7 @@ IF(APPLE)
   
 ELSE(APPLE)
   SET(CPACK_GENERATOR "DEB")
-  SET(CPACK_DEBIAN_PACKAGE_MAINTAINER "Peter & Co")
+  SET(CPACK_DEBIAN_PACKAGE_MAINTAINER "Sillybat")
   # Quick and dirty fix to create /usr/share/tankage/data folder otherwise
   # package complains that folder doesn't exist 
   set(CPACK_DEBIAN_PACKAGE_CONTROL_EXTRA 

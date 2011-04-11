@@ -11,6 +11,8 @@
 #include <platform/packet.h>
 #include <platform/graphics.h>
 #include <platform/window_manager.h>
+#include <platform/self_updater.h>
+#include <platform/config.h>
 
 #include <utils/log.h>
 #include <utils/packer.h>
@@ -18,10 +20,16 @@
 #include <cassert>
 #include <iostream>
 
+namespace {
+std::string Env(const std::string &name) {
+  char *var = getenv(name.c_str());
+  return (var ? var : "");
+}
+}
 
 
 Variable<std::string> client_host("tankage.iostream.cc:12345");
-Variable<std::string> client_name("Some guy");
+Variable<std::string> client_name("Master");
 Variable<bool> client_predict(true);
 Variable<bool> client_lerpRemote(true);
 Variable<bool> client_centerCam(true);
@@ -45,6 +53,20 @@ GameClient::GameClient(class Portal &services)
   _net = services.requestInterface<Network>();
   _gfx = services.requestInterface<Graphics>();
   _wm = services.requestInterface<WindowManager>();
+
+  #if defined(REMOTE_BINARY) && !defined(DEV)
+  if (Env("SKIP_UPDATE") != "true") {
+    Log(INFO) << "checking for updates...";
+    SelfUpdater *updater = services.requestInterface<SelfUpdater>();
+    updater->requestUpdate("tankage", 
+                           "http://iostream.cc/~peter/binaries/" REMOTE_BINARY);
+  }
+  else {
+    Log(INFO) << "skipping update";
+  }
+  #else
+  Log(INFO) << "can't update; binary not built with a remote url";
+  #endif
   
   _last_update = _wm->timeSeconds();
   _input_time = 0.0;
@@ -55,6 +77,7 @@ GameClient::GameClient(class Portal &services)
   
   _state = GameClient::STATE_DISCONNECTED;
   Log(INFO) << "connecting to host " << *client_host << "...";
+  _error = "Connecting...";
   _client = _net->connect(*client_host, 2);  
 }
 
@@ -89,10 +112,14 @@ void GameClient::update() {
   _map.render();
   _tankrenderer.render();
   _bulletrenderer.render();
+  
+  if (_state != GameClient::STATE_CONNECTED)
+    _textrenderer.renderText(_error, vec2(0.0f, 0.0f), 2.0f);
+  
 }
 
 void GameClient::updateNet() {
-  _client->update(10);
+  _client->update(10); // FIXME: can we steal ms here just like this?
   
   const bool connected = _client->isConnected();
 
@@ -124,7 +151,7 @@ void GameClient::sendInput() {
     new_input.aim_x += _view.x;
     new_input.aim_y += _view.y;
     new_input.write(msg);
-    _client->send(buffer, msg.size(), Client::PACKET_UNSEQUENCED, NET_CHANNEL_ABS);
+    _client->send(buffer, msg.size(), 0, NET_CHANNEL_ABS);
     _client->flush();
     _sent_input = new_input;
     _input_time = now;
@@ -155,6 +182,7 @@ void GameClient::onConnect() {
   Packer msg(buffer, buffer + 1024);
   msg.writeShort(NET_CLIENT_INFO);
   msg.writeString(*client_name);
+  msg.writeInt(NET_VERSION);
   _client->send(buffer, msg.size(), Client::PACKET_RELIABLE, NET_CHANNEL_STATE);
 }
 
@@ -168,6 +196,8 @@ double GameClient::deltaTime() const {
   
   return _since_snap / (1.0 / _net_tickrate);
 }
+
+// 0.1.9
 
 double GameClient::sinceSnap() const {
   return _since_snap;
@@ -216,6 +246,12 @@ void GameClient::onReceive(Packet *packet) {
     _tankrenderer.addSnapshot(tanks_snapshot);
     _bulletrenderer.addSnapshot(bullets_snapshot);
     _since_snap = 0.0;
+  }
+  else if (msgtype == NET_ERROR) {
+    int code = msg.readInt();
+    std::string str = msg.readString();
+    Log(INFO) << "> " << str << " (" << code << ")";
+    _error = str;
   }
   else if (msgtype == NET_MAPCHUNK) {
     _map.addChunk(msg);
