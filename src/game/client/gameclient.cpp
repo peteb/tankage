@@ -12,6 +12,7 @@
 #include <platform/graphics.h>
 #include <platform/window_manager.h>
 #include <platform/self_updater.h>
+#include <platform/config.h>
 
 #include <utils/log.h>
 #include <utils/packer.h>
@@ -52,7 +53,7 @@ GameClient::GameClient(class Portal &services)
   _gfx = services.requestInterface<Graphics>();
   _wm = services.requestInterface<WindowManager>();
 
-  #ifdef REMOTE_BINARY
+  #if defined(REMOTE_BINARY) && !defined(DEV)
   if (Env("SKIP_UPDATE") != "true") {
     Log(INFO) << "checking for updates...";
     SelfUpdater *updater = services.requestInterface<SelfUpdater>();
