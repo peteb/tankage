@@ -52,7 +52,7 @@ void Glfw::WindowManager::createWindow(int width, int height) {
   #ifdef DEV
   glfwSetWindowTitle("Snail Wail [DEVELOPER VERSION]");
   #else
-  glfwSetWindowTitle("Snail Wail");
+  glfwSetWindowTitle("The Age of Tanks");
   #endif
 
   std::cout << "glfw: window opened" << std::endl;
