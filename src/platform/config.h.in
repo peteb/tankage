@@ -10,5 +10,6 @@
 #cmakedefine PLATFORM_COCOA
 #cmakedefine DEV
 #cmakedefine REMOTE_BINARY "${REMOTE_BINARY}"  //< where to get the latest binary
+#cmakedefine BUILD_VERSION "${BUILD_VERSION}"
 
 #endif // !CONFIG_H

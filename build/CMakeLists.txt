@@ -66,7 +66,7 @@ set(PROJECT_ROOT_DIR ${PROJECT_SOURCE_DIR}/..)
 set(EXECUTABLE_OUTPUT_PATH ${PROJECT_ROOT_DIR}/bin)
 set(LIBRARY_OUTPUT_PATH ${PROJECT_ROOT_DIR}/bin)
 
-
+# Set resource path
 IF(${CMAKE_BUILD_TYPE} MATCHES "DEBUG")
   IF(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
     SET(RESOURCE_PATH "../../data")
@@ -88,6 +88,29 @@ ELSE(${CMAKE_BUILD_TYPE} MATCHES "DEBUG")
     
   ENDIF(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
 ENDIF(${CMAKE_BUILD_TYPE} MATCHES "DEBUG")
+
+# Determine version
+if(EXISTS "${CMAKE_SOURCE_DIR}/../.git")
+  execute_process(COMMAND git describe --abbrev=4 HEAD
+                  COMMAND sed -e "s/-/./g"
+                  OUTPUT_VARIABLE BUILD_VERSION
+                  OUTPUT_STRIP_TRAILING_WHITESPACE)
+  # remove leading "v"
+  #string(REGEX REPLACE "^v(.*)" "\\1" BUILD_VERSION ${BUILD_VERSION})
+  execute_process( COMMAND bash -c "echo \"${BUILD_VERSION}\" >   ${CMAKE_SOURCE_DIR}/version" )
+
+else(EXISTS "${CMAKE_SOURCE_DIR}/../.git")
+  execute_process(COMMAND cat ${CMAKE_SOURCE_DIR}/version
+                 OUTPUT_VARIABLE BUILD_VERSION
+                 OUTPUT_STRIP_TRAILING_WHITESPACE)
+endif(EXISTS "${CMAKE_SOURCE_DIR}/../.git")
+
+
+
+
+
+
+
 
 if(COMMAND cmake_policy)
   cmake_policy(SET CMP0003 NEW)
