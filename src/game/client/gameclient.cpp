@@ -27,6 +27,7 @@ std::string Env(const std::string &name) {
 }
 }
 
+
 Variable<std::string> client_host("tankage.iostream.cc:12345");
 Variable<std::string> client_name("Master");
 Variable<bool> client_predict(true);
@@ -57,8 +58,14 @@ GameClient::GameClient(class Portal &services)
   if (Env("SKIP_UPDATE") != "true") {
     Log(INFO) << "checking for updates...";
     SelfUpdater *updater = services.requestInterface<SelfUpdater>();
+    #ifdef _WIN32
+    updater->requestUpdate("tankage.exe", 
+                           "http://iostream.cc/~peter/binaries/" REMOTE_BINARY);
+    #else
+
     updater->requestUpdate("tankage", 
                            "http://iostream.cc/~peter/binaries/" REMOTE_BINARY);
+    #endif
   }
   else {
     Log(INFO) << "skipping update";
