@@ -78,32 +78,43 @@ ELSE(${CMAKE_BUILD_TYPE} MATCHES "DEBUG")
     SET(RESOURCE_PATH "${CMAKE_INSTALL_PREFIX}/share/tankage/data")
   ELSEIF(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
     SET(RESOURCE_PATH "data")
-	SET(REMOTE_BINARY "win/tankage.exe")
+  	SET(REMOTE_BINARY "win/tankage.exe")
   ELSE(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
     SET(RESOURCE_PATH "data")    
     
     IF(APPLE)
-    SET(REMOTE_BINARY "osx/Tankage.app/Contents/Resources/tankage")
+      SET(REMOTE_BINARY "osx/Tankage.app/Contents/Resources/tankage")
     ENDIF(APPLE)
     
   ENDIF(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
 ENDIF(${CMAKE_BUILD_TYPE} MATCHES "DEBUG")
 
 # Determine version
-if(EXISTS "${CMAKE_SOURCE_DIR}/../.git")
+if(EXISTS "${PROJECT_ROOT_DIR}/.git")
   execute_process(COMMAND git describe --abbrev=4 HEAD
                   COMMAND sed -e "s/-/./g"
                   OUTPUT_VARIABLE BUILD_VERSION
                   OUTPUT_STRIP_TRAILING_WHITESPACE)
   # remove leading "v"
-  #string(REGEX REPLACE "^v(.*)" "\\1" BUILD_VERSION ${BUILD_VERSION})
+  string(REGEX REPLACE "^v(.*)" "\\1" BUILD_VERSION ${BUILD_VERSION})
+  
+  # FIXME: use cmake stuff
   execute_process( COMMAND bash -c "echo \"${BUILD_VERSION}\" >   ${CMAKE_SOURCE_DIR}/version" )
 
-else(EXISTS "${CMAKE_SOURCE_DIR}/../.git")
+  if(DEV)
+    SET(BUILD_VERSION "${BUILD_VERSION}-dev")
+  endif(DEV)
+  
+  #file(STRINGS "${PROJECT_ROOT_DIR}/src/game/common/net_protocol.h"
+  #  BUILD_NETVER REGEX "NET_VERSION = (.*)")
+    
+  #string(REGEX REPLACE ".*NET_VERSION[\t ]+=[\t ](.*);.*" "\\1" BUILD_NETVER ${BUILD_NETVER})
+else(EXISTS "${PROJECT_ROOT_DIR}/.git")
+  # FIXME: don't use cat, use cmake stuff
   execute_process(COMMAND cat ${CMAKE_SOURCE_DIR}/version
                  OUTPUT_VARIABLE BUILD_VERSION
                  OUTPUT_STRIP_TRAILING_WHITESPACE)
-endif(EXISTS "${CMAKE_SOURCE_DIR}/../.git")
+endif(EXISTS "${PROJECT_ROOT_DIR}/.git")
 
 
 

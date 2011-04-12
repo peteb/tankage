@@ -18,6 +18,9 @@ int app_main(Portal &interfaces, const std::vector<char *> &args) {
   Graphics *gfx = interfaces.requestInterface<Graphics>();
   
   wm->createWindow(800, 600);
+
+  std::string wnd_caption = "Tankage (" BUILD_VERSION ")";
+  wm->setWindowTitle(wnd_caption);
   
   Config config(interfaces);
   client_RegisterVariables(config);
