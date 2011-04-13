@@ -14,7 +14,7 @@ TEST(utils_unittest, test_logging) {
   // create and register consumer
   Log::registerConsumer(MyLogConsumer());
   // do any logging afterwards
-  Log(ERROR) << "bad error occurred";
+  Log(INFO) << "bad error occurred";
   EXPECT_NE(std::string::npos, MyLogConsumer::stream.str().find("bad error"));
   MyLogConsumer::stream.str("");
 } // test_logging
