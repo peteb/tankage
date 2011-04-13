@@ -96,7 +96,7 @@ if(EXISTS "${PROJECT_ROOT_DIR}/.git")
                   OUTPUT_VARIABLE BUILD_VERSION
                   OUTPUT_STRIP_TRAILING_WHITESPACE)
   # remove leading "v"
-  string(REGEX REPLACE "^v(.*)" "\\1" BUILD_VERSION ${BUILD_VERSION})
+  #string(REGEX REPLACE "^v(.*)" "\\1" BUILD_VERSION ${BUILD_VERSION})
   
   # FIXME: use cmake stuff
   execute_process( COMMAND bash -c "echo \"${BUILD_VERSION}\" >   ${CMAKE_SOURCE_DIR}/version" )
