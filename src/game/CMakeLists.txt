@@ -2,6 +2,11 @@
 
 set(GAME_ROOT_DIR ${PROJECT_ROOT_DIR}/src/game)
 
-add_subdirectory(client)
-add_subdirectory(server)
+if (DEFINED CLIENT)
+  add_subdirectory(client)
+endif (DEFINED CLIENT)
+
+if (DEFINED SERVER)
+  add_subdirectory(server)
+endif (DEFINED SERVER)
 

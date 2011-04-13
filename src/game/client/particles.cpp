@@ -1,8 +1,8 @@
 #include <game/client/particles.h>
-#include <engine/portal.h>
-#include <engine/graphics.h>
-#include <engine/window_manager.h>
-#include <engine/texture.h>
+#include <platform/portal.h>
+#include <platform/graphics.h>
+#include <platform/window_manager.h>
+#include <platform/texture.h>
 #include <utils/key.h>
 #include <algorithm>
 #include <utility>

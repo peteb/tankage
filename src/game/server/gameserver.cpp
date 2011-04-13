@@ -6,10 +6,9 @@
 #include <game/common/net_protocol.h>
 #include <game/common/config.h>
 
-#include <engine/packet.h>
-#include <engine/network.h>
-#include <engine/portal.h>
-#include <engine/window_manager.h>
+#include <platform/packet.h>
+#include <platform/network.h>
+#include <platform/portal.h>
 
 #include <utils/packer.h>
 #include <utils/log.h>
@@ -30,7 +29,6 @@ GameServer::GameServer(const Portal &services)
   : _map(this)
 {  
   _net = services.requestInterface<Network>();
-  _wm = services.requestInterface<WindowManager>();
   
   _tick = 0;
   _last_entity = 0;
@@ -44,17 +42,18 @@ GameServer::~GameServer() {
 }
 
 void GameServer::run() {
-  double last_tick = _wm->timeSeconds();
+  double last_tick = _net->time() / 1000.0;
   
   while (true) {
-    double this_tick = _wm->timeSeconds();
+    double this_tick = _net->time() / 1000.0;
     int timeout = clamp(last_tick + tickDuration() - this_tick, tickDuration() * 0.1, 0.0) * 1000.0;
     
     updateNet(timeout);
     
-    this_tick = _wm->timeSeconds();
+    this_tick = _net->time() / 1000.0;
     if (this_tick - last_tick >= tickDuration()) {
       onTick();
+
       last_tick = this_tick;
       _tick++;
     }
@@ -90,7 +89,7 @@ void GameServer::onTick() {
     _events.snap(msg, it->second);
     msg.writeShort(0);
     
-    it->second->client->send(buffer, msg.size(), Client::PACKET_UNSEQUENCED, NET_CHANNEL_ABS);  
+    it->second->client->send(buffer, msg.size(), 0, NET_CHANNEL_ABS);  
     
     // send reliable events
     msg.reset();
@@ -116,7 +115,6 @@ void GameServer::onTick() {
 }
 
 void GameServer::updateNet(int timeout) {
-  //Log(DEBUG) << "updating network, timeout " << timeout;
   _host->update(timeout);
   
   // get all the action
@@ -133,8 +131,6 @@ void GameServer::updateNet(int timeout) {
     onReceive(packet);
     delete packet;
   }  
-  
-  //Log(DEBUG) << "finished updating network";
 }
 
 unsigned int GameServer::gameTick() const {
@@ -147,19 +143,6 @@ double GameServer::tickDuration() const {
 
 void GameServer::onConnect(Client *client) {
   Log(INFO) << "got connection from " << client->address();
-  
-  if (_sessions.find(client) != _sessions.end()) {
-    // FIXME:  disconnect the connection
-    return;
-  }
-  
-  
-  ClientSession *session = new ClientSession(client);
-  _sessions.insert(std::make_pair(client, session));
-  Tank *tank = spawnTank();
-  session->tankid = tank->id();
-
-  sendServerInfo(client);
 }
 
 void GameServer::onDisconnect(Client *client) {
@@ -175,46 +158,80 @@ void GameServer::onDisconnect(Client *client) {
 }
 
 void GameServer::onReceive(Packet *packet) {
-  Unpacker msg(packet->data(), (const unsigned char *)packet->data() + packet->size());
+  Unpacker msg(packet->data(), 
+               (const unsigned char *)packet->data() + packet->size());
   short type = msg.readShort();
+  Client *client = packet->sender();
 
-  ClientSession *sess = session(packet->sender());
-  if (!sess)
-    return;
+  // FIXME: if sending error and doing disconnect, wait with disconnect so it can send it first.
   
-  // TODO sometime: send snapshots at different intervals. players at 15, bullets at 5, etc.
-  
-  if (type == NET_PLAYER_INPUT) {
-    Tank *tank = static_cast<Tank *>(entity(sess->tankid));
-    if (tank) {
-      Control::Input input;
-      input.read(msg);
-      tank->recvInput(input);
-    }
-  }
-  else if (type == NET_CLIENT_INFO) { // should we use this for updating name??
+  // we only allow CLIENT_INFO to be received without a session.  
+  if (type == NET_CLIENT_INFO) {
     std::string name = msg.readString();
-    Log(INFO) << "client " << sess->tankid << " joined as '" << name << "'";
-    sess->name = name;
-    _events.createPlayerJoined(sess->tankid, name); // FIXME: CLIENT_INFO should probably be an update. join is a special case of INFO when a client hasn't received an INFO before
+    int cl_version = msg.readInt();
     
-    const int BUFSZ = 256;
-    char buffer[BUFSZ];
-    
-    SessionMap::iterator it = _sessions.begin(), it_e = _sessions.end();
-    for (; it != it_e; ++it) {
-      if (it->second->client == packet->sender())
-        continue;
-      
-      Packer reply_msg(buffer, buffer + BUFSZ);
-      reply_msg.writeShort(NET_PLAYER_INFO);
-      reply_msg.writeInt(it->second->tankid);
-      reply_msg.writeString(it->second->name);
-      // FIXME: this is one "packet" per player.. maybe we should batch
-      packet->sender()->send(buffer, reply_msg.size(), Client::PACKET_RELIABLE, NET_CHANNEL_STATE);     
+    if (cl_version != NET_VERSION) {
+      Log(DEBUG) << "connecting client has wrong version";
+      sendError(client, 10, "Wrong version!");
+      client->disconnect();
+      return;
     }
 
+    if (_sessions.find(client) != _sessions.end()) {
+      Log(DEBUG) << "client already has a session...?";
+      sendError(client, 11, "You're already here.");
+      client->disconnect();
+      return;
+    }
+    
+    
+    ClientSession *new_s = new ClientSession(client);
+    _sessions.insert(std::make_pair(client, new_s));
+    Tank *tank = spawnTank();
+    new_s->tankid = tank->id();
+
+    sendServerInfo(client);
+
+    Log(INFO) << "client " << new_s->tankid << " joined as '" << name << "'";
+    new_s->name = name;
+    _events.createPlayerJoined(new_s->tankid, name); // FIXME: CLIENT_INFO should probably be an update. join is a special case of INFO when a client hasn't received an INFO before
+    
+    sendPlayers(client);
   }
+  else {
+    ClientSession *sess = session(packet->sender());
+    if (!sess)
+      return;
+  
+    // TODO sometime: send snapshots at different intervals. players at 15, bullets at 5, etc.
+  
+    if (type == NET_PLAYER_INPUT) {
+      Tank *tank = static_cast<Tank *>(entity(sess->tankid));
+      if (tank) {
+        Control::Input input;
+        input.read(msg);
+        tank->recvInput(input);
+      }
+    }
+  }
+}
+
+void GameServer::sendPlayers(class Client *client) {
+  const int BUFSZ = 256;
+  char buffer[BUFSZ];
+  
+  SessionMap::iterator it = _sessions.begin(), it_e = _sessions.end();
+  for (; it != it_e; ++it) {
+    if (it->second->client == client)
+      continue;
+    
+    Packer reply_msg(buffer, buffer + BUFSZ);
+    reply_msg.writeShort(NET_PLAYER_INFO);
+    reply_msg.writeInt(it->second->tankid);
+    reply_msg.writeString(it->second->name);
+    // FIXME: this is one "packet" per player.. maybe we should batch
+    client->send(buffer, reply_msg.size(), Client::PACKET_RELIABLE, NET_CHANNEL_STATE);     
+  }  
 }
 
 ClientSession *GameServer::session(Client *client) const {
@@ -233,9 +250,19 @@ void GameServer::sendServerInfo(Client *receiver) {
   msg.writeShort(*server_tickrate * 10.0);
   msg.writeInt(session(receiver)->tankid);
   
-  receiver->send(buffer, 1024, Client::PACKET_RELIABLE, NET_CHANNEL_STATE);
+  receiver->send(buffer, msg.size(), Client::PACKET_RELIABLE, NET_CHANNEL_STATE);
 }
 
+void GameServer::sendError(class Client *client, int code, 
+                           const std::string &str) {
+  char buffer[1024];
+  Packer msg(buffer, buffer + 1024);
+  msg.writeShort(NET_ERROR);
+  msg.writeInt(code);
+  msg.writeString(str);
+  client->send(buffer, msg.size(), Client::PACKET_RELIABLE, NET_CHANNEL_STATE);
+  client->flush();
+}
 
 Tank *GameServer::spawnTank() {
   Tank *tank = new Tank(this);

@@ -122,6 +122,12 @@ void Config::updateProperty(const std::string &system,
 
 void Config::parse(const std::vector<char *> &args) {
   for (size_t i(1); i < args.size(); ++i) {
+    if (args[i] && args[i][0] == '-') {
+      // MINOR kaspars: eventually it might be good to add proper
+      // argument parsing, probably some centralized thing
+      continue;
+    }
+
     const std::string &arg = args[i];
     size_t dot = arg.find(".");
     if (dot == std::string::npos) 

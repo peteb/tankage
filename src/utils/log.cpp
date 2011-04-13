@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <cstdlib>
+#include <fstream>
 
 
 std::vector<Log::Consumer> Log::_consumers;
@@ -43,7 +44,11 @@ Log::~Log() {
 
 void Log::registerConsumer(const Consumer &consumer) {
   _consumers.push_back(consumer); 
-} // register_consumer 
+}
+
+void Log::clearConsumers() {
+  _consumers.clear();
+}
 
 Log::DefaultLogConsumer::DefaultLogConsumer() : _level(SEVERITY_DEBUG) {
     char *level = getenv("TANKAGE_LOGGING_LEVEL");
@@ -57,5 +62,18 @@ void Log::DefaultLogConsumer::operator()(Log::Severity severity,
   if (_level > severity) {
     std::cout << line << std::endl;
   }
+}
+
+void Log::ToFileConsumer::operator()(Log::Severity severity, 
+  const std::string &line) {
+    std::ofstream file;
+    file.open(_path.c_str(), std::ios::app);
+    if (!_path.empty() && file.is_open()) {
+      file << line << std::endl;
+      file.close();
+    } else {
+      // fall-back on the standard out
+      std::cout << line << std::endl;
+    } 
 }
 

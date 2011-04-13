@@ -5,9 +5,12 @@
 #add_subdirectory(utils)
 #add_subdirectory(opengl)
 add_subdirectory(utils)
-add_subdirectory(engine)
+add_subdirectory(platform)
 add_subdirectory(game)
 
+if (DEFINED SERVER)
+add_subdirectory(tool)
+endif (DEFINED SERVER)
 
 
 if (HAVE_BOOST)

@@ -3,7 +3,7 @@ include_directories(
   ${PROJECT_ROOT_DIR}/3pp/include
 )
 
-add_library(twitcurl
+add_library(twitcurl EXCLUDE_FROM_ALL
   base64.cpp
   HMAC_SHA1.cpp
   oauthlib.cpp

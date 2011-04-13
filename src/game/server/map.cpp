@@ -79,7 +79,9 @@ bool Map::intersectSolid(const vec2 &start, const vec2 &end, float radius, vec2 
 }
 
 void Map::damageTile(const std::pair<int, int> &tile) {
-  _data[tile.second * 32 + tile.first] = 1;
+  int x = clamp(tile.first, 0, 31);
+  int y = clamp(tile.second, 0, 31);
+  _data[y * 32 + x] = 1;
   _gameserver->events().spawnTileUpdate(tile.first, tile.second, 1, 
                                         vec2((tile.first - 16) * 32, (tile.second - 16) * 32));
 }
