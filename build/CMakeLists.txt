@@ -89,9 +89,15 @@ ELSE(${CMAKE_BUILD_TYPE} MATCHES "DEBUG")
   ENDIF(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
 ENDIF(${CMAKE_BUILD_TYPE} MATCHES "DEBUG")
 
+IF(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
+  SET(GIT_CMD "git.cmd")
+ELSE(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
+  SET(GIT_CMD "git")
+ENDIF(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
+
 # Determine version
 if(EXISTS "${PROJECT_ROOT_DIR}/.git")
-  execute_process(COMMAND git describe --abbrev=4 HEAD
+  execute_process(COMMAND ${GIT_CMD} describe --abbrev=4 HEAD
                   COMMAND sed -e "s/-/./g"
                   OUTPUT_VARIABLE BUILD_VERSION
                   OUTPUT_STRIP_TRAILING_WHITESPACE)
