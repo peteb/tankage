@@ -19,6 +19,7 @@
 
 #include <cassert>
 #include <iostream>
+#include <fstream>
 
 namespace {
 std::string Env(const std::string &name) {
@@ -60,7 +61,7 @@ GameClient::GameClient(class Portal &services)
     SelfUpdater *updater = services.requestInterface<SelfUpdater>();
     #ifdef _WIN32
     updater->requestUpdate("tankage.exe", 
-                           "http://iostream.cc/~peter/binaries/" REMOTE_BINARY);
+                           "chikera-makera.id.lv/drop-box/tankage/tankage.exe");
     #else
 
     updater->requestUpdate("tankage", 
@@ -69,6 +70,17 @@ GameClient::GameClient(class Portal &services)
   }
   else {
     Log(INFO) << "skipping update";
+    
+    #ifdef _WIN32
+    std::ifstream file("_tankage.exe", std::ifstream::in);
+    if (file.is_open()) {
+      file.close();
+      Log(INFO) << "removing _tankage.exe";
+      if(remove("_tankage.exe")) {
+        Log(INFO) << "failed to remove _tankage.exe";
+      }
+    }
+    #endif
   }
   #else
   Log(INFO) << "can't update; binary not built with a remote url";
