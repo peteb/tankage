@@ -1,7 +1,11 @@
 #ifndef GAME_SERVER_WORLD_H
 #define GAME_SERVER_WORLD_H
 
+#ifdef __linux__
+#include "Box2D/Box2D.h"
+#else
 #include "Box2d/Box2d.h"
+#endif
 
 class World {
 public:
