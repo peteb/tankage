@@ -9,6 +9,16 @@
 #include <algorithm>
 #include <utility>
 
+//namespace {
+//inline TileCoord clamp(const TileCoord &val, const TileCoord &min, 
+//                       const TileCoord &max) {
+//  TileCoord ret;
+//  ret.first = clamp(val.first, min.first, max.first);
+//  ret.second = clamp(val.second, min.second, max.second);
+//  return ret;
+//}
+//}
+
 Map::Map(GameServer *gameserver) 
   : _gameserver(gameserver)
 {
@@ -39,17 +49,19 @@ void Map::snap(Packer &msg, ClientSession *client) {
   client->sent_map = true;
 }
 
-std::pair<int, int> VecTile(const vec2 &pos) {
+TileCoord VecTile(const vec2 &pos) {
   vec2 ofs = pos;
-  int tile_x = ofs.x / 32.0f;
-  int tile_y = ofs.y / 32.0f;
+  int tile_x = ofs.x / 32.0f - 16;
+  int tile_y = ofs.y / 32.0f - 16;
   
-  tile_x = clamp(tile_x + 1, 0, 32);
-  tile_y = clamp(tile_y + 1, 0, 32);
-  return std::make_pair(tile_x, tile_y);
+  tile_x = clamp(tile_x + 1, -16, 15);
+  tile_y = clamp(tile_y + 1, -16, 15);
+  
+  return TileCoord(tile_x, tile_y);
 }
 
-bool Map::intersectSolid(const vec2 &start, const vec2 &end, float radius, vec2 &point, std::pair<int, int> &hit_tile) {  
+bool Map::intersectSolid(const vec2 &start, const vec2 &end, float radius, 
+                         vec2 &point, TileCoord &hit_tile) {  
   vec2 start_ofs = start + vec2(16.0f * 32.0f, 16.0f * 32.0f);
   vec2 end_ofs = end + vec2(16.0f * 32.0f, 16.0f * 32.0f);
   double dt = 1.0 / length(end_ofs - start_ofs);
@@ -63,9 +75,9 @@ bool Map::intersectSolid(const vec2 &start, const vec2 &end, float radius, vec2 
   
   while (pos <= 1.0) {
     vec2 lerp_pos = lerp(start_ofs, end_ofs, pos);
-    std::pair<int, int> tile = VecTile(lerp_pos);
+    TileCoord tile = VecTile(lerp_pos);
 
-    if (_data[tile.second * 32 + tile.first] == 0) {
+    if (at(tile) == 0) {
       point = last_lerp - vec2(16.0f * 32.0f, 16.0f * 32.0f);
       hit_tile = tile;
       return true;
@@ -78,16 +90,21 @@ bool Map::intersectSolid(const vec2 &start, const vec2 &end, float radius, vec2 
   return false;
 }
 
-void Map::damageTile(const std::pair<int, int> &tile) {
-  int x = clamp(tile.first, 0, 31);
-  int y = clamp(tile.second, 0, 31);
-  _data[y * 32 + x] = 1;
+void Map::damageTile(const TileCoord &tile) {
+  at(tile) = 1;
   _gameserver->events().spawnTileUpdate(tile.first, tile.second, 1, 
-                                        vec2((tile.first - 16) * 32, (tile.second - 16) * 32));
+                                        vec2(tile.first * 32, 
+                                             tile.second * 32));
 }
 
-char Map::at(int x, int y) const {
-  x = clamp(x, -16, 15);
-  y = clamp(y, -16, 15);
+char Map::at(const TileCoord &tile) const {
+  int x = clamp(tile.first, -16, 15);
+  int y = clamp(tile.second, -16, 15);
+  return _data[(x + 16) * 32 + (y + 16)];
+}
+
+char &Map::at(const TileCoord &tile) {
+  int x = clamp(tile.first, -16, 15);
+  int y = clamp(tile.second, -16, 15);
   return _data[(x + 16) * 32 + (y + 16)];
 }

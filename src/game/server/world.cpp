@@ -14,7 +14,7 @@ World::World(class GameServer *server)
   
   for (int y = -16; y < 16; ++y) {
     for (int x = -16; x < 16; ++x) {
-      char tile_type = map.at(x, y);
+      char tile_type = map.at(TileCoord(x, y));
       if (tile_type == 0) {
         tile_shape.SetAsBox(0.5f, 0.5f, b2Vec2(x - 0.5f, y - 0.5f), 0.0f);
         

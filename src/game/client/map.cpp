@@ -38,5 +38,5 @@ void ClientMap::render() {
 }
 
 void ClientMap::setTile(const std::pair<int, int> &tile, char state) {
-  _data[tile.second*32 + tile.first] = state;
+  _data[(tile.second + 16)*32 + (tile.first + 16)] = state;
 }
