@@ -26,8 +26,8 @@ void server_RegisterVariables(class Config &config) {
 }
 
 GameServer::GameServer(const Portal &services) 
-  : _map(this)
-  , _world(this)
+  : _world(b2Vec2(0.0f, 0.0f), false)
+  , _map(this, _world)
 {  
   _net = services.requestInterface<Network>();
   
@@ -72,7 +72,7 @@ void GameServer::onTick() {
   for (size_t i = 0; i < _bullets.size(); ++i)
     _bullets[i]->tick();
   
-  _world.tick();
+  tickPhysics();
   
   for (size_t i = 0; i < _tanks.size(); ++i)
     _tanks[i]->postTick();
@@ -269,7 +269,7 @@ void GameServer::sendError(class Client *client, int code,
 }
 
 Tank *GameServer::spawnTank() {
-  b2Body *tank_body = _world.createTankBody();
+  b2Body *tank_body = createTankBody();
   Tank *tank = new Tank(this, tank_body);
   Tank::State initial;
   initial.id = ++_last_entity;
@@ -368,3 +368,24 @@ Events &GameServer::events() {
 Map &GameServer::map() {
   return _map;
 }
+
+b2Body *GameServer::createTankBody() {
+  b2BodyDef def;
+  def.type = b2_dynamicBody;
+  b2Body *body = _world.CreateBody(&def);
+  
+  b2PolygonShape box;
+  box.SetAsBox(27.0f/64.0f, 25.0f/64.0f);
+    
+  body->CreateFixture(&box, 1.0f);
+  
+  return body;  
+}
+
+void GameServer::tickPhysics() {
+  for (int i = 0; i < 6; ++i) {
+    _world.Step(1.0f/60.0f, 6, 2);
+    _world.ClearForces();
+  }    
+}
+

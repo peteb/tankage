@@ -4,10 +4,11 @@
 #include <game/server/entity.h>
 #include <game/server/events.h>
 #include <game/server/map.h>
-#include <game/server/world.h>
 
 #include <vector>
 #include <map>
+
+#include "Box2D/Box2D.h"
 
 void server_RegisterVariables(class Config &config);
 
@@ -37,20 +38,21 @@ private:
   void updateNet(int timeout = 0);
   void onTick();
   class Tank *spawnTank();
+  b2Body *createTankBody();
   void destroyZombies();
   void sendServerInfo(class Client *receiver);
   void sendPlayers(class Client *client);
   void sendError(class Client *client, int code, const std::string &str);
-  
+  void tickPhysics();
 
   std::vector<class Tank *> _tanks;
   std::vector<class Bullet *> _bullets;
   std::vector<int> _zombie_entities;
   
+  b2World _world;
   SessionMap _sessions;
   Events _events;
   Map _map;
-  World _world;
   
   class Host *_host;
   class Network *_net;

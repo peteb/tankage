@@ -9,6 +9,8 @@
 #include <algorithm>
 #include <utility>
 
+#include "Box2D/Box2D.h"
+
 //namespace {
 //inline TileCoord clamp(const TileCoord &val, const TileCoord &min, 
 //                       const TileCoord &max) {
@@ -19,8 +21,9 @@
 //}
 //}
 
-Map::Map(GameServer *gameserver) 
+Map::Map(GameServer *gameserver, b2World &world) 
   : _gameserver(gameserver)
+  , _world(world)
 {
   std::fill(_data, _data + 32*32, 0);
   for (int y = 0; y < 32; ++y) {
@@ -32,6 +35,27 @@ Map::Map(GameServer *gameserver)
       }
     }
   }
+  
+  
+  b2BodyDef static_body_def;
+  b2Body *static_body = _world.CreateBody(&static_body_def);
+  b2PolygonShape tile_shape;
+  
+  for (int y = -16; y < 16; ++y) {
+    for (int x = -16; x < 16; ++x) {
+      char tile_type = at(TileCoord(x, y));
+      if (tile_type == 0) {
+        tile_shape.SetAsBox(0.5f, 0.5f, b2Vec2(x - 0.5f, y - 0.5f), 0.0f);
+        
+        /*b2FixtureDef fixture_def;
+         fixture_def.shape = &tile_shape;
+         fixture_def.density = 1.0f;
+         fixture_def.friction = 0.3f;*/
+        static_body->CreateFixture(&tile_shape, 1.0f);
+      }
+      
+    }
+  } 
 }
 
 void Map::snap(Packer &msg, ClientSession *client) {
