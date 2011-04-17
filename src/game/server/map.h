@@ -2,6 +2,7 @@
 #define GAME_SERVER_MAP_H
 
 #include <utility>
+#include <vector>
 
 typedef std::pair<int, int> TileCoord;
 
@@ -17,9 +18,14 @@ public:
   char &at(const TileCoord &tile);
   
 private:
-  char _data[32 * 32];
-  class GameServer *_gameserver;
+  void createMapBody();
   
+  class b2Body *_static_body;
+  std::vector<class b2Fixture *> _fixtures;
+  char _data[32 * 32];
+
+  class GameServer *_gameserver;
+
   class b2World &_world;
 };
 

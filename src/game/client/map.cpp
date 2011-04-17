@@ -32,7 +32,7 @@ void ClientMap::render() {
         _gfx->setColor(color4(0.7, 0.7f, 0.7f, 1.0f));
         
       vec2 pos((x - 16) * 32, (y - 16) * 32);
-      _gfx->drawQuad(rect(pos, 32, 32), 0.0f);
+      _gfx->drawQuad(rect(pos, 16, 16), 0.0f);
     }
   }
 }
