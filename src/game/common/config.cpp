@@ -14,6 +14,9 @@ Config::Config(const class Portal &services)
   : _path("") // this should be determined here
   , _node("root")
 {
+  #ifdef _WIN32
+  _path = "tankage.conf";
+  #else
   Log(DEBUG) << "Init config system"; 
   if (_path.empty()) {
     char *home = getenv("HOME");
@@ -23,6 +26,7 @@ Config::Config(const class Portal &services)
   } else {
     // FIXME kaspars: add Windows stuff
   }
+  #endif
   std::stringstream buffer;
   PropertyTreeParser parser;
   // read config file

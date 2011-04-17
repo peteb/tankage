@@ -4,6 +4,10 @@ include_directories(${PROJECT_ROOT_DIR}
   ${PROJECT_ROOT_DIR}/3pp 
 )
 
+IF(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
+  SET(TANKAGE_RESOURCE_FILE ${PROJECT_ROOT_DIR}/cmake/Scripts/tankage.rc)
+ENDIF(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
+
 add_executable(tankage
   # common stuff
   ${GAME_ROOT_DIR}/common/control.cpp
@@ -16,6 +20,9 @@ add_executable(tankage
   ${GAME_ROOT_DIR}/server/events.cpp
   ${GAME_ROOT_DIR}/server/bullet.cpp
   ${GAME_ROOT_DIR}/server/map.cpp
+
+  # sets nice icon for the executable and main window =]
+  ${TANKAGE_RESOURCE_FILE}
 
   # client specific
   main.cpp
