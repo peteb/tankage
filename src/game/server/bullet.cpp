@@ -69,18 +69,22 @@ void Bullet::tick() {
 //  if (_state.start_tick > _gameserver->gameTick())
 //    return;
   
-  vec2 last_pos = _state.positionAt(_gameserver->gameTick() - 1, 0.0, _gameserver->tickDuration());
-  vec2 current_pos = _state.positionAt(_gameserver->gameTick(), 0.0, _gameserver->tickDuration());
+  vec2 last_pos = _state.positionAt(_gameserver->gameTick() - 1, 0.0, 
+                                    _gameserver->tickDuration());
+  vec2 current_pos = _state.positionAt(_gameserver->gameTick(), 0.0, 
+                                       _gameserver->tickDuration());
 
   _state.max_lerp = 10.0f;
 
-  Tank *x_tank = _gameserver->intersectingTank(last_pos, current_pos, 0.0f, _shooter);
+  Tank *x_tank = _gameserver->intersectingTank(last_pos, current_pos, 
+                                               0.0f, _shooter);
   if (x_tank) {
     x_tank->takeDamage(last_pos, 5);
     _gameserver->events().spawnTankHit(x_tank->id(), _shooter, x_tank->state().pos);
     // FIXME: get hit position from intersectingTank; then send that in event
     _alive_time = 0.0;
-    _state.max_lerp = (length(last_pos - x_tank->state().pos) - 16.0f) / 800.0; // FIXME: don't hardcode velocity
+    _state.max_lerp = (length(last_pos - x_tank->state().pos) - 16.0f) / 800.0; 
+    // FIXME: don't hardcode velocity
   }
 
   vec2 hit_pos;

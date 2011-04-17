@@ -2,6 +2,7 @@
 
 include_directories(${PROJECT_ROOT_DIR}
   ${PROJECT_ROOT_DIR}/3pp 
+  ${BOX2D_INCLUDE_DIR}
 )
 
 IF(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
@@ -20,6 +21,7 @@ add_executable(tankage
   ${GAME_ROOT_DIR}/server/events.cpp
   ${GAME_ROOT_DIR}/server/bullet.cpp
   ${GAME_ROOT_DIR}/server/map.cpp
+  ${GAME_ROOT_DIR}/server/world.cpp
 
   # sets nice icon for the executable and main window =]
   ${TANKAGE_RESOURCE_FILE}
@@ -42,6 +44,7 @@ target_link_libraries(tankage
   platform_client
   ptrcfg
   ${EXTRA_WINDOWS_LIBS}
+  ${BOX2D_LIBRARY}
 )
 
 IF(APPLE)
