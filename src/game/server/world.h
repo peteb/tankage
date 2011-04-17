@@ -1,7 +1,7 @@
 #ifndef GAME_SERVER_WORLD_H
 #define GAME_SERVER_WORLD_H
 
-#include <Box2D.h>
+#include <Box2D/Box2D.h>
 
 class World {
 public:

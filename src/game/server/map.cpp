@@ -9,7 +9,7 @@
 #include <algorithm>
 #include <utility>
 
-#include <Box2D.h>
+#include <Box2D/Box2D.h>
 
 //namespace {
 //inline TileCoord clamp(const TileCoord &val, const TileCoord &min, 

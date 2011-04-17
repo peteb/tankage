@@ -4,7 +4,7 @@
 #include <game/server/gameserver.h>
 #include <cmath>
 
-#include <Box2D.h>
+#include <Box2D/Box2D.h>
 
 /* <--- begin tank state ---> */
 Tank::State &Tank::State::write(Packer &msg) {
