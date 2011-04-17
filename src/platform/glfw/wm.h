@@ -12,6 +12,7 @@ public:
 
   rect size() const;
   void createWindow(int width, int height);
+  void setWindowTitle(const std::string &title);
   double timeSeconds();
   void swapBuffers();
   bool windowState(WindowState state);

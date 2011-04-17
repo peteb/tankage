@@ -17,6 +17,7 @@ public:
   }
 
   virtual void createWindow(int width, int height) =0;
+  virtual void setWindowTitle(const std::string &title) =0;
   virtual rect size() const =0;
   virtual double timeSeconds() =0;
   virtual void swapBuffers() =0;

@@ -5,6 +5,10 @@ include_directories(${PROJECT_ROOT_DIR}
   ${BOX2D_INCLUDE_DIR}
 )
 
+IF(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
+  SET(TANKAGE_RESOURCE_FILE ${PROJECT_ROOT_DIR}/cmake/Scripts/tankage.rc)
+ENDIF(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
+
 add_executable(tankage
   # common stuff
   ${GAME_ROOT_DIR}/common/control.cpp
@@ -19,6 +23,9 @@ add_executable(tankage
   ${GAME_ROOT_DIR}/server/map.cpp
   ${GAME_ROOT_DIR}/server/world.cpp
 
+  # sets nice icon for the executable and main window =]
+  ${TANKAGE_RESOURCE_FILE}
+
   # client specific
   main.cpp
   gameclient.cpp
@@ -30,7 +37,7 @@ add_executable(tankage
   )
  
 if (WIN32) 
-  set(EXTRA_WINDOWS_LIBS "ws2_32.lib; winmm.lib")
+  set(EXTRA_WINDOWS_LIBS "ws2_32.lib;winmm.lib")
 endif (WIN32)
 
 target_link_libraries(tankage
@@ -40,5 +47,8 @@ target_link_libraries(tankage
   ${BOX2D_LIBRARY}
 )
 
-INSTALL(TARGETS tankage DESTINATION bin)
-
+IF(APPLE)
+  INSTALL(TARGETS tankage DESTINATION .)  
+ELSE(APPLE)
+  INSTALL(TARGETS tankage DESTINATION bin)
+ENDIF(APPLE)

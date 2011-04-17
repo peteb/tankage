@@ -66,15 +66,74 @@ set(PROJECT_ROOT_DIR ${PROJECT_SOURCE_DIR}/..)
 set(EXECUTABLE_OUTPUT_PATH ${PROJECT_ROOT_DIR}/bin)
 set(LIBRARY_OUTPUT_PATH ${PROJECT_ROOT_DIR}/bin)
 
+# Set resource path
 IF(${CMAKE_BUILD_TYPE} MATCHES "DEBUG")
-  SET(RESOURCE_PATH "../data")
+  IF(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
+    SET(RESOURCE_PATH "../../data")
+  ELSE(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
+    SET(RESOURCE_PATH "../data")
+  ENDIF(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
 ELSE(${CMAKE_BUILD_TYPE} MATCHES "DEBUG")
   IF(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
     SET(RESOURCE_PATH "${CMAKE_INSTALL_PREFIX}/share/tankage/data")
+  ELSEIF(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
+    SET(RESOURCE_PATH "data")
+  	SET(REMOTE_BINARY "win/tankage.exe")
   ELSE(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
-    SET(RESOURCE_PATH "share/tankage/data")    
+    SET(RESOURCE_PATH "data")    
+    
+    IF(APPLE)
+      SET(REMOTE_BINARY "osx/Tankage.app/Contents/Resources/tankage")
+    ENDIF(APPLE)
+    
   ENDIF(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
 ENDIF(${CMAKE_BUILD_TYPE} MATCHES "DEBUG")
+
+IF(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
+  SET(GIT_CMD "git.cmd")
+ELSE(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
+  SET(GIT_CMD "git")
+ENDIF(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
+
+# Determine version
+if(EXISTS "${PROJECT_ROOT_DIR}/.git")
+  execute_process(COMMAND ${GIT_CMD} describe --abbrev=4 HEAD
+                  COMMAND sed -e "s/-/./g"
+                  OUTPUT_VARIABLE BUILD_VERSION
+                  OUTPUT_STRIP_TRAILING_WHITESPACE)
+  # remove leading "v"
+  #string(REGEX REPLACE "^v(.*)" "\\1" BUILD_VERSION ${BUILD_VERSION})
+  
+  # FIXME: use cmake stuff
+  execute_process( COMMAND bash -c "echo \"${BUILD_VERSION}\" >   ${CMAKE_SOURCE_DIR}/version" )
+
+  if(DEV)
+    SET(BUILD_VERSION "${BUILD_VERSION}-dev")
+  endif(DEV)
+  
+  # FIXME: move this to Package?
+  string(REPLACE "." ";" VERSION_LIST ${BUILD_VERSION})
+  list(GET VERSION_LIST 0 BUILD_VERSION_MAJVAL)
+  list(GET VERSION_LIST 1 BUILD_VERSION_MINVAL)
+  set(BUILD_VERSION_MAJOR 1)
+  set(BUILD_VERSION_MINOR 1)
+  #file(STRINGS "${PROJECT_ROOT_DIR}/src/game/common/net_protocol.h"
+  #  BUILD_NETVER REGEX "NET_VERSION = (.*)")
+    
+  #string(REGEX REPLACE ".*NET_VERSION[\t ]+=[\t ](.*);.*" "\\1" BUILD_NETVER ${BUILD_NETVER})
+else(EXISTS "${PROJECT_ROOT_DIR}/.git")
+  # FIXME: don't use cat, use cmake stuff
+  execute_process(COMMAND cat ${CMAKE_SOURCE_DIR}/version
+                 OUTPUT_VARIABLE BUILD_VERSION
+                 OUTPUT_STRIP_TRAILING_WHITESPACE)
+endif(EXISTS "${PROJECT_ROOT_DIR}/.git")
+
+
+
+
+
+
+
 
 if(COMMAND cmake_policy)
   cmake_policy(SET CMP0003 NEW)

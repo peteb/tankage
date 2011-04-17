@@ -8,7 +8,7 @@ class TextRenderer {
 public:
   TextRenderer(class Portal &services, class TextureLoader &texloader);
   
-  void renderText(const std::string &text, const class vec2 &pos);
+  void renderText(const std::string &text, const class vec2 &pos, float scale = 1.0f);
   
 private:
   void fillVerts(const std::string &text, const class vec2 &origin, 

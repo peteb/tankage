@@ -13,9 +13,9 @@ Tank::State &Tank::State::write(Packer &msg) {
   msg.writeShort(pos.y * 10.0f);
   msg.writeShort(lin_vel.x * 100.0f);
   msg.writeShort(lin_vel.y * 100.0f);
-  msg.writeShort(base_dir / 360.0f * 65536.0f);
-  msg.writeShort(rot_vel / 360.0f * 65536.0f);
-  msg.writeShort(turret_dir / 360.0f * 65536.0f);
+  msg.writeShort(base_dir / 360.0 * 100.0);
+  msg.writeShort(rot_vel / 360.0 * 100.0);
+  msg.writeShort(turret_dir / 360.0 * 100.0);
   return *this;
 }
 
@@ -25,9 +25,9 @@ Tank::State &Tank::State::read(class Unpacker &msg) {
   pos.y = static_cast<float>(msg.readShort()) / 10.0f;
   lin_vel.x = static_cast<float>(msg.readShort()) / 100.0f;
   lin_vel.y = static_cast<float>(msg.readShort()) / 100.0f;
-  base_dir = static_cast<float>(msg.readShort()) / 65536.0f * 360.0f;
-  rot_vel = static_cast<float>(msg.readShort()) / 65536.0f * 360.0f;
-  turret_dir = static_cast<float>(msg.readShort()) / 65536.0f * 360.0f;
+  base_dir = static_cast<float>(msg.readShort()) / 100.0 * 360.0;
+  rot_vel = static_cast<float>(msg.readShort()) / 100.0 * 360.0;
+  turret_dir = static_cast<float>(msg.readShort()) / 100.0 * 360.0;
   return *this;
 }
 
@@ -88,6 +88,9 @@ void Tank::State::integrate(const Control::Input &input, double dt) {
   turret_dir += rot_vel * dt;
   pos += lin_vel * dt;
   base_dir += rot_vel * dt;
+  
+  base_dir = wrap(base_dir, 0.0f, 360.0f);
+  turret_dir = wrap(turret_dir, 0.0f, 360.0f);
 }
 /* <--- end tank state ---> */
 

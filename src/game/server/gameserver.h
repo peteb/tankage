@@ -1,7 +1,6 @@
 #ifndef GAME_GAMESERVER_H
 #define GAME_GAMESERVER_H
 
-#include <game/common/net_protocol.h>
 #include <game/server/entity.h>
 #include <game/server/events.h>
 #include <game/server/map.h>
@@ -40,10 +39,10 @@ private:
   class Tank *spawnTank();
   void destroyZombies();
   void sendServerInfo(class Client *receiver);
+  void sendPlayers(class Client *client);
+  void sendError(class Client *client, int code, const std::string &str);
   
-  // net protocol
-  void onIdent(const struct NetIdentifyMsg *ident, class Packet *packet);
-  
+
   std::vector<class Tank *> _tanks;
   std::vector<class Bullet *> _bullets;
   std::vector<int> _zombie_entities;
@@ -55,7 +54,7 @@ private:
   
   class Host *_host;
   class Network *_net;
-  class WindowManager *_wm;
+
   unsigned int _tick;
   unsigned int _last_entity;
 };

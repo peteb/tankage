@@ -10,10 +10,11 @@ TextRenderer::TextRenderer(class Portal &services, class TextureLoader &texloade
 {
   _gfx = services.requestInterface<Graphics>();
   _font = texloader.texture("smallfont.tga");
- // _font->setFiltering(false);
+  _font->setFiltering(false);
 }
 
-void TextRenderer::renderText(const std::string &text, const vec2 &pos) {
+void TextRenderer::renderText(const std::string &text, const vec2 &pos, 
+                              float scale) {
   // prepare buffers
   _coordbuf.reserve(text.size() * 4 * 2);
   _tcbuf.reserve(text.size() * 4 * 2);
@@ -26,7 +27,7 @@ void TextRenderer::renderText(const std::string &text, const vec2 &pos) {
   // collect data
   _coordbuf.clear();
   _tcbuf.clear();
-  fillVerts(text, pos + vec2(1.0f, 1.0f), vec2(1.5f, 1.5f), _coordbuf, _tcbuf);
+  fillVerts(text, pos + vec2(1.0f, 1.0f), vec2(scale, scale), _coordbuf, _tcbuf);
   
   _gfx->setColor(color4(0.0f, 0.0f, 0.0f, 0.5f));
   _gfx->drawQuads(2, _coordbuf.size() / 2, &_coordbuf[0], &_tcbuf[0]);
@@ -34,7 +35,7 @@ void TextRenderer::renderText(const std::string &text, const vec2 &pos) {
   // collect data
   _coordbuf.clear();
   _tcbuf.clear();
-  fillVerts(text, pos, vec2(1.5f, 1.5f), _coordbuf, _tcbuf);
+  fillVerts(text, pos, vec2(scale, scale), _coordbuf, _tcbuf);
   
   _gfx->setColor(color4(1.0f, 1.0f, 1.0f, 1.0f));
   _gfx->drawQuads(2, _coordbuf.size() / 2, &_coordbuf[0], &_tcbuf[0]);
@@ -56,6 +57,7 @@ void TextRenderer::fillVerts(const std::string &text,
   offset.y -= HEIGHT / 2;
   offset.x -= (WIDTH * text.size()) / 4;
   
+  
   for (size_t i = 0; i < text.size(); ++i) {
     char ascii = text[i];
     int map_x = ascii % COLS;
@@ -63,11 +65,11 @@ void TextRenderer::fillVerts(const std::string &text,
 
     vec2 c_start = offset;
     vec2 c_end = offset + vec2(WIDTH, HEIGHT);
-    vec2 t_start(static_cast<float>(map_x) / COLS,
-                 static_cast<float>(map_y) / ROWS);
-    vec2 t_end(static_cast<float>(map_x + 1) / COLS,
-               static_cast<float>(map_y + 1) / ROWS);
-            
+    vec2 t_start(static_cast<float>(map_x) / COLS /*+ 1.0/256.0*/,
+                 static_cast<float>(map_y) / ROWS /*+ 1.0/256.0*/);
+    vec2 t_end(static_cast<float>(map_x + 1) / COLS /*+ 1.0/256.0*/,
+               static_cast<float>(map_y + 1) / ROWS /*+ 1.0/256.0*/);
+
     coords.push_back(c_start.x);
     coords.push_back(c_start.y);
     coords.push_back(c_end.x);
