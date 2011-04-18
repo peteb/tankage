@@ -27,7 +27,7 @@ void server_RegisterVariables(class Config &config) {
 
 GameServer::GameServer(const Portal &services) 
   : _world(b2Vec2(0.0f, 0.0f), false)
-  , _map(this, _world)
+  , _map(this, &_world)
 {  
   _net = services.requestInterface<Network>();
   
@@ -79,7 +79,7 @@ void GameServer::onTick() {
   
   SessionMap::iterator it = _sessions.begin(), it_e = _sessions.end();
   for (; it != it_e; ++it) {
-    Packer msg(buffer, buffer + 4096);
+    Packer msg(buffer, buffer + 4296);
     msg.writeShort(NET_SNAPSHOT);
     msg.writeInt(gameTick());
 

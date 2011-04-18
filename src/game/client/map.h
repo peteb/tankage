@@ -12,7 +12,7 @@ public:
   void render();
   
 private:
-  char _data[32*32];
+  char _data[64*64];
   
   class Graphics *_gfx;
 };
