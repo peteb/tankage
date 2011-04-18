@@ -163,7 +163,7 @@ add_subdirectory(${PROJECT_ROOT_DIR}/3pp/enet CMakeFiles/ENet)
 
 add_custom_target(clean-gen
 	rm -rf CMakeFiles CMakeCache.txt Makefile cmake_install.cmake ../bin 
-	install_manifest.txt _CPack_Packages *.deb CPack*	
+	install_manifest.txt _CPack_Packages *.deb CPack* version
 )
 
 # Add CPack definitions for package generation on the current platform
