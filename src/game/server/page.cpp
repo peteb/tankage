@@ -124,6 +124,8 @@ void Page::refresh(const TileCoord &coord) {
   if (_fixtures.size() < fixture)
     return;
   
+  Log(DEBUG) << "refreshing tile " << coord.first << ", " << coord.second;
+  
   b2PolygonShape tile_shape;
   _body->DestroyFixture(_fixtures[fixture]);
   
