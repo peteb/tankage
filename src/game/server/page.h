@@ -29,7 +29,7 @@ private:
   
   class b2World *_world;
   class b2Body *_body;
-  char _tiles[WIDTH * HEIGHT];
+  char _tiles[WIDTH * HEIGHT + WIDTH];
   std::vector<class b2Fixture *> _fixtures;
 };
 
