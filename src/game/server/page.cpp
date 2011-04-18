@@ -75,8 +75,8 @@ TileCoord Page::vec2Tile(const vec2 &pos) const {
   int tile_x = ofs.x / 32.0f;
   int tile_y = ofs.y / 32.0f;
   
-  tile_x = clamp(tile_x, 0, 64);
-  tile_y = clamp(tile_y, 0, 64);
+  tile_x = clamp(tile_x, 0, 63);
+  tile_y = clamp(tile_y, 0, 63);
   
   return TileCoord(tile_x, tile_y);
 }
@@ -153,5 +153,5 @@ void Page::destroyFixtures() {
 }
 
 char &Page::tileAt(const TileCoord &coord) {
-  return _tiles[coord.first + coord.second * WIDTH];
+  return _tiles[clamp(coord.first, 0, 63) + clamp(coord.second, 0, 63) * WIDTH];
 }
