@@ -5,33 +5,23 @@
 #include <string>
 #include <utility>
 
-class Packer {
-  std::vector<unsigned char> &_data;
-  bool _badbit;
-  
+class Packer {  
 public:
   Packer(std::vector<unsigned char> &data);
   
-//  size_t size() const;
-//  void advance(size_t amount);
-//  void reset();
-//  
   void writeByte(char value);
   void writeShort(short value);
   void writeInt(int value);
   void writeString(const std::string &value);  
   void writeData(const char *data, size_t size);
   void append(const Packer &packer);
-//  void writeData(const void *data, size_t size);
+  
+private:
+  std::vector<unsigned char> &_data;
+  bool _badbit;
 };
 
 class Unpacker {
-  const std::vector<unsigned char> &_data;
-  size_t _pos;
-  bool _badbit;
-  
-  bool verifySize(size_t size);
-  
 public:
   Unpacker(const std::vector<unsigned char> &data);
   
@@ -41,7 +31,13 @@ public:
   int readInt();
   std::string readString();
   std::pair<const unsigned char *, size_t> readData();
-//  const void *readData(size_t size);
+
+private:  
+  bool verifySize(size_t size);
+
+  const std::vector<unsigned char> &_data;
+  size_t _pos;
+  bool _badbit;  
 };
 
 #endif // !UTILS_PACKER_H

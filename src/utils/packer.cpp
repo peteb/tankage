@@ -1,10 +1,5 @@
 #include <utils/packer.h>
 
-#include <cassert>
-#include <limits>
-#include <cstring>
-
-/* Maybe fix this into the CMake? */
 #ifdef _WIN32
 #include <WinSock2.h>
 #else 
@@ -12,26 +7,6 @@
 #endif
 
 #undef max // some better way to get rid of this one?
-
-// FIXME: the asserts here should probably set a badstate or throw exception
-
-//namespace {
-//template<typename T>
-//void *WriteType(void *pos, void *end, const T &val) {
-//  T *conv = reinterpret_cast<T *>(pos);
-//  assert(conv + 1 <= end && "not enough room for data");
-//  *conv = val;
-//  return conv + 1;
-//}
-//  
-//template<typename T>
-//const void *ReadType(const void *pos, const void *end, T &val) {
-//  const T *conv = reinterpret_cast<const T *>(pos);
-//  assert(conv + 1 <= end && "not enough room for data");
-//  val = *conv;
-//  return conv + 1;
-//}  
-//}
 
 Packer::Packer(std::vector<unsigned char> &data) 
   : _data(data)
@@ -58,14 +33,7 @@ void Packer::writeInt(int value) {
 }
 
 void Packer::writeString(const std::string &value) {
-  if (value.size() > 0xFFFF) {
-    _badbit = true;
-    return;
-  }
-  
-  writeShort((short)value.size());
-  _data.reserve(_data.size() + value.size());
-  _data.insert(_data.end(), value.begin(), value.end());
+  writeData(value.c_str(), value.size());
 }
 
 void Packer::writeData(const char *data, size_t size) {
@@ -74,7 +42,7 @@ void Packer::writeData(const char *data, size_t size) {
     return;
   }
   
-  writeShort((short)size);
+  writeShort((unsigned short)size);
   _data.insert(_data.end(), data, data + size);
 }
 
@@ -83,24 +51,6 @@ void Packer::append(const Packer &packer) {
 }
 
 
-//
-//void Packer::writeData(const void *data, size_t size) {
-//  assert(static_cast<char *>(_pos) + size < _end && "not enough room for data");
-//  memcpy(_pos, data, size);
-//  _pos = static_cast<char *>(_pos) + size;  
-//}
-
-//size_t Packer::size() const {
-//  return static_cast<const char *>(_pos) - static_cast<const char *>(_start);
-//}
-//
-//void Packer::advance(size_t amount) {
-//  _pos = static_cast<char *>(_pos) + amount;
-//}
-//
-//void Packer::reset() {
-//  _pos = _start;
-//}
 
 Unpacker::Unpacker(const std::vector<unsigned char> &data) 
   : _data(data)
@@ -165,21 +115,14 @@ std::pair<const unsigned char *, size_t> Unpacker::readData() {
 }
 
 std::string Unpacker::readString() {
-  unsigned short size = readShort();
+  std::pair<const unsigned char *, size_t> data = readData();
   std::string ret;
-  if (_badbit || !verifySize(size))
+  if (_badbit)
     return ret;
   
-  ret.assign(&_data[_pos], &_data[_pos + size]);
-  _pos += size;
+  ret.assign((const char *)data.first, data.second);
 
   return ret;
 }
 
-//const void *Unpacker::readData(size_t size) {
-//  const char *data = reinterpret_cast<const char *>(_pos);
-//  assert(data + size <= _end && "not enough room for data");
-//  _pos = data + size;
-//  return data;
-//}
-//
+

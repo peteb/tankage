@@ -39,10 +39,11 @@ TEST(Packer, UnpackBasicTypes) {
   packer.writeString("san jose"); 
   packer.writeByte(0x00);
   packer.writeShort(-12345);
+  packer.writeShort(0xFFFF);
   
   std::vector<unsigned char> buffer_copy(buffer);
   Unpacker unpacker(buffer);
-  EXPECT_EQ(21u, buffer.size());
+  EXPECT_EQ(23u, buffer.size());
   
   EXPECT_EQ(static_cast<char>(0xAB), unpacker.readByte());
   EXPECT_EQ(0x1337, unpacker.readShort());
@@ -51,6 +52,7 @@ TEST(Packer, UnpackBasicTypes) {
   EXPECT_STREQ("san jose", unpacker.readString().c_str());
   EXPECT_EQ(0x00, unpacker.readByte());
   EXPECT_EQ(-12345, unpacker.readShort());
+  EXPECT_EQ(0xFFFF, (unsigned short)unpacker.readShort());
   
   EXPECT_EQ(false, unpacker.bad());
   EXPECT_EQ(true, std::equal(buffer.begin(), buffer.end(), buffer_copy.begin()));
@@ -155,4 +157,8 @@ TEST(Packer, MultiPackers) {
   EXPECT_EQ(false, unpack.bad());
   EXPECT_EQ(1, unpack.readInt());
   EXPECT_EQ(2, unpack.readInt());
+}
+
+TEST(Packer, Data) {
+  // TODO: add testcases for data
 }
