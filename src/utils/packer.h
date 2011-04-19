@@ -5,38 +5,37 @@
 #include <string>
 
 class Packer {
-  void * _pos;
-  void * _start;
-  void * const _end;
-
+  std::vector<char> &_data;
+  
 public:
-  Packer(void *start, void *end);
-  Packer(const Packer &other);
+  Packer(std::vector<char> &data);
   
-  size_t size() const;
-  void advance(size_t amount);
-  void reset();
-  
+//  size_t size() const;
+//  void advance(size_t amount);
+//  void reset();
+//  
   void writeByte(char value);
   void writeShort(short value);
   void writeInt(int value);
   void writeString(const std::string &value);  
-  void writeData(const Packer &packer);
-  void writeData(const void *data, size_t size);
+//  void writeData(const Packer &packer);
+//  void writeData(const void *data, size_t size);
 };
 
 class Unpacker {
-  const void * _pos;
-  const void * const _end;
+  const std::vector<char> &_data;
+  size_t _pos;
+  bool _badbit;
   
 public:
-  Unpacker(const void *data, const void *end);
+  Unpacker(const std::vector<char> &data);
   
+  bool bad() const;
   char readByte();
   short readShort();
   int readInt();
   std::string readString();
-  const void *readData(size_t size);
+//  const void *readData(size_t size);
 };
 
 #endif // !UTILS_PACKER_H
