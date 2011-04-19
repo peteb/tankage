@@ -59,7 +59,7 @@ Log::DefaultLogConsumer::DefaultLogConsumer() : _level(SEVERITY_DEBUG) {
 
 void Log::DefaultLogConsumer::operator()(Log::Severity severity, 
   const std::string &line) {
-  if (_level > severity) {
+  if (_level >= severity) {
     std::cout << line << std::endl;
   }
 }
