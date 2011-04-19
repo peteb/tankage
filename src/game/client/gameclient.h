@@ -74,6 +74,7 @@ private:
   std::string _error;
   
   std::map<int, class TankInfo *> _tanks;
+  std::vector<char> tmp_packet;
 };
 
 

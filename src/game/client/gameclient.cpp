@@ -159,19 +159,19 @@ void GameClient::updateNet() {
 }
 
 void GameClient::sendInput() {
-  const size_t BUFSZ = 256;
-  char buffer[BUFSZ];
-
+  tmp_packet.clear();
+  tmp_packet.reserve(256);
+  
   double now = _wm->timeSeconds();
   Control::Input new_input = _control.currentInput();
   
   if (new_input.buttons != _sent_input.buttons || now - _input_time >= 1.0/10.0) {
-    Packer msg(buffer, buffer + BUFSZ);
+    Packer msg(tmp_packet);
     msg.writeShort(NET_PLAYER_INPUT);
     new_input.aim_x += _view.x;
     new_input.aim_y += _view.y;
     new_input.write(msg);
-    _client->send(buffer, msg.size(), 0, NET_CHANNEL_ABS);
+    _client->send(&tmp_packet[0], tmp_packet.size(), 0, NET_CHANNEL_ABS);
     _client->flush();
     _sent_input = new_input;
     _input_time = now;

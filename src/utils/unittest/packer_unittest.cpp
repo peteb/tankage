@@ -132,3 +132,26 @@ TEST(Packer, UnpackNegative) {
     EXPECT_EQ(true, second.bad());   
   }    
 }
+
+TEST(Packer, MultiPackers) {
+  std::vector<char> main;
+  Packer main_pack(main);
+  main_pack.writeString("greenman cometh");
+  
+  for (size_t i = 0; i < 10; ++i) {
+    std::vector<char> sub;
+    Packer sub_pack(sub);
+    sub_pack.writeInt(i);
+  
+    main_pack.writeData(sub_pack);
+  }
+  
+  EXPECT_EQ(57u, main.size());
+  
+  Unpacker unpack(main);
+  EXPECT_STREQ("greenman cometh", unpack.readString().c_str());
+  EXPECT_EQ(0, unpack.readInt());
+  EXPECT_EQ(false, unpack.bad());
+  EXPECT_EQ(1, unpack.readInt());
+  EXPECT_EQ(2, unpack.readInt());
+}

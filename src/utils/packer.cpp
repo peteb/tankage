@@ -64,9 +64,10 @@ void Packer::writeString(const std::string &value) {
   _data.insert(_data.end(), value.begin(), value.end());
 }
 
-//void Packer::writeData(const Packer &packer) {
-//  writeData(packer._start, packer.size());
-//}
+void Packer::writeData(const Packer &packer) {
+  _data.insert(_data.end(), packer._data.begin(), packer._data.end());
+}
+
 //
 //void Packer::writeData(const void *data, size_t size) {
 //  assert(static_cast<char *>(_pos) + size < _end && "not enough room for data");

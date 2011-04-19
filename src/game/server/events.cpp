@@ -3,11 +3,12 @@
 #include <game/common/net_protocol.h>
 #include <utils/packer.h>
 #include <utils/vec.h>
+#include <vector>
 
 class Event {
 public:
   Event(short type)
-    : params(param_buffer, param_buffer + BUFSZ)
+    : params(param_buffer)
     , _type(type)
   {
     snapped = false;
@@ -21,8 +22,7 @@ public:
   bool snapped;
 
   Packer params;
-  static const size_t BUFSZ = 32;
-  char param_buffer[BUFSZ];
+  std::vector<char> param_buffer;
 
 private:
   short _type;
