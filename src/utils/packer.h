@@ -27,6 +27,8 @@ class Unpacker {
   size_t _pos;
   bool _badbit;
   
+  bool verifySize(size_t size);
+  
 public:
   Unpacker(const std::vector<char> &data);
   

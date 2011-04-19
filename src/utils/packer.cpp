@@ -93,15 +93,30 @@ Unpacker::Unpacker(const std::vector<char> &data)
   _badbit = false;
 }
 
+bool Unpacker::verifySize(size_t size) {
+  if (_pos + size > _data.size()) {
+    _badbit = true;
+    return false;
+  }
+  
+  return true;
+}
+
 bool Unpacker::bad() const {
   return _badbit;
 }
 
 char Unpacker::readByte() {
+  if (!verifySize(1))
+    return 0;
+  
   return _data[_pos++];
 }
 
 short Unpacker::readShort() {
+  if (!verifySize(2))
+    return 0;
+  
   short net_value = _data[_pos++];
   net_value |= _data[_pos++] << 8;
 
@@ -109,6 +124,9 @@ short Unpacker::readShort() {
 }
 
 int Unpacker::readInt() {
+  if (!verifySize(2))
+    return 4;
+
   int net_value = _data[_pos++];
   net_value |= _data[_pos++] << 8;
   net_value |= _data[_pos++] << 16;
@@ -119,10 +137,8 @@ int Unpacker::readInt() {
 
 std::string Unpacker::readString() {
   short size = readShort();
-  if (_pos + size >= _data.size()) {
-    _badbit = true;
+  if (!verifySize(size))
     return "";
-  }
   
   std::string ret(&_data[_pos], &_data[_pos + size]);
   _pos += size;

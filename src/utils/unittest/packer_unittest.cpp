@@ -54,3 +54,81 @@ TEST(Packer, UnpackBasicTypes) {
   EXPECT_EQ(false, unpacker.bad());
   EXPECT_EQ(true, std::equal(buffer.begin(), buffer.end(), buffer_copy.begin()));
 }
+
+TEST(Packer, UnpackNegative) {
+  std::vector<char> buffer;
+
+  {
+    Unpacker unpacker(buffer);
+    EXPECT_EQ(false, unpacker.bad());
+    unpacker.readByte();
+    EXPECT_EQ(true, unpacker.bad());    
+  }
+
+  {
+    Unpacker unpacker(buffer);
+    EXPECT_EQ(false, unpacker.bad());
+    unpacker.readShort();
+    EXPECT_EQ(true, unpacker.bad());    
+  }
+  
+  {
+    Unpacker unpacker(buffer);
+    EXPECT_EQ(false, unpacker.bad());
+    unpacker.readInt();
+    EXPECT_EQ(true, unpacker.bad());    
+  }
+
+  {
+    Unpacker unpacker(buffer);
+    EXPECT_EQ(false, unpacker.bad());
+    unpacker.readString();
+    EXPECT_EQ(true, unpacker.bad());    
+  }
+  
+  Packer packer(buffer);
+  
+  packer.writeByte(0xAB);
+  packer.writeShort(0x1337);
+  packer.writeByte(0xBA);
+  packer.writeInt(42);
+  packer.writeString("san jose"); 
+  packer.writeByte(0x00);
+  
+  Unpacker unpacker(buffer);
+  EXPECT_EQ(false, unpacker.bad());
+  unpacker.readByte();
+  unpacker.readShort();
+  unpacker.readByte();
+  unpacker.readInt();
+  unpacker.readString();
+  unpacker.readByte();
+  
+  {
+    Unpacker second(unpacker);
+    EXPECT_EQ(false, second.bad());   
+    second.readByte();
+    EXPECT_EQ(true, second.bad());   
+  }
+  
+  {
+    Unpacker second(unpacker);
+    EXPECT_EQ(false, second.bad());   
+    second.readShort();
+    EXPECT_EQ(true, second.bad());   
+  }
+
+  {
+    Unpacker second(unpacker);
+    EXPECT_EQ(false, second.bad());   
+    second.readInt();
+    EXPECT_EQ(true, second.bad());   
+  }  
+
+  {
+    Unpacker second(unpacker);
+    EXPECT_EQ(false, second.bad());   
+    second.readString();
+    EXPECT_EQ(true, second.bad());   
+  }    
+}
