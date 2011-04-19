@@ -6,11 +6,11 @@
 #include <utility>
 
 class Packer {
-  std::vector<char> &_data;
+  std::vector<unsigned char> &_data;
   bool _badbit;
   
 public:
-  Packer(std::vector<char> &data);
+  Packer(std::vector<unsigned char> &data);
   
 //  size_t size() const;
 //  void advance(size_t amount);
@@ -26,21 +26,21 @@ public:
 };
 
 class Unpacker {
-  const std::vector<char> &_data;
+  const std::vector<unsigned char> &_data;
   size_t _pos;
   bool _badbit;
   
   bool verifySize(size_t size);
   
 public:
-  Unpacker(const std::vector<char> &data);
+  Unpacker(const std::vector<unsigned char> &data);
   
   bool bad() const;
   char readByte();
   short readShort();
   int readInt();
   std::string readString();
-  std::pair<const char *, size_t> readData();
+  std::pair<const unsigned char *, size_t> readData();
 //  const void *readData(size_t size);
 };
 

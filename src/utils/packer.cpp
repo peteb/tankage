@@ -33,7 +33,7 @@
 //}  
 //}
 
-Packer::Packer(std::vector<char> &data) 
+Packer::Packer(std::vector<unsigned char> &data) 
   : _data(data)
 {
   _badbit = false;
@@ -41,14 +41,12 @@ Packer::Packer(std::vector<char> &data)
 
 void Packer::writeByte(char value) {
   _data.push_back(value);
-//  _pos = WriteType(_pos, _end, value);
 }
 
 void Packer::writeShort(short value) {
-  //_pos = WriteType(_pos, _end, htons(value));
   short net_value = htons(value);
-  _data.push_back(net_value & 0xFF);
   _data.push_back((net_value >> 8) & 0xFF);  
+  _data.push_back(net_value & 0xFF);
 }
 
 void Packer::writeInt(int value) {
@@ -104,7 +102,7 @@ void Packer::append(const Packer &packer) {
 //  _pos = _start;
 //}
 
-Unpacker::Unpacker(const std::vector<char> &data) 
+Unpacker::Unpacker(const std::vector<unsigned char> &data) 
   : _data(data)
 {
   _pos = 0;
@@ -135,8 +133,9 @@ short Unpacker::readShort() {
   if (!verifySize(2))
     return 0;
   
-  short net_value = _data[_pos++];
+  short net_value = 0;
   net_value |= _data[_pos++] << 8;
+  net_value |= _data[_pos++];
 
   return ntohs(net_value);
 }
@@ -153,9 +152,9 @@ int Unpacker::readInt() {
   return ntohl(net_value);
 }
 
-std::pair<const char *, size_t> Unpacker::readData() {
+std::pair<const unsigned char *, size_t> Unpacker::readData() {
   unsigned short size = readShort();
-  std::pair<const char *, size_t> ret(0, 0);
+  std::pair<const unsigned char *, size_t> ret(0, 0);
   if (_badbit || !verifySize(size))
     return ret;
   

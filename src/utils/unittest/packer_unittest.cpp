@@ -4,7 +4,7 @@
 #include <algorithm>
 
 TEST(Packer, PackBasicTypes) {
-  std::vector<char> buffer;
+  std::vector<unsigned char> buffer;
   Packer packer(buffer);
 
   EXPECT_EQ(0u, buffer.size());
@@ -26,11 +26,10 @@ TEST(Packer, PackBasicTypes) {
 
   packer.writeByte(0x00);
   EXPECT_EQ(19u, buffer.size());
-  
 }
 
 TEST(Packer, UnpackBasicTypes) {
-  std::vector<char> buffer;
+  std::vector<unsigned char> buffer;
   Packer packer(buffer);
 
   packer.writeByte(0xAB);
@@ -39,10 +38,11 @@ TEST(Packer, UnpackBasicTypes) {
   packer.writeInt(42);
   packer.writeString("san jose"); 
   packer.writeByte(0x00);
-
-  std::vector<char> buffer_copy(buffer);
+  packer.writeShort(-12345);
+  
+  std::vector<unsigned char> buffer_copy(buffer);
   Unpacker unpacker(buffer);
-  EXPECT_EQ(19u, buffer.size());
+  EXPECT_EQ(21u, buffer.size());
   
   EXPECT_EQ(static_cast<char>(0xAB), unpacker.readByte());
   EXPECT_EQ(0x1337, unpacker.readShort());
@@ -50,13 +50,14 @@ TEST(Packer, UnpackBasicTypes) {
   EXPECT_EQ(42, unpacker.readInt());
   EXPECT_STREQ("san jose", unpacker.readString().c_str());
   EXPECT_EQ(0x00, unpacker.readByte());
+  EXPECT_EQ(-12345, unpacker.readShort());
   
   EXPECT_EQ(false, unpacker.bad());
   EXPECT_EQ(true, std::equal(buffer.begin(), buffer.end(), buffer_copy.begin()));
 }
 
 TEST(Packer, UnpackNegative) {
-  std::vector<char> buffer;
+  std::vector<unsigned char> buffer;
 
   {
     Unpacker unpacker(buffer);
@@ -134,12 +135,12 @@ TEST(Packer, UnpackNegative) {
 }
 
 TEST(Packer, MultiPackers) {
-  std::vector<char> main;
+  std::vector<unsigned char> main;
   Packer main_pack(main);
   main_pack.writeString("greenman cometh");
   
   for (size_t i = 0; i < 10; ++i) {
-    std::vector<char> sub;
+    std::vector<unsigned char> sub;
     Packer sub_pack(sub);
     sub_pack.writeInt(i);
   

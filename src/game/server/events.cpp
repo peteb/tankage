@@ -16,7 +16,7 @@ public:
 
   virtual void snap(Packer &msg, ClientSession *client) {
     msg.writeShort(_type);
-    msg.writeData(params);    
+    msg.append(params);    
   }
 
   bool snapped;
