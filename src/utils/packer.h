@@ -3,9 +3,11 @@
 
 #include <vector>
 #include <string>
+#include <utility>
 
 class Packer {
   std::vector<char> &_data;
+  bool _badbit;
   
 public:
   Packer(std::vector<char> &data);
@@ -18,7 +20,8 @@ public:
   void writeShort(short value);
   void writeInt(int value);
   void writeString(const std::string &value);  
-  void writeData(const Packer &packer);
+  void writeData(const char *data, size_t size);
+  void append(const Packer &packer);
 //  void writeData(const void *data, size_t size);
 };
 
@@ -37,6 +40,7 @@ public:
   short readShort();
   int readInt();
   std::string readString();
+  std::pair<const char *, size_t> readData();
 //  const void *readData(size_t size);
 };
 

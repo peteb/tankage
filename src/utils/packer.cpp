@@ -36,6 +36,7 @@
 Packer::Packer(std::vector<char> &data) 
   : _data(data)
 {
+  _badbit = false;
 }
 
 void Packer::writeByte(char value) {
@@ -59,14 +60,30 @@ void Packer::writeInt(int value) {
 }
 
 void Packer::writeString(const std::string &value) {
-  writeShort(value.size());
+  if (value.size() > 0xFFFF) {
+    _badbit = true;
+    return;
+  }
+  
+  writeShort((short)value.size());
   _data.reserve(_data.size() + value.size());
   _data.insert(_data.end(), value.begin(), value.end());
 }
 
-void Packer::writeData(const Packer &packer) {
-  _data.insert(_data.end(), packer._data.begin(), packer._data.end());
+void Packer::writeData(const char *data, size_t size) {
+  if (size > 0xFFFF) {
+    _badbit = true;
+    return;
+  }
+  
+  writeShort((short)size);
+  _data.insert(_data.end(), data, data + size);
 }
+
+void Packer::append(const Packer &packer) {
+  _data.insert(_data.end(), packer._data.begin(), packer._data.end());  
+}
+
 
 //
 //void Packer::writeData(const void *data, size_t size) {
@@ -136,12 +153,25 @@ int Unpacker::readInt() {
   return ntohl(net_value);
 }
 
-std::string Unpacker::readString() {
-  short size = readShort();
-  if (!verifySize(size))
-    return "";
+std::pair<const char *, size_t> Unpacker::readData() {
+  unsigned short size = readShort();
+  std::pair<const char *, size_t> ret(0, 0);
+  if (_badbit || !verifySize(size))
+    return ret;
   
-  std::string ret(&_data[_pos], &_data[_pos + size]);
+  ret = std::make_pair(&_data[_pos], size);
+  _pos += size;
+  
+  return ret;
+}
+
+std::string Unpacker::readString() {
+  unsigned short size = readShort();
+  std::string ret;
+  if (_badbit || !verifySize(size))
+    return ret;
+  
+  ret.assign(&_data[_pos], &_data[_pos + size]);
   _pos += size;
 
   return ret;

@@ -143,7 +143,7 @@ TEST(Packer, MultiPackers) {
     Packer sub_pack(sub);
     sub_pack.writeInt(i);
   
-    main_pack.writeData(sub_pack);
+    main_pack.append(sub_pack);
   }
   
   EXPECT_EQ(57u, main.size());

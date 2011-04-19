@@ -64,7 +64,10 @@ void GameServer::run() {
 }
 
 void GameServer::onTick() {
-  char buffer[5000];
+  static std::vector<char> buffer;
+  buffer.clear();
+  buffer.reserve(5000);
+  
   destroyZombies(); // updateNet might call onDisconnect which might destroyEntity
 
   for (size_t i = 0; i < _tanks.size(); ++i)
@@ -79,7 +82,7 @@ void GameServer::onTick() {
   
   SessionMap::iterator it = _sessions.begin(), it_e = _sessions.end();
   for (; it != it_e; ++it) {
-    Packer msg(buffer, buffer + 5000);
+    Packer msg(buffer);
     msg.writeShort(NET_SNAPSHOT);
     msg.writeInt(gameTick());
 
@@ -93,23 +96,23 @@ void GameServer::onTick() {
     _events.snap(msg, it->second);
     msg.writeShort(0);
     
-    it->second->client->send(buffer, msg.size(), 0, NET_CHANNEL_ABS);  
+    it->second->client->send(&buffer[0], buffer.size(), 0, NET_CHANNEL_ABS);  
     
     // send reliable events
-    msg.reset();
+    buffer.clear();
     _events.writeReliable(msg, it->second);
 
-    if (msg.size() > 0) {
+    if (buffer.size() > 0) {
       msg.writeShort(0);
-      it->second->client->send(buffer, msg.size(), Client::PACKET_RELIABLE, NET_CHANNEL_STATE);      
+      it->second->client->send(&buffer[0], buffer.size(), Client::PACKET_RELIABLE, NET_CHANNEL_STATE);      
     }
     
     // send map updates in own packet
-    msg.reset();
+    buffer.clear();
     _map.snap(msg, it->second);
 
-    if (msg.size() > 0) {
-      it->second->client->send(buffer, msg.size(), Client::PACKET_RELIABLE, NET_CHANNEL_STATE);      
+    if (buffer.size() > 0) {
+      it->second->client->send(&buffer[0], buffer.size(), Client::PACKET_RELIABLE, NET_CHANNEL_STATE);      
     }    
   }  
   
@@ -162,8 +165,11 @@ void GameServer::onDisconnect(Client *client) {
 }
 
 void GameServer::onReceive(Packet *packet) {
-  Unpacker msg(packet->data(), 
-               (const unsigned char *)packet->data() + packet->size());
+  static std::vector<char> buffer;
+  buffer.assign((const char *)packet->data(), 
+                (const char *)packet->data() + packet->size());
+  
+  Unpacker msg(buffer);
   short type = msg.readShort();
   Client *client = packet->sender();
 
@@ -221,20 +227,19 @@ void GameServer::onReceive(Packet *packet) {
 }
 
 void GameServer::sendPlayers(class Client *client) {
-  const int BUFSZ = 256;
-  char buffer[BUFSZ];
-  
+  static std::vector<char> buffer;
+
   SessionMap::iterator it = _sessions.begin(), it_e = _sessions.end();
   for (; it != it_e; ++it) {
     if (it->second->client == client)
       continue;
     
-    Packer reply_msg(buffer, buffer + BUFSZ);
+    Packer reply_msg(buffer);
     reply_msg.writeShort(NET_PLAYER_INFO);
     reply_msg.writeInt(it->second->tankid);
     reply_msg.writeString(it->second->name);
     // FIXME: this is one "packet" per player.. maybe we should batch
-    client->send(buffer, reply_msg.size(), Client::PACKET_RELIABLE, NET_CHANNEL_STATE);     
+    client->send(&buffer[0], buffer.size(), Client::PACKET_RELIABLE, NET_CHANNEL_STATE);     
   }  
 }
 
@@ -248,23 +253,27 @@ ClientSession *GameServer::session(Client *client) const {
 }
 
 void GameServer::sendServerInfo(Client *receiver) {
-  char buffer[1024];
-  Packer msg(buffer, buffer + 1024);
+  static std::vector<char> buffer;
+  buffer.clear();
+  
+  Packer msg(buffer);
   msg.writeShort(NET_SERVER_INFO);
   msg.writeShort(*server_tickrate * 10.0);
   msg.writeInt(session(receiver)->tankid);
   
-  receiver->send(buffer, msg.size(), Client::PACKET_RELIABLE, NET_CHANNEL_STATE);
+  receiver->send(&buffer[0], buffer.size(), Client::PACKET_RELIABLE, NET_CHANNEL_STATE);
 }
 
 void GameServer::sendError(class Client *client, int code, 
                            const std::string &str) {
-  char buffer[1024];
-  Packer msg(buffer, buffer + 1024);
+  static std::vector<char> buffer;
+  buffer.clear();
+  
+  Packer msg(buffer);
   msg.writeShort(NET_ERROR);
   msg.writeInt(code);
   msg.writeString(str);
-  client->send(buffer, msg.size(), Client::PACKET_RELIABLE, NET_CHANNEL_STATE);
+  client->send(&buffer[0], buffer.size(), Client::PACKET_RELIABLE, NET_CHANNEL_STATE);
   client->flush();
 }
 
