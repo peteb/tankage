@@ -22,7 +22,7 @@ public:
   bool snapped;
 
   Packer params;
-  std::vector<char> param_buffer;
+  std::vector<unsigned char> param_buffer;
 
 private:
   short _type;

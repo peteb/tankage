@@ -159,19 +159,19 @@ void GameClient::updateNet() {
 }
 
 void GameClient::sendInput() {
-  tmp_packet.clear();
-  tmp_packet.reserve(256);
+  static std::vector<unsigned char> buffer;
+  buffer.clear();
   
   double now = _wm->timeSeconds();
   Control::Input new_input = _control.currentInput();
   
   if (new_input.buttons != _sent_input.buttons || now - _input_time >= 1.0/10.0) {
-    Packer msg(tmp_packet);
+    Packer msg(buffer);
     msg.writeShort(NET_PLAYER_INPUT);
     new_input.aim_x += _view.x;
     new_input.aim_y += _view.y;
     new_input.write(msg);
-    _client->send(&tmp_packet[0], tmp_packet.size(), 0, NET_CHANNEL_ABS);
+    _client->send(&buffer[0], buffer.size(), 0, NET_CHANNEL_ABS);
     _client->flush();
     _sent_input = new_input;
     _input_time = now;
@@ -198,7 +198,7 @@ void GameClient::disconnectGently() {
 void GameClient::onConnect() {
   Log(INFO) << "connected!";
   
-  static std::vector<char> buffer;
+  static std::vector<unsigned char> buffer;
   buffer.clear();
 
   Packer msg(buffer);
@@ -234,7 +234,7 @@ double GameClient::tickDuration() const {
 }
 
 void GameClient::onReceive(Packet *packet) {
-  static std::vector<char> buffer;  
+  static std::vector<unsigned char> buffer;  
   static int packetCount = 0;
   
   if (packetCount++ > 10) {

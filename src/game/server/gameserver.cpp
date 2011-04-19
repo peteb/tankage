@@ -64,7 +64,7 @@ void GameServer::run() {
 }
 
 void GameServer::onTick() {
-  static std::vector<char> buffer;
+  static std::vector<unsigned char> buffer;
   buffer.clear();
   buffer.reserve(5000);
   
@@ -165,7 +165,7 @@ void GameServer::onDisconnect(Client *client) {
 }
 
 void GameServer::onReceive(Packet *packet) {
-  static std::vector<char> buffer;
+  static std::vector<unsigned char> buffer;
   buffer.assign((const char *)packet->data(), 
                 (const char *)packet->data() + packet->size());
   
@@ -227,8 +227,9 @@ void GameServer::onReceive(Packet *packet) {
 }
 
 void GameServer::sendPlayers(class Client *client) {
-  static std::vector<char> buffer;
-
+  static std::vector<unsigned char> buffer;
+  buffer.clear();
+  
   SessionMap::iterator it = _sessions.begin(), it_e = _sessions.end();
   for (; it != it_e; ++it) {
     if (it->second->client == client)
@@ -253,7 +254,7 @@ ClientSession *GameServer::session(Client *client) const {
 }
 
 void GameServer::sendServerInfo(Client *receiver) {
-  static std::vector<char> buffer;
+  static std::vector<unsigned char> buffer;
   buffer.clear();
   
   Packer msg(buffer);
@@ -266,7 +267,7 @@ void GameServer::sendServerInfo(Client *receiver) {
 
 void GameServer::sendError(class Client *client, int code, 
                            const std::string &str) {
-  static std::vector<char> buffer;
+  static std::vector<unsigned char> buffer;
   buffer.clear();
   
   Packer msg(buffer);
