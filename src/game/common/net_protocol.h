@@ -1,7 +1,7 @@
 #ifndef GAME_COMMON_NET_PROTOCOL_H
 #define GAME_COMMON_NET_PROTOCOL_H
 
-const int NET_VERSION = 11; // step this when data format changes
+const int NET_VERSION = 12; // step this when data format changes
 
 /**
  * Enumeration over the different packet types
