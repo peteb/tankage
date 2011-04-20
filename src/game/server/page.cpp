@@ -29,7 +29,6 @@ Page::~Page() {
 
 void Page::snap(Packer &msg) {
   msg.writeShort(NET_MAPCHUNK);
-  msg.writeShort(WIDTH*HEIGHT); // size of data
   msg.writeData(_tiles, WIDTH*HEIGHT);  
 }
 

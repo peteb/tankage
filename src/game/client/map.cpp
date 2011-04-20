@@ -11,11 +11,10 @@ ClientMap::ClientMap(Portal &services) {
 }
 
 void ClientMap::addChunk(Unpacker &msg) {
-  short num_tiles = msg.readShort();
-  Log(DEBUG) << "got map chunk containing " << num_tiles << " tiles";
+  std::pair<const unsigned char *, size_t> chunk = msg.readData();
+  Log(DEBUG) << "got map chunk containing " << chunk.second << " tiles";
   
-  const char *tiles = reinterpret_cast<const char *>(msg.readData(num_tiles));
-  std::copy(tiles, tiles + num_tiles, _data);
+  std::copy(chunk.first, chunk.first + chunk.second, _data);
 }
 
 void ClientMap::render() {

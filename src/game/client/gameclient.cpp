@@ -159,19 +159,19 @@ void GameClient::updateNet() {
 }
 
 void GameClient::sendInput() {
-  const size_t BUFSZ = 256;
-  char buffer[BUFSZ];
-
+  static std::vector<unsigned char> buffer;
+  buffer.clear();
+  
   double now = _wm->timeSeconds();
   Control::Input new_input = _control.currentInput();
   
   if (new_input.buttons != _sent_input.buttons || now - _input_time >= 1.0/10.0) {
-    Packer msg(buffer, buffer + BUFSZ);
+    Packer msg(buffer);
     msg.writeShort(NET_PLAYER_INPUT);
     new_input.aim_x += _view.x;
     new_input.aim_y += _view.y;
     new_input.write(msg);
-    _client->send(buffer, msg.size(), 0, NET_CHANNEL_ABS);
+    _client->send(&buffer[0], buffer.size(), 0, NET_CHANNEL_ABS);
     _client->flush();
     _sent_input = new_input;
     _input_time = now;
@@ -198,12 +198,14 @@ void GameClient::disconnectGently() {
 void GameClient::onConnect() {
   Log(INFO) << "connected!";
   
-  char buffer[1024];
-  Packer msg(buffer, buffer + 1024);
+  static std::vector<unsigned char> buffer;
+  buffer.clear();
+
+  Packer msg(buffer);
   msg.writeShort(NET_CLIENT_INFO);
   msg.writeString(*client_name);
   msg.writeInt(NET_VERSION);
-  _client->send(buffer, msg.size(), Client::PACKET_RELIABLE, NET_CHANNEL_STATE);
+  _client->send(&buffer[0], buffer.size(), Client::PACKET_RELIABLE, NET_CHANNEL_STATE);
 }
 
 void GameClient::onDisconnect() {
@@ -232,13 +234,17 @@ double GameClient::tickDuration() const {
 }
 
 void GameClient::onReceive(Packet *packet) {
+  static std::vector<unsigned char> buffer;  
   static int packetCount = 0;
+  
   if (packetCount++ > 10) {
     packetCount = 0;
     Log(DEBUG) << "rtt: " << packet->sender()->stats(Client::STAT_RTT);
   }
   
-  Unpacker msg(packet->data(), (const char *)packet->data() + packet->size());
+  buffer.assign((const char *)packet->data(),
+                (const char *)packet->data() + packet->size());
+  Unpacker msg(buffer);
   short msgtype = msg.readShort();
   
   if (msgtype == NET_SNAPSHOT) {
