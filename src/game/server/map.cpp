@@ -42,6 +42,10 @@ void Map::damageTile(const TileCoord &tile, int amount) {
   char tile_damage = (tile_data & 0xF0) >> 4;
   char new_tile;
   
+  if ((tile_data & 0x0F) == Page::TileWall) {
+    amount *= 1.5f;
+  }
+  
   if (tile_damage == 0xF) {
     Log(DEBUG) << "removing " << tile.first << ", " << tile.second;
     new_tile = Page::TileGrass;
