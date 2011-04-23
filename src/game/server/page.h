@@ -12,6 +12,11 @@ public:
   static const int WIDTH = 64;
   static const int HEIGHT = 64;
 
+  enum Tiles {
+    TileGrass = 0x00,
+    TileWall  = 0x01
+  };
+  
   Page(class b2World *world);
   ~Page();
   
@@ -29,7 +34,7 @@ private:
   
   class b2World *_world;
   class b2Body *_body;
-  char _tiles[WIDTH * HEIGHT + WIDTH];
+  char _tiles[WIDTH * HEIGHT];
   std::vector<class b2Fixture *> _fixtures;
 };
 

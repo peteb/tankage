@@ -10,12 +10,12 @@ Page::Page(b2World *world)
   _body = 0;
   
   
-  std::fill(_tiles, _tiles + WIDTH*HEIGHT, 0);
+  std::fill(_tiles, _tiles + WIDTH*HEIGHT, TileWall);
   for (int y = 0; y < HEIGHT; ++y) {
     for (int x = 0; x < WIDTH; ++x) {
       if (y >= HEIGHT/3 && y <= HEIGHT/3*2) {
         if (x >= WIDTH/3 && x <= WIDTH/3*2) {
-          _tiles[y*WIDTH+x] = 1;
+          _tiles[y*WIDTH+x] = TileGrass;
         }
       }
     }
@@ -47,7 +47,7 @@ void Page::load() {
   for (int y = 0; y < HEIGHT; ++y) {
     for (int x = 0; x < WIDTH; ++x) {
       char tile_type = tileAt(TileCoord(x, y));
-      if (tile_type == 0) {
+      if ((tile_type & 0x0F) == TileWall) {
         tile_shape.SetAsBox(0.5f, 0.5f, b2Vec2(x - WIDTH/2, y - HEIGHT/2), 0.0f);
         _fixtures[x + y * WIDTH] = _body->CreateFixture(&tile_shape, 1.0f);
       }
@@ -102,7 +102,7 @@ bool Page::intersectSolid(const vec2 &start, const vec2 &end,
     vec2 lerp_pos = lerp(start_ofs, end_ofs, pos);
     TileCoord tile = vec2Tile(lerp_pos);
     
-    if (tileAt(tile) == 0) {
+    if ((tileAt(tile) & 0x0F) == TileWall) {
       point = last_lerp; 
       hit_tile = tile;
       return true;
@@ -129,7 +129,7 @@ void Page::refresh(const TileCoord &coord) {
   _body->DestroyFixture(_fixtures[fixture]);
   
   char tile_type = tileAt(coord);
-  if (tile_type == 0) {
+  if ((tile_type & 0x0F) == TileWall) {
     tile_shape.SetAsBox(0.5f, 0.5f, b2Vec2(coord.first - WIDTH/2, coord.second - HEIGHT/2), 0.0f);
     b2Fixture *new_fix = _body->CreateFixture(&tile_shape, 1.0f);
     _fixtures[fixture] = new_fix;

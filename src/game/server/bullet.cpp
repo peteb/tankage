@@ -92,7 +92,7 @@ void Bullet::tick() {
   if (_gameserver->map().intersectSolid(last_pos, current_pos, hit_pos, tile)) {
     _alive_time = 0.0;
     _state.max_lerp = length(hit_pos - last_pos) / 800.0;
-    _gameserver->map().damageTile(tile);
+    _gameserver->map().damageTile(tile, 2);
   }
   
   _alive_time -= _gameserver->tickDuration();

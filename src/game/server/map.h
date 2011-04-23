@@ -14,7 +14,7 @@ public:
   void snap(class Packer &msg, class ClientSession *client);
   
   bool intersectSolid(const class vec2 &start, const class vec2 &end, vec2 &point, TileCoord &hit_tile);
-  void damageTile(const TileCoord &tile);
+  void damageTile(const TileCoord &tile, int amount);
   
 private:
   class GameServer *_gameserver;

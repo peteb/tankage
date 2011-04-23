@@ -24,13 +24,23 @@ void ClientMap::render() {
   for (int y = 0; y < 64; ++y) {
     for (int x = 0; x < 64; ++x) {
       char tile_val = _data[y*64+x];
-
-      if (tile_val)
-        _gfx->setColor(color4(0.42, 0.54f, 0.33f, 1.0f));
+      char tile_damage = (tile_val & 0xF0) >> 4;
+      float dmg_scale = float(tile_damage) / 16.0f;
+      dmg_scale = lerp(0.0f, 0.8f, dmg_scale);
+      
+      color4 grass_color = color4(0.42, 0.54f, 0.33f, 1.0f);
+      color4 tile_color;
+      
+      if ((tile_val & 0x0F) == 0)
+        tile_color = grass_color;
       else
-        _gfx->setColor(color4(0.7, 0.7f, 0.7f, 1.0f));
-        
+        tile_color = color4(0.7, 0.7f, 0.7f, 1.0f);
+      
+      tile_color = lerp(tile_color, grass_color, dmg_scale);
+      tile_color.a = 1.0f;
+      
       vec2 pos((x - 32) * 32, (y - 32) * 32);
+      _gfx->setColor(tile_color);
       _gfx->drawQuad(rect(pos, 16, 16), 0.0f);
     }
   }

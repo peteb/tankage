@@ -16,6 +16,21 @@ public:
   {
   }
  
+  color4 operator *(float scalar) const {
+    color4 ret = color4(r * scalar, g * scalar, b * scalar, a * scalar);
+    return ret;
+  }
+  
+  color4 operator -(const color4 &rhs) const {
+    color4 ret = color4(r - rhs.r, g - rhs.g, b - rhs.b, a - rhs.a);
+    return ret;
+  }
+
+  color4 operator +(const color4 &rhs) const {
+    color4 ret = color4(r + rhs.r, g + rhs.g, b + rhs.b, a + rhs.a);
+    return ret;
+  }
+  
   static color4 White();
   
   float r, g, b, a;
