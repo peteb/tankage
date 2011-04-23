@@ -37,6 +37,7 @@ public:
   void postTick();
   void recvInput(const Control::Input &input);
   void takeDamage(const vec2 &at, int amount);
+  void takeItem(char type, int amount);
   vec2 position() const {return _state.pos; }
   
   const State &state() const;

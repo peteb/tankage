@@ -30,7 +30,7 @@ Resource::State &Resource::State::read(class Unpacker &msg) {
 
 
 Resource::Resource(class GameServer *gameserver) 
-  : Entity(32.0f)
+  : Entity(8.0f)
   , _gameserver(gameserver)
 {
   
@@ -51,6 +51,14 @@ void Resource::snap(class Packer &msg, const class ClientSession *client) {
 }
 
 void Resource::tick() {
-
+  // FIXME: maybe something that just takes a point, and not a ray?
+  Tank *x_tank = _gameserver->intersectingTank(_state.pos, 
+                                               _state.pos + vec2(0.0f, 1.0f), 
+                                               radius(), 0);
+  if (x_tank) {
+    x_tank->takeItem(_state.type, 5);
+    _gameserver->destroyEntity(id());
+  }
+  
 }
 

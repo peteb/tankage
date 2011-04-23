@@ -170,3 +170,8 @@ void Tank::takeDamage(const vec2 &at, int amount) {
     _gameserver->destroyEntity(id());
   }
 }
+
+void Tank::takeItem(char type, int amount) {
+  Log(DEBUG) << "tank " << id() << " got item #" << int(type) << " amount: " << amount;
+  
+}
