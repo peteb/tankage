@@ -22,6 +22,10 @@ Page::Page(b2World *world)
       if (rand() % 30 == 1 && _tiles[y*WIDTH+x] != TileGrass) {
         _tiles[y*WIDTH+x] = TileKasparium;
       }
+      
+      if (_tiles[y*WIDTH+x] == TileKasparium && rand() % 5 == 1) {
+        _tiles[y*WIDTH+x] = TileKaspariumGen;
+      }
     }
   }
 }

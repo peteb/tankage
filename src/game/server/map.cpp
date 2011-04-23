@@ -43,7 +43,7 @@ void Map::damageTile(const TileCoord &tile, int amount) {
   char new_tile;
   
   if ((tile_data & 0x0F) == Page::TileWall) {
-    amount *= 1.5f;
+    amount *= 2.0f;
   }
   
   if (tile_damage == 0xF) {

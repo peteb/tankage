@@ -51,7 +51,7 @@ GameClient::GameClient(class Portal &services)
   , _tankrenderer(this, services)
   , _resrenderer(this, services)
   , _control(services)
-  , _map(services)
+  , _map(services, this)
 {
   _net = services.requestInterface<Network>();
   _gfx = services.requestInterface<Graphics>();
@@ -95,6 +95,7 @@ GameClient::GameClient(class Portal &services)
   _net_tickrate = 10.0; // default, but should be updated by server_info
   _view = vec2(0.0f, 0.0f);
   _local_player = -1;
+  _first_tick = -1;
   
   _state = GameClient::STATE_DISCONNECTED;
   Log(INFO) << "connecting to host " << *client_host << "...";
@@ -237,6 +238,14 @@ double GameClient::tickDuration() const {
   return 1.0/_net_tickrate;
 }
 
+double GameClient::localTime() const {
+  return (snapTick() - _first_tick) * tickDuration() + sinceSnap();
+}
+
+int GameClient::snapTick() const {
+  return _snap_tick;
+}
+
 void GameClient::onReceive(Packet *packet) {
   static std::vector<unsigned char> buffer;  
   static int packetCount = 0;
@@ -254,6 +263,11 @@ void GameClient::onReceive(Packet *packet) {
   if (msgtype == NET_SNAPSHOT) {
     int snap_tick = msg.readInt();
     Log(DEBUG) << "rx snap " << snap_tick << ", since last: " << sinceSnap();
+    
+    if (_first_tick < 0)
+      _first_tick = snap_tick;
+    
+    _snap_tick = snap_tick;
     
     Snapshot<Tank::State> tanks_snapshot(snap_tick);
     Snapshot<Bullet::State> bullets_snapshot(snap_tick);
@@ -350,6 +364,7 @@ void GameClient::onEvent(short event, class Unpacker &msg) {
     int entity = msg.readInt();
     char items = msg.readByte();
     
+    // We still have to eat the data, even if we're not the target..
     if (entity == localPlayer()) {
       Log(INFO) << int(items) << "# of items in tank inventory:";
       Log(INFO) << "---------------------------------";

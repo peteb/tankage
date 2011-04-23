@@ -1,11 +1,14 @@
 #include "map.h"
+#include <game/client/gameclient.h>
 #include <platform/portal.h>
 #include <platform/graphics.h>
 #include <utils/packer.h>
 #include <utils/log.h>
 #include <algorithm>
 
-ClientMap::ClientMap(Portal &services) {
+ClientMap::ClientMap(Portal &services, GameClient *gameclient) 
+  : _gameclient(gameclient)
+{
   _gfx = services.requestInterface<Graphics>();
   std::fill(_data, _data + 64*64, 0);
 }
@@ -30,6 +33,7 @@ void ClientMap::render() {
       
       color4 grass_color = color4(0.42, 0.54f, 0.33f, 1.0f);
       color4 tile_color;
+      vec2 scale(1.0f, 1.0f);
       
       switch (tile_val & 0x0F) {
       case 0: // grass
@@ -43,6 +47,13 @@ void ClientMap::render() {
       case 3: // kasparium
         tile_color = color4(0.3, 0.3, 0.4, 1.0f);
         break;  
+          
+      case 5:
+        tile_color = color4(0.3, 0.3, 0.6, 1.0f);
+        tile_color.b = sin(_gameclient->localTime() * 2.0 * M_PI) * 0.1 + 0.6;
+        //scale.x = sin(_gameclient->localTime() * 360.0) * 0.1 + 1.1;
+        //scale.y = scale.x;
+        break;
       }
 
       tile_color = lerp(tile_color, grass_color, dmg_scale);
@@ -50,7 +61,7 @@ void ClientMap::render() {
       
       vec2 pos((x - 32) * 32, (y - 32) * 32);
       _gfx->setColor(tile_color);
-      _gfx->drawQuad(rect(pos, 16, 16), 0.0f);
+      _gfx->drawQuad(rect(pos, 16 * scale.x, 16 * scale.y), 0.0f);
     }
   }
 }

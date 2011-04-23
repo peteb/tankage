@@ -19,6 +19,8 @@ int app_main(Portal &interfaces, const std::vector<char *> &args) {
     Log::registerConsumer(Log::ToFileConsumer(path));
   }
 
+  srand(time(0));
+  
   Config config(interfaces);
   server_RegisterVariables(config);
   config.parse(args); // read and set variables from cmdline

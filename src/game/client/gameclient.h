@@ -28,6 +28,8 @@ public:
   void start();
   void update();
   void disconnectGently();
+  double localTime() const;
+  int snapTick() const;
   double deltaTime() const;
   double sinceSnap() const;
   double tickDuration() const;
@@ -63,6 +65,8 @@ private:
   double _last_ping;
   vec2 _view;
   int _local_player;
+  int _first_tick;
+  int _snap_tick;
   
   Control::Input _sent_input;
   TextureLoader _texloader;
