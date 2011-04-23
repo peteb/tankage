@@ -33,5 +33,11 @@ ValueT clamp(const ValueT &val, const ValueT &min, const ValueT &max) {
   return std::max(std::min(val, max), min);
 }
 
+inline double wrap(double value, double lower, double upper) {
+  double distance = upper - lower;
+  double times = floor((value - lower) / distance);
+  return value - (times * distance);
+}
+
 #endif //!UTILS_ALGORITHM_H
 

@@ -7,11 +7,6 @@
 #include <utils/algorithm.h>
 #include <vector>
 
-inline double wrap(double value, double lower, double upper) { // FIXME: util.
-  double distance = upper - lower;
-  double times = floor((value - lower) / distance);
-  return value - (times * distance);
-}
 
 class Tank : public Entity {
 public:

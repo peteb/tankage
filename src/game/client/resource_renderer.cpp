@@ -11,7 +11,7 @@ ResourceRenderer::ResourceRenderer(class GameClient *client, Portal &services)
   : _client(client)
 {
   _gfx = services.requestInterface<Graphics>();
-  _texture = _client->textureLoader().texture("ptr_bullet.png");
+  _texture = _client->textureLoader().texture("kasparium.png");
   _texture->setFiltering(false);
 }
 
@@ -33,8 +33,11 @@ void ResourceRenderer::render() {
       vec2 pos = state.pos;
       pos.x = floor(pos.x);
       pos.y = floor(pos.y);
-      _gfx->setColor(color);
-      _gfx->drawQuad(rect(state.pos, 16, 16), 0.1f);
+      color.a = clamp(1.0 + sin(time * 2.0 * 3.1415926535) * 0.5, 0.0, 1.0);
+      color.a *= clamp(time, 0.0, 1.0);
+      
+      _gfx->setColor(color);      
+      _gfx->drawQuad(rect(state.pos, 8, 8), time * 180.0);        
     }
   }  
 }
