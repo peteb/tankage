@@ -200,5 +200,5 @@ TEST(Packer, BadData) {
 }
 
 TEST(Packer, String) {
-  
+  // mostly tested through data tests
 }

@@ -11,7 +11,7 @@ ClientMap::ClientMap(Portal &services) {
 }
 
 void ClientMap::addChunk(Unpacker &msg) {
-  std::pair<const unsigned char *, size_t> chunk = msg.readData();
+  std::pair<const char *, size_t> chunk = msg.readData();
   Log(DEBUG) << "got map chunk containing " << chunk.second << " tiles";
   
   std::copy(chunk.first, chunk.first + chunk.second, _data);
