@@ -1,4 +1,5 @@
 #include <utils/packer.h>
+#include <utils/log.h>
 
 #ifdef _WIN32
 #include <WinSock2.h>
@@ -60,6 +61,11 @@ Unpacker::Unpacker(const std::vector<unsigned char> &data)
 }
 
 bool Unpacker::verifySize(size_t size) {
+  if (_badbit) {
+    Log(DEBUG) << "unpacker already in bad state";
+    return false;
+  }
+  
   if (_pos + size > _data.size()) {
     _badbit = true;
     return false;
@@ -102,20 +108,20 @@ int Unpacker::readInt() {
   return ntohl(net_value);
 }
 
-std::pair<const unsigned char *, size_t> Unpacker::readData() {
+std::pair<const char *, size_t> Unpacker::readData() {
   unsigned short size = readShort();
-  std::pair<const unsigned char *, size_t> ret(0, 0);
+  std::pair<const char *, size_t> ret(0, 0);
   if (_badbit || !verifySize(size))
     return ret;
   
-  ret = std::make_pair(&_data[_pos], size);
+  ret = std::make_pair(reinterpret_cast<const char *>(&_data[_pos]), size);
   _pos += size;
   
   return ret;
 }
 
 std::string Unpacker::readString() {
-  std::pair<const unsigned char *, size_t> data = readData();
+  std::pair<const char *, size_t> data = readData();
   std::string ret;
   if (_badbit)
     return ret;

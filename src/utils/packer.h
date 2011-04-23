@@ -30,7 +30,7 @@ public:
   short readShort();
   int readInt();
   std::string readString();
-  std::pair<const unsigned char *, size_t> readData();
+  std::pair<const char *, size_t> readData();
 
 private:  
   bool verifySize(size_t size);

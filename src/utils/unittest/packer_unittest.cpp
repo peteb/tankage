@@ -159,6 +159,46 @@ TEST(Packer, MultiPackers) {
   EXPECT_EQ(2, unpack.readInt());
 }
 
-TEST(Packer, Data) {
-  // TODO: add testcases for data
+TEST(Packer, BigData) {
+  std::vector<unsigned char> msg;
+
+  char *data = static_cast<char *>(malloc(0xFFFF));
+  for (size_t i = 0; i < 0xFFFF; ++i) {
+    data[i] = (char)i;
+  }
+  
+  {
+    Packer pack(msg);
+    pack.writeData(data, 0xFFFF);    
+  }
+  
+  {
+    Unpacker unpack(msg);
+    std::pair<const char *, size_t> data_read = unpack.readData();
+    
+    EXPECT_EQ(0xFFFFu, data_read.second);
+    
+    bool same = true;
+    for (size_t i = 0; i < data_read.second; ++i) {
+      if (data_read.first[i] != data[i])
+        same = false;
+    }
+    
+    EXPECT_TRUE(same);
+  }
+}
+
+TEST(Packer, BadData) {
+  std::vector<unsigned char> data;
+  Packer pack(data);
+  pack.writeShort((unsigned short)-1);
+  
+  Unpacker unpack(data);
+  std::pair<const char *, size_t> read_data = unpack.readData();
+  EXPECT_EQ(0u, read_data.second);
+  EXPECT_TRUE(unpack.bad());
+}
+
+TEST(Packer, String) {
+  
 }
