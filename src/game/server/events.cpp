@@ -130,3 +130,27 @@ void Events::spawnTileUpdate(int x, int y, char state, const class vec2 &pos) {
   event->params.writeShort(y);
   event->params.writeByte(state);
 }
+
+void Events::spawnItemPickup(int tankid, char item, char amount, 
+                             const class vec2 &pos) {
+  Event *event = spawnLocalEvent(NET_ITEM_PICKUP, pos, 0);
+  event->params.writeInt(tankid);
+  event->params.writeByte(item);  
+  event->params.writeByte(amount);  
+}
+
+void Events::spawnInventoryUpdate(int entity, const std::map<char, char> &items) {
+  // FIXME: spawnPlayerEvent, only for a certain player!
+  typedef std::map<char, char> ItemMap;
+  
+  Event *event = spawnGlobalEvent(NET_INVENTORY_UPDATE, 0);
+  event->params.writeInt(entity);
+  event->params.writeByte(items.size());
+  
+  for (ItemMap::const_iterator it = items.begin(), e = items.end();
+       it != e; ++it) {
+    event->params.writeByte(it->first);
+    event->params.writeByte(it->second);
+  }
+  
+}

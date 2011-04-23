@@ -1,7 +1,7 @@
 #ifndef GAME_COMMON_NET_PROTOCOL_H
 #define GAME_COMMON_NET_PROTOCOL_H
 
-const int NET_VERSION = 12; // step this when data format changes
+const int NET_VERSION = 13; // step this when data format changes
 
 /**
  * Enumeration over the different packet types
@@ -15,7 +15,9 @@ enum {
   NET_SNAPSHOT = 6,
   NET_MAPCHUNK = 7,
   NET_TILE_UPDATE = 8,
-  NET_ERROR = 9
+  NET_ERROR = 9,
+  NET_ITEM_PICKUP = 10,
+  NET_INVENTORY_UPDATE = 11
 };
 
 enum NetChannels {

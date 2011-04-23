@@ -30,7 +30,7 @@ Resource::State &Resource::State::read(class Unpacker &msg) {
 
 
 Resource::Resource(class GameServer *gameserver) 
-  : Entity(8.0f)
+  : Entity(12.0f)
   , _gameserver(gameserver)
 {
   
@@ -57,6 +57,11 @@ void Resource::tick() {
                                                radius(), 0);
   if (x_tank) {
     x_tank->takeItem(_state.type, 5);
+    //_gameserver->events().spawnItemPickup(x_tank->id(), 
+    //                                      _state.type, 5,
+    //                                      _state.pos);
+    _gameserver->events().spawnInventoryUpdate(x_tank->id(), x_tank->inventory());
+    
     _gameserver->destroyEntity(id());
   }
   

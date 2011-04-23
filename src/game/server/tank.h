@@ -6,7 +6,7 @@
 #include <utils/vec.h>
 #include <utils/algorithm.h>
 #include <vector>
-
+#include <map>
 
 class Tank : public Entity {
 public:
@@ -28,7 +28,9 @@ public:
     void integrate(const Control::Input &input, double dt);
   };
   /* <--- end shared state code ---> */
-  
+
+  typedef std::map<char, char> Inventory;
+
   
   Tank(class GameServer *gameserver, class b2Body *body);
   
@@ -43,6 +45,7 @@ public:
   const State &state() const;
   void assign(const State &state);
   int id() const {return _state.id; }
+  const Inventory &inventory() const {return _inventory; }
   
 private:
   void shoot();
@@ -53,6 +56,7 @@ private:
   class GameServer *_gameserver;
   class b2Body *_body;
   State _state;
+  Inventory _inventory;
   std::vector<Control::Input> _lastinput;
 };
 

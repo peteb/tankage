@@ -4,6 +4,7 @@
 #include <utils/packer.h>
 #include <vector>
 #include <string>
+#include <map>
 
 class Events {
 public:
@@ -13,7 +14,9 @@ public:
 
   void createPlayerJoined(int tankid, const std::string &name);
   void spawnTankHit(int tankid, int shooter, const class vec2 &pos);
+  void spawnItemPickup(int tankid, char item, char amount, const class vec2 &pos);
   void spawnTileUpdate(int x, int y, char state, const class vec2 &pos);
+  void spawnInventoryUpdate(int entity, const std::map<char, char> &items);
   
 private:
   enum {

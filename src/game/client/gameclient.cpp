@@ -339,6 +339,34 @@ void GameClient::onEvent(short event, class Unpacker &msg) {
     char state = msg.readByte();
     _map.setTile(std::make_pair(x, y), state);
   }
+  else if (event == NET_ITEM_PICKUP) {
+    int entity = msg.readInt();
+    char item = msg.readByte();
+    char amount = msg.readByte();
+    Log(DEBUG) << "tank " << entity << " picked up " << 
+                  int(item) << " amount: " << int(amount);
+  }
+  else if (event == NET_INVENTORY_UPDATE) {
+    int entity = msg.readInt();
+    char items = msg.readByte();
+    
+    if (entity == localPlayer()) {
+      Log(INFO) << int(items) << "# of items in tank inventory:";
+      Log(INFO) << "---------------------------------";
+    }
+    else {
+      Log(INFO) << "not local player";
+    }
+      
+    for (int i = 0; i < items; ++i) {
+      char type = msg.readByte();
+      char amount = msg.readByte();
+        
+      if (entity == localPlayer()) {
+        Log(INFO) << "type: " << int(type) << " amount: " << int(amount);
+      }
+    }
+  }
 }
 
 TextureLoader &GameClient::textureLoader() {

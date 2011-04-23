@@ -173,5 +173,10 @@ void Tank::takeDamage(const vec2 &at, int amount) {
 
 void Tank::takeItem(char type, int amount) {
   Log(DEBUG) << "tank " << id() << " got item #" << int(type) << " amount: " << amount;
-  
+
+  Inventory::iterator iter = _inventory.find(type);
+  if (iter == _inventory.end())
+    _inventory.insert(Inventory::value_type(type, amount));
+  else
+    iter->second = clamp(iter->second + amount, 0, 100); // 100 is maximum amt
 }
