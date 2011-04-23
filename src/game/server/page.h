@@ -13,8 +13,9 @@ public:
   static const int HEIGHT = 64;
 
   enum Tiles {
-    TileGrass = 0x00,
-    TileWall  = 0x01
+    TileGrass     = 0x00,
+    TileWall      = 0x01,
+    TileKasparium = 0x03,
   };
   
   Page(class b2World *world);

@@ -31,11 +31,20 @@ void ClientMap::render() {
       color4 grass_color = color4(0.42, 0.54f, 0.33f, 1.0f);
       color4 tile_color;
       
-      if ((tile_val & 0x0F) == 0)
+      switch (tile_val & 0x0F) {
+      case 0: // grass
         tile_color = grass_color;
-      else
+        break;
+          
+      case 1: // rock
         tile_color = color4(0.7, 0.7f, 0.7f, 1.0f);
-      
+        break;
+          
+      case 3: // kasparium
+        tile_color = color4(0.3, 0.3, 0.4, 1.0f);
+        break;  
+      }
+
       tile_color = lerp(tile_color, grass_color, dmg_scale);
       tile_color.a = 1.0f;
       
