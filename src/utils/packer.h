@@ -23,6 +23,7 @@ private:
 
 class Unpacker {
 public:
+  // TODO: const char * + size_t instead of vector here
   Unpacker(const std::vector<unsigned char> &data);
   
   bool bad() const;

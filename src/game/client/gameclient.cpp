@@ -3,6 +3,7 @@
 #include <game/client/snapshot.h>
 #include <game/server/tank.h> // needed for tank::state
 #include <game/server/bullet.h>
+#include <game/server/resource.h>
 #include <game/common/net_protocol.h>
 #include <game/common/config.h>
 
@@ -48,6 +49,7 @@ GameClient::GameClient(class Portal &services)
   , _textrenderer(services, _texloader) // NOTE: can probably be done similar to below, ->textureLoader()..
   , _bulletrenderer(this, services)
   , _tankrenderer(this, services)
+  , _resrenderer(this, services)
   , _control(services)
   , _map(services)
 {
@@ -72,6 +74,7 @@ GameClient::GameClient(class Portal &services)
     Log(INFO) << "skipping update";
     
     #ifdef _WIN32
+    // FIXME: this should not be here. it should be in the SelfUpdate service.
     std::ifstream file("_tankage.exe", std::ifstream::in);
     if (file.is_open()) {
       file.close();
@@ -130,6 +133,7 @@ void GameClient::update() {
   const color4 desertColor(0.957f, 0.917f, 0.682f, 1.0f);
   _gfx->clear(desertColor);
   _map.render();
+  _resrenderer.render();
   _tankrenderer.render();
   _bulletrenderer.render();
   
@@ -253,6 +257,7 @@ void GameClient::onReceive(Packet *packet) {
     
     Snapshot<Tank::State> tanks_snapshot(snap_tick);
     Snapshot<Bullet::State> bullets_snapshot(snap_tick);
+    Snapshot<Resource::State> res_snapshot(snap_tick);
     
     while (short snaptype = msg.readShort()) {
       switch (snaptype) {
@@ -264,6 +269,10 @@ void GameClient::onReceive(Packet *packet) {
         bullets_snapshot.push(msg);
         break;
         
+      case 3:
+        res_snapshot.push(msg);
+        break;
+
       default:
         onEvent(snaptype, msg);
       }
@@ -271,6 +280,7 @@ void GameClient::onReceive(Packet *packet) {
     
     _tankrenderer.addSnapshot(tanks_snapshot);
     _bulletrenderer.addSnapshot(bullets_snapshot);
+    _resrenderer.addSnapshot(res_snapshot);
     _since_snap = 0.0;
   }
   else if (msgtype == NET_ERROR) {

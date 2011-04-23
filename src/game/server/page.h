@@ -28,6 +28,7 @@ public:
   char &tileAt(const TileCoord &coord);
   bool intersectSolid(const vec2 &start, const vec2 &end, 
                       vec2 &point, TileCoord &hit_tile);
+  vec2 tilePos(const TileCoord &coord) const;
   
 private:
   void destroyFixtures();

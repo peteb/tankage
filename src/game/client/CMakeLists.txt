@@ -23,6 +23,7 @@ add_executable(tankage
   ${GAME_ROOT_DIR}/server/map.cpp
   ${GAME_ROOT_DIR}/server/world.cpp
   ${GAME_ROOT_DIR}/server/page.cpp
+  ${GAME_ROOT_DIR}/server/resource.cpp
 
   # sets nice icon for the executable and main window =]
   ${TANKAGE_RESOURCE_FILE}
@@ -34,6 +35,7 @@ add_executable(tankage
   text_renderer.cpp
   tank_info.cpp
   bullet_renderer.cpp
+  resource_renderer.cpp
   map.cpp
   )
  

@@ -25,6 +25,8 @@ public:
   Entity *entity(int eid) const;
   void destroyEntity(int eid);
   Entity *spawnBullet(const vec2 &pos, const vec2 &vel, double dir, int shooter);
+  Entity *spawnResource(const vec2 &pos, char type);
+  
   class Tank *intersectingTank(const vec2 &start, const vec2 &end, float radius, int ignore);
   Events &events();
   Map &map();
@@ -47,6 +49,7 @@ private:
 
   std::vector<class Tank *> _tanks;
   std::vector<class Bullet *> _bullets;
+  std::vector<class Resource *> _resources;
   std::vector<int> _zombie_entities;
   
   b2World _world;

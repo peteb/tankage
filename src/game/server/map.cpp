@@ -45,6 +45,10 @@ void Map::damageTile(const TileCoord &tile, int amount) {
   if (tile_damage == 0xF) {
     Log(DEBUG) << "removing " << tile.first << ", " << tile.second;
     new_tile = Page::TileGrass;
+    
+    if ((tile_data & 0x0F) == Page::TileKasparium) {
+      _gameserver->spawnResource(_page.tilePos(tile), 1);
+    }
   }
   else {
     tile_damage = clamp(tile_damage + amount, 0, 0xF);

@@ -2,6 +2,7 @@
 #include <game/server/client_session.h>
 #include <game/server/tank.h>
 #include <game/server/bullet.h>
+#include <game/server/resource.h>
 
 #include <game/common/net_protocol.h>
 #include <game/common/config.h>
@@ -74,6 +75,8 @@ void GameServer::onTick() {
     _tanks[i]->tick();
   for (size_t i = 0; i < _bullets.size(); ++i)
     _bullets[i]->tick();
+  for (size_t i = 0; i < _resources.size(); ++i)
+    _resources[i]->tick();
   
   tickPhysics();
   
@@ -91,6 +94,8 @@ void GameServer::onTick() {
       _tanks[i]->snap(msg, it->second);    
     for (size_t i = 0; i < _bullets.size(); ++i)
       _bullets[i]->snap(msg, it->second);
+    for (size_t i = 0; i < _resources.size(); ++i)
+      _resources[i]->snap(msg, it->second);
 
     // and add unreliable events to snapshot packet
     _events.snap(msg, it->second);
@@ -309,6 +314,21 @@ Entity *GameServer::spawnBullet(const vec2 &pos, const vec2 &vel, double dir, in
   return bullet;
 }
 
+Entity *GameServer::spawnResource(const vec2 &pos, char type) {
+  Log(DEBUG) << "spawning resource " << int(type) << " at " << std::string(pos);
+  
+  Resource *resource = new Resource(this);
+  Resource::State initial;
+  initial.id = ++_last_entity;
+  initial.type = type;
+  initial.pos = pos;
+  initial.start_tick = gameTick();
+  resource->assign(initial);
+  _resources.push_back(resource);
+  
+  return resource;  
+}
+
 Entity *GameServer::entity(int eid) const {
   for (size_t i = 0; i < _tanks.size(); ++i) {
     if (_tanks[i]->id() == eid)
@@ -318,6 +338,11 @@ Entity *GameServer::entity(int eid) const {
   for (size_t i = 0; i < _bullets.size(); ++i) {
     if (_bullets[i]->id() == eid)
       return _bullets[i];
+  }
+
+  for (size_t i = 0; i < _resources.size(); ++i) {
+    if (_resources[i]->id() == eid)
+      return _resources[i];
   }
   
   return NULL;
@@ -350,6 +375,17 @@ void GameServer::destroyZombies() {
       if (std::find(_zombie_entities.begin(), _zombie_entities.end(), (*iter)->id())
           != _zombie_entities.end())
         iter = _bullets.erase(iter);
+      else
+        ++iter;
+    }
+  }
+
+  {
+    std::vector<Resource *>::iterator iter = _resources.begin();
+    while (iter != _resources.end()) {
+      if (std::find(_zombie_entities.begin(), _zombie_entities.end(), (*iter)->id())
+          != _zombie_entities.end())
+        iter = _resources.erase(iter);
       else
         ++iter;
     }

@@ -84,6 +84,11 @@ TileCoord Page::vec2Tile(const vec2 &pos) const {
   return TileCoord(tile_x, tile_y);
 }
 
+vec2 Page::tilePos(const TileCoord &coord) const {
+  return vec2(float(coord.first - WIDTH/2) * 32.0f, 
+              float(coord.second - HEIGHT/2) * 32.0f);
+}
+
 bool Page::intersectSolid(const vec2 &start, const vec2 &end, 
                           vec2 &point, TileCoord &hit_tile) {  
   vec2 start_ofs = start + vec2(32.0f * 32.0f + 16.0f, 32.0f * 32.0f + 16.0f);

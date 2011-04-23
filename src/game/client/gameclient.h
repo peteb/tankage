@@ -4,6 +4,7 @@
 #include <game/client/tank_renderer.h>
 #include <game/client/text_renderer.h>
 #include <game/client/bullet_renderer.h>
+#include <game/client/resource_renderer.h>
 #include <game/client/map.h>
 #include <game/common/net_protocol.h>
 #include <game/common/control.h>
@@ -68,6 +69,7 @@ private:
   TextRenderer _textrenderer;
   BulletRenderer _bulletrenderer;
   TankRenderer _tankrenderer;
+  ResourceRenderer _resrenderer;
   Control _control;
   ClientMap _map;
   
