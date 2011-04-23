@@ -63,9 +63,16 @@ void Map::damageTile(const TileCoord &tile, int amount) {
   }
 
   _page.tileAt(tile) = new_tile;
-  _page.refresh(tile);
+
+  if ((tile_data & 0x0F) != (new_tile & 0x0F)) 
+    _page.refresh(tile);
+  
   _gameserver->events().spawnTileUpdate(tile.first, tile.second, new_tile, 
                                         vec2((tile.first - 16) * 32, 
                                              (tile.second - 16) * 32));  
+}
+
+void Map::tick() {
+  _page.update(_gameserver->tickDuration(), _gameserver);
 }
 

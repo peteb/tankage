@@ -79,6 +79,7 @@ void GameServer::onTick() {
     _resources[i]->tick();
   
   tickPhysics();
+  _map.tick();
   
   for (size_t i = 0; i < _tanks.size(); ++i)
     _tanks[i]->postTick();

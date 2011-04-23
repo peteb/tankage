@@ -7,6 +7,21 @@
 
 typedef std::pair<int, int> TileCoord;
 
+class KaspariumGenerator {
+public:
+  KaspariumGenerator(const TileCoord &coord);
+  void update(double dt, class Page &page, class GameServer *gameserver);
+  
+  const TileCoord &coord() const {
+    return _coord;
+  }
+  
+private:
+  TileCoord _coord;
+  double _reload;
+  double _interval;
+};
+
 class Page {
 public:
   static const int WIDTH = 64;
@@ -25,6 +40,7 @@ public:
   void snap(class Packer &msg);
   void load();
   void unload();
+  void update(double dt, class GameServer *gameserver);
   void refresh(const TileCoord &coord);
   char &tileAt(const TileCoord &coord);
   bool intersectSolid(const vec2 &start, const vec2 &end, 
@@ -39,6 +55,7 @@ private:
   class b2Body *_body;
   char _tiles[WIDTH * HEIGHT];
   std::vector<class b2Fixture *> _fixtures;
+  std::vector<KaspariumGenerator> _gens;
 };
 
 #endif // !GAME_SERVER_PAGE_H

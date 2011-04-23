@@ -2,6 +2,7 @@
 #include <utils/packer.h>
 #include <utils/log.h>
 #include <game/common/net_protocol.h>
+#include <game/server/gameserver.h>
 #include <Box2D/Box2D.h>
 
 Page::Page(b2World *world) 
@@ -25,6 +26,7 @@ Page::Page(b2World *world)
       
       if (_tiles[y*WIDTH+x] == TileKasparium && rand() % 5 == 1) {
         _tiles[y*WIDTH+x] = TileKaspariumGen;
+        _gens.push_back(TileCoord(x, y));
       }
     }
   }
@@ -132,14 +134,15 @@ void Page::refresh(const TileCoord &coord) {
   if (!_body)
     return;
   
-  size_t fixture = coord.first + coord.second * HEIGHT;
+  size_t fixture = coord.first + coord.second * WIDTH;
   if (_fixtures.size() < fixture)
     return;
   
   Log(DEBUG) << "refreshing tile " << coord.first << ", " << coord.second;
   
   b2PolygonShape tile_shape;
-  _body->DestroyFixture(_fixtures[fixture]);
+  if (_fixtures.at(fixture))
+    _body->DestroyFixture(_fixtures[fixture]);
   
   char tile_type = tileAt(coord);
   if ((tile_type & 0x0F) & TileWall) {
@@ -166,4 +169,64 @@ void Page::destroyFixtures() {
 
 char &Page::tileAt(const TileCoord &coord) {
   return _tiles[clamp(coord.first, 0, 63) + clamp(coord.second, 0, 63) * WIDTH];
+}
+
+void Page::update(double dt, GameServer *gameserver) {
+  std::vector<KaspariumGenerator>::iterator iter = _gens.begin();
+  while (iter != _gens.end()) {
+    char &tile = tileAt(iter->coord());
+    if ((tile & 0x0F) == TileKaspariumGen) {
+      iter->update(dt, *this, gameserver);
+      ++iter;
+    }
+    else {
+      iter = _gens.erase(iter);
+    }
+  }
+}
+
+KaspariumGenerator::KaspariumGenerator(const TileCoord &coord)
+  : _coord(coord)
+{
+  _interval = double(rand() % 20 + 10);
+  _reload = _interval;
+}
+
+void KaspariumGenerator::update(double dt, Page &page, GameServer *gameserver) {
+  _reload -= dt;
+  
+  if (_reload <= 0.0) {
+    _reload = _interval;
+    
+    std::vector<TileCoord> neighbors;
+    neighbors.push_back(TileCoord(-1, -1));
+    neighbors.push_back(TileCoord( 0, -1));
+    neighbors.push_back(TileCoord( 1, -1));
+    neighbors.push_back(TileCoord( 1,  0));
+    neighbors.push_back(TileCoord( 1,  1));
+    neighbors.push_back(TileCoord( 0,  1));
+    neighbors.push_back(TileCoord(-1,  1));
+    neighbors.push_back(TileCoord(-1,  0));
+    
+    size_t ofs = rand() % neighbors.size();
+    
+    for (size_t i = 0; i < neighbors.size(); ++i) {
+      TileCoord &nbor = neighbors[(i + ofs) % neighbors.size()];
+      TileCoord abs = coord();
+      abs.first += nbor.first;
+      abs.second += nbor.second;
+      
+      char &tile = page.tileAt(abs);
+      if ((tile & 0x0F) != Page::TileKasparium && 
+          (tile & 0x0F) != Page::TileKaspariumGen) {
+        tile = Page::TileKasparium;
+        page.refresh(abs);
+        gameserver->events().spawnTileUpdate(abs.first, abs.second, tile, 
+                                              vec2((abs.first - 16) * 32, 
+                                                   (abs.second - 16) * 32));  
+        
+        break;
+      }
+    }
+  }
 }
